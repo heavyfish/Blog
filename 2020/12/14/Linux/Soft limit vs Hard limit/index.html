@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="什么是limitlimit 是指 对Shell 或由Shell启动的进程 进行资源配额的控制。在实际应用中最常见的就是对打开文件(Open Files)的限制，在配置web 服务如nginx时就会用到。 limit 既可以通过 ulimit 设置，也可以通过 &#x2F;etc&#x2F;security&#x2F;limits.conf 设置。 ulimit通过-H和-S选项指定为给定资源设置硬限制或软限制。如果既未指定-H">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/12/14/Linux/Soft%20limit%20vs%20Hard%20limit/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="什么是limitlimit 是指 对Shell 或由Shell启动的进程 进行资源配额的控制。在实际应用中最常见的就是对打开文件(Open Files)的限制，在配置web 服务如nginx时就会用到。 limit 既可以通过 ulimit 设置，也可以通过 &#x2F;etc&#x2F;security&#x2F;limits.conf 设置。 ulimit通过-H和-S选项指定为给定资源设置硬限制或软限制。如果既未指定-H">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-12-14T09:14:49.205Z">
+<meta property="article:modified_time" content="2020-12-14T09:29:33.234Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/12/" class="post-meta__date button">2020-12-14</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h2 id="什么是limit"><a href="#什么是limit" class="headerlink" title="什么是limit"></a>什么是limit</h2><p>limit 是指 对Shell 或由Shell启动的进程 进行资源配额的控制。在实际应用中最常见的就是对打开文件(Open Files)的限制，在配置web 服务如nginx时就会用到。</p>
+<p>limit 既可以通过 <code>ulimit</code> 设置，也可以通过 <code>/etc/security/limits.conf</code> 设置。</p>
+<p><code>ulimit</code>通过<code>-H</code>和<code>-S</code>选项指定为给定资源设置硬限制或软限制。如果既未指定<code>-H</code>也未指定<code>-S</code>，则将同时设置软限制和硬限制。</p>
+<p>配置文件示例如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nginx    soft    nofile    10000</span><br><span class="line">nginx    hard  nofile     30000</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="soft-limit-vs-hard-limit"><a href="#soft-limit-vs-hard-limit" class="headerlink" title="soft limit vs hard limit"></a>soft limit vs hard limit</h2><p><code>ulimit -Sn</code> 查看的是软限制</p>
+<p><code>ulimit -Hn</code> 查看的是硬限制</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-H  ：hard limit ，严格的设定，必定不能超过这个设定的数值</span><br><span class="line"></span><br><span class="line">-S  ：soft limit ，非跟用户不能超过此数值</span><br></pre></td></tr></table></figure>
+<p>非根用户不能超过软限制，但非根用户可以做的是将软限制增加到硬限制。非根用户不能增加硬限制。只有根可以增加硬限制。</p>
+<h2 id="fs-file-max-和-limit"><a href="#fs-file-max-和-limit" class="headerlink" title="fs.file-max 和 limit"></a>fs.file-max 和 limit</h2><p><code>fs.file-max</code> 是系统级的 打开最大文件句柄的数量。 limit 是进程级的。进程级始终受限于 系统级，在进行参数调优时，需要注意同步调整。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-12-14</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/12/15/Linux/Apche/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/12/14/Linux/Nginx/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

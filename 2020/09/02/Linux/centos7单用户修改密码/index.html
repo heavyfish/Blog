@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="1. Power up &#x2F; rebootThe first step is to power up or reboot the system and edit the grub2 parameters. Timing here is critical. You must press ‘e’ before the menu times out and boots normally. 2. Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/02/Linux/centos7%E5%8D%95%E7%94%A8%E6%88%B7%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="1. Power up &#x2F; rebootThe first step is to power up or reboot the system and edit the grub2 parameters. Timing here is critical. You must press ‘e’ before the menu times out and boots normally. 2. Linux">
+<meta property="og:locale">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/passwordstep1-500x425.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture2-500x425.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture5.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture6.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture7.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture8.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture9.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture10.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture12.png">
+<meta property="og:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture13.png">
+<meta property="article:published_time" content="2020-09-02T15:50:21.586Z">
+<meta property="article:modified_time" content="2020-09-02T15:52:57.373Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s25088.pcdn.co/wp-content/uploads/2017/07/passwordstep1-500x425.png">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-02</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h5 id="1-Power-up-reboot"><a href="#1-Power-up-reboot" class="headerlink" title="1. Power up / reboot"></a>1. Power up / reboot</h5><p>The first step is to power up or reboot the system and edit the grub2 parameters. Timing here is critical. You must press ‘e’ before the menu times out and boots normally.<br><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/passwordstep1-500x425.png" alt=" passwordstep1 500x425"></p>
+<h5 id="2-Linux16"><a href="#2-Linux16" class="headerlink" title="2. Linux16"></a>2. Linux16</h5><p>Look for a line that mentions <strong>linux16</strong> (or <strong>linuxefi</strong> if you are using UEFI bios). You may need to use the arrow keys to scroll down. At the end of the linux16 or linuxefi line, find and replace the <strong>rhgb</strong> <strong>quiet</strong> parameters with <strong>rd.break</strong> <strong>enforcing=0</strong></p>
+<p><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture2-500x425.png" alt=" Picture2 500x425"></p>
+<h5 id="3-Start-boot-process"><a href="#3-Start-boot-process" class="headerlink" title="3. Start boot process"></a>3. Start boot process</h5><p>Once you have edited the parameters accordingly, hit CTRL-X to start the boot process with the new parameters. The system should boot into the root system.</p>
+<p><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture5.png" alt=" Picture5"></p>
+<h5 id="4-Remount-as-read-write"><a href="#4-Remount-as-read-write" class="headerlink" title="4. Remount as read/write"></a>4. Remount as read/write</h5><p>Enter the following command to remount the sysroot filesystem as read/write: <strong>mount -o remount,rw /sysroot</strong></p>
+<p><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture6.png" alt=" Picture6"></p>
+<h5 id="5-chroot-into-sysroot"><a href="#5-chroot-into-sysroot" class="headerlink" title="5. chroot into sysroot"></a>5. chroot into sysroot</h5><p>Now we chroot into the sysroot, using the following command: <strong>chroot /sysroot</strong></p>
+<p><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture7.png" alt=" Picture7"></p>
+<h5 id="6-Change-the-password"><a href="#6-Change-the-password" class="headerlink" title="6. Change the password"></a>6. Change the password</h5><p>We can use the <strong>passwd</strong> command to change the root password.<br><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture8.png" alt=" Picture8"></p>
+<h5 id="7-Return-to-switch-root"><a href="#7-Return-to-switch-root" class="headerlink" title="7. Return to switch_root"></a>7. Return to switch_root</h5><p>Issue the following command to bring us back to the switch_root:/# prompt: <strong>exit</strong></p>
+<p><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture9.png" alt=" Picture9"></p>
+<h5 id="8-Remount-to-read-only"><a href="#8-Remount-to-read-only" class="headerlink" title="8. Remount to read-only"></a>8. Remount to read-only</h5><p>Enter the following command to remount the sysroot filesystem as read-only once again: <strong>mount -o remount,ro /sysroot</strong></p>
+<p><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture10.png" alt=" Picture10"></p>
+<h5 id="9-Exit-the-session"><a href="#9-Exit-the-session" class="headerlink" title="9. Exit the session"></a>9. Exit the session</h5><p>Now we can exit the session and allow the system to reboot using the following command: <strong>exit</strong></p>
+<p><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture12.png" alt=" Picture12"></p>
+<h5 id="10-Boot-and-login"><a href="#10-Boot-and-login" class="headerlink" title="10. Boot and login"></a>10. Boot and login</h5><p>Allow the system to boot normally and login as root using the new password that you set in step 6.</p>
+<p><img src="https://s25088.pcdn.co/wp-content/uploads/2017/07/Picture13.png" alt=" Picture13"></p>
+<h2 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h2><p><a target="_blank" rel="noopener" href="https://spr.com/password-recovery-for-rhel-centos-7-linux/">12 Steps to Password Recovery for RHEL, CentOS 7 Linux</a></p>
+<p>注：链接中还有 11、12步，但这是针对selinux的，可以不用做</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-09-02</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/09/02/Linux/CentOS%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/09/02/Linux/%E5%AD%98%E5%82%A8/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

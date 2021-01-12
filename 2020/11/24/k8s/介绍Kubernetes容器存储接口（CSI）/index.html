@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="Kubernetes 设计文档中的 CSI Volume Plugins本文翻译于 CSI Volume Plugins in Kubernetes Design Doc 术语   Term Definition    Container Storage Interface (CSI) 一种规范，试图建立一个行业标准接口，Container Orchestration Systems（COs）可以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/11/24/k8s/%E4%BB%8B%E7%BB%8DKubernetes%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E6%8E%A5%E5%8F%A3%EF%BC%88CSI%EF%BC%89/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="Kubernetes 设计文档中的 CSI Volume Plugins本文翻译于 CSI Volume Plugins in Kubernetes Design Doc 术语   Term Definition    Container Storage Interface (CSI) 一种规范，试图建立一个行业标准接口，Container Orchestration Systems（COs）可以">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/kubernetes/community/raw/master/contributors/design-proposals/storage/container-storage-interface_diagram1.png?raw=true">
+<meta property="article:published_time" content="2020-11-24T06:25:08.543Z">
+<meta property="article:modified_time" content="2020-11-24T15:15:22.341Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://github.com/kubernetes/community/raw/master/contributors/design-proposals/storage/container-storage-interface_diagram1.png?raw=true">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/11/" class="post-meta__date button">2020-11-24</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="Kubernetes-设计文档中的-CSI-Volume-Plugins"><a href="#Kubernetes-设计文档中的-CSI-Volume-Plugins" class="headerlink" title="Kubernetes 设计文档中的 CSI Volume Plugins"></a>Kubernetes 设计文档中的 CSI Volume Plugins</h1><p>本文翻译于 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/community/blob/master/contributors/design-proposals/storage/container-storage-interface.md">CSI Volume Plugins in Kubernetes Design Doc</a></p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Container Storage Interface (CSI)</td>
+<td>一种规范，试图建立一个行业标准接口，Container Orchestration Systems（COs）可以使用该接口将任意存储系统暴露在其容器化工作负载下。</td>
+</tr>
+<tr>
+<td>in-tree</td>
+<td>存在于核心Kubernetes存储库中的代码。</td>
+</tr>
+<tr>
+<td>out-of-tree</td>
+<td>存在于核心Kubernetes存储库之外的代码。</td>
+</tr>
+<tr>
+<td>CSI Volume Plugin</td>
+<td>一个新的in-tree volume plugin，充当适配器，支持在Kubernetes中使用 out-of-tree 第三方 CSI volume drivers。</td>
+</tr>
+<tr>
+<td>CSI Volume Driver</td>
+<td>一个与 out-of-tree CSI兼容的volume plugin 实现，可以通过Kubernetes CSI volume plugin 在Kubernetes中使用</td>
+</tr>
+</tbody></table>
+<h2 id="背景和动机"><a href="#背景和动机" class="headerlink" title="背景和动机"></a>背景和动机</h2><p>容器存储接口（CSI）是一种规范，它是由来自不同COs的社区成员之间的合作所产生的，包括Kubernetes、Mesos、CloudFoundry和Docker。该接口的目标是为COs建立标准化机制，以将任意存储系统暴露到其容器化工作负载中。</p>
+<p>存储供应商采用该接口的主要动机是希望让他们的系统尽可能多地为用户所用，而只需尽可能少的工作。COs采用该接口的主要动机是采用一种机制，使其用户能够使用尽可能多的不同存储系统。此外，对于Kubernetes，采用CSI还有一个额外的好处：将卷插件移出树，并使卷插件能够被容器化。</p>
+<p><strong>Links</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/container-storage-interface/spec/blob/master/spec.md">Container Storage Interface (CSI) Spec</a></li>
+</ul>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>本文档的目的是记录在Kubernetes中启用CSI兼容的卷插件（CSI卷驱动程序）的所有要求</p>
+<h3 id="主要目标"><a href="#主要目标" class="headerlink" title="主要目标"></a>主要目标</h3><ul>
+<li>Define Kubernetes API 和 任意第三方 CSI volume drivers 交互.</li>
+<li>定义Kubernetes主节点组件和工作节点组件与任意第三方CSI volume drivers安全通信的机制</li>
+<li>定义一种机制，Kubernetes主组件和节点组件将发现并注册部署在Kubernetes上的任意第三方CSI卷驱动程序。</li>
+<li>对 Kubernetes兼容的第三方CSI卷驱动程序的打包要求 提出 建议。</li>
+<li>对 Kubernetes集群上与Kubernetes兼容的第三方CSI卷驱动程序的部署过程 提出建议</li>
+</ul>
+<h3 id="不包含目标"><a href="#不包含目标" class="headerlink" title="不包含目标"></a>不包含目标</h3><p>Replace <a target="_blank" rel="noopener" href="https://github.com/kubernetes/community/blob/master/contributors/devel/sig-storage/flexvolume.md">Flex Volume plugin</a></p>
+<ul>
+<li>Flex卷插件是作为一种基于exec的机制来创建“out-of-tree”卷插件的</li>
+<li>因为Flex驱动程序存在并依赖于Flex接口，因此它将继续得到稳定API的支持。.</li>
+<li>CSI卷插件将与Flex卷插件共存。</li>
+</ul>
+<h2 id="设计概述"><a href="#设计概述" class="headerlink" title="设计概述"></a>设计概述</h2><p>为了支持CSI兼容的卷插件，Kubernetes将引入一个新的树内（in-tree）CSI卷插件。这个新的卷插件将是Kubernetes用户（应用程序开发人员和集群管理员）与外部CSI卷驱动程序交互的机制。</p>
+<p>新的树内CSI卷插件的<code>SetUp/TearDown</code>调用将通过节点计算机上的unix域套接字直接调用<code>NodePublishVolume</code>和<code>NodeUnpublishVolume</code> CSI RPCs。</p>
+<p>Provision/delete and attach/detach 必须由某个外部组件处理，该组件代表CSI卷驱动程序监视Kubernetes API，并针对它调用相应的CSI RPC。</p>
+<p>为了简化集成，Kubernetes团队将提供一个容器，该容器捕获所有Kubernetes特定的逻辑，并充当第三方容器化CSI卷驱动程序和Kubernetes之间的适配器（CSI驱动程序的每个部署都有自己的适配器实例）。</p>
+<h2 id="设计细节"><a href="#设计细节" class="headerlink" title="设计细节"></a>设计细节</h2><h3 id="Third-Party-CSI-Volume-Drivers"><a href="#Third-Party-CSI-Volume-Drivers" class="headerlink" title="Third-Party CSI Volume Drivers"></a>Third-Party CSI Volume Drivers</h3><p>Kubernetes在CSI卷驱动程序的打包和部署上尽可能少做规范。在Kubernetes中，启用任意外部CSI兼容存储驱动程序的唯一要求是使用 <em>Communication Channels</em></p>
+<p>本文推荐一种标准机制，用于在Kubernetes上部署任意的容器化CSI驱动程序。存储提供商可以使用这一点简化Kubernetes上容器化CSI兼容卷驱动程序的部署（请参阅下面的“在Kubernetes上部署CSI驱动程序的推荐机制”一节）。然而，这种机制是严格可选的。</p>
+<h3 id="Communication-Channels"><a href="#Communication-Channels" class="headerlink" title="Communication Channels"></a>Communication Channels</h3><h4 id="Kubelet-to-CSI-Driver-Communication"><a href="#Kubelet-to-CSI-Driver-Communication" class="headerlink" title="Kubelet to CSI Driver Communication"></a>Kubelet to CSI Driver Communication</h4><p><strong>Kubelet（负责mount and unmount）</strong>将通过一个Unix域套接字与运行在同一台主机（无论是否容器化）上的外部“CSI卷驱动程序”通信。</p>
+<p>CSI卷驱动程序应在节点计算机上的以下路径创建一个套接字：</p>
+<p><code>/var/lib/kubelet/plugins/[SanitizedCSIDriverName]/csi.sock</code>，对于 alpha，kubelet将假定这是Unix域套接字与CSI卷驱动程序对话的位置。对于beta版的实现，我们考虑使用 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/community/blob/master/contributors/design-proposals/resource-management/device-plugin.md#unix-socket">Device Plugin Unix Domain Socket Registration</a> 机制向kubelet注册Unix域套接字。这个机制需要被扩展以支持CSI卷驱动程序和设备插件的独立注册。</p>
+<p><code>Sanitized CSIDriverName</code>是CSI驱动程序名称，不包含危险字符，可以用作 annotation 名称。它可以遵循与<a target="_blank" rel="noopener" href="https://git.k8s.io/utils/strings/escape.go#L28">volume plugins</a>相同的模式。太长或太复杂的驱动程序名称可能会被拒绝，也就是说，本文档中描述的所有组件都将报告错误，并且不会与该CSI驱动程序通信。</p>
+<ul>
+<li>在初始化外部“CSI volume driver”时，kubelet必须调用CSI method <code>NodeGetInfo</code>以获取从Kubernetes Node names 到CSI driver NodeID的映射以及相关的<code>accessible_topology</code>。它必须：<ul>
+<li>这将使发出<code>ControllerPublishVolume</code>调用的组件能够使用<code>CSINodeInfo</code>作为从 cluster node ID 到 storage node ID的映射。</li>
+<li>这将使发出<code>CreateVolume</code>的组件能够重建 <code>accessible_topology</code> ，并提供可从特定节点访问的卷。</li>
+<li>每个驱动程序必须完全覆盖其以前版本的NodeID和topology keys（如果存在的话）</li>
+<li>如果<code>NodeGetInfo</code>调用失败，kubelet必须删除此驱动程序以前的任何 NodeID和topology keys </li>
+<li>在实现kubelet插件注销机制时，在注销驱动程序时删除 NodeID and topology keys</li>
+</ul>
+</li>
+<li>Create/update Node API object ，将<code>accessible_topology</code> 作为 lable，标签格式没有硬限制，但是对于推荐的设置使用的格式，请参考 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/community/blob/master/contributors/design-proposals/storage/container-storage-interface.md#topology-representation-in-node-objects">Topology Representation in Node Objects</a></li>
+</ul>
+<p>为了方便部署外部容器化CSI卷驱动程序，Kubernetes团队将提供一个sidecar“Kubernetes CSI Helper”容器，它可以管理unix域套接字注册和Node Id初始化。下面的“在Kubernetes上部署CSI驱动程序的建议机制”一节对此进行了详细说明。</p>
+<h4 id="Master-to-CSI-Driver-Communication"><a href="#Master-to-CSI-Driver-Communication" class="headerlink" title="Master to CSI Driver Communication"></a>Master to CSI Driver Communication</h4><p>因为CSI卷驱动程序代码被认为是不可信的，所以它可能不允许在 master 上运行。因此，<strong>Kube controller manager（负责create, delete, attach, 和 detach）</strong>不能通过Unix域套接字与“CSI卷驱动程序”容器通信。相反，Kube controller manager 将通过 kubernetes Api与外部“CSI卷驱动程序”通信。</p>
+<p>更具体地说，某些外部组件必须代表外部CSI卷驱动程序 watch kubernetes API，并触发适当的操作。这消除了在Kube controller manager 和CSI卷驱动程序之间发现和保护 channel 的问题。</p>
+<p>为了方便在Kubernetes上部署外部容器化CSI卷驱动程序，而不让驱动程序Kubernetes知道，Kubernetes将提供一个sidecar “Kubernetes To CSI”  代理容器，该容器将监视Kubernetes API并触发针对“CSI卷驱动程序”容器的适当操作。下面的“在Kubernetes上部署CSI驱动程序的建议机制”一节对此进行了详细说明。</p>
+<p>代表外部CSI卷驱动程序监视kubernetes api的<strong>外部组件必须处理provisioning, deleting, attaching, and detaching.。</strong></p>
+<h5 id="Provisioning-and-Deleting"><a href="#Provisioning-and-Deleting" class="headerlink" title="Provisioning and Deleting"></a>Provisioning and Deleting</h5><p>使用现有的 external provisioner mechanism 处理 Provisioning 和 deletion 操作 。其中代表外部CSI卷驱动程序监视Kubernetes API的外部组件将充当external provisioner（外部供应器）。</p>
+<p>简言之，要动态地配置新的CSI volume，集群管理员将创建一个<code>StorageClass</code>，其provisioner与代表CSI卷驱动程序处理配置请求的 external provisioner 的名称相对应。</p>
+<p>To provision a new CSI volume, an end user would create a <code>PersistentVolumeClaim</code> object referencing this <code>StorageClass</code>. The external provisioner will react to the creation of the PVC and issue the <code>CreateVolume</code> call against the CSI volume driver to provision the volume. The <code>CreateVolume</code> name will be auto-generated as it is for other dynamically provisioned volumes. The <code>CreateVolume</code> capacity will be taken from the <code>PersistentVolumeClaim</code> object. The <code>CreateVolume</code> parameters will be passed through from the <code>StorageClass</code> parameters (opaque/不透明 to Kubernetes).</p>
+<p>要删除CSI卷，最终用户将删除相应的PersistentVolumeClaim对象。外部供应器将对PVC的删除做出反应，并根据其回收策略，针对CSI卷驱动程序命令发出<code>DeleteVolume</code>调用以删除卷。然后它将删除PersistentVolume对象。</p>
+<h5 id="Attaching-and-Detaching"><a href="#Attaching-and-Detaching" class="headerlink" title="Attaching and Detaching"></a>Attaching and Detaching</h5><p>Attach/detach  操作也必须由外部组件（“attacher”）处理。attacher代表外部CSI卷驱动程序监视Kubernetes API以获取新的<code>VolumeAttachment</code>对象（定义见下文），并触发针对CSI卷驱动程序的适当调用以附加卷。即使底层CSI驱动程序不支持<code>ControllerPublishVolume</code>调用，附件也必须监视<code>VolumeAttachment</code>对象并将其标记为已附加，因为Kubernetes对此一无所知。</p>
+<p>更具体地说，外部“attacher”必须代表外部CSI卷驱动程序监视kubernetes api来处理Attach/detach请求。</p>
+<h3 id="Kubernetes-In-Tree-CSI-Volume-Plugin"><a href="#Kubernetes-In-Tree-CSI-Volume-Plugin" class="headerlink" title="Kubernetes In-Tree CSI Volume Plugin"></a>Kubernetes In-Tree CSI Volume Plugin</h3><p>一个新的树内Kubernetes CSI卷插件将包含Kubernetes与任意、树外、第三方CSI兼容的卷驱动程序通信所需的所有逻辑。</p>
+<p>现有的Kubernetes卷组件（attach/detach controller、PVC/PV controller、Kubelet volume manager）将处理CSI卷插件操作的生命周期（ volume provisioning/deleting, attaching/detaching, and mounting/unmounting ）与它们对现有树内卷插件所做的一样。</p>
+<h4 id="Internal-Interfaces"><a href="#Internal-Interfaces" class="headerlink" title="Internal Interfaces"></a>Internal Interfaces</h4><p>树内CSI卷插件将实现以下内部Kubernetes卷接口：</p>
+<ol>
+<li><code>VolumePlugin</code><ul>
+<li>Mounting/Unmounting of a volume to a specific path.</li>
+</ul>
+</li>
+<li><code>AttachableVolumePlugin</code><ul>
+<li>Attach/detach of a volume to a given node.</li>
+</ul>
+</li>
+</ol>
+<p>值得注意的是，由于CSI卷的 provisioning 和 deleting 由外部供应器处理，因此未实现<code>ProvisionableVolumePlugin</code>和<code>DeletableVolumePlugin</code>。</p>
+<h4 id="Mount-and-Unmount"><a href="#Mount-and-Unmount" class="headerlink" title="Mount and Unmount"></a>Mount and Unmount</h4><p>树内卷插件的SetUp和TearDown方法将通过Unix域套接字触发<code>NodePublishVolume</code>和NodeUnpublishVolume CSI调用。Kubernetes将生成一个唯一的<code>target_path</code>（unique per pod per volume）通过<code>NodePublishVolume</code>传递给CSI插件来 mount 卷。成功完成<code>NodeUnpublishVolume</code>调用后（一旦验证了卷 unmount），Kubernetes将删除该目录。</p>
+<p>Kubernetes卷子系统目前不支持 block volumes（only file），因此对于alpha，Kubernetes CSI卷插件只支持file。</p>
+<h4 id="Attaching-and-Detaching-1"><a href="#Attaching-and-Detaching-1" class="headerlink" title="Attaching and Detaching"></a>Attaching and Detaching</h4><p>attach/detach controller 作为主节点上 kube-controller-manager 二进制文件的一部分运行，决定何时必须从特定节点连接或分离CSI Volume。</p>
+<h3 id="在Kubernetes上部署CSI驱动程序的推荐机制"><a href="#在Kubernetes上部署CSI驱动程序的推荐机制" class="headerlink" title="在Kubernetes上部署CSI驱动程序的推荐机制"></a>在Kubernetes上部署CSI驱动程序的推荐机制</h3><p>尽管Kubernetes没有规定CSI卷驱动程序的打包，但是它提供了以下建议，以简化在Kubernetes上部署集容器化CSI卷驱动程序。</p>
+<p><img src="https://github.com/kubernetes/community/raw/master/contributors/design-proposals/storage/container-storage-interface_diagram1.png?raw=true" alt="Recommended CSI Deployment Diagram"></p>
+<p>要部署容器化的第三方CSI卷驱动程序，建议存储供应商：</p>
+<ul>
+<li>Create a “CSI volume driver” container，该容器实现卷插件行为并通过unix域套接字公开gRPC接口，如CSI规范（包括Controller, Node,和 Identity services）中定义的那样</li>
+<li>将“CSI volume driver”容器与Kubernetes团队将提供的helper容器捆绑在一起（external-attacher, external-provisioner, node-driver-registrar, cluster-driver-registrar, external-resizer, external-snapshotter, livenessprobe），（这些辅助容器将帮助“CSI卷驱动程序”容器与Kubernetes系统交互）。更具体地说，创建以下Kubernetes对象：<ul>
+<li>为了方便与 Kubernetes controllers, a <code>StatefulSet</code> or a <code>Deployment</code> 通信(depending on the user’s need; see <a target="_blank" rel="noopener" href="https://github.com/kubernetes/community/blob/master/contributors/design-proposals/storage/container-storage-interface.md#cluster-level-deployment">Cluster-Level Deployment</a>) 需要有:<ul>
+<li>The following containers<ul>
+<li>The “CSI volume driver” container created by the storage vendor.</li>
+<li>Containers provided by the Kubernetes team (all of which are optional):<ul>
+<li><code>cluster-driver-registrar</code> (refer to the README in <code>cluster-driver-registrar</code> repository for when the container is required)</li>
+<li><code>external-provisioner</code> (required for provision/delete operations)</li>
+<li><code>external-attacher</code> (required for attach/detach operations. If you wish to skip the attach step, CSISkipAttach feature must be enabled in Kubernetes in addition to omitting this container)</li>
+<li><code>external-resizer</code> (required for resize operations)</li>
+<li><code>external-snapshotter</code> (required for volume-level snapshot operations)</li>
+<li><code>livenessprobe</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>The following volumes:<ul>
+<li><code>emptyDir</code> volume<ul>
+<li>Mounted by all containers, including the “CSI volume driver”.</li>
+<li>The “CSI volume driver” container should create its Unix Domain Socket in this directory to enable communication with the Kubernetes helper container(s).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>A <code>DaemonSet</code> (to facilitate communication with every instance of kubelet) that has:<ul>
+<li>The following containers<ul>
+<li>The “CSI volume driver” container created by the storage vendor.</li>
+<li>Containers provided by the Kubernetes team:<ul>
+<li><code>node-driver-registrar</code> - Responsible for registering the unix domain socket with kubelet.</li>
+<li><code>livenessprobe</code> (optional)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>The following volumes:<ul>
+<li><code>hostpath</code> volume<ul>
+<li>Expose <code>/var/lib/kubelet/plugins_registry</code> from the host.</li>
+<li>Mount only in <code>node-driver-registrar</code> container at <code>/registration</code></li>
+<li><code>node-driver-registrar</code> will use this unix domain socket to register the CSI driver’s unix domain socket with kubelet.</li>
+</ul>
+</li>
+<li><code>hostpath</code> volume<ul>
+<li>Expose <code>/var/lib/kubelet/</code> from the host.</li>
+<li>Mount only in “CSI volume driver” container at <code>/var/lib/kubelet/</code></li>
+<li>Ensure <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/storage/volumes/#mount-propagation">bi-directional mount propagation</a> is enabled, so that any mounts setup inside this container are propagated back to the host machine.</li>
+</ul>
+</li>
+<li><code>hostpath</code> volume<ul>
+<li>Expose <code>/var/lib/kubelet/plugins/[SanitizedCSIDriverName]/</code> from the host as <code>hostPath.type = &quot;DirectoryOrCreate&quot;</code>.</li>
+<li>Mount inside “CSI volume driver” container at the path the CSI gRPC socket will be created.</li>
+<li>This is the primary means of communication between Kubelet and the “CSI volume driver” container (gRPC over UDS).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>让群集管理员部署上述<code>StatefulSet</code>和 <code>DaemonSet</code>，以添加对Kubernetes群集中存储系统的支持。</li>
+</ul>
+<p>Alternatively, deployment could be simplified by having all components (including external-provisioner and external-attacher) in the same pod (DaemonSet). Doing so, however, would consume more resources, and require a leader election protocol (likely <a target="_blank" rel="noopener" href="https://git.k8s.io/contrib/election">https://git.k8s.io/contrib/election</a>) in the <code>external-provisioner</code> and <code>external-attacher</code> components.</p>
+<p>Containers provided by Kubernetes are maintained in <a target="_blank" rel="noopener" href="https://github.com/kubernetes-csi">GitHub kubernetes-csi organization</a>.</p>
+<h3 id="示例流程"><a href="#示例流程" class="headerlink" title="示例流程"></a>示例流程</h3><h4 id="Provisioning-Volumes"><a href="#Provisioning-Volumes" class="headerlink" title="Provisioning Volumes"></a>Provisioning Volumes</h4><ol>
+<li>A cluster admin creates a <code>StorageClass</code> pointing to the CSI driver’s external-provisioner and specifying any parameters required by the driver.</li>
+<li>A user creates a <code>PersistentVolumeClaim</code> referring to the new <code>StorageClass</code>.</li>
+<li>The persistent volume controller realizes（发现） that dynamic provisioning is needed, and marks the PVC with a <code>volume.beta.kubernetes.io/storage-provisioner</code> annotation.</li>
+<li>The external-provisioner for the CSI driver sees the <code>PersistentVolumeClaim</code> with the <code>volume.beta.kubernetes.io/storage-provisioner</code> annotation so it starts dynamic volume provisioning:<ol>
+<li>它取消对<code>StorageClass</code>的引用，以收集用于 Provisioning 的不透明参数.</li>
+<li>它使用<code>StorageClass</code>和PersistentVolumeClaim对象中的参数对CSI driver container调用<code>CreateVolume</code>。</li>
+</ol>
+</li>
+<li>成功创建卷后，external-provisioner 将创建一个<code>PersistentVolume</code>对象来表示新创建的卷，并将其绑定到<code>PersistentVolumeClaim</code></li>
+</ol>
+<h4 id="Deleting-Volumes"><a href="#Deleting-Volumes" class="headerlink" title="Deleting Volumes"></a>Deleting Volumes</h4><ol>
+<li>A user deletes a <code>PersistentVolumeClaim</code> object bound to a CSI volume.</li>
+<li>The external-provisioner for the CSI driver sees the <code>PersistentVolumeClaim</code> was deleted and triggers the retention（保留） policy:</li>
+<li>If the retention policy is <code>delete</code> 1. The external-provisioner triggers volume deletion by issuing a <code>DeleteVolume</code> call against the CSI volume plugin container. 2. Once the volume is successfully deleted, the external-provisioner deletes the corresponding（相应的） <code>PersistentVolume</code> object.</li>
+<li>If the retention policy is <code>retain</code> 1. The external-provisioner does not delete the <code>PersistentVolume</code> object.</li>
+</ol>
+<h4 id="Attaching-Volumes"><a href="#Attaching-Volumes" class="headerlink" title="Attaching Volumes"></a>Attaching Volumes</h4><ol>
+<li>The Kubernetes attach/detach controller, running as part of the <code>kube-controller-manager</code> binary on the master, sees that a pod referencing a CSI volume plugin is scheduled to a node, so it calls the in-tree CSI volume plugin’s attach method.</li>
+<li>The in-tree volume plugin creates a new <code>VolumeAttachment</code> object in the kubernetes API and waits for its status to change to completed or error.</li>
+<li>The external-attacher sees the <code>VolumeAttachment</code> object and triggers a <code>ControllerPublish</code> against the CSI volume driver container to fulfil it (meaning the external-attacher container issues a gRPC call via underlying UNIX domain socket to the CSI driver container).</li>
+<li>Upon successful completion of the <code>ControllerPublish</code> call the external-attacher updates the status of the <code>VolumeAttachment</code> object to indicate the volume is successfully attached.</li>
+<li>The in-tree volume plugin watching the status of the <code>VolumeAttachment</code> object in the Kubernetes API, sees the <code>Attached</code> field set to true indicating the volume is attached, so it updates the attach/detach controller’s internal state to indicate the volume is attached.</li>
+</ol>
+<h4 id="Detaching-Volumes"><a href="#Detaching-Volumes" class="headerlink" title="Detaching Volumes"></a>Detaching Volumes</h4><ol>
+<li>The Kubernetes attach/detach controller, running as part of the <code>kube-controller-manager</code> binary on the master, sees that a pod referencing an attached CSI volume plugin is terminated or deleted, so it calls the in-tree CSI volume plugin’s detach method.</li>
+<li>The in-tree volume plugin deletes the corresponding <code>VolumeAttachment</code> object.</li>
+<li>The external-attacher sees a <code>deletionTimestamp</code> set on the <code>VolumeAttachment</code> object and triggers a <code>ControllerUnpublish</code> against the CSI volume driver container to detach it.</li>
+<li>Upon successful completion of the <code>ControllerUnpublish</code> call, the external-attacher removes the finalizer from the <code>VolumeAttachment</code> object to indicate successful completion of the detach operation allowing the <code>VolumeAttachment</code> object to be deleted.</li>
+<li>The in-tree volume plugin waiting for the <code>VolumeAttachment</code> object sees it deleted and assumes the volume was successfully detached, so It updates the attach/detach controller’s internal state to indicate the volume is detached.</li>
+</ol>
+<h4 id="Mounting-Volumes"><a href="#Mounting-Volumes" class="headerlink" title="Mounting Volumes"></a>Mounting Volumes</h4><ol>
+<li>The volume manager component of kubelet notices a new volume, referencing a CSI volume, has been scheduled to the node, so it calls the in-tree CSI volume plugin’s <code>WaitForAttach</code> method.</li>
+<li>The in-tree volume plugin’s <code>WaitForAttach</code> method watches the <code>Attached</code> field of the <code>VolumeAttachment</code> object in the kubernetes API to become <code>true</code>, it then returns without error.</li>
+<li>Kubelet then calls the in-tree CSI volume plugin’s <code>MountDevice</code> method which is a no-op and returns immediately.</li>
+<li>Finally kubelet calls the in-tree CSI volume plugin’s mount (setup) method, which causes the in-tree volume plugin to issue a <code>NodePublishVolume</code> call via the registered unix domain socket to the local CSI driver.</li>
+<li>Upon successful completion of the <code>NodePublishVolume</code> call the specified path is mounted into the pod container.</li>
+</ol>
+<h4 id="Unmounting-Volumes"><a href="#Unmounting-Volumes" class="headerlink" title="Unmounting Volumes"></a>Unmounting Volumes</h4><ol>
+<li>The volume manager component of kubelet, notices a mounted CSI volume, referenced by a pod that has been deleted or terminated, so it calls the in-tree CSI volume plugin’s <code>UnmountDevice</code> method which is a no-op and returns immediately.</li>
+<li>Next kubelet calls the in-tree CSI volume plugin’s unmount (teardown) method, which causes the in-tree volume plugin to issue a <code>NodeUnpublishVolume</code> call via the registered unix domain socket to the local CSI driver. If this call fails from any reason, kubelet re-tries the call periodically.</li>
+<li>Upon successful completion of the <code>NodeUnpublishVolume</code> call the specified path is unmounted from the pod container.</li>
+</ol>
+<h1 id="Container-Storage-Interface-CSI"><a href="#Container-Storage-Interface-CSI" class="headerlink" title="Container Storage Interface (CSI)"></a>Container Storage Interface (CSI)</h1><p>本文翻译于<a target="_blank" rel="noopener" href="https://github.com/container-storage-interface/spec/blob/master/spec.md">Container Storage Interface (CSI)</a></p>
+<h2 id="术语-1"><a href="#术语-1" class="headerlink" title="术语"></a>术语</h2><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Volume</td>
+<td>通过CSI在 CO 管理的容器内提供的一种存储单元</td>
+</tr>
+<tr>
+<td>Block Volume</td>
+<td>在容器中显示为块设备的卷。</td>
+</tr>
+<tr>
+<td>Mounted Volume</td>
+<td>A volume that will be mounted using the specified file system and appear as a directory inside the container.</td>
+</tr>
+<tr>
+<td>CO</td>
+<td>Container Orchestration system, 使用 CSI service RPCs 与 Plugins 通信 .</td>
+</tr>
+<tr>
+<td>SP</td>
+<td>Storage Provider, the vendor of a CSI plugin implementation.</td>
+</tr>
+<tr>
+<td>RPC</td>
+<td><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Remote_procedure_call">Remote Procedure Call</a>.</td>
+</tr>
+<tr>
+<td>Node</td>
+<td>A host where the user workload will be running, 从插件的角度来看，可以通过 node ID 唯一标识</td>
+</tr>
+<tr>
+<td>Plugin</td>
+<td>“plugin implementation”, a gRPC endpoint that implements the CSI Services.</td>
+</tr>
+<tr>
+<td>Plugin Supervisor</td>
+<td>控制插件生命周期的进程, MAY be the CO.</td>
+</tr>
+<tr>
+<td>Workload</td>
+<td>The atomic unit of “work” scheduled by a CO. This MAY be a container or a collection of containers.</td>
+</tr>
+</tbody></table>
+<h2 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h2><p>定义一个行业标准的  “Container Storage Interface” (CSI) 使存储厂商 (SP) 能够一次性开发一个插件，并使其在多个 container orchestration (CO) systems 使用。</p>
+<h3 id="Goals-in-MVP"><a href="#Goals-in-MVP" class="headerlink" title="Goals in MVP"></a>Goals in MVP</h3><p>The Container Storage Interface (CSI) will</p>
+<ul>
+<li>Enable SP authors to write one CSI compliant Plugin that “just works” across all COs that implement CSI.</li>
+<li>Define API (RPCs) that enable:<ul>
+<li>Dynamic provisioning and deprovisioning of a volume.</li>
+<li>Attaching or detaching a volume from a node.</li>
+<li>Mounting/unmounting a volume from a node.</li>
+<li>Consumption（消耗） of both block and mountable volumes.</li>
+<li>Local storage providers (e.g., device mapper, lvm).</li>
+<li>Creating and deleting a snapshot (source of the snapshot is a volume).</li>
+<li>Provisioning a new volume from a snapshot (reverting（恢复） snapshot, where data in the original volume is erased and replaced with data in the snapshot, is out of scope).</li>
+</ul>
+</li>
+<li>定义 plugin 协议规范<ul>
+<li>描述 Supervisor 配置一个 Plugin 的过程.</li>
+<li>容器部署注意事项 (<code>CAP_SYS_ADMIN</code>, mount namespace, etc.).</li>
+</ul>
+</li>
+</ul>
+<h3 id="Non-Goals-in-MVP"><a href="#Non-Goals-in-MVP" class="headerlink" title="Non-Goals in MVP"></a>Non-Goals in MVP</h3><p>容器存储接口（CSI）不会明确定义、提供或规定:</p>
+<ul>
+<li>Plugin Supervisor 管理插件生命周期的特定机制，包括:<ul>
+<li>How to maintain state (e.g. what is attached, mounted, etc.).</li>
+<li>How to deploy, install, upgrade, uninstall, monitor, or respawn (in case of unexpected termination) Plugins.</li>
+</ul>
+</li>
+<li>A first class message structure/field to represent “grades of storage” (aka “storage class”).</li>
+<li>Protocol-level authentication and authorization.</li>
+<li>Packaging of a Plugin.</li>
+<li>POSIX兼容：CSI不能保证提供的 volume 是与POSIX兼容的文件系统。合规性由 plugin 实现（及其依赖的任何后端存储系统）决定。CSI不得妨碍 Plugin Supervisor 或CO以符合POSIX的方式与插件管理的 volume 进行交互</li>
+</ul>
+<h3 id="解决方案概述"><a href="#解决方案概述" class="headerlink" title="解决方案概述"></a>解决方案概述</h3><p>本规范定义了一个接口以及存储提供商（SP）实现CSI兼容插件的最低操作和打包建议。Plugin 必须暴露接口声明的RPCS：这是CSI规范的主要焦点。任何 operational 和 packaging 建议都为促进交叉兼容提供了额外的指导。</p>
+<h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4><p>本规范的主要焦点是CO和插件之间的协议。多种架构的插件应该是兼容的。CO应该能够处理集中式和分布式插件，以及 split-component 和 unified（一体化） plugins。下图说明了其中几种可能性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">                             CO &quot;Master&quot; Host</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    | Controller |  |</span><br><span class="line">|  |            +-----------&gt;   Plugin   |  |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">                            CO &quot;Node&quot; Host(s)</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    |    Node    |  |</span><br><span class="line">|  |            +-----------&gt;   Plugin   |  |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">Figure 1: The Plugin runs on all nodes in the cluster: </span><br><span class="line">a centralized Controller Plugin is available on the CO master host </span><br><span class="line">and the Node Plugin is available on all of the CO Nodes.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">                            CO &quot;Node&quot; Host(s)</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    | Controller |  |</span><br><span class="line">|  |            +--+--------&gt;   Plugin   |  |</span><br><span class="line">|  +------------+  |        +------------+  |</span><br><span class="line">|                  |                        |</span><br><span class="line">|                  |                        |</span><br><span class="line">|                  |        +------------+  |</span><br><span class="line">|                  |        |    Node    |  |</span><br><span class="line">|                  +--------&gt;   Plugin   |  |</span><br><span class="line">|                           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">Figure 2: Headless Plugin deployment, only the CO Node hosts run</span><br><span class="line">Plugins. Separate（单独地）, split-component Plugins supply the Controller</span><br><span class="line">Service and the Node Service respectively（分别）.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">                            CO &quot;Node&quot; Host(s)</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    | Controller |  |</span><br><span class="line">|  |            +-----------&gt;    Node    |  |</span><br><span class="line">|  +------------+           |   Plugin   |  |</span><br><span class="line">|                           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">Figure 3: Headless Plugin deployment, only the CO Node hosts run</span><br><span class="line">Plugins. A unified Plugin component supplies both the Controller</span><br><span class="line">Service and Node Service.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">                            CO &quot;Node&quot; Host(s)</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                           |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|  |     CO     |   gRPC    |    Node    |  |</span><br><span class="line">|  |            +-----------&gt;   Plugin   |  |</span><br><span class="line">|  +------------+           +------------+  |</span><br><span class="line">|                                           |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line"></span><br><span class="line">Figure 4: Headless Plugin deployment, only the CO Node hosts run</span><br><span class="line">Plugins. A Node-only Plugin component supplies only the Node Service.</span><br><span class="line">Its GetPluginCapabilities RPC does not report the CONTROLLER_SERVICE capability.</span><br></pre></td></tr></table></figure>
+<h4 id="Volume-Lifecycle"><a href="#Volume-Lifecycle" class="headerlink" title="Volume Lifecycle"></a>Volume Lifecycle</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   CreateVolume +------------+ DeleteVolume</span><br><span class="line"> +-------------&gt;|  CREATED   +--------------+</span><br><span class="line"> |              +---+----^---+              |</span><br><span class="line"> |       Controller |    | Controller       v</span><br><span class="line">+++         Publish |    | Unpublish       +++</span><br><span class="line">|X|          Volume |    | Volume          | |</span><br><span class="line">+-+             +---v----+---+             +-+</span><br><span class="line">                | NODE_READY |</span><br><span class="line">                +---+----^---+</span><br><span class="line">               Node |    | Node</span><br><span class="line">            Publish |    | Unpublish</span><br><span class="line">             Volume |    | Volume</span><br><span class="line">                +---v----+---+</span><br><span class="line">                | PUBLISHED  |</span><br><span class="line">                +------------+</span><br><span class="line"></span><br><span class="line">Figure 5: The lifecycle of a dynamically provisioned volume, from creation to destruction（销毁）.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">   CreateVolume +------------+ DeleteVolume</span><br><span class="line"> +-------------&gt;|  CREATED   +--------------+</span><br><span class="line"> |              +---+----^---+              |</span><br><span class="line"> |       Controller |    | Controller       v</span><br><span class="line">+++         Publish |    | Unpublish       +++</span><br><span class="line">|X|          Volume |    | Volume          | |</span><br><span class="line">+-+             +---v----+---+             +-+</span><br><span class="line">                | NODE_READY |</span><br><span class="line">                +---+----^---+</span><br><span class="line">               Node |    | Node</span><br><span class="line">              Stage |    | Unstage</span><br><span class="line">             Volume |    | Volume</span><br><span class="line">                +---v----+---+</span><br><span class="line">                |  VOL_READY |</span><br><span class="line">                +---+----^---+</span><br><span class="line">               Node |    | Node</span><br><span class="line">            Publish |    | Unpublish</span><br><span class="line">             Volume |    | Volume</span><br><span class="line">                +---v----+---+</span><br><span class="line">                | PUBLISHED  |</span><br><span class="line">                +------------+</span><br><span class="line"></span><br><span class="line">Figure 6: The lifecycle of a dynamically provisioned volume, from creation to destruction, when the Node Plugin advertises the STAGE_UNSTAGE_VOLUME capability.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">    Controller                  Controller</span><br><span class="line">       Publish                  Unpublish</span><br><span class="line">        Volume  +------------+  Volume</span><br><span class="line"> +-------------&gt;+ NODE_READY +--------------+</span><br><span class="line"> |              +---+----^---+              |</span><br><span class="line"> |             Node |    | Node             v</span><br><span class="line">+++         Publish |    | Unpublish       +++</span><br><span class="line">|X| &lt;-+      Volume |    | Volume          | |</span><br><span class="line">+++   |         +---v----+---+             +-+</span><br><span class="line"> |    |         | PUBLISHED  |</span><br><span class="line"> |    |         +------------+</span><br><span class="line"> +----+</span><br><span class="line">   Validate</span><br><span class="line">   Volume</span><br><span class="line">   Capabilities</span><br><span class="line"></span><br><span class="line">Figure 7: The lifecycle of a pre-provisioned volume that requires </span><br><span class="line">controller to publish to a node (&#96;ControllerPublishVolume&#96;) prior to（在...前）</span><br><span class="line">publishing on the node (&#96;NodePublishVolume&#96;).</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">       +-+  +-+</span><br><span class="line">       |X|  | |</span><br><span class="line">       +++  +^+</span><br><span class="line">        |    |</span><br><span class="line">   Node |    | Node</span><br><span class="line">Publish |    | Unpublish</span><br><span class="line"> Volume |    | Volume</span><br><span class="line">    +---v----+---+</span><br><span class="line">    | PUBLISHED  |</span><br><span class="line">    +------------+</span><br><span class="line"></span><br><span class="line">Figure 8: 插件可以通过 capabilities API 禁止其他生命周期步骤。与此类插件的交互量减少到“ NodePublishVolume”和“ NodeUnpublishVolume”调用。</span><br></pre></td></tr></table></figure>
+<p>上面的图表说明了关于CO如何通过本规范中提供的API来管理卷的生命周期的一般期望。插件应该公开来自接口的所有RPCS：Controller plugins 应该实现 <code>Controller</code> 服务的所有RPC。不受支持的RPC应该返回一个适当的错误代码来指明这一点（例如CALL_NOT_IMPLEMENTED）。插件功能的完整列表记录在<code>ControllerGetCapabilities</code>和NodeGetCapabilities RPC中。</p>
+<h1 id="Kubernetes存储架构整体介绍"><a href="#Kubernetes存储架构整体介绍" class="headerlink" title="Kubernetes存储架构整体介绍"></a>Kubernetes存储架构整体介绍</h1>
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-11-24</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/12/11/Linux/IO%E6%A8%A1%E5%9E%8B%E5%8F%8Aselect%E3%80%81poll%E3%80%81epoll%E5%92%8Ckqueue%E7%9A%84%E5%8C%BA%E5%88%AB/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/11/23/k8s/GRPC/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

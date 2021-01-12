@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="Python程序的执行方式![image-20200914172258244](&#x2F;Users&#x2F;shenshawn&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20200914172258244.png) 字节码编译当程序执行时，Python内部（对用户是透明的）会先将源代码（Python代码文件中的语句）编译成字节码的形式。字节码是源代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/14/python/Python%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="Python程序的执行方式![image-20200914172258244](&#x2F;Users&#x2F;shenshawn&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20200914172258244.png) 字节码编译当程序执行时，Python内部（对用户是透明的）会先将源代码（Python代码文件中的语句）编译成字节码的形式。字节码是源代">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-09-14T09:16:03.102Z">
+<meta property="article:modified_time" content="2020-09-14T10:10:04.606Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-14</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="Python程序的执行方式"><a href="#Python程序的执行方式" class="headerlink" title="Python程序的执行方式"></a>Python程序的执行方式</h1><p>![image-20200914172258244](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200914172258244.png)</p>
+<h2 id="字节码编译"><a href="#字节码编译" class="headerlink" title="字节码编译"></a>字节码编译</h2><p>当程序执行时，Python内部（对用户是透明的）会先将源代码（Python代码文件中的语句）编译成字节码的形式。字节码是源代码底层的、与平台无关的表现形式。一条语句可能对应着一组字节码指令。</p>
+<p>![image-20200914172604438](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200914172604438.png)</p>
+<p>有时，我们执行Python程序后会看到 .pyc  后缀的文件，这就是字节码文件。 一般被 import 导入的库菜会生成 .pyc文件。有 .pyc 文件，可以加速程序的运行，但没有也没关系。</p>
+<h2 id="Python虚拟机（PVM）"><a href="#Python虚拟机（PVM）" class="headerlink" title="Python虚拟机（PVM）"></a>Python虚拟机（PVM）</h2><p>程序编译成字节码后，会发送给Python虚拟机（Python virtual Machine）上来执行。PVM不是一个独立的程序，它是解释器中的运行引擎。从技术上讲，它是所谓“Python解释器”的最后一步。</p>
+<h1 id="Python解释器"><a href="#Python解释器" class="headerlink" title="Python解释器"></a>Python解释器</h1><p>当Python被安装到机器后，它包含了一些最小化的组件：一个解释器和支持的库。当我们执行脚本时，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python xxx.py</span><br></pre></td></tr></table></figure>
+<p>实际上命令<code>python</code>就是解释器（一个可执行程序），解释器中，包含了编译和PVM的相关功能。</p>
+<p>![image-20200914172041167](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200914172041167.png)</p>
+<p>一般默认的Python解释器都是Cpython，即用C语言编写的解释器。但也有其他语言编写的解释器，如 JPython，用Java编写的解释器。</p>
+<h1 id="Python执行优化工具"><a href="#Python执行优化工具" class="headerlink" title="Python执行优化工具"></a>Python执行优化工具</h1><p>Python还有一些优化工具，使计算机可以更快的速度运行Python代码。如</p>
+<ul>
+<li>Psyco实时编译器</li>
+<li>Shedskin C++ 转换器</li>
+</ul>
+<p>它们是执行模块的变体。</p>
+<h1 id="冻结二进制文件"><a href="#冻结二进制文件" class="headerlink" title="冻结二进制文件"></a>冻结二进制文件</h1><p>通过从网络上获得的一些第三方工具，可将Python程序转化为可执行程序（即冻结二进制文件，Frozen Binary）。</p>
+<p>冻结二进制文件能够将程序的字节码，PVM（解释器）以及任何程序所需要的Python支持文件捆绑在一起形成一个单独的文件包。实际的执行结果将会是一个单独的可执行二进制文件程序。</p>
+<p>冻结二进制文件中嵌入了Python，接收端并不需要安装Python以运行二进制文件</p>
+<p>生成冻结二进制文件的工具有：</p>
+<ul>
+<li>py2exe</li>
+<li>pyInstaller</li>
+<li>freeze</li>
+</ul>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-09-14</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/09/14/Linux/KVM/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

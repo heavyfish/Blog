@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="Types and interfaces反射用于检查自身的结构，属于元程序编程。每个语言的反射机制都是不同的，有的语言没有反射。go语言的反射机制建立在类型系统之上 Go是静态类型的。每个变量都有一个静态类型，也就是在编译时已知并固定的一种类型：int，float32，*MyType，[] byte等。如果我们声明 1234type MyInt intvar i intvar j MyInt 那么">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/11/16/k8s/%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%8D%E5%B0%84-%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="Types and interfaces反射用于检查自身的结构，属于元程序编程。每个语言的反射机制都是不同的，有的语言没有反射。go语言的反射机制建立在类型系统之上 Go是静态类型的。每个变量都有一个静态类型，也就是在编译时已知并固定的一种类型：int，float32，*MyType，[] byte等。如果我们声明 1234type MyInt intvar i intvar j MyInt 那么">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-11-16T13:13:35.849Z">
+<meta property="article:modified_time" content="2020-11-16T14:06:42.610Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/11/" class="post-meta__date button">2020-11-16</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="Types-and-interfaces"><a href="#Types-and-interfaces" class="headerlink" title="Types and interfaces"></a>Types and interfaces</h1><p>反射用于检查自身的结构，属于元程序编程。每个语言的反射机制都是不同的，有的语言没有反射。<strong>go语言的反射机制建立在类型系统之上</strong></p>
+<p>Go是静态类型的。每个变量都有一个静态类型，也就是在编译时已知并固定的一种类型：int，float32，*MyType，[] byte等。如果我们声明</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyInt <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i <span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> j MyInt</span><br></pre></td></tr></table></figure>
+<p>那么i 的类型为int，j 的类型为MyInt。变量i和j具有不同的静态类型，尽管它们具有相同的基础类型，但是如果不进行转换就无法将它们彼此调用。</p>
+<p>type 的一个重要类别是接口类型，它表示固定的方法集。接口变量可以存储任何具体的（非接口）值，只要该值实现接口的方法即可。一对著名的示例是io.Reader和io.Writer，它们是io包中的Reader和Writer类型</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Reader is the interface that wraps the basic Read method.</span></span><br><span class="line"><span class="keyword">type</span> Reader <span class="keyword">interface</span> &#123;</span><br><span class="line">    Read(p []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Writer is the interface that wraps the basic Write method.</span></span><br><span class="line"><span class="keyword">type</span> Writer <span class="keyword">interface</span> &#123;</span><br><span class="line">    Write(p []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>任何使用此签名实现Read（或Write）方法的类型都称为io.Reader（或io.Writer）。在此讨论中，这意味着io.Reader类型的变量可以保存 其类型具有Read方法的任何值：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> r io.Reader</span><br><span class="line">r = os.Stdin</span><br><span class="line">r = bufio.NewReader(r)</span><br><span class="line">r = <span class="built_in">new</span>(bytes.Buffer)</span><br><span class="line"><span class="comment">// and so on</span></span><br></pre></td></tr></table></figure>
+<p>重要的是要清楚，无论r可能包含什么具体值，r的类型始终是io.Reader：Go是静态类型的，而r的静态类型是io.Reader。</p>
+<p>接口类型的一个非常重要的例子是空接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interface&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>它表示空方法集，并且由任何值完全满足，因为任何值具有零个或多个方法。</p>
+<p>有人说Go的接口是动态类型的，这是不对的。Go接口是静态类型的：接口类型的变量始终具有相同的静态类型，即使在运行时存储在接口变量中的值可能会更改类型，该值也将始终满足接口的要求。</p>
+<p>我们需要对所有这些事情都保持精确，因为反射和接口密切相关。</p>
+<h1 id="接口的表示"><a href="#接口的表示" class="headerlink" title="接口的表示"></a>接口的表示</h1><p>Russ Cox写了一篇详细的<a target="_blank" rel="noopener" href="https://research.swtch.com/2009/12/go-data-structures-interfaces.html">博客文章</a>，内容涉及Go中接口值的表示。这里没有必要重复完整的故事，但有一些必要的概要。</p>
+<p>接口类型的变量存储一对：分配给该变量的具体值以及该值的类型描述符。更准确地说，该值是实现接口的基础具体数据项，而类型则描述该项的完整类型。例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> r io.Reader</span><br><span class="line">tty, err := os.OpenFile(<span class="string">&quot;/dev/tty&quot;</span>, os.O_RDWR, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">&#125;</span><br><span class="line">r = tty</span><br></pre></td></tr></table></figure>
+<p>r  包含（value, type）对，（tty，* os.File）。注意，* os.File类型实现了Read以外的方法；即使接口值仅提供对Read方法的访问，值内部也包含有关该值的所有类型信息。这就是为什么我们可以做这样的事情：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> w io.Writer</span><br><span class="line">w = r.(io.Writer)</span><br></pre></td></tr></table></figure>
+<p>此处的表达式是类型断言；它断言的是r中的类型也实现了io.Writer，因此我们可以将其分配给w。分配后，w将包含（tty，* os.File）对。这与在r中持有的对相同。接口的静态类型确定可以使用接口变量调用哪些方法，即使内部的具体值可能具有更大的方法集。</p>
+<p>继续，我们可以这样做：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> empty <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">empty = w</span><br></pre></td></tr></table></figure>
+<p>并且我们的空接口值empty将再次包含同一对（tty，* os.File）。这很方便：一个空接口可以保存任何值，并包含我们可能需要的有关该值的所有信息。</p>
+<p>（我们在这里不需要类型断言，因为静态地知道w可以满足空接口。在将值从Reader移到Writer的示例中，我们需要显式并使用类型断言，因为Writer的方法是而不是Reader的子集。）</p>
+<p>一个重要的细节是，<strong>接口内的对始终具有形式（值，具体类型）</strong>，而不能具有形式（值，接口类型）。接口不保存接口值。</p>
+<h1 id="反射第一定律：反射从接口值到反射对象"><a href="#反射第一定律：反射从接口值到反射对象" class="headerlink" title="反射第一定律：反射从接口值到反射对象"></a>反射第一定律：反射从接口值到反射对象</h1><p>在底层级别上，<strong>反射只是一种检查存储在接口变量中的 类型和值对 的机制</strong>。首先，我们需要在 <a target="_blank" rel="noopener" href="https://golang.org/pkg/reflect/">package reflect</a>: 中了解两种类型：<a target="_blank" rel="noopener" href="https://golang.org/pkg/reflect/#Type">Type</a> and <a target="_blank" rel="noopener" href="https://golang.org/pkg/reflect/#Value">Value</a>。这两种类型允许访问接口变量的内容，还有两个简单的函数，称为<code>reflect.TypeOf</code>和<code>reflect.ValueOf</code>，从接口值中获取<code>reflect.Type</code>和<code>reflect.Value</code>部分。 （此外，从<code>reflect.Value</code>可以很容易地到达<code>reflect.Type</code>，但是现在让Value和Type概念保持分离。）</p>
+<p>让我们从TypeOf开始：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;reflect&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;type:&quot;</span>, reflect.TypeOf(x))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该程序打印</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span>: <span class="keyword">float64</span></span><br></pre></td></tr></table></figure>
+<p>您可能想知道为什么接口在这里，因为该程序看起来像在传递float64变量x，而不是接口值给<code>reflect.TypeOf</code>。但是在查看 <a target="_blank" rel="noopener" href="https://golang.org/pkg/reflect/#TypeOf">godoc report</a> 时，reflect.TypeOf的签名包括一个空接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TypeOf returns the reflection Type of the value in the interface&#123;&#125;.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TypeOf</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">Type</span></span></span><br></pre></td></tr></table></figure>
+<p>当我们调用<code>reflect.TypeOf（x）</code>时，x首先存储在一个空接口中，然后将其作为参数传递； <code>Reflection.TypeOf</code>解压缩该空接口以恢复类型信息</p>
+<p>当然，<code>reflect.ValueOf</code>函数可以恢复值（从这里开始，我们将跳过样板并只关注可执行代码）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">fmt.Println(<span class="string">&quot;value:&quot;</span>, reflect.ValueOf(x).String())</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 打印</span></span><br><span class="line">value: &lt;<span class="keyword">float64</span> Value&gt;</span><br></pre></td></tr></table></figure>
+<p>（我们明确地调用String方法，因为默认情况下，fmt包会挖掘到一个<code>reflect.Value</code>以显示其中的具体值。而String方法则不会。）</p>
+<p><code>reflect.Type</code>和<code>reflect.Value</code>都有很多方法可以让我们检查和操作它们。一个重要的例子是<code>Value</code>具有<code>Type</code>方法，该方法返回<code>reflect.Value</code>的Type。另一个是Type和Value都具有<code>Kind</code>方法，该方法返回一个常量，指示存储的项目类型：Uint，Float64，Slice等。同样，使用诸如Int和Float之类的Value方法，还可以获取存储在其中的值（如int64和float64）:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br><span class="line">fmt.Println(<span class="string">&quot;type:&quot;</span>, v.Type())</span><br><span class="line">fmt.Println(<span class="string">&quot;kind is float64:&quot;</span>, v.Kind() == reflect.Float64)</span><br><span class="line">fmt.Println(<span class="string">&quot;value:&quot;</span>, v.Float())</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 打印</span></span><br><span class="line"><span class="keyword">type</span>: <span class="keyword">float64</span></span><br><span class="line">kind is <span class="keyword">float64</span>: <span class="literal">true</span></span><br><span class="line">value: <span class="number">3.4</span></span><br></pre></td></tr></table></figure>
+<p>还有诸如SetInt和SetFloat之类的方法，但要使用它们，我们需要了解settability，这是第三反射定律的主题，下面将进行讨论。</p>
+<p>反射库具有几个值得一提的属性。首先，为使API保持简单，Value的“ getter”和“ setter”方法在可以保存该值的最大类型上运行：例如，所有有符号整数的int64。也就是说，Value的Int方法返回一个int64，而SetInt值设置一个int64；可能需要转换为涉及的实际类型：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">uint8</span> = <span class="string">&#x27;x&#x27;</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br><span class="line">fmt.Println(<span class="string">&quot;type:&quot;</span>, v.Type())                            <span class="comment">// uint8.</span></span><br><span class="line">fmt.Println(<span class="string">&quot;kind is uint8: &quot;</span>, v.Kind() == reflect.Uint8) <span class="comment">// true.</span></span><br><span class="line">x = <span class="keyword">uint8</span>(v.Uint())                                       <span class="comment">// v.Uint returns a uint64.</span></span><br></pre></td></tr></table></figure>
+<p>第二个属性是<strong>反射对象的<code>kind</code>描述基础类型，而不是静态类型</strong>。如果反射对象包含用户定义的整数类型的值，例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyInt <span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> x MyInt = <span class="number">7</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br></pre></td></tr></table></figure>
+<p>v的kind仍然是reflect.Int，即使x的静态类型是MyInt 不是int。换句话说，即使Type可以，Kind也不能将MyInt 和 Int 区别开。</p>
+<h1 id="反射第二定律：反射从反射对象到接口值"><a href="#反射第二定律：反射从反射对象到接口值" class="headerlink" title="反射第二定律：反射从反射对象到接口值"></a>反射第二定律：反射从反射对象到接口值</h1><p>像物理反射一样，Go中的反射会生成自己的逆反射。</p>
+<p>给定一个reflect.Value，我们可以使用Interface方法恢复接口值；实际上，该方法将类型和值信息打包回接口表示形式并返回结果：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Interface returns v&#x27;s value as an interface&#123;&#125;.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v Value)</span> <span class="title">Interface</span><span class="params">()</span> <span class="title">interface</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y := v.Interface().(<span class="keyword">float64</span>) <span class="comment">// y will have type float64.</span></span><br><span class="line">fmt.Println(y)</span><br></pre></td></tr></table></figure>
+<p>打印反射对象v表示的float64值。</p>
+<p>不过，我们可以做得更好。 fmt.Println，fmt.Printf等的参数都作为空接口值传递，然后像在前面的示例中一样，在内部由fmt包解压缩。因此，正确打印reflect.Value的内容所要做的就是将Interface方法的结果传递给格式化的打印例程：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(v.Interface())</span><br></pre></td></tr></table></figure>
+<p>（为什么不使用fmt.Println（v）？因为v是reflect.Value；我们想要它包含的具体值。）由于我们的值是float64，因此如果需要，我们甚至可以使用浮点格式：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fmt.Printf(<span class="string">&quot;value is %7.1e\n&quot;</span>, v.Interface())</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印为</span></span><br><span class="line"><span class="number">3.4e+00</span></span><br></pre></td></tr></table></figure>
+<p>同样，无需将v.Interface（）的结果类型声明为float64;。空接口值内部具有具体值的类型信息，Printf将对其进行恢复。</p>
+<p>简而言之，Interface方法与ValueOf函数相反，但其结果始终是静态类型interface {}。</p>
+<p>重申：反射从接口值到反射对象，然后再返回。</p>
+<h1 id="反射第三定律：要修改反射对象，value-必须可settable"><a href="#反射第三定律：要修改反射对象，value-必须可settable" class="headerlink" title="反射第三定律：要修改反射对象，value 必须可settable"></a>反射第三定律：要修改反射对象，value 必须可settable</h1><p>这是一些无效的代码，但值得研究。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br><span class="line">v.SetFloat(<span class="number">7.1</span>) <span class="comment">// Error: will panic.</span></span><br></pre></td></tr></table></figure>
+<p>如果运行此代码，它将：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">panic</span>: reflect.Value.SetFloat using unaddressable value</span><br></pre></td></tr></table></figure>
+<p>问题不在于值7.1不可寻址。是因为 v 是不可设置的。可设置性是反射值的属性，并非所有反射值都具有它。</p>
+<p>值的CanSet方法报告值的可设置性：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br><span class="line">fmt.Println(<span class="string">&quot;settability of v:&quot;</span>, v.CanSet())</span><br></pre></td></tr></table></figure>
+<p>打印</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">settability of v: <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>在不可设置的值上调用Set方法是错误的。但是什么是可设置性？</p>
+<p>可设置性有点像可寻址性，但是更严格。它是反射对象可以修改创建反射对象时的实际存储的属性。可设置性由反射对象是否保留原始条目确定。当我们说</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br></pre></td></tr></table></figure>
+<p>我们将x的副本传递给reflect.ValueOf，因此，作为reflect.ValueOf的参数创建的接口值是x的副本，而不是x本身。因此，如果声明</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v.SetFloat(<span class="number">7.1</span>)</span><br></pre></td></tr></table></figure>
+<p>被允许成功，即使v看起来是从x创建的，它也不会更新x。相反，它将更新存储在反射值内的x的副本，并且x本身将不受影响。这将造成混乱和无用，因此是非法的，可设置性是避免此问题的属性。</p>
+<p>考虑将x传递给函数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(x)</span><br></pre></td></tr></table></figure>
+<p>我们不希望f能够修改x，因为我们传递了x值的副本，而不是x本身。如果要让f直接修改x，则必须将x的地址（即指向x的指针）传递给函数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(&amp;x)</span><br></pre></td></tr></table></figure>
+<p>这是直接且熟悉的，并且反射的工作方式相同。<strong>如果要通过反射修改x，则必须为反射库提供指向要修改的值的指针</strong>。</p>
+<p>来做吧：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">float64</span> = <span class="number">3.4</span></span><br><span class="line">p := reflect.ValueOf(&amp;x) <span class="comment">// Note: take the address of x.</span></span><br><span class="line">fmt.Println(<span class="string">&quot;type of p:&quot;</span>, p.Type())</span><br><span class="line">fmt.Println(<span class="string">&quot;settability of p:&quot;</span>, p.CanSet())</span><br></pre></td></tr></table></figure>
+<p>到目前为止的输出是:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> of p: *<span class="keyword">float64</span></span><br><span class="line">settability of p: <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>反射对象p是不可设置的，但我们不是要设置的p，实际上是*p。为了得到p所指向的内容，我们称为Value的<code>Elem</code>方法，该方法通过指针进行间接操作，并将结果保存在名为v的反射Value中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v := p.Elem()</span><br><span class="line">fmt.Println(<span class="string">&quot;settability of v:&quot;</span>, v.CanSet())</span><br></pre></td></tr></table></figure>
+<p>现在v是一个可设置的反射对象，如输出所示，</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">settability of v: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>由于它代表x，我们最终可以使用v.SetFloat修改x的值：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">v.SetFloat(<span class="number">7.1</span>)</span><br><span class="line">fmt.Println(v.Interface())</span><br><span class="line">fmt.Println(x)</span><br></pre></td></tr></table></figure>
+<p>预期的输出是:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">7.1</span></span><br><span class="line"><span class="number">7.1</span></span><br></pre></td></tr></table></figure>
+<p>反射可能很难理解，但是它确实在做语言的工作，尽管通过反射可以掩盖正在发生的事情的类型和值。请记住，<strong>反射值需要某些内容的地址才能修改其表示的内容</strong>。</p>
+<h1 id="Struct"><a href="#Struct" class="headerlink" title="Struct"></a>Struct</h1><p>在我们前面的示例中，v本身并不是指针，它只是从一个指针派生的。发生这种情况的常见方式是使用反射来修改结构的字段。只要有了结构的地址，就可以修改其字段。</p>
+<p>这是一个分析结构值t的简单示例。我们使用结构的地址创建反射对象，因为稍后将要对其进行修改。然后，将typeOfT 设置为其类型，并使用简单的方法调用对字段进行迭代（有关详细信息，请参见<a target="_blank" rel="noopener" href="https://golang.org/pkg/reflect/">包反射</a>）。请注意，我们从结构类型中提取了字段的名称，但是字段本身是常规的reflect.Value对象。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">    A <span class="keyword">int</span></span><br><span class="line">    B <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line">t := T&#123;<span class="number">23</span>, <span class="string">&quot;skidoo&quot;</span>&#125;</span><br><span class="line">s := reflect.ValueOf(&amp;t).Elem()</span><br><span class="line">typeOfT := s.Type()</span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; s.NumField(); i++ &#123;</span><br><span class="line">    f := s.Field(i)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;%d: %s %s = %v\n&quot;</span>, i,</span><br><span class="line">        typeOfT.Field(i).Name, f.Type(), f.Interface())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该程序的输出是：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>: A <span class="keyword">int</span> = <span class="number">23</span></span><br><span class="line"><span class="number">1</span>: B <span class="keyword">string</span> = skidoo</span><br></pre></td></tr></table></figure>
+<p>在此处传递的内容还涉及可设置性的另一点：T的字段名是大写的（已导出），因为仅可导出结构的导出字段是可设置的。</p>
+<p>因为s包含可设置的反射对象，所以我们可以修改结构的字段。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s.Field(<span class="number">0</span>).SetInt(<span class="number">77</span>)</span><br><span class="line">s.Field(<span class="number">1</span>).SetString(<span class="string">&quot;Sunset Strip&quot;</span>)</span><br><span class="line">fmt.Println(<span class="string">&quot;t is now&quot;</span>, t)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t is now &#123;<span class="number">77</span> Sunset Strip&#125;</span><br></pre></td></tr></table></figure>
+<p>如果我们修改程序，以便从t而不是＆t创建s，则对SetInt和SetString的调用将失败，因为t的字段不可设置。</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>这里重复一下反射定律：</p>
+<ul>
+<li>反射从接口值到反射对象。</li>
+<li>反射从反射对象到接口值。</li>
+<li>要修改反射对象，该值必须可设置</li>
+</ul>
+<p>一旦理解了这些定律，尽管Go中的反射仍然很细微，但它变得更易于使用。这是一个功能强大的工具，除非绝对必要，否则应谨慎使用并避免使用。</p>
+<p>我们还没有涉及到更多的反射-在channel上发送和接收，分配内存，使用切片和映射，调用方法和函数-但是这篇文章足够长。我们将在以后的文章中介绍其中一些主题。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-11-16</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/11/17/Linux/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/11/15/k8s/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

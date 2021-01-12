@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="10、StatefulSet：部署有状态的多副本应用10.1、复制有状态Pod      10.2、了解Statefulset                10.3、使用Statefulset            10.3.3、使用你的Pod      10.4、在Statefulset中发现伙伴节点       注意：返回的SRV记录顺序是随机的， 因为它们拥有相同的优先级。 所以不要 期望">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/11/02/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B010~11/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="10、StatefulSet：部署有状态的多副本应用10.1、复制有状态Pod      10.2、了解Statefulset                10.3、使用Statefulset            10.3.3、使用你的Pod      10.4、在Statefulset中发现伙伴节点       注意：返回的SRV记录顺序是随机的， 因为它们拥有相同的优先级。 所以不要 期望">
+<meta property="og:locale">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102164413172.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102164528277.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102164915594.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165041089.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165118926.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165341321.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165417185.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165502143.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165555279.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165705335.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165808180.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102165941862.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102170030890.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102170422283.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102170440880.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102170635376.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102170808627.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102171112114.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102171145416.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102171247670.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102171439575.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102171528055.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102171633946.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102171813230.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102171838453.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102172633847.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102172809924.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102173009632.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102173036545.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103120440329.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103120509226.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103120633871.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103120752246.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121114246.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121239402.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121331428.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121403034.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121443503.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121547840.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121713961.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121741106.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103121848706.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103122313362.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103123358079.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103123852828.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103123908623.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103124849015.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103124906385.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103124941316.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103125037636.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103143823328.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103143958883.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103144114929.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103144221645.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103144321381.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103144417102.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103144535765.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103144608799.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103144708330.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103144817911.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103145818656.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103145922754.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103150025179.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103150153694.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103150237837.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103150340604.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103150355178.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103150421443.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103150659586.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103150731909.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103151847139.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103151917126.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103152016071.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103152055867.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103152242340.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103152408024.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103152440868.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103152529695.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103152632534.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103152659765.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153007056.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153046724.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153137683.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153202289.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153434714.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153803829.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153848672.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153906092.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153928025.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103153942909.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103154429762.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103154501801.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103154514484.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103154613368.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103154709138.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103154846841.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103154923039.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103154950505.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103170056935.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103165925802.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201103165954417.png">
+<meta property="article:published_time" content="2020-11-02T04:27:55.824Z">
+<meta property="article:modified_time" content="2020-11-03T09:12:41.156Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102164413172.png">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/11/" class="post-meta__date button">2020-11-02</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="10、StatefulSet：部署有状态的多副本应用"><a href="#10、StatefulSet：部署有状态的多副本应用" class="headerlink" title="10、StatefulSet：部署有状态的多副本应用"></a>10、StatefulSet：部署有状态的多副本应用</h1><h2 id="10-1、复制有状态Pod"><a href="#10-1、复制有状态Pod" class="headerlink" title="10.1、复制有状态Pod"></a>10.1、复制有状态Pod</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102164413172.png" alt="image-20201102164413172" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102164528277.png" alt="image-20201102164528277" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102164915594.png" alt="image-20201102164915594" style="zoom:50%;" />
+
+<h2 id="10-2、了解Statefulset"><a href="#10-2、了解Statefulset" class="headerlink" title="10.2、了解Statefulset"></a>10.2、了解Statefulset</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165041089.png" alt="image-20201102165041089" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165118926.png" alt="image-20201102165118926" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165341321.png" alt="image-20201102165341321" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165417185.png" alt="image-20201102165417185" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165502143.png" alt="image-20201102165502143" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165555279.png" alt="image-20201102165555279" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165705335.png" alt="image-20201102165705335" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165808180.png" alt="image-20201102165808180" style="zoom:50%;" />
+
+<h2 id="10-3、使用Statefulset"><a href="#10-3、使用Statefulset" class="headerlink" title="10.3、使用Statefulset"></a>10.3、使用Statefulset</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102165941862.png" alt="image-20201102165941862" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102170030890.png" alt="image-20201102170030890" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102170422283.png" alt="image-20201102170422283" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102170440880.png" alt="image-20201102170440880" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102170635376.png" alt="image-20201102170635376" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102170808627.png" alt="image-20201102170808627" style="zoom:50%;" />
+
+<h3 id="10-3-3、使用你的Pod"><a href="#10-3-3、使用你的Pod" class="headerlink" title="10.3.3、使用你的Pod"></a>10.3.3、使用你的Pod</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102171112114.png" alt="image-20201102171112114" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102171145416.png" alt="image-20201102171145416" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102171247670.png" alt="image-20201102171247670" style="zoom:50%;" />
+
+<h2 id="10-4、在Statefulset中发现伙伴节点"><a href="#10-4、在Statefulset中发现伙伴节点" class="headerlink" title="10.4、在Statefulset中发现伙伴节点"></a>10.4、在Statefulset中发现伙伴节点</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102171439575.png" alt="image-20201102171439575" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102171528055.png" alt="image-20201102171528055" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102171633946.png" alt="image-20201102171633946" style="zoom:50%;" />
+
+<blockquote>
+<p>注意：返回的SRV记录顺序是随机的， 因为它们拥有相同的优先级。 所以不要 期望总是看到kubia-0会排在kubia-1前面</p>
+</blockquote>
+<h3 id="10-4-1、通过DNS实现伙伴彼此发现"><a href="#10-4-1、通过DNS实现伙伴彼此发现" class="headerlink" title="10.4.1、通过DNS实现伙伴彼此发现"></a>10.4.1、通过DNS实现伙伴彼此发现</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102171813230.png" alt="image-20201102171813230" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102171838453.png" alt="image-20201102171838453" style="zoom:50%;" />
+
+<h3 id="10-4-2、更新Statefulset"><a href="#10-4-2、更新Statefulset" class="headerlink" title="10.4.2、更新Statefulset"></a>10.4.2、更新Statefulset</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改 ymal 中的 image 属性</span></span><br><span class="line">kubectl edit statefulset kubia</span><br></pre></td></tr></table></figure>
+<p>在 Kubernetes 1.7 及以后的版本中，StatefulSet 的 <code>.spec.updateStrategy</code> 字段让您可以配置和禁用掉自动滚动更新 Pod 的容器、标签、资源请求或限制、以及注解。</p>
+<p><code>RollingUpdate</code> 更新策略对 StatefulSet 中的 Pod 执行自动的滚动更新。在没有声明 <code>.spec.updateStrategy</code> 时，<code>RollingUpdate</code> 是默认配置。 当 StatefulSet 的 <code>.spec.updateStrategy.type</code> 被设置为 <code>RollingUpdate</code> 时，StatefulSet 控制器会删除和重建 StatefulSet 中的每个 Pod。 它将按照与 Pod 终止相同的顺序（从最大序号到最小序号）进行，每次更新一个 Pod。它会等到被更新的 Pod 进入 Running 和 Ready 状态，然后再更新其前一个。</p>
+<p>在默认 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/concepts/workloads/controllers/statefulset/#pod-management-policies">Pod 管理策略</a>(<code>OrderedReady</code>) 时使用 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/concepts/workloads/controllers/statefulset/#rolling-updates">滚动更新</a> ，可能进入需要人工干预才能修复的损坏状态。如果更新后 Pod 模板配置进入无法运行或就绪的状态（例如，由于错误的二进制文件或应用程序级配置错误）StatefulSet 将停止回滚并等待。在这种状态下，仅将 Pod 模板还原为正确的配置是不够的。由于 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/issues/67250">已知问题</a>，StatefulSet 将继续等待损坏状态的 Pod 准备就绪（永远不会发生），然后再尝试将其恢复为正常工作配置。恢复模板后，还必须删除更新导致的异常 Pod。这样， StatefulSet 才会开始使用被还原的模板来重新创建 Pod。</p>
+<h2 id="10-5、了解Statefulset如何处理节点失效"><a href="#10-5、了解Statefulset如何处理节点失效" class="headerlink" title="10.5、了解Statefulset如何处理节点失效"></a>10.5、了解Statefulset如何处理节点失效</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102172633847.png" alt="image-20201102172633847" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102172809924.png" alt="image-20201102172809924" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在节点断网的情况下，pod是无法正常删除的</span></span><br><span class="line">kubectl delete pod kubia-0</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 告诉API服务器直接删除Pod</span></span><br><span class="line">kubectl delete po kubia-0 --force --grace-period 0</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102173009632.png" alt="image-20201102173009632" style="zoom:50%;" />
+
+<h2 id="10-6、本章小结"><a href="#10-6、本章小结" class="headerlink" title="10.6、本章小结"></a>10.6、本章小结</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102173036545.png" alt="image-20201102173036545" style="zoom:50%;" />
+
+<h1 id="11、了解Kubernetes机理"><a href="#11、了解Kubernetes机理" class="headerlink" title="11、了解Kubernetes机理"></a>11、了解Kubernetes机理</h1><h2 id="11-1、了解架构"><a href="#11-1、了解架构" class="headerlink" title="11.1、了解架构"></a>11.1、了解架构</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103120440329.png" alt="image-20201103120440329" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103120509226.png" alt="image-20201103120509226" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 检查控制平面组件状态</span></span><br><span class="line">kubectl get componentstatuses</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103120633871.png" alt="image-20201103120633871" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103120752246.png" alt="image-20201103120752246" style="zoom:50%;" />
+
+<h3 id="11-1-2、kubernetes如何使用Pod"><a href="#11-1-2、kubernetes如何使用Pod" class="headerlink" title="11.1.2、kubernetes如何使用Pod"></a>11.1.2、kubernetes如何使用Pod</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121114246.png" alt="image-20201103121114246" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121239402.png" alt="image-20201103121239402" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121331428.png" alt="image-20201103121331428" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121403034.png" alt="image-20201103121403034" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121443503.png" alt="image-20201103121443503" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121547840.png" alt="image-20201103121547840" style="zoom:50%;" />
+
+<h3 id="11-1-3、API服务器做了什么"><a href="#11-1-3、API服务器做了什么" class="headerlink" title="11.1.3、API服务器做了什么"></a>11.1.3、API服务器做了什么</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121713961.png" alt="image-20201103121713961" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121741106.png" alt="image-20201103121741106" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103121848706.png" alt="image-20201103121848706" style="zoom:50%;" />
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">认证-》授权-》准入控制（请求合法性判断）</span><br></pre></td></tr></table></figure>
+<h3 id="11-1-4、API服务器如何通知客户端资源变更"><a href="#11-1-4、API服务器如何通知客户端资源变更" class="headerlink" title="11.1.4、API服务器如何通知客户端资源变更"></a>11.1.4、API服务器如何通知客户端资源变更</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103122313362.png" alt="image-20201103122313362" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 打印出整个监听事件的YMAL文件</span></span><br><span class="line">kubect1 get pods -o yaml --watch</span><br></pre></td></tr></table></figure>
+<h3 id="11-1-4、List-Watch机制和Informer模块（补充）"><a href="#11-1-4、List-Watch机制和Informer模块（补充）" class="headerlink" title="11.1.4、List-Watch机制和Informer模块（补充）"></a>11.1.4、List-Watch机制和Informer模块（补充）</h3><p><code>Etcd</code>存储集群的数据信息，<code>apiserver</code>作为统一入口，任何对数据的操作都必须经过<code>apiserver</code>。客户端(<code>kubelet</code>/<code>scheduler</code>/<code>controller-manager</code>)通过<code>list-watch</code>监听<code>apiserver</code>中资源(<code>pod/rs/rc</code>等等)的<code>create</code>,<code>update</code>和<code>delete</code>事件，并针对<code>事件类型</code>调用相应的<code>事件处理函数</code>。</p>
+<p>那么<code>list-watch</code>具体是什么呢，顾名思义，<code>list-watch</code>有两部分组成，分别是<code>list</code>和<code>watch</code>。<code>list</code>非常好理解，就是调用资源的<code>list API</code>罗列资源，基于<code>HTTP</code>短链接<code>实现；</code>watch<code>则是调用资源的</code>watch API<code>监听资源变更事件，基于</code>HTTP 长链接<code>实现，也是本文重点分析的对象。以</code>pod 资源<code>为例，它的</code>list<code>和</code>watch API<code>分别为：</code></p>
+<blockquote>
+<p>GET /api/v1/pods</p>
+</blockquote>
+<p><a href="https://link.zhihu.com/?target=https://v1-10.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/%23watch-list-all-namespaces-66">Watch API</a>，往往带上<code>watch=true</code>，表示采用<code>HTTP 长连接</code>持续监听<code>pod 相关事件</code>，每当有事件来临，返回一个<a href="https://link.zhihu.com/?target=https://v1-10.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/%23watchevent-v1-meta">WatchEvent</a>。</p>
+<blockquote>
+<p>GET /api/v1/watch/pods</p>
+</blockquote>
+<p><code>K8S</code>的<code>informer</code>模块封装<code>list-watch API</code>，用户只需要指定资源，编写事件处理函数，<code>AddFunc</code>,<code>UpdateFunc</code>和<code>DeleteFunc</code>等。如下图所示，<code>informer</code>首先通过<code>list API</code>罗列资源，然后调用<code>watch API</code>监听资源的变更事件，并将结果放入到一个<code>FIFO 队列</code>，队列的另一头有协程从中取出事件，并调用对应的注册函数处理事件。<code>Informer</code>还维护了一个只读的<code>Map Store</code>缓存，主要为了提升查询的效率，降低<code>apiserver</code>的负载。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103123358079.png" alt="image-20201103123358079" style="zoom:50%;" />
+
+<p><code>list API</code>可以查询当前的资源及其对应的状态(即期望的状态)，客户端通过拿<code>期望的状态</code>和<code>实际的状态</code>进行对比，纠正状态不一致的资源。<code>Watch API</code> 和 <code>apiserver</code>保持一个<code>长链接</code>，接收资源的<code>状态变更事件</code>并做相应处理。如果仅调用 <code>watch API</code>，若某个时间点连接中断，就有可能导致消息丢失，所以需要通过**<code>list API</code>解决<code>消息丢失</code>的问题<strong>。从另一个角度出发，</strong>我们可以认为<code>list API</code>获取全量数据，<code>watch API</code>获取增量数据**。虽然仅仅通过轮询 <code>list API</code>，也能达到同步资源状态的效果，但是存在开销大，实时性不足的问题。</p>
+<p>消息必须是实时的，<code>list-watch</code> 机制下，每当<code>apiserver</code> 的资源产生<code>状态变更事件</code>，都会将事件及时的推送给客户端，从而保证了<code>消息的实时性</code>。</p>
+<p>消息的顺序性也是非常重要的，在并发的场景下，客户端在短时间内可能会收到同一个资源的多个事件，对于<code>关注最终一致性</code>的 <code>K8S</code> 来说，它需要知道哪个是最近发生的事件，并保证资源的最终状态如同最近事件所表述的状态一样。**<code>K8S</code> 在每个资源的事件中都带一个 <code>resourceVersion</code>的标签，这个标签是递增的数字，所以当客户端并发处理同一个资源的事件时，它就可以对比 <code>resourceVersion</code>来保证最终的状态和最新的事件所期望的状态保持一致。**</p>
+<p><code>List-watch</code> 还具有高性能的特点，虽然仅通过周期性调用<code>list API</code>也能达到资源最终一致性的效果，但是周期性频繁的轮询大大的增大了开销，增加<code>apiserver</code>的压力。而**<code>watch</code> 作为异步消息通知机制，复用一条长链接，保证实时性的同时也保证了性能。**</p>
+<p><strong><code>Informer</code> 是 <code>Client-go</code> 中的一个核心工具包</strong>。在<code>Kubernetes</code>源码中，如果 <code>Kubernetes</code> 的某个组件，需要 <code>List/Get Kubernetes</code> 中的 <code>Object</code>，在绝大多 数情况下，会直接使用<code>Informer</code>实例中的<code>Lister()</code>方法（该方法包含 了 Get 和 List 方法），而很少直接请求<code>Kubernetes API</code>。<code>Informer</code> 最基本 的功能就是<code>List/Get Kubernetes</code>中的 <code>Object</code>。</p>
+<p>二级缓存属于 <code>Informer</code>的底层缓存机制，这两级缓存分别是<code>DeltaFIFO</code>（上图的FIFO）和 <code>LocalStore</code>（上图的MapStore）。</p>
+<p>这两级缓存的用途各不相同。<code>DeltaFIFO</code>用来存储<code>Watch API</code>返回的各种事件 ，<code>LocalStore</code> 只会被<code>Lister</code>的<code>List/Get</code>方法访问 。</p>
+<p>虽然<code>Informer</code>和 <code>Kubernetes</code> 之间没有<code>resync</code>机制，但<code>Informer</code>内部的这两级缓存之间存在<code>resync</code> 机制。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103123852828.png" alt="image-20201103123852828" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103123908623.png" alt="image-20201103123908623" style="zoom:50%;" />
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Informer 在初始化时，Reflector 会先 List API 获得所有的 Pod</span><br><span class="line"></span><br><span class="line">Reflect 拿到全部 Pod 后，会将全部 Pod 放到 Store 中</span><br><span class="line"></span><br><span class="line">如果有人调用 Lister 的 List&#x2F;Get 方法获取 Pod， 那么 Lister 会直接从 Store 中拿数据</span><br><span class="line"></span><br><span class="line">Informer 初始化完成之后，Reflector 开始 Watch Pod，监听 Pod 相关 的所有事件;如果此时 pod_1 被删除，那么 Reflector 会监听到这个事件</span><br><span class="line"></span><br><span class="line">Reflector 将 pod_1 被删除 的这个事件发送到 DeltaFIFO</span><br><span class="line"></span><br><span class="line">DeltaFIFO 首先会将这个事件存储在自己的数据结构中(实际上是一个 queue)，然后会直接操作 Store 中的数据，删除 Store 中的 pod_1</span><br><span class="line"></span><br><span class="line">DeltaFIFO 再 Pop 这个事件到 Controller 中</span><br><span class="line"></span><br><span class="line">Controller 收到这个事件，会触发 Processor 的回调函数</span><br><span class="line"></span><br><span class="line">LocalStore 会周期性地把所有的 Pod 信息重新放到 DeltaFIFO 中</span><br></pre></td></tr></table></figure>
+<h3 id="11-1-5、了解调度器"><a href="#11-1-5、了解调度器" class="headerlink" title="11.1.5、了解调度器"></a>11.1.5、了解调度器</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103124849015.png" alt="image-20201103124849015" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103124906385.png" alt="image-20201103124906385" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103124941316.png" alt="image-20201103124941316" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103125037636.png" alt="image-20201103125037636" style="zoom:50%;" />
+
+<h3 id="11-1-6、了解控制器"><a href="#11-1-6、了解控制器" class="headerlink" title="11.1.6、了解控制器"></a>11.1.6、了解控制器</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103143823328.png" alt="image-20201103143823328" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103143958883.png" alt="image-20201103143958883" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103144114929.png" alt="image-20201103144114929" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103144221645.png" alt="image-20201103144221645" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103144321381.png" alt="image-20201103144321381" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103144417102.png" alt="image-20201103144417102" style="zoom:50%;" />
+
+<h3 id="11-1-7、kubelet-做了什么"><a href="#11-1-7、kubelet-做了什么" class="headerlink" title="11.1.7、kubelet 做了什么"></a>11.1.7、kubelet 做了什么</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103144535765.png" alt="image-20201103144535765" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103144608799.png" alt="image-20201103144608799" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103144708330.png" alt="image-20201103144708330" style="zoom:50%;" />
+
+<h3 id="11-1-8、Kubernetes-Service-Proxy-的作用"><a href="#11-1-8、Kubernetes-Service-Proxy-的作用" class="headerlink" title="11.1.8、Kubernetes Service Proxy 的作用"></a>11.1.8、Kubernetes Service Proxy 的作用</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103144817911.png" alt="image-20201103144817911" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103145818656.png" alt="image-20201103145818656" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103145922754.png" alt="image-20201103145922754" style="zoom:50%;" />
+
+<h3 id="11-1-9、介绍Kubernetes-插件"><a href="#11-1-9、介绍Kubernetes-插件" class="headerlink" title="11.1.9、介绍Kubernetes 插件"></a>11.1.9、介绍Kubernetes 插件</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103150025179.png" alt="image-20201103150025179" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103150153694.png" alt="image-20201103150153694" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103150237837.png" alt="image-20201103150237837" style="zoom:50%;" />
+
+<h2 id="11-2、控制器如何协作"><a href="#11-2、控制器如何协作" class="headerlink" title="11.2、控制器如何协作"></a>11.2、控制器如何协作</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103150340604.png" alt="image-20201103150340604" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103150355178.png" alt="image-20201103150355178" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103150421443.png" alt="image-20201103150421443" style="zoom:50%;" />
+
+
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103150659586.png" alt="image-20201103150659586" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103150731909.png" alt="image-20201103150731909" style="zoom:50%;" />
+
+<h3 id="11-2-3、观察集群事件"><a href="#11-2-3、观察集群事件" class="headerlink" title="11.2.3、观察集群事件"></a>11.2.3、观察集群事件</h3><p>控制平面组件和Kubelet执行动作时，都会发送事件给API服务器。<strong>发送事件是通过创建事件资源来实现的，事件资源和其他的Kubemetes资源类似</strong>。每次使用 kubectl describe来检查资源的时候，就能看到资源相关的事件，也可以直接用kubectl get events获取事件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 观察控制器发出的事件</span></span><br><span class="line">kubectl get events --watch</span><br></pre></td></tr></table></figure>
+<h2 id="11-3、了解运行中的Pod是什么"><a href="#11-3、了解运行中的Pod是什么" class="headerlink" title="11.3、了解运行中的Pod是什么"></a>11.3、了解运行中的Pod是什么</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103151847139.png" alt="image-20201103151847139" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103151917126.png" alt="image-20201103151917126" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103152016071.png" alt="image-20201103152016071" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103152055867.png" alt="image-20201103152055867" style="zoom:50%;" />
+
+<h2 id="11-4、跨Pod网络"><a href="#11-4、跨Pod网络" class="headerlink" title="11.4、跨Pod网络"></a>11.4、跨Pod网络</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103152242340.png" alt="image-20201103152242340" style="zoom:50%;" />
+
+<h3 id="11-4-1、网络应该是什么样的"><a href="#11-4-1、网络应该是什么样的" class="headerlink" title="11.4.1、网络应该是什么样的"></a>11.4.1、网络应该是什么样的</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103152408024.png" alt="image-20201103152408024" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103152440868.png" alt="image-20201103152440868" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103152529695.png" alt="image-20201103152529695" style="zoom:50%;" />
+
+<h3 id="11-4-2、深入了解网络工作原理"><a href="#11-4-2、深入了解网络工作原理" class="headerlink" title="11.4.2、深入了解网络工作原理"></a>11.4.2、深入了解网络工作原理</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103152632534.png" alt="image-20201103152632534" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103152659765.png" alt="image-20201103152659765" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153007056.png" alt="image-20201103153007056" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153046724.png" alt="image-20201103153046724" style="zoom:50%;" />
+
+<h3 id="11-4-3、引入容器网络接口"><a href="#11-4-3、引入容器网络接口" class="headerlink" title="11.4.3、引入容器网络接口"></a>11.4.3、引入容器网络接口</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153137683.png" alt="image-20201103153137683" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153202289.png" alt="image-20201103153202289" style="zoom:50%;" />
+
+<h2 id="11-5、服务是如何实现的"><a href="#11-5、服务是如何实现的" class="headerlink" title="11.5、服务是如何实现的"></a>11.5、服务是如何实现的</h2><h3 id="11-5-1、引入kube-proxy"><a href="#11-5-1、引入kube-proxy" class="headerlink" title="11.5.1、引入kube-proxy"></a>11.5.1、引入kube-proxy</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153434714.png" alt="image-20201103153434714" style="zoom:50%;" />
+
+<h3 id="11-5-2、kube-proxy-如何使用-iptables"><a href="#11-5-2、kube-proxy-如何使用-iptables" class="headerlink" title="11.5.2、kube-proxy 如何使用 iptables"></a>11.5.2、kube-proxy 如何使用 iptables</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153803829.png" alt="image-20201103153803829" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153848672.png" alt="image-20201103153848672" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153906092.png" alt="image-20201103153906092" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153928025.png" alt="image-20201103153928025" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103153942909.png" alt="image-20201103153942909" style="zoom:50%;" />
+
+<h2 id="11-6、运行高可用集群"><a href="#11-6、运行高可用集群" class="headerlink" title="11.6、运行高可用集群"></a>11.6、运行高可用集群</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103154429762.png" alt="image-20201103154429762" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103154501801.png" alt="image-20201103154501801" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103154514484.png" alt="image-20201103154514484" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103154613368.png" alt="image-20201103154613368" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103154709138.png" alt="image-20201103154709138" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103154846841.png" alt="image-20201103154846841" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103154923039.png" alt="image-20201103154923039" style="zoom:50%;" />
+
+<h2 id="11-7、本章小结"><a href="#11-7、本章小结" class="headerlink" title="11.7、本章小结"></a>11.7、本章小结</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103154950505.png" alt="image-20201103154950505" style="zoom:50%;" />
+
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><h2 id="1、pause-系统调用"><a href="#1、pause-系统调用" class="headerlink" title="1、pause()系统调用"></a>1、pause()系统调用</h2><p>pause（）系统调用用于使调用进程或调用线程休眠，直到发生以下事件之一。</p>
+<ul>
+<li>调用进程接收的信号的默认行为是终止进程。</li>
+<li>信号处理程序执行完毕。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.nayab.xyz/man2/pause-system-call-in-c">pause() system call in C - explained with examples</a></p>
+<h1 id="2、pause容器的作用"><a href="#2、pause容器的作用" class="headerlink" title="2、pause容器的作用"></a>2、pause容器的作用</h1><p>在Kubernetes中，pause容器充当pod中所有容器的“父容器”。暂停容器有两个核心职责。首先，它是pod中Linux名称空间共享的基础。其次，在启用PID（processid）命名空间共享的情况下，它充当每个pod的PID 1，并重新捕获僵尸进程。</p>
+<p><a target="_blank" rel="noopener" href="https://www.ianlewis.org/en/almighty-pause-container">The Almighty Pause Container</a></p>
+<h1 id="3、Kubernetes-如何利用iptables"><a href="#3、Kubernetes-如何利用iptables" class="headerlink" title="3、Kubernetes 如何利用iptables"></a>3、Kubernetes 如何利用iptables</h1><p><a target="_blank" rel="noopener" href="http://www.dbsnake.net/how-kubernetes-use-iptables.html">Kubernetes如何利用iptables</a></p>
+<h1 id="4、ipvs"><a href="#4、ipvs" class="headerlink" title="4、ipvs"></a>4、ipvs</h1><p><em>ipvs</em>称之为IP虚拟服务器（IP Virtual Server，简写为<em>IPVS</em>）。是运行在LVS下的提供负载平衡功能的一种技术。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103170056935.png" alt="image-20201103170056935" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103165925802.png" alt="image-20201103165925802" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201103165954417.png" alt="image-20201103165954417" style="zoom:50%;" />
+
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d10bf4086644?utm_campaign=hugo&utm_content=note&utm_medium=seo_notes&utm_source=recommendation">k8s网络原理-ipvs</a></p>
+<h1 id="5、ipvs-与-iptables"><a href="#5、ipvs-与-iptables" class="headerlink" title="5、ipvs 与 iptables"></a>5、ipvs 与 iptables</h1><p>kube-proxy 处理 iptables规则的方式意味着它名义上是一个O（n）风格的算法，其中n大致与集群大小成比例增长（或者更准确地说是服务数量和每个服务背后的后端pod数量）。</p>
+<p>在IPVS模式下kube-proxy的连接处理具有O（1）的名义计算复杂度。换句话说，在大多数情况下，它的连接处理性能将保持不变，与集群大小无关。</p>
+<p>此外，作为一个专用的负载均衡器，IPVS拥有多种不同的调度算法，如循环调度、最短预期延迟、最少连接和各种哈希方法。相比之下，iptables中的kube-proxy使用随机等成本选择算法。</p>
+<blockquote>
+<p>个人注释：这篇文章很好</p>
+<p><a target="_blank" rel="noopener" href="https://www.projectcalico.org/comparing-kube-proxy-modes-iptables-or-ipvs/">Comparing kube-proxy modes: iptables or IPVS?</a></p>
+</blockquote>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-11-03</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/11/03/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B0%2012~13/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/11/02/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B08%EF%BD%9E9/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="一个高性能、开源的通用RPC框架  Why gRPCgRPC是一个现代的开源高性能RPC框架，可以在任何环境下运行。它可以有效地连接数据中心内和跨数据中心的服务，支持负载平衡、跟踪、健康检查和身份验证。它也适用于分布式计算的最后一英里，将设备、移动应用程序和浏览器连接到后端服务 gRPC简介本页介绍 gRPC 和 protocol buffers。gRPC可以使用 protocol buffer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/11/23/k8s/GRPC/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="一个高性能、开源的通用RPC框架  Why gRPCgRPC是一个现代的开源高性能RPC框架，可以在任何环境下运行。它可以有效地连接数据中心内和跨数据中心的服务，支持负载平衡、跟踪、健康检查和身份验证。它也适用于分布式计算的最后一英里，将设备、移动应用程序和浏览器连接到后端服务 gRPC简介本页介绍 gRPC 和 protocol buffers。gRPC可以使用 protocol buffer">
+<meta property="og:locale">
+<meta property="og:image" content="https://grpc.io/img/landing-2.svg">
+<meta property="article:published_time" content="2020-11-23T04:22:49.174Z">
+<meta property="article:modified_time" content="2020-11-23T10:44:01.727Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://grpc.io/img/landing-2.svg">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/11/" class="post-meta__date button">2020-11-23</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <blockquote>
+<p>一个高性能、开源的通用RPC框架</p>
+</blockquote>
+<h1 id="Why-gRPC"><a href="#Why-gRPC" class="headerlink" title="Why gRPC"></a>Why gRPC</h1><p>gRPC是一个现代的开源高性能RPC框架，可以在任何环境下运行。它可以有效地连接数据中心内和跨数据中心的服务，支持负载平衡、跟踪、健康检查和身份验证。它也适用于分布式计算的最后一英里，将设备、移动应用程序和浏览器连接到后端服务</p>
+<h1 id="gRPC简介"><a href="#gRPC简介" class="headerlink" title="gRPC简介"></a>gRPC简介</h1><p>本页介绍 gRPC 和 protocol buffers。gRPC可以使用 protocol buffers 作为其 接口定义语言（<strong>IDL</strong> / Interface Definition Language）和底层消息交换格式。如果你不熟悉gRPC 或 protocol buffers，请阅读本文。</p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p>在gRPC中，client 应用程序可以像本地对象一样直接调用另一台计算机上的 server application 上的方法，从而使您更容易创建分布式应用程序和服务。与许多RPC系统一样，gRPC基于定义服务的思想，指定可以通过参数和返回类型远程调用的方法。在 server 端，server 实现这个接口并运行gRPC server 来处理 client 调用。在client端，client 有一个存根（<strong>stub</strong>）（在某些语言中称为 client），它提供与服务器相同的方法。</p>
+<p><img src="https://grpc.io/img/landing-2.svg" alt="Concept Diagram"></p>
+<p>gRPC clients 和 servers 可以在各种环境中运行和相互交流，从Google内部的服务器到您自己的桌面，并且可以用gRPC支持的任何语言编写。因此，例如，您可以使用Go、Python或Ruby 创建 client，而用 Java创建gRPC server。此外，最新的Google APIs将有gRPC版本的接口，让您可以轻松地在应用程序中构建Google功能。</p>
+<h2 id="使用Protocol-Buffers"><a href="#使用Protocol-Buffers" class="headerlink" title="使用Protocol Buffers"></a>使用Protocol Buffers</h2><p>默认情况下，gRPC使用<a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/overview">Protocol Buffers</a>，Google成熟的用于序列化 structured data 的开源机制（尽管它可以与JSON等其他数据格式一起使用）。下面是一个如何工作的快速介绍。如果您已经熟悉Protocol Buffers，请跳到下一节。</p>
+<p>使用 协议缓冲区 的第一步是定义要在<em>proto file</em>中序列化的数据的结构：这是一个扩展名为<code>.proto</code>的普通文本文件。协议缓冲区数据被结构化为 <code>message</code>，其中每个 message 都是一个小的逻辑信息记录，其中包含一系列名为<em>fields</em> 的 键值对。下面是一个简单的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">message Person &#123;</span><br><span class="line">  string name &#x3D; 1;</span><br><span class="line">  int32 id &#x3D; 2;</span><br><span class="line">  bool has_ponycopter &#x3D; 3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，一旦指定了数据结构，就可以使用 protocol buffer 编译器 <code>protoc</code> ，从你的 proto定义中 生成您首选语言的数据访问类。它们为每个字段提供简单的访问器，如<code>name（）</code>和<code>set_name（）</code>，以及将整个结构 serialize/parse 为原始字节的方法。因此，例如，如果您选择的语言是C++，则在上面的示例中运行编译器将生成一个名为“<code>Person</code>”的类。然后，可以在应用程序中使用该类来填充、序列化和检索<code>Person</code>协议缓冲区消息。</p>
+<p>您可以在普通的proto文件中定义gRPC服务，并将RPC方法参数和返回类型指定为协议缓冲区消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; The greeter service definition.</span><br><span class="line">service Greeter &#123;</span><br><span class="line">  &#x2F;&#x2F; Sends a greeting</span><br><span class="line">  rpc SayHello (HelloRequest) returns (HelloReply) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; The request message containing the user&#39;s name.</span><br><span class="line">message HelloRequest &#123;</span><br><span class="line">  string name &#x3D; 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; The response message containing the greetings</span><br><span class="line">message HelloReply &#123;</span><br><span class="line">  string message &#x3D; 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>gRPC使用<code>protoc</code>和一个特殊的gRPC插件从proto文件生成代码：您可以得到生成的gRPC客户端和服务器代码，以及用于填充、序列化和检索消息类型的 常规 协议缓冲代码。下面是一个例子</p>
+<p>要了解有关协议缓冲区的更多信息，包括如何使用您选择的语言安装带有gRPC插件的<code>protoc</code>，请参阅<a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/overview">protocol buffers文档</a>。</p>
+<h2 id="Protocol-buffer-versions"><a href="#Protocol-buffer-versions" class="headerlink" title="Protocol buffer versions"></a>Protocol buffer versions</h2><p>While <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/overview">protocol buffers</a> have been available to open source users for some time, most examples from this site use protocol buffers version 3 (proto3), which has a slightly simplified syntax, some useful new features, and supports more languages. Proto3 is currently available in Java, C++, Dart, Python, Objective-C, C#, a lite-runtime (Android Java), Ruby, and JavaScript from the <a target="_blank" rel="noopener" href="https://github.com/google/protobuf/releases">protocol buffers GitHub repo</a>, as well as a Go language generator from the <a target="_blank" rel="noopener" href="https://github.com/golang/protobuf">golang/protobuf GitHub repo</a>, with more languages in development. You can find out more in the <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/proto3">proto3 language guide</a> and the <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/reference/overview">reference documentation</a> available for each language. The reference documentation also includes a <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/reference/proto3-spec">formal specification</a> for the <code>.proto</code> file format.</p>
+<p>一般来说，虽然您可以使用proto2（当前默认的协议缓冲区版本），但我们建议您将proto3与gRPC一起使用，因为它允许您使用gRPC支持的所有语言，并避免proto2客户端与proto3服务器通信时的兼容性问题，反之亦然</p>
+<h1 id="基础教程"><a href="#基础教程" class="headerlink" title="基础教程"></a>基础教程</h1><p>本教程提供了一个基本的Go程序员使用gRPC的介绍。</p>
+<p>通过本例，您将学习如何：</p>
+<ul>
+<li>Define a service in a <code>.proto</code> file.</li>
+<li>Generate server and client code using the protocol buffer compiler.</li>
+<li>Use the Go gRPC API to write a simple client and server for your service.</li>
+</ul>
+<p>It assumes that you have read the <a target="_blank" rel="noopener" href="https://grpc.io/docs/what-is-grpc/introduction/">Introduction to gRPC</a> and are familiar with <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/overview">protocol buffers</a>. Note that the example in this tutorial uses the proto3 version of the protocol buffers language: you can find out more in the <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/proto3">proto3 language guide</a> and the <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/reference/go-generated">Go generated code guide</a>.</p>
+<h3 id="什么是-protocol-buffers？"><a href="#什么是-protocol-buffers？" class="headerlink" title="什么是 protocol buffers？"></a>什么是 protocol buffers？</h3><p>protocol buffers 是Google开发的 与语言无关、平台无关、可扩展的序列化结构化数据的机制，类似XML，但是更小、更快、更简单。您只需定义一次数据的结构化方式，然后就可以使用特殊生成的源代码，轻松地将结构化数据写入和读取到各种数据流中，并使用多种语言 </p>
+<h3 id="Why-use-gRPC"><a href="#Why-use-gRPC" class="headerlink" title="Why use gRPC?"></a>Why use gRPC?</h3><p>我们的示例是一个简单的路由映射应用程序，它允许 client 获取有关其路由特性的信息，创建其路由的摘要，并与服务器和其他 client 交换路由信息，如流量更新。</p>
+<p>有了gRPC，我们可以在<code>.proto</code>文件中定义我们的服务，并用gRPC支持的任何语言生成客户端和服务器，它可以在从大型数据中心内的服务器到您自己的平板电脑的各种环境中运行，不同语言和环境之间的所有复杂通信都由gRPC为您处理。我们还获得了使用协议缓冲区的所有优点，包括高效的序列化、简单的IDL和容易的接口更新。</p>
+<h3 id="Get-the-example-code"><a href="#Get-the-example-code" class="headerlink" title="Get the example code"></a>Get the example code</h3><p>The example code is part of the <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-go">grpc-go</a> repo.</p>
+<ol>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-go/archive/v1.33.1.zip">Download the repo as a zip file</a> and unzip it, or clone the repo:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> -b v1.33.1 https://github.com/grpc/grpc-go</span><br></pre></td></tr></table></figure></li>
+<li><p>Change to the example directory:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> grpc-go/examples/route_guide</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<h3 id="Defining-the-service"><a href="#Defining-the-service" class="headerlink" title="Defining the service"></a>Defining the service</h3><p>Our first step (as you’ll know from the <a target="_blank" rel="noopener" href="https://grpc.io/docs/what-is-grpc/introduction/">Introduction to gRPC</a>) is to define the gRPC <em>service</em> and the method <em>request</em> and <em>response</em> types using <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/overview">protocol buffers</a>. For the complete <code>.proto</code> file, see <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-go/blob/master/examples/route_guide/routeguide/route_guide.proto">routeguide/route_guide.proto</a>.</p>
+<p>To define a service, you specify a named <code>service</code> in your .proto file:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">service RouteGuide &#123;</span><br><span class="line">   ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Then you define <code>rpc</code> methods inside your service definition, specifying their request and response types. gRPC lets you define four kinds of service method, all of which are used in the <code>RouteGuide</code> service:</p>
+<ul>
+<li><p>A <em>simple RPC</em> where the client sends a request to the server using the stub and waits for a response to come back, just like a normal function call.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Obtains the feature at a given position.</span><br><span class="line">rpc GetFeature(Point) returns (Feature) &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>A <em>server-side streaming RPC</em> where the client sends a request to the server and gets a stream to read a sequence of messages back. The client reads from the returned stream until there are no more messages. As you can see in our example, you specify a server-side streaming method by placing the <code>stream</code> keyword before the <em>response</em> type.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Obtains the Features available within the given Rectangle.  Results are</span><br><span class="line">&#x2F;&#x2F; streamed rather than returned at once (e.g. in a response message with a</span><br><span class="line">&#x2F;&#x2F; repeated field), as the rectangle may cover a large area and contain a</span><br><span class="line">&#x2F;&#x2F; huge number of features.</span><br><span class="line">rpc ListFeatures(Rectangle) returns (stream Feature) &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>A <em>client-side streaming RPC</em> where the client writes a sequence of messages and sends them to the server, again using a provided stream. Once the client has finished writing the messages, it waits for the server to read them all and return its response. You specify a client-side streaming method by placing the <code>stream</code> keyword before the <em>request</em> type.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Accepts a stream of Points on a route being traversed, returning a</span><br><span class="line">&#x2F;&#x2F; RouteSummary when traversal is completed.</span><br><span class="line">rpc RecordRoute(stream Point) returns (RouteSummary) &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>A <em>bidirectional(双向的) streaming RPC</em> where both sides send a sequence of messages using a read-write stream. The two streams operate independently, so clients and servers can read and write in whatever order they like: for example, the server could wait to receive all the client messages before writing its responses, or it could alternately read a message then write a message, or some other combination of reads and writes. The order of messages in each stream is preserved. You specify this type of method by placing the <code>stream</code> keyword before both the request and the response.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Accepts a stream of RouteNotes sent while a route is being traversed,</span><br><span class="line">&#x2F;&#x2F; while receiving other RouteNotes (e.g. from other users).</span><br><span class="line">rpc RouteChat(stream RouteNote) returns (stream RouteNote) &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>Our <code>.proto</code> file also contains protocol buffer message type definitions for all the request and response types used in our service methods - for example, here’s the <code>Point</code> message type:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Points are represented as latitude-longitude pairs in the E7 representation</span><br><span class="line">&#x2F;&#x2F; (degrees multiplied by 10**7 and rounded to the nearest integer).</span><br><span class="line">&#x2F;&#x2F; Latitudes should be in the range +&#x2F;- 90 degrees and longitude should be in</span><br><span class="line">&#x2F;&#x2F; the range +&#x2F;- 180 degrees (inclusive).</span><br><span class="line">message Point &#123;</span><br><span class="line">  int32 latitude &#x3D; 1;</span><br><span class="line">  int32 longitude &#x3D; 2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Generating-client-and-server-code"><a href="#Generating-client-and-server-code" class="headerlink" title="Generating client and server code"></a>Generating client and server code</h3><p>Next we need to generate the gRPC client and server interfaces from our <code>.proto</code> service definition. We do this using the protocol buffer compiler <code>protoc</code> with a special gRPC Go plugin. This is similar to what we did in the <a target="_blank" rel="noopener" href="https://grpc.io/docs/languages/go/quickstart/">Quick start</a>.</p>
+<p>From the <code>examples/route_guide</code> directory, run the following command:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ protoc --go_out=. --go_opt=paths=source_relative \</span><br><span class="line">    --go-grpc_out=. --go-grpc_opt=paths=source_relative \</span><br><span class="line">    routeguide/route_guide.proto</span><br></pre></td></tr></table></figure>
+<p>Running this command generates the following files in the <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-go/blob/master/examples/route_guide/routeguide">routeguide</a> directory:</p>
+<ul>
+<li><p><code>route_guide.pb.go</code>, which contains all the protocol buffer code to populate, serialize, and retrieve request and response message types.</p>
+</li>
+<li><pre><code>route_guide_grpc.pb.go</code></pre>
+<p>, which contains the following:</p>
+<ul>
+<li>An interface type (or <em>stub</em>) for clients to call with the methods defined in the <code>RouteGuide</code> service.</li>
+<li>An interface type for servers to implement, also with the methods defined in the <code>RouteGuide</code> service.</li>
+</ul>
+</li>
+</ul>
+<h3 id="接下来"><a href="#接下来" class="headerlink" title="接下来"></a>接下来</h3><p>接下来是构建 server 端 和 client 端的代码，暂且省略。目前需要明白 protocol buffer 和 gGRPC的大致概念。</p>
+<ol>
+<li>client 和 server 两端 传输的数据，都是使用 protocol buffer 编码的，它们共享了一个 <code>.proto</code> 文件，因此能够明白 二进制数据如何转换，并共享了 rpc 函数</li>
+<li><code>.proto</code> 文件被编译处理后，自动生成的 code 中，是关于<ul>
+<li> 处理 protocol buffer 的函数</li>
+<li>与gRPC相关的函数。（因为你在 service中定义了 rpc 方法，这个 code 里 自动帮你把这些 rpc 方法写入到了 gRPC 中。 应该是 client 与 server 交互时，经过 gRPC 时，这些代码应该会有用）</li>
+</ul>
+</li>
+</ol>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://grpc.io/docs/languages/go/basics/">Basics tutorial</a>-gRPC 官网</p>
+<p><a href="grpc/grpc-go">grpc/grpc-go</a> —— gRPC 的 示例代码</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-11-23</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/11/24/k8s/%E4%BB%8B%E7%BB%8DKubernetes%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E6%8E%A5%E5%8F%A3%EF%BC%88CSI%EF%BC%89/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/11/23/k8s/PLEG%E6%9C%BA%E5%88%B6/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

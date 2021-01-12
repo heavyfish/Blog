@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="卷迁移有两种场景：1、同一个卷类型（volume type)2、不同的卷类型 (volume type) 第一种场景 同一个卷类型（volume type）我们现有的环境在配置存储时，主要有如下几个概念pool volume_backend volume_backend_name volume_type 同一个卷类型就是指多个pool归属于同一个volume_backend,然后一个volume_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/06/29/OpenStack/%E5%BE%85%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="卷迁移有两种场景：1、同一个卷类型（volume type)2、不同的卷类型 (volume type) 第一种场景 同一个卷类型（volume type）我们现有的环境在配置存储时，主要有如下几个概念pool volume_backend volume_backend_name volume_type 同一个卷类型就是指多个pool归属于同一个volume_backend,然后一个volume_">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-06-29T02:53:02.000Z">
+<meta property="article:modified_time" content="2020-07-01T12:16:43.000Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/06/" class="post-meta__date button">2020-06-29</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>卷迁移有两种场景：<br>1、同一个卷类型（volume type)<br>2、不同的卷类型 (volume type)</p>
+<p>第一种场景 同一个卷类型（volume type）<br>我们现有的环境在配置存储时，主要有如下几个概念<br>pool volume_backend volume_backend_name volume_type</p>
+<p>同一个卷类型就是指多个pool归属于同一个volume_backend,然后一个volume_backend与一个volume_backend_name对应<br>或者每个pool归属于不同的volume_backend，所有的volume_backend都与同一个volume_backend_name对应，<br>最终建立面向用户的volume_type时，关联具体的backend_name实现。</p>
+<p>在这种场景下，虚拟机可以实现卷的热迁移，相关的请求需要在openstack cli界面里执行cinder migrate 命令实现。</p>
+<p>命令为：openstack volume migrate volume_id –host <host_name><br>(host_name可使用cinder get-pools查询，实现pool之间的精确迁移)<br>默认迁移机制走存储底层的迁移，迁移速度由存储底层决定<br>添加 –force-host-copy ，表示迁移由cinder去引导，迁移速度为磁盘dd的速度</p>
+<p>第二种场景 不同的卷类型（volume type）</p>
+<p>这种场景下，虚拟机就不能进行在线的卷迁移，只能通过retype功能（前端可以实现），而retype的前提是硬盘必须先卸载，处于none in-use状态。<br>显然操作系统盘无法进行retype，因此这种情况下如果需要实现热迁移需要借助存储底层来执行复制迁移，云平台再被动同步数据库信息。（建议不这样做）<br>这种情况下的迁移走的是存储底层，迁移速度由存储底层决定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看libvirt日志、message日志、虚拟机instance日志均无明显报错，存储对接华为san存储；</span><br><span class="line">     后使用 nova trigger-crash-dump &lt;id&gt;; 命令，触发虚拟机内核崩溃，在windows系统内部生成dump日志文件交由微软进行日志分析</span><br></pre></td></tr></table></figure>
+
+
+
+
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/51867254">OpenStack层次化端口绑定</a></p>
+<p><a target="_blank" rel="noopener" href="https://feichashao.com/linux_tcp_keepalive/">如何使用 Linux 中的 TCP keepalive</a></p>
+<p><strong>关闭ceilometer</strong></p>
+<p>在/etc/kolla/config/globals.conf中添加<br>[oslo_messaging_notifications]<br>driver = noop<br>topics =</p>
+<p>![image-20200629142120706](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200629142120706.png)</p>
+<p>![image-20200701151323086](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200701151323086.png)</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-07-01</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/07/10/windows/winserver%202003%E6%B8%85%E9%99%A4%E7%BD%91%E5%8D%A1%E6%AE%8B%E7%95%99%E4%BF%A1%E6%81%AF/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/06/19/OpenStack/Config%20Drives/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

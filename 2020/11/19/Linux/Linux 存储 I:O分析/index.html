@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="1、图表架构 天蓝色：硬件存储设备。 橙色：传输协议。 蓝色：Linux系统中的设备文件。 黄色：I&#x2F;O调度策略。 绿色：Linux系统的文件系统。 蓝绿色：Linux Storage操作的基本数据结构BIO  2、文件系统2.1、VFSVFS是Linux内核提供的一个虚拟文件系统层。VFS提供给用户层一些标准的系统调用来操作文件系统，如open()、read()、write()等，让用户态应用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/11/19/Linux/Linux%20%E5%AD%98%E5%82%A8%20I:O%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="1、图表架构 天蓝色：硬件存储设备。 橙色：传输协议。 蓝色：Linux系统中的设备文件。 黄色：I&#x2F;O调度策略。 绿色：Linux系统的文件系统。 蓝绿色：Linux Storage操作的基本数据结构BIO  2、文件系统2.1、VFSVFS是Linux内核提供的一个虚拟文件系统层。VFS提供给用户层一些标准的系统调用来操作文件系统，如open()、read()、write()等，让用户态应用">
+<meta property="og:locale">
+<meta property="og:image" content="https://www.thomas-krenn.com/de/wikiDE/images/e/e0/Linux-storage-stack-diagram_v4.10.png">
+<meta property="article:published_time" content="2020-11-19T08:58:10.370Z">
+<meta property="article:modified_time" content="2020-11-20T05:59:06.975Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.thomas-krenn.com/de/wikiDE/images/e/e0/Linux-storage-stack-diagram_v4.10.png">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/11/" class="post-meta__date button">2020-11-19</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p><img src="https://www.thomas-krenn.com/de/wikiDE/images/e/e0/Linux-storage-stack-diagram_v4.10.png" alt="Diagram for Linux Kernel 4.10"></p>
+<h1 id="1、图表架构"><a href="#1、图表架构" class="headerlink" title="1、图表架构"></a>1、图表架构</h1><ul>
+<li>天蓝色：硬件存储设备。</li>
+<li>橙色：传输协议。</li>
+<li>蓝色：Linux系统中的设备文件。</li>
+<li>黄色：I/O调度策略。</li>
+<li>绿色：Linux系统的文件系统。</li>
+<li>蓝绿色：Linux Storage操作的基本数据结构BIO</li>
+</ul>
+<h1 id="2、文件系统"><a href="#2、文件系统" class="headerlink" title="2、文件系统"></a>2、文件系统</h1><h2 id="2-1、VFS"><a href="#2-1、VFS" class="headerlink" title="2.1、VFS"></a>2.1、VFS</h2><p>VFS是Linux内核提供的一个虚拟文件系统层。VFS提供给用户层一些标准的系统调用来操作文件系统，如open()、read()、write()等，让用户态应用无需关心底层的文件系统和存储介质。同时VFS还要对底层文件系统进行约束，提供统一的抽象接口和操作方式。</p>
+<h2 id="2-2、底层文件系统"><a href="#2-2、底层文件系统" class="headerlink" title="2.2、底层文件系统"></a>2.2、底层文件系统</h2><p>Linux支持的文件系统众多，大致可以分为以下几类。</p>
+<ul>
+<li>磁盘文件系统：基于物理存储设备的文件系统，用来管理设备的存储空间，如ext2、ext4、xfs等。</li>
+<li>网络文件系统：用于访问网络中其他设备上的文件，如NFS、smbfs等。网络文件系统的目标是网络设备，所以它不会调用系统的Block层。</li>
+<li>堆栈式文件系统（Stackable FS）：叠加在其他文件系统之上的一种文件系统，本身不存储数据，而是对下层文件的扩展，如eCryptfs，Wrapfs等。</li>
+<li>伪文件系统（Pseudo FS）：因为并不管理真正的存储空间，所以被称为伪文件系统。它组织了一些虚拟的目录和文件，通过这些文件可以查看内核或部分修改内核的数据。如proc、sysfs等。</li>
+<li>特殊文件系统（Special purpose FS）：特殊文件系统也是一种伪文件系统，它使用起来更像是一个磁盘文件系统，但读写是内存而不是磁盘设备。如tmpfs、ramfs等。</li>
+<li>用户文件系统：也叫做FUSE。它提供一种方式可以让开发者在用户空间实现文件系统，而不需要修改内核。这种方式更加灵活，但效率会更低。FUSE直接面向的是用户文件系统，也不会调用Block层。</li>
+</ul>
+<h1 id="Option（LVM）"><a href="#Option（LVM）" class="headerlink" title="Option（LVM）"></a>Option（LVM）</h1><h1 id="Block-Layer"><a href="#Block-Layer" class="headerlink" title="Block Layer"></a>Block Layer</h1><p>Block Layer是Linux Storage系统中的中间层，连接着文件系统和块设备。它将上层文件系统的读写请求抽象为BIOs，通过调度策略将BIOs传输给设备。</p>
+<h3 id="Page-cache"><a href="#Page-cache" class="headerlink" title="Page cache"></a>Page cache</h3><p>Linux系统在打开文件时可以通过O_DIRECT标识来却别是否使用Page cache。当带有O_DIRECT时，I/O读写会绕过cache，直接访问块设备。否则，读写需要通过Page cache进行，Page cache的主要行为如下。</p>
+<ul>
+<li>读数据时，如果访问的页在Page cache中（命中），则直接返回页。</li>
+<li>读数据时，如果访问的页不在Page cache中（缺失），则产生缺页异常。系统会创建一个缓存页，将访问的地址缓存到这个页中。上层会再次读取，发生cache命中。</li>
+<li>写数据时，如果cache命中，则将数据写到缓存页中。</li>
+<li>写数据时，如果cache缺失，则产生缺页异常，系统创建缓存页。上层再次写入，发生cache命中。</li>
+<li>当Page cache中的一个缓存页被修改时，会标记为dirty。上层调用sync或pdflush进程会将脏页写回到磁盘中。</li>
+</ul>
+<h3 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h3><p>BIO代表对Block设备的读写请求，在内核中使用一个结构体来描述。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">struct bvec_iter &#123;</span><br><span class="line">    sector_t        bi_sector; &#x2F;&#x2F; 设备地址，以扇区（512字节）为单位</span><br><span class="line">    unsigned int        bi_size; &#x2F;&#x2F; 传输数据的大小，byte</span><br><span class="line">    unsigned int        bi_idx;    &#x2F;&#x2F; 当前在bvl_vec中的索引</span><br><span class="line">    unsigned int        bi_bvec_done; &#x2F;&#x2F; 当前bvec中已经完成的数据大小，byte</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct bio &#123;</span><br><span class="line">    struct bio        *bi_next;    &#x2F;&#x2F; request队列</span><br><span class="line">    struct block_device    *bi_bdev; &#x2F;&#x2F; 指向block设备</span><br><span class="line">    int            bi_error;</span><br><span class="line">    unsigned int        bi_opf;        &#x2F;&#x2F; request标签</span><br><span class="line">    unsigned short        bi_flags;    &#x2F;&#x2F; 状态，命令</span><br><span class="line">    unsigned short        bi_ioprio;</span><br><span class="line">    struct bvec_iter    bi_iter;</span><br><span class="line">    unsigned int        bi_phys_segments; &#x2F;&#x2F; 物理地址合并后，BIO中段的数量</span><br><span class="line"></span><br><span class="line">    &#x2F;*</span><br><span class="line">     * To keep track of the max segment size, we account for the</span><br><span class="line">     * sizes of the first and last mergeable segments in this bio.</span><br><span class="line">     *&#x2F;</span><br><span class="line">    unsigned int        bi_seg_front_size; &#x2F;&#x2F; 第一个可合并段的大小</span><br><span class="line">    unsigned int        bi_seg_back_size; &#x2F;&#x2F; 最后一个可合并段的大小</span><br><span class="line"></span><br><span class="line">    atomic_t        __bi_remaining;</span><br><span class="line">    bio_end_io_t        *bi_end_io; &#x2F;&#x2F; BIO结束时的回调函数，一般用于通知调用者该BIO的完成情况 </span><br><span class="line">    ......</span><br><span class="line">    unsigned short        bi_vcnt; &#x2F;&#x2F; bio_vec的计数</span><br><span class="line">    unsigned short        bi_max_vecs; &#x2F;&#x2F; bvl_vecs的最大数量</span><br><span class="line">    atomic_t        __bi_cnt; &#x2F;&#x2F; 使用计数</span><br><span class="line">    struct bio_vec        *bi_io_vec; &#x2F;&#x2F; vec list的指针</span><br><span class="line">    struct bio_set        *bi_pool;</span><br><span class="line">    ......</span><br><span class="line">&#125;;    </span><br></pre></td></tr></table></figure>
+<p>一个BIO构建完成后，就可以通过generic_make_request()来创建传输Request，将Request加入到请求队列中。请求队列在内核中有结构体request_queue来描述，它包含一个双向请求链表以及相关控制信息。请求链表中每一项都是一个Request，Request由BIOs组成，BIO中又可能包含不同的Segment。因为一个BIO只能连续的磁盘块，但一个Request可能不连续的磁盘块，所以一个Request可能包含一个或多个BIOs。尽管BIO中的磁盘块是连续的，但它们在内存中可能是不连续的，所以BIO中可能包含几个Segments。</p>
+<h3 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a>Scheduler</h3><p>读写数据组织成请求队列后，就是访问磁盘的过程，这个过程由IO调度完成。BIOs访问的指定的磁盘扇区，首先要进行寻址的操作。寻址就是定位磁盘磁头到特定块上的某个位置，这个过程相对来说很慢。为了优化寻址操作，内核既不会简单地按请求接收次序，也不会立即将其提交给磁盘，而是在提交前，先执行名为合并与排序的预操作，这种预操作可以极大地提高系统的整体性能。这就是IO调度需要完成的工作。</p>
+<p>当前内核中，支持两种模式的IO调度器：single-queue和multi-queue。single-queue在图中标识为“I/O Scheduler”，multi-queue标识为blkmq。二者应该都是Scheduler，只是请求的组织方式不同。</p>
+<p>single-queue通过合并和排序来减少磁盘寻址时间。合并指将多个连续请求合成一个更大的IO请求，以便充分发挥硬件性能。排序使用电梯调度，将整个请求队列将按扇区增长方向有序排列。排列的目的不仅是为了缩短单独一次请求的寻址时间，更重要的优化在于，通过保持磁盘头以直线方向移动，缩短了所有请求的磁盘寻址的时间。目前single-queue使用的调度策略包括：noop、deadline、cfq等。</p>
+<ul>
+<li>Noop：IO调度器最简单的算法，将IO请求放入队列中并顺序的执行这些IO请求，对于连续的IO请求也会做相应的合并。</li>
+<li>Deadline：保证IO请求在一定时间内能够被服务，避免某个请求饥饿。</li>
+<li>CFQ：即绝对公平算法，试图为竞争块设备使用权的所有进程分配一个请求队列和一个时间片，在调度器分配给进程的时间片内，进程可以将其读写请求发送给底层块设备，当进程的时间片消耗完，进程的请求队列将被挂起，等待调度。</li>
+</ul>
+<p>早先的内核只有single-queue，当时存储设备主要时HDD，HDD的随机寻址性能很差，single-queue就可以满足传输需求。当SSD发展起来后，它的随机寻址性能很好，传输的瓶颈就转移到请求队列上。结合多核CPU，multi-queue被设计出来。multi-queue为每个CPU core或socket配置一个Software queue，这也解决了single-queue中多核锁竞争的问题。如果存储设备支持并行多个Hardware dispatch queues，传输性能又会大幅度提升。目前multi-queue支持的调度策略包括：mq-deadline、bfq、kyber等。</p>
+<h2 id="Block设备"><a href="#Block设备" class="headerlink" title="Block设备"></a>Block设备</h2><h3 id="设备文件"><a href="#设备文件" class="headerlink" title="设备文件"></a>设备文件</h3><p>设备文件是Linux系统访问硬件设备的接口，驱动程序将硬件设备抽象为设备文件，以便应用程序访问。设备驱动加载时在/dev/下创建设备文件描述符，如果是Block设备，同时会创建一个软链接到/dev/block/下，并根据设备号来命名。图中将Block设备分为以下几类。</p>
+<ul>
+<li>逻辑设备：图中的“Devices on top of “normal” block devices”，使用Device Mapper将物理块设备进行映射。通过这种映射机制，可以根据需要实现对存储资源的管理。包括LVM、DM、bcache等。</li>
+<li>SCSI设备：使用SCSI标准的设备文件，包括sda（硬盘）、sr（光驱）等。</li>
+<li>其他块设备：每一种块设备都有自己的传输协议。一类代表真正的硬件设备，如mmc、nvme等。另一类表示虚拟的块设备，如loop、zram等。</li>
+</ul>
+<h3 id="传输协议"><a href="#传输协议" class="headerlink" title="传输协议"></a>传输协议</h3><p>图中橙色部分表示了Block设备所依赖的技术实现，可能是硬件规范的软件实现，也可能是一种软件架构。图中把SCSI和LIO单独圈出来，因为这两部分相对比较复杂。SCSI包含的硬件规范很多，最常用的是通过libata来访问HDD和SSD。</p>
+<p>LIO（Linux-IO）是基于SCSI engine，实现了SCSI体系模型（SAM）中描述的SCSI Target。LIO在linux 2.6.38后引入内核，其支持的SAN技术包括Fibre Channel、FCoE、iSCSI、iSER 、SRP、USB等，同时还能为本机生成模拟的SCSI设备，以及为虚拟机提供基于virtio的SCSI设备。LIO使用户能够使用相对廉价的Linux系统实现SCSI、SAN的各种功能，而不用购买昂贵的专业设备。可以看到LIO的前端是Fabric模块（Fibre Channel、FCoE、iSCSI等），用来访问模拟的SCSI设备。Fabric模块就是实现SCSI命令的传输协议，例如iSCSI技术就是把SCSI命令放在TCP/IP中传输，vhost技术就是把SCSI命令放在virtio队列中传输。LIO的后端实现了访问磁盘数据的方法。FILEIO通过Linux VFS来访问数据，IBLOCK访问Linux Block设备，PSCSI 直接访问SCSI设备，Memory Copy RAMDISK用来放访问模拟SCSI的ramdisk。</p>
+<h3 id="硬件设备"><a href="#硬件设备" class="headerlink" title="硬件设备"></a>硬件设备</h3><p>图中天蓝色部分，就是实际的硬件存储设备。其中virtio_pci、para-virtualized SCSI、VMware’s para-virtualized scsi是虚拟化的硬件设备。</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000020990855">Linux Storage Stack Diagram</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.programmersought.com/article/8101385700/">Analysis of Linux block device I/O stack</a></p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-11-20</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/11/20/k8s/K8s%20FAQ/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/11/18/k8s/The%20Go%20scheduler-v1.8/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

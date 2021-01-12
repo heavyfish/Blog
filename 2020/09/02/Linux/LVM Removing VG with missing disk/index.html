@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="如果从服务器上卸下了磁盘，却忘记了彻底删除配置，则可能会遇到类似的情况 下面显示了lvremove发生的情况：  123456# lvremove --force --verbose &#x2F;dev&#x2F;vg02&#x2F;u01 &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/02/Linux/LVM%20Removing%20VG%20with%20missing%20disk/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="如果从服务器上卸下了磁盘，却忘记了彻底删除配置，则可能会遇到类似的情况 下面显示了lvremove发生的情况：  123456# lvremove --force --verbose &#x2F;dev&#x2F;vg02&#x2F;u01 &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-09-02T10:21:48.337Z">
+<meta property="article:modified_time" content="2020-09-02T10:23:53.054Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-02</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>如果从服务器上卸下了磁盘，却忘记了彻底删除配置，则可能会遇到类似的情况</p>
+<p>下面显示了lvremove发生的情况： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># lvremove --force --verbose &#x2F;dev&#x2F;vg02&#x2F;u01</span><br><span class="line"> &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE-C4Av-paaxEH not found or rejected by a filter.</span><br><span class="line">  &#96;&#96;There are 1 physical volumes missing.</span><br><span class="line">  &#96;&#96;Archiving volume group &#96;&#96;&quot;vg02&quot;&#96; &#96;metadata (seqno 2).</span><br><span class="line">  &#96;&#96;Releasing logical volume &#96;&#96;&quot;u01&quot;</span><br><span class="line"> &#96;&#96;Aborting vg_write: No metadata areas to write to!</span><br></pre></td></tr></table></figure>
+<p>有些人似乎在使用vgreduce命令方面取得了成功，但是我最终制造了一个假设备并扩展了VG以清理LV</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># lvs</span><br><span class="line"> &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE-C4Av-paaxEH not found or rejected by a filter.</span><br><span class="line"> &#96;&#96;LV  VG  Attr    LSize  Pool Origin Data% Meta% Move Log Cpy%Sync Convert</span><br><span class="line"> &#96;&#96;opt vg01 -wi-ao---- 995.00g                          </span><br><span class="line"> &#96;&#96;u01 vg02 -wi-----p- 248.00g                          </span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;&#x2F;tmp&#x2F;tmp.raw bs&#x3D;1M count&#x3D;100</span><br><span class="line">100+0 records &#96;&#96;in</span><br><span class="line">100+0 records out</span><br><span class="line">104857600 bytes (105 MB) copied, 0.0763176 s, 1.4 GB&#x2F;s</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># losetup -f</span><br><span class="line">&#x2F;dev&#x2F;loop0</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># losetup &#x2F;dev&#x2F;loop0 &#x2F;tmp&#x2F;tmp.raw</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># vgextend vg02 &#x2F;dev&#x2F;loop0</span><br><span class="line"> &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE-C4Av-paaxEH not found or rejected by a filter.</span><br><span class="line"> &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE-C4Av-paaxEH not found or rejected by a filter.</span><br><span class="line"> &#96;&#96;Physical volume &#96;&#96;&quot;&#x2F;dev&#x2F;loop0&quot;&#96; &#96;successfully created.</span><br><span class="line"> &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE-C4Av-paaxEH not found or rejected by a filter.</span><br><span class="line"> &#96;&#96;Volume group &#96;&#96;&quot;vg02&quot;&#96; &#96;successfully extended</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># vgremove vg02 --force</span><br><span class="line"> &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE-C4Av-paaxEH not found or rejected by a filter.</span><br><span class="line"> &#96;&#96;Logical volume &#96;&#96;&quot;u01&quot;&#96; &#96;successfully removed</span><br><span class="line"> &#96;&#96;Volume group &#96;&#96;&quot;vg02&quot;&#96; &#96;successfully removed</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># pvremove &#x2F;dev&#x2F;loop0</span><br><span class="line"> &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE-C4Av-paaxEH not found or rejected by a filter.</span><br><span class="line"> &#96;&#96;Labels on physical volume &#96;&#96;&quot;&#x2F;dev&#x2F;loop0&quot;&#96; &#96;successfully wiped.</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># losetup -d &#x2F;dev&#x2F;loop0 </span><br><span class="line"># rm &#x2F;tmp&#x2F;tmp.raw</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># lvs</span><br><span class="line"> &#96;&#96;LV  VG  Attr    LSize  Pool Origin Data% Meta% Move Log Cpy%Sync Convert</span><br><span class="line"> &#96;&#96;opt vg01 -wi-ao---- 995.00g                          </span><br><span class="line"># vgs</span><br><span class="line"> &#96;&#96;VG  &#96;&#96;#PV #LV #SN Attr  VSize  VFree</span><br><span class="line"> &#96;&#96;vg01  1  1  0 wz--n- 999.99g 4.99g</span><br><span class="line"># pvs</span><br><span class="line"> &#96;&#96;WARNING: Device &#96;&#96;for&#96; &#96;PV ore6TE-2ues-rc5q-mkCN-hEHE-C4Av-paaxEH not found or rejected by a filter.</span><br><span class="line"> &#96;&#96;PV     VG  Fmt Attr PSize  PFree</span><br><span class="line"> &#96;&#96;&#x2F;dev&#x2F;sdb  vg01 lvm2 a-- 999.99g 4.99g</span><br></pre></td></tr></table></figure>
+
+
+<p>另，用dmsetup 直接remove相关设备应该也可以</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-09-02</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/09/02/Linux/%E5%AD%98%E5%82%A8/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/09/02/Linux/Linux%E4%B8%A2%E5%8C%85%E6%8E%92%E6%9F%A5/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="1、概览1.1、什么是tomcatTomcat是由Apache软件基金会属下Jakarta项目开发的Servlet容器，按照Sun Microsystems（推出Java的公司）提供的技术规范，实现了对Servlet和JavaServer Page（JSP）的支持，由于Tomcat本身也内含了HTTP服务器，因此也可以视作单独的Web服务器。但是，不能将Tomcat和Apache HTTP服务器混">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/12/16/Linux/Tomcat/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="1、概览1.1、什么是tomcatTomcat是由Apache软件基金会属下Jakarta项目开发的Servlet容器，按照Sun Microsystems（推出Java的公司）提供的技术规范，实现了对Servlet和JavaServer Page（JSP）的支持，由于Tomcat本身也内含了HTTP服务器，因此也可以视作单独的Web服务器。但是，不能将Tomcat和Apache HTTP服务器混">
+<meta property="og:locale">
+<meta property="og:image" content="https://img-blog.csdn.net/20180629162348667?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hbmZlaWJ1eWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181206104130815.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI2MzIzMzIz,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-55ce1485739fcd31605a21fd0a7c32fd_b.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-584ba647031250c4019d9ee135202d6c_1440w.jpg?source=1940ef5c">
+<meta property="article:published_time" content="2020-12-16T14:20:28.556Z">
+<meta property="article:modified_time" content="2020-12-16T16:10:53.774Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180629162348667?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hbmZlaWJ1eWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/12/" class="post-meta__date button">2020-12-16</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="1、概览"><a href="#1、概览" class="headerlink" title="1、概览"></a>1、概览</h1><h2 id="1-1、什么是tomcat"><a href="#1-1、什么是tomcat" class="headerlink" title="1.1、什么是tomcat"></a>1.1、什么是tomcat</h2><p><strong>Tomcat</strong>是由Apache软件基金会属下Jakarta项目开发的Servlet容器，按照Sun Microsystems（推出Java的公司）提供的技术规范，实现了对Servlet和JavaServer Page（JSP）的支持，由于Tomcat本身也内含了HTTP服务器，因此也可以视作单独的Web服务器。但是，不能将Tomcat和Apache HTTP服务器混淆，Apache HTTP服务器是用C语言实现的HTTP Web服务器，Tomcat是用Java编写的 Java web服务器。</p>
+<p>Tomcat一般用来处理动态页面，静态页面 由 Nginx 或 Apache 处理。组合方式一般是 Nginx + Tomcat</p>
+<p>Tomcat也叫做Serlvet容器，事实上，Tomcat访问所有的资源，都是用Servlet来实现的。</p>
+<p>在Tomcat看来，资源分3种</p>
+<ol>
+<li><p>静态资源，如css,html,js,jpg,png等</p>
+</li>
+<li><p>Servlet </p>
+</li>
+<li><p>JSP</p>
+</li>
+</ol>
+<p>对于静态资源，Tomcat最后会交由一个叫做DefaultServlet的类来处理</p>
+<p>对于Servlet ，Tomcat最后会交由一个叫做 InvokerServlet的类来处理</p>
+<p>对于JSP，Tomcat最后会交由一个叫做JspServlet的类来处理</p>
+<p>所以Tomcat又叫Servlet容器嘛，什么都交给Servlet来处理。</p>
+<h2 id="1-2、Servlet-和-Jsp"><a href="#1-2、Servlet-和-Jsp" class="headerlink" title="1.2、Servlet 和 Jsp"></a>1.2、Servlet 和 Jsp</h2><p>示例一： <a target="_blank" rel="noopener" href="https://blog.csdn.net/nanfeibuyi/article/details/80856969">Javaweb之简单例子</a> </p>
+<p>示例二：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_19782019/article/details/80292110">JavaWeb——Servlet（全网最详细教程包括Servlet源码分析）</a>–找到其中关于 serlvet的示例代码</p>
+<p>开始，首先配置了一个 web.xml，配置了首页</p>
+<blockquote>
+<p>注解：</p>
+<p>web.xml 是java web 项目的一个重要的配置文件，但是web.xml文件并不是Java web工程必须的。web.xml文件是用来配置：欢迎页、servlet、filter等的。当你的web工程没用到这些时，你可以不用web.xml文件来配置你的web工程。</p>
+</blockquote>
+<p><img src="https://img-blog.csdn.net/20180629162348667?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hbmZlaWJ1eWk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- XML中配置servlet-mapping --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>FormServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.javaee.util.FormServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>FormServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/form<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后看下 html 中请求 servlet 的方式</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Type&quot;</span> <span class="attr">content</span>=<span class="string">&quot;text/html; charset=UTF-8&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>用户登录<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;CSS/index.css&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&#x27;text/javascript&#x27;</span> <span class="attr">src</span>=<span class="string">&#x27;JS/jquery.min.js&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">			<span class="function"><span class="keyword">function</span> <span class="title">ALogin</span>(<span class="params"></span>)</span></span></span><br><span class="line">			&#123;</span><br><span class="line"><span class="handlebars"><span class="xml">				var userName = $(&quot;#userName&quot;).val().trim();<span class="comment">&lt;!--获取用户输入的用户名--&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">				var pwd = $(&quot;#pwd&quot;).val().trim();<span class="comment">&lt;!--获取用户输入的密码--&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">				if(( userName!=&quot;&quot; &amp;&amp; pwd!=&quot;&quot;))<span class="comment">&lt;!--如果用户名和密码不为空--&gt;</span></span></span></span><br><span class="line">				&#123;</span><br><span class="line"><span class="javascript">					$.ajax(&#123;</span></span><br><span class="line"><span class="handlebars"><span class="xml">						type:&quot;POST&quot;,    <span class="comment">&lt;!--以post方式请求--&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">						async: true,	<span class="comment">&lt;!--异步请求--&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">						dataType: &quot;json&quot;,<span class="comment">&lt;!--期望服务器返回的数据格式为json--&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">						url:&quot;./servlet/LoginServlet&quot;,<span class="comment">&lt;!--请求LoginServlet--&gt;</span></span></span></span><br><span class="line"> 						....</span><br><span class="line">			&#125; </span><br><span class="line">		<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 示例2，注意下面的 action=&quot;/form&quot;，&quot;/form&quot; 在 XML中已经和servlet有了映射关系 --&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/form&quot;</span> <span class="attr">method</span>=<span class="string">&quot;get&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>用户名<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>密码<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">name</span>=<span class="string">&quot;submit&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例2</span></span><br><span class="line"><span class="comment">// &quot;/form&quot; 对应的 serverlet</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FormServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">4186928407001085733L</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">         <span class="comment">//设置响应的编码格式为UTF-8编码，否则发生中文乱码现象</span></span><br><span class="line">        response.setContentType(<span class="string">&quot;text/html;charset=UTF-8&quot;</span>);</span><br><span class="line">        <span class="comment">//1.获得请求方式</span></span><br><span class="line">        String method = request.getMethod();</span><br><span class="line">        <span class="comment">//2.获得请求的资源相关的内容</span></span><br><span class="line">        String requestURI = request.getRequestURI();<span class="comment">//获得请求URI</span></span><br><span class="line">        StringBuffer requestURL = request.getRequestURL();</span><br><span class="line">        String webName = request.getContextPath();<span class="comment">//获得应用路径（应用名称）</span></span><br><span class="line">        String querryString = request.getQueryString();<span class="comment">//获得查询字符串</span></span><br><span class="line">        <span class="comment">//注：Servelt 返回完整的Html页面时，写法太冗长了</span></span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;下面是获得的字符串&lt;/h1&gt;&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;method(HTTP方法):&lt;h1&gt;&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;&quot;</span>+method+<span class="string">&quot;&lt;/h1&gt;&lt;br&gt;&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;requestURi(请求URI）:&lt;/h1&gt;&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;&quot;</span> + requestURI + <span class="string">&quot;&lt;/h1&gt;&lt;br&gt;&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;webname(应用名称):&lt;/h1&gt;&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;&quot;</span> + webName + <span class="string">&quot;&lt;/h1&gt;&lt;br&gt;&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;querrystring(查询字符串):&lt;/h1&gt;&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;&lt;h1&gt;&quot;</span> + querryString + <span class="string">&quot;&lt;/h1&gt;&quot;</span>);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-1、Servlet是什么？"><a href="#1-2-1、Servlet是什么？" class="headerlink" title="1.2.1、Servlet是什么？"></a>1.2.1、Servlet是什么？</h3><p><strong>Servlet</strong>（Server Applet），全称<strong>Java Servlet</strong>。是用Java编写的服务器端程序。其主要功能在于交互式地浏览和修改数据，生成动态Web内容。狭义的Servlet是指Java语言实现的一个接口，广义的Servlet是指任何实现了这个Servlet接口的类。此处我们主要解释狭义的Servlet。</p>
+<p><strong>Servlet是一个Java接口</strong>，但sevlet不会直接和客户端打交道。请求是通过tomcat 去到servlet的。tomcat 监听了端口，请求过来后，根据url等信息，确定要将请求交给哪个servlet去处理，然后调用那个servlet的service方法，service方法返回一个response对象，tomcat再把这个response返回给客户端。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181206104130815.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI2MzIzMzIz,size_16,color_FFFFFF,t_70" alt="img"></p>
+<p>Servlet 这个接口的定义，J2EE 规范中的一种，主要是为了扩展java作为web服务的功能，这样程序员你只需要了解servlet规范就可以从request中取值，你就可以操作session等等。而 Tomcat 本质扮演了 servlet 容器的角色，它接受到请求，然后解析请求，调用相关的servlet处理后，返回给客户端。具体的过程后续章节再阐述。</p>
+<blockquote>
+<p>注释：这里提到了容器一词，此处的容器表示：<strong>程序运行时需要的环境</strong>。Tomcat是servlet的运行环境，所以Tomcat是servlet容器</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// servlet 接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Servlet</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig var1)</span> <span class="keyword">throws</span> ServletException</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="function">ServletConfig <span class="title">getServletConfig</span><span class="params">()</span></span>;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest var1, ServletResponse var2)</span> <span class="keyword">throws</span> ServletException, IOException</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="function">String <span class="title">getServletInfo</span><span class="params">()</span></span>;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-2、Jsp是什么？"><a href="#1-2-2、Jsp是什么？" class="headerlink" title="1.2.2、Jsp是什么？"></a>1.2.2、Jsp是什么？</h3><p>JSP是一种Java servlet，主要用于实现Java web应用程序的用户界面部分，它使用JSP标签在HTML网页中插入Java代码。标签通常以&lt;%开头以%&gt;结束。</p>
+<p>Tomcat的主要目的是处理动态页面（当然静态也可以，只是不如Apache、Nginx），需要的是<strong>在最终输出的html的代码中嵌入后台数据</strong>。Servlet采用的是不断的将 html静态页面上的html语句贴到Servlet中，即在Java 代码中，嵌入HTML代码。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">out.println(&quot;&lt;span&gt;用户名是：&quot;+user.age+&lt;&quot;/span&gt;&quot;);</span><br></pre></td></tr></table></figure>
+<p>由于Servlet的不便，由此出现了Jsp。直接在 html语句中写入动态数据。我们可以直接在JSP文件里写HTML代码，使用上把它<strong>当做</strong>HTML文件。而且JSP中HTML/CSS/JS等的写法和HTML文件中的写法是一模一样的。不过它本质上不是HTML，因为我们可以把Java代码内嵌在JSP页面中，所以很方便地把动态数据渲染成静态页面。</p>
+<p>当有人请求JSP时，服务器内部会经历一次动态资源（JSP）到静态资源（HTML）的转化，服务器会自动帮我们把JSP中的HTML片段和数据拼接成静态资源响应给浏览器。也就是说JSP是运行在服务器端，但最终发给客户端的都已经是转换好的HTML静态页面（在响应体里）。</p>
+<p>即：<strong>JSP = HTML + Java片段</strong>（各种标签本质上还是Java片段）</p>
+<p>Jsp 本质上是一个 servlet，大致转换流程为：</p>
+<blockquote>
+<p>WEB容器接收到以.jsp为扩展名的URL的访问请求时，它将把该请求交给JSP引擎去处理。Tomcat中的JSP引擎就是一个Servlet程序，它负责解释和执行JSP页面。</p>
+<p>每个JSP 页面在第一次被访问时，JSP引擎将它翻译成一个Servlet源程序，接着再把这个Servlet源程序编译成Servlet的class类文件，然后再由WEB容器像调用普通Servlet程序一样的方式来装载和解释执行这个由JSP页面翻译成的Servlet程序。</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Jsp 示例--&gt;</span><br><span class="line">&lt;%@ page language=<span class="string">&quot;java&quot;</span> contentType=<span class="string">&quot;text/html; charset=UTF-8&quot;</span></span><br><span class="line">    pageEncoding=<span class="string">&quot;UTF-8&quot;</span>%&gt;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line">&lt;title&gt;菜鸟教程(runoob.com)&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">Hello World!&lt;br/&gt;</span><br><span class="line">&lt;%</span><br><span class="line">out.println(<span class="string">&quot;你的 IP 地址 &quot;</span> + request.getRemoteAddr());</span><br><span class="line">%&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-3、Tomcat的架构"><a href="#1-3、Tomcat的架构" class="headerlink" title="1.3、Tomcat的架构"></a>1.3、Tomcat的架构</h2><p><img src="https://pic2.zhimg.com/v2-55ce1485739fcd31605a21fd0a7c32fd_b.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-584ba647031250c4019d9ee135202d6c_1440w.jpg?source=1940ef5c" alt="img"></p>
+<p>1.server层代表整个servlet容器，用于启动与监听服务端事件</p>
+<p>2.service是由一个engine和一个或多个connector组成，这些connector共享一个Engine来处理请求</p>
+<p>3.connector将在某个指定端口监听客户的请求，把从socket传送来的数据封装成request传递给engine，并从engine处获得响应返回给客户。</p>
+<p>Tomcat通常会用到两种Connector： </p>
+<p>a)    Http Connector 在端口8080处侦听来自客户browser的http请求。 </p>
+<p>b)    AJP Connector 在端口8009处侦听来自其它WebServer(Apache)的servlet/jsp代理请求。 </p>
+<p>3.engine负责处理来自相关联的service的所有请求，处理后返回给service，connector作为两者中间媒介出现</p>
+<p>   engine下可以配置多个虚拟主机，当engine获得一个请求时将这个请求匹配给对应的虚拟主机上处理</p>
+<p>4.Host虚拟主机与某个网络域名(domain name)相匹配。一个主机下可以部署一个或者多个web应用，每个应用对应一个context，有一个context path。当host获得一个请求时将这个请求匹配到某个context上，将请求交给context处理，这种方法叫最长匹配。path==“”时即匹配所有无法匹配到context的请求。</p>
+<p>5.context对应一个应用，由一个或多个servlet组成。context创建时将根据web.xml载入servlet类。</p>
+<h3 id="1-3-1、tomcat如何与serverlet交互"><a href="#1-3-1、tomcat如何与serverlet交互" class="headerlink" title="1.3.1、tomcat如何与serverlet交互"></a>1.3.1、tomcat如何与serverlet交互</h3><p>1、Web客户向Servlet容器（Tomcat）发出Http请求</p>
+<p>2、Servlet容器分析客户的请求信息</p>
+<p>3、Servlet容器创建一个HttpRequest对象，将客户请求的信息封装到这个对象中</p>
+<p>4、Servlet容器创建一个HttpResponse对象</p>
+<p>5、Servlet容器调用HttpServlet对象的service方法，把HttpRequest对象与HttpResponse对象作为参数</p>
+<p>   传给 HttpServlet对象</p>
+<p>6、HttpServlet调用HttpRequest对象的有关方法，获取Http请求信息</p>
+<p>7、HttpServlet调用HttpResponse对象的有关方法，生成响应数据</p>
+<p>8、Servlet容器把HttpServlet的响应结果传给Web客户</p>
+<h1 id="参考文档："><a href="#参考文档：" class="headerlink" title="参考文档："></a>参考文档：</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/42343690">浅谈JSP</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_19782019/article/details/80292110">JavaWeb——Servlet（全网最详细教程包括Servlet源码分析）</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/21416727">servlet的本质是什么，它是如何工作的？</a>-知乎</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-12-17</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/12/15/Linux/Apche/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

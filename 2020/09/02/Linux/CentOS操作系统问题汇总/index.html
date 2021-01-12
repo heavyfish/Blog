@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="1、存储相关1.LVM1、Read-only locking type set. Write locks are prohibited. (LVM) 现象是：虚机内部做了lvm，然后虚机重启后，提示相关VG找不到 12dracut: Read-only locking type set. Write locks are prohibited.dracut: Can&#39;t get lock f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/02/Linux/CentOS%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="1、存储相关1.LVM1、Read-only locking type set. Write locks are prohibited. (LVM) 现象是：虚机内部做了lvm，然后虚机重启后，提示相关VG找不到 12dracut: Read-only locking type set. Write locks are prohibited.dracut: Can&#39;t get lock f">
+<meta property="og:locale">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200915213707930.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019110123041145.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmdsaWFuZ2x1YW5n,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191101230449958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmdsaWFuZ2x1YW5n,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdn.net/20160906081402924">
+<meta property="og:image" content="https://img-blog.csdn.net/20160113005100270?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="article:published_time" content="2020-09-02T15:53:19.267Z">
+<meta property="article:modified_time" content="2020-09-16T03:42:11.206Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200915213707930.png">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-02</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="1、存储相关"><a href="#1、存储相关" class="headerlink" title="1、存储相关"></a>1、存储相关</h1><h2 id="1-LVM"><a href="#1-LVM" class="headerlink" title="1.LVM"></a>1.LVM</h2><p>1、<a target="_blank" rel="noopener" href="https://access.redhat.com/solutions/2604341">Read-only locking type set. Write locks are prohibited. (LVM)</a></p>
+<p>现象是：虚机内部做了lvm，然后虚机重启后，提示相关VG找不到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dracut: Read-only locking type set. Write locks are prohibited.</span><br><span class="line">dracut: Can&#39;t get lock for VG</span><br></pre></td></tr></table></figure>
+<p><strong>解决方法：</strong></p>
+<p>Boot system using <code>rdshell</code> option<br>Verify that locking_type is 4 in dracut <code>lvm.conf</code> file<br>Manually override locking_type using <code>lvm vgchange -ay --config &#39; global &#123;locking_type=1&#125; &#39;</code> command<br>boot system as root volume group is activated<br>Change <code>locking_type</code> to 1 ( or to 3 incase clustered locking) in <code>/etc/lvm/lvm.conf</code> file<br>Rebuild dracut image using <code>dracut -v -f</code>【注：可能没有这个命了，用dracutcmdline 代替，或者不执行此步。但不执行的测试未做过】</p>
+<h1 id="2、网络相关"><a href="#2、网络相关" class="headerlink" title="2、网络相关"></a>2、网络相关</h1><h2 id="1-TCP-UDP包大小，以及MTU、MSS的意义"><a href="#1-TCP-UDP包大小，以及MTU、MSS的意义" class="headerlink" title="1.TCP UDP包大小，以及MTU、MSS的意义"></a>1.TCP UDP包大小，以及MTU、MSS的意义</h2><h3 id="MTU、MSS的意义"><a href="#MTU、MSS的意义" class="headerlink" title="MTU、MSS的意义"></a>MTU、MSS的意义</h3><p><strong>MTU</strong>：Maximum Transmit Unit，最大传输单元，即物理接口（数据链路层）提供给其上层（通常是IP层）最大一次传输数据的大小。用以太网协议为例：每个以太网帧都有最小的大小64Bytes最大不能超过1518Bytes，对于小于或者大于这个限制的以太网帧我们都可以视之为错误的数据帧，一般的以太网转发设备会丢弃这些数据帧。 由于以太网EthernetII最大的数据帧是1518Bytes这样，刨去以太网帧的帧头（DMAC目的MAC地址48bits=6Bytes + SMAC源MAC地址48bits=6Bytes + Type域2Bytes）14Bytes和帧尾CRC校验部分4Bytes那么剩下承载上层协议的地方也就是<strong>Data域最大就只能有1500Bytes</strong>这个值我们就把它称之为<strong>MTU</strong>。</p>
+<p><strong>MSS</strong>：Maximum Segment Size ，<strong>TCP提交给IP层最大分段大小</strong>，不包含TCP Header和 TCP Option，<strong>只包含TCP Payload</strong> ，MSS是TCP用来限制application层最大的发送字节数。如果底层物理接口MTU= 1500 byte，则 MSS = 1500- 20(IP Header) -20 (TCP Header) = 1460 byte，如果application 有2000 byte发送，需要两个segment才可以完成发送，第一个TCP segment = 1460，第二个TCP segment = 540。MSS是TCP中的概念，由通信双方协商得到，但一般是1460 byte</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915213707930.png" alt="image-20200915213707930" style="zoom:50%;" />
+
+
+
+<p>不同协议的MTU大小：</p>
+<p>FDDI协议：4352字节<br>以太网（Ethernet）协议：1500字节<br>PPPoE（ADSL）协议：1492字节<br>X.25协议（Dial Up/Modem）：576字节<br>Point-to-Point：4470字节</p>
+<h3 id="数据的封装格式"><a href="#数据的封装格式" class="headerlink" title="数据的封装格式"></a>数据的封装格式</h3><p>![image-20200915213331832](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915213331832.png)</p>
+<ol>
+<li><strong>报文</strong>：报文是网络中交换与传输的数据单元，即站点一次性要发送的数据块。报文包含了将要发送的完整的数据信息，其长短很不一致，长度不限且可变。（想象HTTP 报文）</li>
+<li><strong>报文段</strong>：<ol>
+<li>TCP段：如果使用TCP协议传输，那么报文会被自动切割成MSS的大小，无需手动分段。所以使用TCP Socket时，常常有数据流的概念，因为我们不关心分段。而由于MSS本身的限制，TCP段不会发生分片</li>
+<li>UDP段：UDP段的payload大小建议为 1500 - 20【IP数据包首部】- 8【UDP数据包首部】= 1472 bytes。UDP的payload大小，需要在编写socket时，手动设置。注意，UDP的payload最好不要超过1472，不然在 IP 协议处会发生 分片（即切割 payload）。但由于UDP本身没有重传机制，则数据有可能丢失。</li>
+</ol>
+</li>
+<li><strong>数据包</strong>：又称分组，是在分组交换网络中传输的格式化数据单元。</li>
+<li><strong>帧</strong>：帧是数据链路层的传输单元，它将上层传入的数据添加一个头部和尾部，组成了帧。</li>
+<li><strong>bit流（bit）</strong>：物理层的数据传输单元。</li>
+</ol>
+<h2 id="2-TCP相关"><a href="#2-TCP相关" class="headerlink" title="2.TCP相关"></a>2.TCP相关</h2><h3 id="1-为什么需要三次握手，四次挥手"><a href="#1-为什么需要三次握手，四次挥手" class="headerlink" title="1.为什么需要三次握手，四次挥手"></a>1.为什么需要三次握手，四次挥手</h3><p>与此相关的一些问题，参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/86426969">面试官，不要再问我三次握手和四次挥手</a></p>
+<img src="https://img-blog.csdnimg.cn/2019110123041145.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmdsaWFuZ2x1YW5n,size_16,color_FFFFFF,t_70" alt="三次握手" style="zoom:75%;" />
+
+<p>TCP控制字段标志：</p>
+<p>URG:Urget pointer is valid (紧急指针字段值有效)</p>
+<p>SYN: 表示建立连接</p>
+<p>FIN: 表示关闭连接</p>
+<p>ACK: 表示响应</p>
+<p>PSH: 表示有 DATA数据传输</p>
+<p>RST: 表示连接重置。</p>
+<img src="https://img-blog.csdnimg.cn/20191101230449958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmdsaWFuZ2x1YW5n,size_16,color_FFFFFF,t_70" alt="四次挥手" style="zoom:75%;" />
+
+<h3 id="2-滑动窗口"><a href="#2-滑动窗口" class="headerlink" title="2.滑动窗口"></a>2.滑动窗口</h3><p>滑动窗口的意义在于 保证数据可靠的情况下，尽可能多的传输数据。</p>
+<p><img src="https://img-blog.csdn.net/20160906081402924" alt="img"></p>
+<h2 id="3-MSL，TTL，RTT简介"><a href="#3-MSL，TTL，RTT简介" class="headerlink" title="3.MSL，TTL，RTT简介"></a>3.MSL，TTL，RTT简介</h2><p>1、MSL是Maximum Segment Lifetime英文的缩写，中文可以译为“报文最大生存时间”，他是任何报文在网络上存在的最长时间，超过这个时间报文将被丢弃。因为tcp报文（segment）是ip数据报（datagram）的数据部分。</p>
+<p>2、而ip头中有一个TTL域，TTL是time to live的缩写，中文可以译为“生存时间”，这个生存时间是由源主机设置初始值 但不是存的具体时间，而是存储了一个ip数据报可以经过的最大路由数，每经过一个处理他的路由器此值就减1，当此值为0则数据报将被丢弃，同时发送ICMP报文通知源主机。RFC 793中规定MSL为2分钟，实际应用中常用的是30秒，1分钟和2分钟等。</p>
+<p>   2MSL即两倍的MSL，TCP的TIME_WAIT状态也称为2MSL等待状态，当TCP的一端发起主动关闭，在发出最后一个ACK包后，即第3次握手完成后发送了第四次握手的ACK包后就进入了TIME_WAIT状态，必须在此状态上停留两倍的MSL时间，等待2MSL时间主要目的是怕最后一个ACK包对方没收到，那么对方在超时后将重发第三次挥手的FIN包，主动关闭端接到重发的FIN包后可以再发一个ACK应答包。在TIME_WAIT状态时两端的端口不能使用，要等到2MSL时间结束才可继续使用。当连接处于2MSL等待阶段时任何迟到的报文段都将被丢弃。不过在实际应用中可以通过设置SO_REUSEADDR选项达到不必等待2MSL时间结束再使用此端口。</p>
+<p>  TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TTL。</p>
+<p> 3、 RTT是客户到服务器往返所花时间（round-trip time，简称RTT），TCP含有动态估算RTT的算法。TCP还持续估算一个给定连接的RTT，这是因为RTT受网络传输拥塞程序的变化而变化</p>
+<p>4、 2MSL即两倍的MSL，TCP的TIME_WAIT状态也称为2MSL等待状态，当TCP的一端发起主动关闭，在发出最后一个ACK包后，即第3次握 手完成后发送了第四次握手的ACK包后就进入了TIME_WAIT状态，必须在此状态上停留两倍的MSL时间，等待2MSL时间主要目的是怕最后一个 ACK包对方没收到，那么对方在超时后将重发第三次握手的FIN包，主动关闭端接到重发的FIN包后可以再发一个ACK应答包。在TIME_WAIT状态 时两端的端口不能使用，要等到2MSL时间结束才可继续使用。当连接处于2MSL等待阶段时任何迟到的报文段都将被丢弃。不过在实际应用中可以通过设置 SO_REUSEADDR选项达到不必等待2MSL时间结束再使用此端口。对于TCP中的各种控制字段，接下来进行具体说明。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.ipv4.ip_default_ttl&#x3D;129</span><br><span class="line">sysctl net.ipv4.tcp_fin_timeout &#x3D; 60</span><br></pre></td></tr></table></figure>
+<h2 id="4-VXLAN和VLAN的区别"><a href="#4-VXLAN和VLAN的区别" class="headerlink" title="4.VXLAN和VLAN的区别"></a>4.VXLAN和VLAN的区别</h2><p>关于VXLAN的介绍可以看下<a target="_blank" rel="noopener" href="http://www.h3c.com/cn/d_201811/1131076_30005_0.htm">解读VXLAN</a></p>
+<p><img src="https://img-blog.csdn.net/20160113005100270?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<h3 id="OpenStack中l2population的作用"><a href="#OpenStack中l2population的作用" class="headerlink" title="OpenStack中l2population的作用"></a>OpenStack中l2population的作用</h3><p><strong>L2 Population 是用来提高 VXLAN 网络 Scalability 的</strong>。</p>
+<p>L2 Population 的作用是在 VTEP 上提供 Porxy ARP 功能，使得 VTEP 能够预先获知 VXLAN 网络中如下信息： 1. VM IP – MAC 对应关系 2. VM – VTEP 的对应关系。</p>
+<p><strong>VTEP 是如何提前获知 IP – MAC – VTEP 相关信息的呢</strong>？</p>
+<p>答案是：</p>
+<ol>
+<li>Neutron 知道每一个 port 的状态和信息； port 保存了 IP，MAC 相关数据。</li>
+<li>instance 启动时，其 port 状态变化过程为：down -&gt; build -&gt; active。</li>
+<li>每当 port 状态发生变化时，Neutron 都会通过 RPC 消息通知各节点上的 Neutron agent，使得 VTEP 能够更新 VM 和 port 的相关信息。</li>
+<li>VTEP 可以根据这些信息判断出其他 Host 上都有哪些 VM，以及它们的 MAC 地址，这样就能直接与之通信，从而避免了不必要的隧道连接和广播。</li>
+</ol>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-09-16</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/09/02/OpenStack/Neutron%E7%9B%B8%E5%85%B3/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/09/02/Linux/centos7%E5%8D%95%E7%94%A8%E6%88%B7%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

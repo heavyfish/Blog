@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="10、if测试和语法规则12345678910#一般形式if test1:	statements1elif test2:	statements2else test3:	statements3  #三元表达式A &#x3D; Y if X else Z 字典多路式分支         真值和布尔测试  注意倒数第二条：布尔 and 和 or 运算符会返回真或假的操作数对象 12345678910111213&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/18/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C10%EF%BD%9E13/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="10、if测试和语法规则12345678910#一般形式if test1:	statements1elif test2:	statements2else test3:	statements3  #三元表达式A &#x3D; Y if X else Z 字典多路式分支         真值和布尔测试  注意倒数第二条：布尔 and 和 or 运算符会返回真或假的操作数对象 12345678910111213&amp;">
+<meta property="og:locale">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918163258758.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918163500614.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200919121554794.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200919154107667.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200919163832262.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200919170135838.png">
+<meta property="article:published_time" content="2020-09-18T07:35:47.659Z">
+<meta property="article:modified_time" content="2020-10-18T06:14:19.226Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918163258758.png">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-18</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="10、if测试和语法规则"><a href="#10、if测试和语法规则" class="headerlink" title="10、if测试和语法规则"></a>10、if测试和语法规则</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#一般形式</span></span><br><span class="line"><span class="keyword">if</span> test1:</span><br><span class="line">	statements1</span><br><span class="line"><span class="keyword">elif</span> test2:</span><br><span class="line">	statements2</span><br><span class="line"><span class="keyword">else</span> test3:</span><br><span class="line">	statements3</span><br><span class="line">  </span><br><span class="line"><span class="comment">#三元表达式</span></span><br><span class="line">A = Y <span class="keyword">if</span> X <span class="keyword">else</span> Z</span><br></pre></td></tr></table></figure>
+<p><strong>字典多路式分支</strong></p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918163258758.png" alt="image-20200918163258758" style="zoom:50%;" />
+
+
+
+
+
+
+
+<h2 id="真值和布尔测试"><a href="#真值和布尔测试" class="headerlink" title="真值和布尔测试"></a>真值和布尔测试</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918163500614.png" alt="image-20200918163500614" style="zoom:50%;" />
+
+<p>注意倒数第二条：<strong>布尔 and 和 or 运算符会返回真或假的操作数对象</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">2</span> <span class="keyword">or</span> <span class="number">3</span>,<span class="number">3</span> <span class="keyword">or</span> <span class="number">2</span></span><br><span class="line">(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">3</span> <span class="keyword">or</span> []</span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[] <span class="keyword">or</span> &#123;&#125;</span><br><span class="line">&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">2</span> <span class="keyword">and</span> <span class="number">3</span>,<span class="number">3</span> <span class="keyword">and</span> <span class="number">2</span></span><br><span class="line">(<span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">3</span> <span class="keyword">and</span> []</span><br><span class="line">[]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[] <span class="keyword">and</span> &#123;&#125;</span><br><span class="line">[]</span><br></pre></td></tr></table></figure>
+<p><strong>布尔运算符的常见用法</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#通过or从一组对象中做选择</span></span><br><span class="line">X = A <span class="keyword">or</span> B <span class="keyword">or</span> C <span class="keyword">or</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<p><strong>any()和all()</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#any 检查集合中的元素是否有真</span></span><br><span class="line"><span class="comment">#all 检查集合中的元素是否全为真</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L</span><br><span class="line">[<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">any</span>(L)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">all</span>(L)</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<h1 id="11、while循环和for循环"><a href="#11、while循环和for循环" class="headerlink" title="11、while循环和for循环"></a>11、while循环和for循环</h1><h2 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#	一般形式</span></span><br><span class="line"><span class="keyword">while</span> true:</span><br><span class="line">	statements</span><br><span class="line">	<span class="keyword">if</span> test:<span class="keyword">break</span>    <span class="comment"># break执行后，else语句不会执行</span></span><br><span class="line">	<span class="keyword">if</span> test:<span class="keyword">continue</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	statements</span><br><span class="line">  </span><br><span class="line"><span class="comment"># 模仿do until</span></span><br><span class="line"><span class="keyword">while</span> true:</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">if</span> exitTest():<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<h2 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> target <span class="keyword">in</span> <span class="built_in">object</span>:</span><br><span class="line">	statements</span><br><span class="line">  <span class="keyword">if</span> test:<span class="keyword">break</span>    <span class="comment"># break执行后，else语句不会执行</span></span><br><span class="line">	<span class="keyword">if</span> test:<span class="keyword">continue</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	statements</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>3.x中的扩展序列赋值</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> (a,*b,c) <span class="keyword">in</span> [[<span class="number">1</span>,[<span class="number">2</span>,<span class="number">3</span>],<span class="number">4</span>],[<span class="number">5</span>,[<span class="number">6</span>,<span class="number">7</span>],<span class="number">8</span>]]:</span><br><span class="line"><span class="meta">... </span>    print(a,b,c)</span><br><span class="line">...</span><br><span class="line"><span class="number">1</span> [[<span class="number">2</span>, <span class="number">3</span>]] <span class="number">4</span></span><br><span class="line"><span class="number">5</span> [[<span class="number">6</span>, <span class="number">7</span>]] <span class="number">8</span></span><br></pre></td></tr></table></figure>
+
+
+<p><strong>for循环读取文件</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一次性将文件加载到内存</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(<span class="string">&#x27;test.txt&#x27;</span>).readlines():</span><br><span class="line">	print(line.rstrip())</span><br><span class="line"><span class="comment"># 文件迭代器</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(<span class="string">&#x27;test.txt&#x27;</span>):</span><br><span class="line">	print(line.rstrip())</span><br></pre></td></tr></table></figure>
+<h2 id="编写for循环的技巧"><a href="#编写for循环的技巧" class="headerlink" title="编写for循环的技巧"></a>编写for循环的技巧</h2><p>熟练使用 range，zip，enumerate</p>
+<p><strong>range</strong></p>
+<p><code>range</code> 返回一系列连续增加的整数，可作为for中的索引</p>
+<p>2.x中range 会返回一个完整的列表，3.x中range 会返回一个迭代器</p>
+<p><strong>zip</strong></p>
+<p><code>zip</code> 返回一系列并行元素的元组</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L1=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L2=[<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">zip</span>(L1,L2))</span><br><span class="line">[(<span class="number">1</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">6</span>), (<span class="number">3</span>, <span class="number">7</span>), (<span class="number">4</span>, <span class="number">8</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dict</span>(<span class="built_in">zip</span>(L1,L2))</span><br><span class="line">&#123;<span class="number">1</span>: <span class="number">5</span>, <span class="number">2</span>: <span class="number">6</span>, <span class="number">3</span>: <span class="number">7</span>, <span class="number">4</span>: <span class="number">8</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>enumerate</strong></p>
+<p><code>enumerate</code> 同时生成可迭代对象中元素的值和索引</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>S=<span class="string">&quot;spam&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>E=<span class="built_in">enumerate</span>(S)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>E</span><br><span class="line">&lt;<span class="built_in">enumerate</span> <span class="built_in">object</span> at <span class="number">0x104af09d8</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(E)</span><br><span class="line">(<span class="number">0</span>, <span class="string">&#x27;s&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(E)</span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;p&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(E)</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;a&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p><code>enumerate</code> 函数会返回一个生成器对象，这种对象支持迭代协议。</p>
+<h2 id="for-循环遍历shell命令的返回值"><a href="#for-循环遍历shell命令的返回值" class="headerlink" title="for 循环遍历shell命令的返回值"></a>for 循环遍历shell命令的返回值</h2><p>可以用for循环收集shell命令的返回值进行处理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> os</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F=os.popen(<span class="string">&#x27;ls -l&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> line <span class="keyword">in</span> F.readlines():</span><br><span class="line"><span class="meta">... </span>    print(line.rstrip())</span><br><span class="line">...</span><br><span class="line">total <span class="number">8</span></span><br><span class="line">drwx------@  <span class="number">3</span> shenshawn  staff    <span class="number">96</span>  <span class="number">7</span> <span class="number">29</span> <span class="number">22</span>:<span class="number">00</span> Applications</span><br><span class="line">drwx------+ <span class="number">11</span> shenshawn  staff   <span class="number">352</span>  <span class="number">9</span>  <span class="number">5</span> <span class="number">11</span>:<span class="number">00</span> Desktop</span><br></pre></td></tr></table></figure>
+<h1 id="12、迭代和推导"><a href="#12、迭代和推导" class="headerlink" title="12、迭代和推导"></a>12、迭代和推导</h1><p>“可迭代对象”本质上就是序列观念的一种通用化：如果对象是实际保存的序列或是可以在迭代工具上下文中（例如，for循环）一次产生一个结果的对象，那么就看作是可迭代的。可迭代对象包括实际序列，以及能够按照需求计算的虚拟序列。</p>
+<p>可迭代对象（iterable）一般指一个支持iter调用的对象。</p>
+<p>迭代器（iterator）指一个支持<code>next(I)</code>调用的对象（这个对象是通过 <code>I = iter(X)</code> 返回的）</p>
+<p>生成器指代能自动支持迭代协议的对象，因此生成器本身就是可迭代对象</p>
+<h2 id="迭代协议：文件迭代器"><a href="#迭代协议：文件迭代器" class="headerlink" title="迭代协议：文件迭代器"></a>迭代协议：文件迭代器</h2><p>通过不断调用 readline 方法，前进到下一行，到达文件末尾时，会返回空字符串，通过检查空字符串可以跳出循环。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;tmp.txt&#x27;</span>)</span><br><span class="line">f.readline()</span><br><span class="line">f.readline()</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>在3.x中，文件有一个名为<code>__next__</code>（2.x中名为<code>next</code>）的，有着与上述几乎一样的效果。每次调用时，返回文件下一行。区别在于，到达文件末尾时，<code>__next__</code>会引发内置的 StopInteration 异常，而不是返回空字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;tmp.txt&#x27;</span>)</span><br><span class="line">f.__next__()</span><br></pre></td></tr></table></figure>
+<p><code>__next__</code>这个接口基本上就是Python所谓的迭代协议：所有带有<code>__next__</code>方法的对象会前进到下一个结果，而到达一系列结果的末尾时，<code>__next__</code>会引发 StopInteration 异常，这种对象在Python中被称为迭代器。这类对象也能以for循环或其他迭代工具遍历，因为所有迭代工具内部工作起来都是在每次迭代中调用<code>__next__</code>，并且通过捕捉StopInteration 异常 确认何时离开。</p>
+<p>对某些对象完整的迭代协议包括额外的一步 iter调用，但对文件而言这不是必须的。</p>
+<blockquote>
+<p>注意：2.x中，迭代方法名为  <code>X.next()</code>，3.x中名为 <code>X.__next__()</code>，出于可移植性，出现了 <code>next()</code> 内置函数去调用不同版本的迭代方法。不同版本的迭代原理时一致的</p>
+</blockquote>
+<h2 id="手动迭代：iter-和-next"><a href="#手动迭代：iter-和-next" class="headerlink" title="手动迭代：iter 和 next"></a>手动迭代：iter 和 next</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200919121554794.png" alt="image-20200919121554794" style="zoom:50%;" />
+
+<p>迭代协议涉及了两种对象：</p>
+<ul>
+<li>可迭代对象：迭代的调用对象，其 <code>__iter__</code> 方法被 iter函数所调用（即，<code>I = iter(X)</code>，X是可迭代对象，I是迭代器对象）</li>
+<li>迭代器对象：可迭代对象的返回结果，在迭代过程中实际提供值的对象，它的<code>__next__</code>方法被next 运行，并在结束时触发StopInteration 异常</li>
+</ul>
+<p>迭代器工具在多数情况下，自动执行这些步骤，以 for 循环为例：for循环在开始时，会首先把可迭代对象传入内置函数iter，并由此拿到一个迭代器；而iter调用返回的迭代器对象有着next方法。iter函数与 next同 <code>__next__</code>的关系类型，其在内部调用了 <code>__iter__</code>方法</p>
+<h2 id="内置类型可迭代对象"><a href="#内置类型可迭代对象" class="headerlink" title="内置类型可迭代对象"></a>内置类型可迭代对象</h2><p>除了文件和像列表这样的物理序列外，其他类型也有其适用的迭代器。在最新的Python版本中，字典作为一个可迭代对象自带一个迭代器，在迭代上下文中，会自动一次返回一个键</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dict</span>=&#123;<span class="string">&#x27;a&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;b&#x27;</span>:<span class="number">2</span>,<span class="string">&#x27;c&#x27;</span>:<span class="number">3</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dict</span></span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I = <span class="built_in">iter</span>(<span class="built_in">dict</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(I)</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>shelve（Python对象的一种按照键访问的文件系统）和os.popen 的返回结果也是可迭代的。对于这些可迭代对象，只要我们使用了 被for循环以及其他迭代上下文自动采用的完整迭代协议，也就是顶层的<code>iter()</code>调用，那么<code>iter</code>会执行一些内部必要的步骤，从而使该对象支持<code>next</code>调用。</p>
+<p>迭代协议也是我们必须把某些返回结果包装到一个<code>list</code>调用中，才能一次看到它们的值的原因。可迭代对象一次返回一个结果，而不是一次性返回一个实际的列表。</p>
+<h2 id="列表推导"><a href="#列表推导" class="headerlink" title="列表推导"></a>列表推导</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#列表推导</span></span><br><span class="line">L = [x + <span class="number">10</span> <span class="keyword">for</span> x <span class="keyword">in</span> L]</span><br><span class="line"></span><br><span class="line"><span class="comment">#for循环</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(L)):</span><br><span class="line">  L[i]+=<span class="number">10</span></span><br></pre></td></tr></table></figure>
+<p>列表推导并不完全和for循环语句相同，因为<strong>它产生一个新的列表对象</strong>（for 循环是在原基础上修改）。</p>
+<p>列表推导看上去像一个反着写的for循环。但列表推导更精简，而且执行速度比for循环更快。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 例子</span></span><br><span class="line">[line.upper() <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(<span class="string">&#x27;tmp.txt&#x27;</span>)]</span><br><span class="line">[line.upper() <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(<span class="string">&#x27;tmp.txt&#x27;</span>) <span class="keyword">if</span> line[<span class="number">0</span>] == <span class="string">&#x27;p&#x27;</span>]</span><br><span class="line">[x+y <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">&#x27;abc&#x27;</span> <span class="keyword">for</span> y <span class="keyword">in</span> <span class="string">&#x27;lmn&#x27;</span>]  <span class="comment">#相当于嵌套循环</span></span><br></pre></td></tr></table></figure>
+<h2 id="其他迭代上下文"><a href="#其他迭代上下文" class="headerlink" title="其他迭代上下文"></a>其他迭代上下文</h2><p>用户定义的类也可以实现迭代协议。任何利用了迭代协议的工具，都能在遵循了迭代协议的任何内置类型或用户定义的类上自动工作。</p>
+<p>虽然上述例子用的for循环介绍，但 所有能够在对象中 从左到右扫描的内置工具都使用了迭代协议。</p>
+<p>Python还包含了其他许多处理可迭代对象的内置函数。</p>
+<ul>
+<li>map：作用是把一个函数调用应用于传入的可迭代对象的每一项<code>map(str.upper),open(&#39;tmp.txt&#39;)</code></li>
+<li>sorted：排序可迭代对象</li>
+<li>zip：组合可迭代对象中的项</li>
+<li>enumerate：把可迭代对象中的项与它们的位置相匹配</li>
+<li>filter：按照一个函数是否为真来选择可迭代对象中的项</li>
+<li>reduce：针对可迭代对象中的成对的项来运行一个函数<code>reduce(add, [1, 3, 5, 7, 9]</code>)</li>
+</ul>
+<p>3.x中，zip、enumerate、filter、map都会返回一个可迭代对象。sorted会返回一个新的排序后的真正列表。</p>
+<p>实际上Python内置工具集中所有能够从左到右扫描一个对象的工具，都被定义为在主体对象上使用了迭代协议。这甚至包括了更高级的工具，如list，tuple，字符串join 方法。还有其他的一些工具如：序列赋值、in成员测试、分片赋值、列表的extend方法。还有set调用，集合推导和字典推导式，sum，all，any，max，min</p>
+<p>在函数调用中，还有一种特殊的 *arg 形式，它也是迭代上下文。它会把一个集合的值解包为单个的参数</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200919154107667.png" alt="image-20200919154107667" style="zoom:50%;" />
+
+<h2 id="Python-3-x-中新增的可迭代对象"><a href="#Python-3-x-中新增的可迭代对象" class="headerlink" title="Python 3.x 中新增的可迭代对象"></a>Python 3.x 中新增的可迭代对象</h2><p>字典方法Keys，values，items都在3.x中返回可迭代对象。2.x中它们会直接创建列表。</p>
+<h2 id="单次迭代与多次迭代"><a href="#单次迭代与多次迭代" class="headerlink" title="单次迭代与多次迭代"></a>单次迭代与多次迭代</h2><p>一些可迭代对象可以通过 iter 函数生成多个不同的迭代器，而一些可迭代对象只能生成一个迭代器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 多个不同的迭代器</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I1 = <span class="built_in">iter</span>(L)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I2 = <span class="built_in">iter</span>(L)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(I1)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(I2)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这种可迭代对象本身就是迭代器，通过 iter函数调用后，返回的是它们自身</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>M = <span class="built_in">map</span>(<span class="built_in">abs</span>,(-<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I1 = <span class="built_in">iter</span>(M)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I2 = <span class="built_in">iter</span>(M)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I1</span><br><span class="line">&lt;<span class="built_in">map</span> <span class="built_in">object</span> at <span class="number">0x104af8710</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I2</span><br><span class="line">&lt;<span class="built_in">map</span> <span class="built_in">object</span> at <span class="number">0x104af8710</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(I1)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(I2)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(M)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>range，list，字典的key（<code>I = item(D)</code>）  可以多次迭代</p>
+<p>map，filter，reduce，文件对象 只能单次迭代</p>
+<h1 id="13、文档"><a href="#13、文档" class="headerlink" title="13、文档"></a>13、文档</h1><h2 id="Python文档资源"><a href="#Python文档资源" class="headerlink" title="Python文档资源"></a>Python文档资源</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200919163832262.png" alt="image-20200919163832262" style="zoom:50%;" />
+
+<ul>
+<li><p><strong>#注释</strong></p>
+<p>#注释适用于较小代码的文档（例如，这个表达式的目的）。文档字符串则是较大型功能的文档</p>
+</li>
+<li><p>dir函数</p>
+<p>dir函数可列表显示对象内所有可用属性。如果不向dir内传入参数，则可以列出调用者作用域内的变量。它也能够传入任何有属性的对象，包括被导入的模块、内置函数和数据类型的名字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dir</span>()</span><br><span class="line">[<span class="string">&#x27;D&#x27;</span>, <span class="string">&#x27;D1&#x27;</span>, <span class="string">&#x27;D2&#x27;</span>, <span class="string">&#x27;__annotations__&#x27;</span>, <span class="string">&#x27;__builtins__&#x27;</span>, <span class="string">&#x27;__doc__&#x27;</span>, <span class="string">&#x27;__loader__&#x27;</span>, <span class="string">&#x27;__name__&#x27;</span>, <span class="string">&#x27;__package__&#x27;</span>...]</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>(sys)</span><br><span class="line"><span class="built_in">dir</span>([])</span><br><span class="line"><span class="built_in">dir</span>(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="built_in">dir</span>(<span class="built_in">list</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#过滤掉下划线开头的属性</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dir1</span>(<span class="params">x</span>):</span></span><br><span class="line">  <span class="keyword">return</span> [a <span class="keyword">for</span> a <span class="keyword">in</span> <span class="built_in">dir</span>(x) <span class="keyword">if</span> <span class="keyword">not</span> a.startswith(<span class="string">&#x27;_&#x27;</span>)]</span><br></pre></td></tr></table></figure>
+<p>在返回的属性中，我们通常不关心下划线开头的属性，双下划线开头通常意味着与解释器相关，单下划线开头意味着非正式的私有属性的实现。</p>
+<p>dir函数常用于提醒，它不告知属性的实际含义</p>
+</li>
+<li><p>文档字符串<code>__doc__</code></p>
+<p>这些注释字符串，放在模块文件、函数以及类语句的顶部，位于任何可执行代码之前（不过，#注释以及UNIX风格的#!可以放在它们前面）。这些字符串被正式地称为文档字符串。Python会自动装载这些文本，使其成为相应对象的<code>__doc__</code>属性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">tmp</span>:</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string"> 这是文档字符串</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    这是文档字符串</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Pydoc：help函数</p>
+<p>Pydoc是一段Python程序，用于提取文档字符串以及相关的结构信息。有多种方式启动Pydoc，包括命令行脚本选项。两种最主要的PyDoc接口是 内置的help函数同Pydoc基于GUI 和 基于Web的HTML接口。help函数，会启用Pydoc从而为任何Python对象生成简单的文字报告</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;<span class="built_in">help</span>(sys)</span><br><span class="line">Help on built-<span class="keyword">in</span> module sys:</span><br><span class="line"></span><br><span class="line">NAME</span><br><span class="line">    sys</span><br><span class="line"></span><br><span class="line">MODULE REFERENCE</span><br><span class="line">    https://docs.python.org/<span class="number">3.7</span>/library/sys</span><br><span class="line"></span><br><span class="line">    The following documentation <span class="keyword">is</span> automatically generated <span class="keyword">from</span> the Python</span><br><span class="line">    source files.  It may be incomplete, incorrect <span class="keyword">or</span> include features that</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></li>
+<li><p>Pydoc：HTML报告</p>
+<p>启用浏览器模式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m doc -b</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200919170135838.png" alt="image-20200919170135838" style="zoom:50%;" />
+</li>
+<li><p>Sphix</p>
+<p>Sphix是一个强大的文本编写工具，用于大型项目</p>
+</li>
+<li><p>标准手册集</p>
+<p>Python标准手册提供了Python语言及其工具集的完整说明<a target="_blank" rel="noopener" href="https://docs.python.org/3/">https://docs.python.org/3/</a></p>
+</li>
+</ul>
+<h2 id="常见代码编写陷阱"><a href="#常见代码编写陷阱" class="headerlink" title="常见代码编写陷阱"></a>常见代码编写陷阱</h2><ul>
+<li>复合语句头部末尾的 :</li>
+<li>缩进一致，一般可把tab键改为4个空格</li>
+<li>使用for循环，而不是while 和 range</li>
+<li>注意赋值语句中的可变对象</li>
+<li>在原位置修改对象的函数不会返回结果，如 list.append()，list.sort返回的是None</li>
+</ul>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-10-18</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/09/19/python/python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C14/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

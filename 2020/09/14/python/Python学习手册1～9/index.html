@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式 字节码编译当程序执行时，Pyt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式 字节码编译当程序执行时，Pyt">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210111233223093.png?token=AJI5TSLNNM5MV5GT6GU6QS277RX4Q">
+<meta property="og:image" content="https://github.com/heavyfish/BlogImage/blob/master/image-20200914172604438.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210112230738129.png?token=AJI5TSIEZGX3HFGNSIFKSIS77W5X4">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-6827-Vtk4m.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-5882-BO4qO.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916132610249.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916132627532.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916132924204.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916133336921.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916133548656.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916134225338.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916134733442.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916134657802.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916135016505.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916135103284.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916135156467.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916150952384.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916151015240.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916151637621.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916151959471.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916152027350.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916175844014.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916175857817.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916181402181.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916181429137.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916183214690.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916183516356.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916210815587.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916210836175.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916211711761.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916212505735.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916212701949.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200917105231036.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200917105250030.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918144651449.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918145958769.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918152225030.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918152445798.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918152501526.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918152639516.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918152843159.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918152943250.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918153132849.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918153418924.png">
+<meta property="article:published_time" content="2020-09-14T10:10:19.019Z">
+<meta property="article:modified_time" content="2021-01-12T15:08:48.640Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210111233223093.png?token=AJI5TSLNNM5MV5GT6GU6QS277RX4Q">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-14</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="1、Python如何运行程序"><a href="#1、Python如何运行程序" class="headerlink" title="1、Python如何运行程序"></a>1、Python如何运行程序</h1><h2 id="Python程序的结构"><a href="#Python程序的结构" class="headerlink" title="Python程序的结构"></a>Python程序的结构</h2><ol>
+<li>程序由模块构成</li>
+<li>模块包含语句</li>
+<li>语句包含表达式</li>
+<li>表达式创建并处理对象</li>
+</ol>
+<h2 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h2><p>Python中，每个模块都是一个单独的命名空间。</p>
+<p>在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。</p>
+<h2 id="Python程序的执行方式"><a href="#Python程序的执行方式" class="headerlink" title="Python程序的执行方式"></a>Python程序的执行方式</h2><p><img src="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210111233223093.png?token=AJI5TSLNNM5MV5GT6GU6QS277RX4Q" alt="image-20210111233223093"></p>
+<h3 id="字节码编译"><a href="#字节码编译" class="headerlink" title="字节码编译"></a>字节码编译</h3><p>当程序执行时，Python内部（对用户是透明的）会先将源代码（Python代码文件中的语句）编译成字节码的形式。字节码是源代码底层的、与平台无关的表现形式。一条语句可能对应着一组字节码指令。</p>
+<p><img src="https://github.com/heavyfish/BlogImage/blob/master/image-20200914172604438.png?raw=true" alt="image-20200914172604438.png"></p>
+<p>有时，我们执行Python程序后会看到 .pyc  后缀的文件，这就是字节码文件。 一般被 import 导入的库菜会生成 .pyc文件。有 .pyc 文件，可以加速程序的运行，但没有也没关系。</p>
+<h3 id="Python虚拟机（PVM）"><a href="#Python虚拟机（PVM）" class="headerlink" title="Python虚拟机（PVM）"></a>Python虚拟机（PVM）</h3><p>程序编译成字节码后，会发送给Python虚拟机（Python virtual Machine）上来执行。PVM不是一个独立的程序，它是解释器中的运行引擎。从技术上讲，它是所谓“Python解释器”的最后一步。</p>
+<h3 id="Python解释器"><a href="#Python解释器" class="headerlink" title="Python解释器"></a>Python解释器</h3><p>当Python被安装到机器后，它包含了一些最小化的组件：一个解释器和支持的库。当我们执行脚本时，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python xxx.py</span><br></pre></td></tr></table></figure>
+<p>实际上命令<code>python</code>就是解释器（一个可执行程序），解释器中，包含了编译和PVM的相关功能。</p>
+<p>![image-20210111233416891](/Users/shenshawn/Library/Application Support/typora-user-images/image-20210111233416891.png)</p>
+<p>一般默认的Python解释器都是Cpython，即用C语言编写的解释器。但也有其他语言编写的解释器，如 JPython，用Java编写的解释器。</p>
+<h3 id="Python执行优化工具"><a href="#Python执行优化工具" class="headerlink" title="Python执行优化工具"></a>Python执行优化工具</h3><p>Python还有一些优化工具，使计算机可以更快的速度运行Python代码。如</p>
+<ul>
+<li>Psyco实时编译器</li>
+<li>Shedskin C++ 转换器</li>
+</ul>
+<p>它们是执行模块的变体。</p>
+<h3 id="冻结二进制文件"><a href="#冻结二进制文件" class="headerlink" title="冻结二进制文件"></a>冻结二进制文件</h3><p>通过从网络上获得的一些第三方工具，可将Python程序转化为可执行程序（即冻结二进制文件，Frozen Binary）。</p>
+<p>冻结二进制文件能够将程序的字节码，PVM（解释器）以及任何程序所需要的Python支持文件捆绑在一起形成一个单独的文件包。实际的执行结果将会是一个单独的可执行二进制文件程序。</p>
+<p>冻结二进制文件中嵌入了Python，接收端并不需要安装Python以运行二进制文件</p>
+<p>生成冻结二进制文件的工具有：</p>
+<ul>
+<li>py2exe</li>
+<li>pyInstaller</li>
+<li>freeze</li>
+</ul>
+<h1 id="2、介绍Python对象类型"><a href="#2、介绍Python对象类型" class="headerlink" title="2、介绍Python对象类型"></a>2、介绍Python对象类型</h1><h2 id="核心类型"><a href="#核心类型" class="headerlink" title="核心类型"></a>核心类型</h2><p>数字、字符串、列表、字典、元组、文件、集合一般被认为是核心对象（数据）类型。 类型、None和布尔型有时也被归为这一分类中。它们被认作是“核心”类型是因为它们是Python语言自身的一部分，并且总是有效的。</p>
+<h3 id="序列是什么意思"><a href="#序列是什么意思" class="headerlink" title="序列是什么意思"></a>序列是什么意思</h3><p>一个“序列”是具有位置顺序的对象的集合体。字符串、列表、元组是Python中所有的序列。它们共同拥有一般的序列操作，例如索引、合并和分片，但又各自有自己的类型特定的方法调用。“可迭代性”，意味着任何一个能够按需提供它的内容的物理或虚拟队列。</p>
+<h2 id="递归和迭代的区别"><a href="#递归和迭代的区别" class="headerlink" title="递归和迭代的区别"></a>递归和迭代的区别</h2><p>递归和迭代都重复执行指令集。递归是指函数中的语句重复调用自身。迭代是指循环重复执行，直到控制条件变为false。递归和迭代的主要区别在于，递归是一个过程，总是应用于函数，迭代应用于我们希望重复执行的指令集。</p>
+<p><strong>递归</strong></p>
+<ul>
+<li>递归使用选择结构。 </li>
+<li>如果递归步骤不能以某种条件（base case）收敛的方式减少问题，则会发生无限递归，并且无限递归可能会使系统崩溃。 </li>
+<li>当识别到base case时，递归终止。 </li>
+<li>由于维护堆栈的开销，递归通常比迭代慢。 </li>
+<li>递归比迭代使用更多的内存。 </li>
+<li>递归使代码更小</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class RecursionExample &#123;</span><br><span class="line">   public static void main(String args[]) &#123;</span><br><span class="line">      RecursionExample re = new RecursionExample();</span><br><span class="line">      <span class="built_in">int</span> result = re.factorial(<span class="number">4</span>);</span><br><span class="line">      System.out.println(<span class="string">&quot;Result:&quot;</span> + result);</span><br><span class="line">   &#125;</span><br><span class="line">   public <span class="built_in">int</span> factorial(<span class="built_in">int</span> n) &#123;</span><br><span class="line">      <span class="keyword">if</span> (n==<span class="number">0</span>) &#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">         <span class="keyword">return</span> n*factorial(n-<span class="number">1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>迭代</strong></p>
+<ul>
+<li>迭代使用重复结构。 </li>
+<li>如果循环条件测试从未变为假，并且无限循环重复使用CPU周期，则在迭代过程中会发生无限循环。 </li>
+<li>循环条件失败时迭代终止。 </li>
+<li>迭代不使用堆栈，因此它比递归更快。 </li>
+<li>迭代消耗更少的内存。 </li>
+<li>迭代使代码更长。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class IterationExample &#123;</span><br><span class="line">   public static void main(String args[]) &#123;</span><br><span class="line">      <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">         System.out.println(i + <span class="string">&quot; &quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="3、数值类型"><a href="#3、数值类型" class="headerlink" title="3、数值类型"></a>3、数值类型</h1><p><strong>小数和分数</strong></p>
+<p>重要的是知道浮点数在运算时产生的显示异常（因为硬件本身精度的原因导致）</p>
+<p><img src="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210112230738129.png?token=AJI5TSIEZGX3HFGNSIFKSIS77W5X4" alt="image-20210112230738129"></p>
+<p>通过使用小数和分数，可使结果显示的更为精确</p>
+<p>![image-20200915154843008](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915154843008.png)</p>
+<p>![image-20200915154931468](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915154931468.png)</p>
+<p><strong>集合</strong></p>
+<p>集合是不可变对象，因此集合中只能嵌套元组。集合在比较两个数字列表是否一致时很有用，其省去了逐个数字排序比较的开销。</p>
+<p>![image-20200915155319085](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915155319085.png)</p>
+<p><strong>布尔型（bool）</strong></p>
+<p>bool实际上是内置整数类型<code>int</code>的子类（从面向对象的角度看）。True和False的行为与整数1和0是一样的，只不过它们有独特的显示逻辑：它们是作为关键字True和False显示的，而不是数字1和0。bool为这两个对象重新定义了str和repr的字符串格式。</p>
+<h1 id="4、动态类型"><a href="#4、动态类型" class="headerlink" title="4、动态类型"></a>4、动态类型</h1><h2 id="变量、对象和引用"><a href="#变量、对象和引用" class="headerlink" title="变量、对象和引用"></a>变量、对象和引用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; 3</span><br></pre></td></tr></table></figure>
+<p>上述赋值有在Python中有三步操作：</p>
+<ol>
+<li>创建一个对象在代表值3</li>
+<li>创建一个变量a，如果它还没有被创建的话</li>
+<li>将变量与新的对象3相连接</li>
+</ol>
+<p>![image-20200915162929466](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915162929466.png)</p>
+<p>变量仅仅是个名字，类型的概念存在于对象而不是变量名中。变量是通用的，它只是在一个特定的时间点，简单地引用了一个特定的对象而已。</p>
+<p>当变量出现在表达式中时，它会马上被当前引用的对象所代替，无论这个对象是什么类型。</p>
+<p>根据上图，具体来讲：</p>
+<ul>
+<li>变量是一个系统表的入口，包含了指向对象的连接</li>
+<li>对象是被分配到的一块内存，有足够的空间去表示它们所代表的值</li>
+<li>引用是自动形成的从变量到对象的指针</li>
+</ul>
+<p>每通过表达式创建生成一个新的值，Python都创建了一个新的对象（一块内存）表示这个值，从内部看，作为一种优化手段，Python缓存了一些不可变的对象并对其进行复用（比如较小的整数，0，1等）</p>
+<h2 id="对象如何标识类型"><a href="#对象如何标识类型" class="headerlink" title="对象如何标识类型"></a>对象如何标识类型</h2><p>从技术上将，对象不仅有足够的空间表示它的值，还包含了更复杂的结构。每一个对象有两个标准的头部信息：类型标识符（type designator）标识这个对象的类型；引用的技术器（reference counter）决定何时回收这个对象。</p>
+<p>如上述的 <code>a=3</code>。整数对象3，包含了值3 以及一个标识符，标识符是一个指向int对象的指针。</p>
+<p>因为a引用了3，此时对象3的至少有1个引用。当一个对象的引用为0时，该对象的内存空间会被放入可分配内存池中，这就是Python的垃圾自动回收。</p>
+<h2 id="共享引用"><a href="#共享引用" class="headerlink" title="共享引用"></a>共享引用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;3</span><br><span class="line">b&#x3D;a</span><br></pre></td></tr></table></figure>
+<p>![image-20200915164343173](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915164343173.png)</p>
+<p>上述代码是共享引用。共享引用的关键点在于，如果共享引用了可变类型对象，那么需要注意修改该对象时，对其他引用也会产生影响。</p>
+<p>当想让两个变量，拥有相同的列表值时，可以通过：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#共享引用</span></span><br><span class="line">a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b=a</span><br><span class="line"></span><br><span class="line"><span class="comment">#为b生成新的内存区域</span></span><br><span class="line">b=a[:]</span><br><span class="line">b=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b=copy.copy(a)</span><br><span class="line">b=copy.deepcopy(a)</span><br></pre></td></tr></table></figure>
+<p>浅拷贝：嵌套的列表使用同一个引用</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-6827-Vtk4m.png" alt="img"></p>
+<p>深拷贝：嵌套的列表使用不同的引用</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-5882-BO4qO.png" alt="img"></p>
+<h2 id="共享引用和相等"><a href="#共享引用和相等" class="headerlink" title="共享引用和相等"></a>共享引用和相等</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;[1,2,3]</span><br><span class="line">b&#x3D;a</span><br><span class="line">c&#x3D;[1,2,3]</span><br></pre></td></tr></table></figure>
+<p><code>a==b</code>，<code>a==c</code>，返回的是<code>True</code>。==代表的是值的比较</p>
+<p><code>a is b</code> 返回 <code>True</code>，但是<code>a is c</code> 返回<code>False</code>，因为is 判断的是两个变量的引用指针是否是同一个</p>
+<p>如果想查询一个对象的引用次数，可以：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.getrefcount(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h2><p>弱引用不会增加对象的引用数量。</p>
+<p>![image-20200915165557437](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915165557437.png)</p>
+<h1 id="5、字符串基础"><a href="#5、字符串基础" class="headerlink" title="5、字符串基础"></a>5、字符串基础</h1><blockquote>
+<p>首先记住两句话：</p>
+<p><strong>1.将字符转换为字节的方式称为编码</strong></p>
+<p><strong>2.将字节转换为字符的方式称为解码</strong></p>
+</blockquote>
+<p>Python字符串，是一个有序的字符集合。</p>
+<p>Python分别使用字符串类型对象和文件接口，用来区分文本和二进制数据。对此Python不同版本的支持为：</p>
+<ul>
+<li><strong>Python 3.x中</strong>：有三种字符类型：str用于Unicode文本（包括ASCII），bytes用于二进制数据（包括已编码的文本），bytearray是bytes的一个可修改的变体。文件在两种模式下工作：文本，它将内容表示为str类型并实现Unicode编码；二进制，它以原始bytes的形式处理，且不做任何数据转换。</li>
+<li><strong>Python 2.x中</strong>：unicode字符串表示Unicode文本，str字符串同时处理8位文本和二进制数据，而bytearray从3.X 向后移植，在Python2.6和随后版本可用。普通文件的内容是有str直接表示的字节，但是codes模块打开Unicode文本文件，处理编码，并将内容作为Unicode对象显示。</li>
+</ul>
+<h2 id="字符串基础"><a href="#字符串基础" class="headerlink" title="字符串基础"></a>字符串基础</h2><p>字符串可以用来表示能够编码为文本或字节的任何事物。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916132610249.png" alt="image-20200916132610249" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916132627532.png" alt="image-20200916132627532" style="zoom:50%;" />
+
+<p>几个要点：</p>
+<ul>
+<li><p>单引号和双引号字符串是一样的</p>
+</li>
+<li><p>转义序列代表特殊字符</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916132924204.png" alt="image-20200916132924204" style="zoom:50%;" />
+
+<ul>
+<li>str() 的输出追求可读性，输出格式要便于理解，适合用于输出内容到用户终端。</li>
+<li>repr() 的输出追求明确性，显示直接的字节内容，适合开发和调试阶段使用。</li>
+</ul>
+</li>
+<li><p>在Unicode世界中，“字节“没有任何含义。Unicode中的单个字符不一定直接映射为单个字节</p>
+</li>
+<li><p>三引号 可用于 代码中注释代码</p>
+</li>
+<li><p>索引和分片</p>
+</li>
+</ul>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916133336921.png" alt="image-20200916133336921" style="zoom: 33%;" />
+
+<h2 id="字符传表达"><a href="#字符传表达" class="headerlink" title="字符传表达"></a>字符传表达</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916133548656.png" alt="image-20200916133548656" style="zoom:50%;" />
+
+<h3 id="字符传格式化表达式"><a href="#字符传格式化表达式" class="headerlink" title="字符传格式化表达式"></a><strong>字符传格式化表达式</strong></h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916134225338.png" alt="image-20200916134225338" style="zoom: 33%;" />
+
+<p>表达式左侧的转换目标支持多种转换操作，转换目标的结构为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[(keyname)[flags][width][.precision]]typecode</span><br></pre></td></tr></table></figure>
+<ul>
+<li>keyname：为索引在表达式右侧使用的字典提供键名称</li>
+<li>flags：罗列出说明格式的标签，如左对齐（-），数值符号（+），正数前的空白以及负数前的 -（空格）和零填充（0）</li>
+<li>width：未被替换的文本给出总的最小字段宽度</li>
+<li>.precision：为浮点数设置小数点精度</li>
+</ul>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916134733442.png" alt="image-20200916134733442" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916134657802.png" alt="image-20200916134657802" style="zoom:50%;" />
+
+<h3 id="字符传格式化方法"><a href="#字符传格式化方法" class="headerlink" title="字符传格式化方法"></a><strong>字符传格式化方法</strong></h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916135016505.png" alt="image-20200916135016505" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916135103284.png" alt="image-20200916135103284" style="zoom:50%;" />
+
+<p>![image-20200916135139164](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916135139164.png)</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916135156467.png" alt="image-20200916135156467" style="zoom:50%;" />
+
+<h1 id="6、列表与字典"><a href="#6、列表与字典" class="headerlink" title="6、列表与字典"></a>6、列表与字典</h1><h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><p>Python列表是：</p>
+<ul>
+<li>任意对象的有序集合</li>
+<li>通过偏移访问</li>
+<li>可变长度、异构以及任意嵌套</li>
+<li>属于“可变序列”的分类</li>
+<li>对象引用数组：从技术上讲，Python列表包含了零个或多个其他对象的引用</li>
+</ul>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916150952384.png" alt="image-20200916150952384" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916151015240.png" alt="image-20200916151015240" style="zoom:50%;" />
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">L=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#分片赋值，删除分片的值，并将右侧的值插入其中</span></span><br><span class="line">L[<span class="number">1</span>:<span class="number">2</span>]=[<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">[<span class="number">1</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">3</span>]</span><br><span class="line">L[<span class="number">1</span>:<span class="number">2</span>]=[]  <span class="comment">#空白列表会删除 分片的值</span></span><br><span class="line">[<span class="number">1</span>,<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">L[<span class="number">1</span>]=[]    <span class="comment">#指定索引则会替换</span></span><br><span class="line">[<span class="number">1</span>,[],<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<p>除了<code>L.sort()</code>还可以用<code>sotred()</code>排序</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916151637621.png" alt="image-20200916151637621" style="zoom:50%;" />
+
+<p>列表定义好后，只能通过append，extend新增元素</p>
+<h2 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h2><p>字典是：</p>
+<ul>
+<li>通过键而不是偏移量来读取</li>
+<li>任意对象的无序集合</li>
+<li>长度可变，异构，任意嵌套</li>
+<li>属于“可变映射“类型：key是不可变类型，但value是可变类型</li>
+<li>对象引用表（散列表）：本质上，字典是作为散列表实现的</li>
+</ul>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916151959471.png" alt="image-20200916151959471" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916152027350.png" alt="image-20200916152027350" style="zoom:50%;" />
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>K=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>V=[a,b,c]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dict</span>(<span class="built_in">zip</span>(K,V))</span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;c&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dict</span>.fromkeys([<span class="string">&#x27;x&#x27;</span>,<span class="string">&#x27;y&#x27;</span>],<span class="number">0</span>)</span><br><span class="line">&#123;<span class="string">&#x27;y&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;x&#x27;</span>: <span class="number">0</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3.x和2.7的区别：</strong></p>
+<ul>
+<li>D.keys() ，D.values() , D.items()，3.x返回类似集合的可迭代视图，2.7返回的是列表</li>
+<li>3.x不再有D.has_key 方法，只有使用 in 成员关系测试</li>
+<li>3.x对D.keys()排序时，需要使用 list(D.keys()).sort()</li>
+</ul>
+<h1 id="7、元组、文件与其他核心类型"><a href="#7、元组、文件与其他核心类型" class="headerlink" title="7、元组、文件与其他核心类型"></a>7、元组、文件与其他核心类型</h1><h2 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h2><p>元组是：</p>
+<ul>
+<li>任意对象的有序集合</li>
+<li>通过偏移量存取</li>
+<li>属于“不可变序列”：但内嵌的List是可变的</li>
+<li>固定长度、多样性、任意嵌套</li>
+<li>对象引用的数组：与列表相似，元组应当被看作对象引用的数组</li>
+</ul>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916175844014.png" alt="image-20200916175844014" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916175857817.png" alt="image-20200916175857817" style="zoom:50%;" />
+
+<p>1、为什了有了列表还要元组？</p>
+<p>列表是一种随时间改变的数据结构。而元组的不可变性提供了某种一致性。元组和其他不可变对象的角色类似于其他语言中的“常量”声明，只是这种常量概念在Python中是与对象相结合的，而不是变量</p>
+<p>2、命名元组</p>
+<p>namedtuple  实现了一个增加了逻辑的元组扩展类型，能同时支持使用序号和属性名访问组件，也可被转换成使用键的类字典形式的访问。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Rec = namedtuple(<span class="string">&#x27;Rec&#x27;</span>,[<span class="string">&#x27;names&#x27;</span>,<span class="string">&#x27;age&#x27;</span>,<span class="string">&#x27;jobs&#x27;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bob = Rec(<span class="string">&#x27;bob&#x27;</span>,age=<span class="string">&#x27;40.5&#x27;</span>,jobs=[<span class="string">&#x27;dev&#x27;</span>,<span class="string">&#x27;mgr&#x27;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bob</span><br><span class="line">Rec(names=<span class="string">&#x27;bob&#x27;</span>, age=<span class="string">&#x27;40.5&#x27;</span>, jobs=[<span class="string">&#x27;dev&#x27;</span>, <span class="string">&#x27;mgr&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 转换成一个类字典的基于键的形式</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>O = bob._asdict()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>O[<span class="string">&#x27;names&#x27;</span>],O[<span class="string">&#x27;jobs&#x27;</span>]</span><br><span class="line">(<span class="string">&#x27;bob&#x27;</span>, [<span class="string">&#x27;dev&#x27;</span>, <span class="string">&#x27;mgr&#x27;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>O</span><br><span class="line">OrderedDict([(<span class="string">&#x27;names&#x27;</span>, <span class="string">&#x27;bob&#x27;</span>), (<span class="string">&#x27;age&#x27;</span>, <span class="string">&#x27;40.5&#x27;</span>), (<span class="string">&#x27;jobs&#x27;</span>, [<span class="string">&#x27;dev&#x27;</span>, <span class="string">&#x27;mgr&#x27;</span>])])</span><br></pre></td></tr></table></figure>
+<p>命名元组是一个元组、类、字典的混合体。为了获得额外的功能，需要额外的代码和一些性能上的损失来实现这种魔法。</p>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p>内置函数open 能够返回一个Python 文件对象作为到计算机上一个文件的链接。在调用open 后，可以通过返回的文件对象的方法，在程序与相应文件之间来回传递串形式的数据。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916181402181.png" alt="image-20200916181402181" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916181429137.png" alt="image-20200916181429137" style="zoom:50%;" />
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">afile = <span class="built_in">open</span>(filename, mode, option)</span><br><span class="line"></span><br><span class="line"><span class="comment">#示例</span></span><br><span class="line">f = <span class="built_in">open</span>(file=’/sxr/test.txt’ ,mode=’r’ , encoding=’utf-<span class="number">8</span>’)</span><br><span class="line">data = f.read()</span><br><span class="line">f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(file=’/sxr/test.txt’ ,mode=’r’ , encoding=’utf-<span class="number">8</span>’) <span class="keyword">as</span> f1:</span><br><span class="line">	print(f1.read())</span><br></pre></td></tr></table></figure>
+<p><strong>mode一览表</strong></p>
+<table>
+<thead>
+<tr>
+<th>Character</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‘r’</td>
+<td>open for reading (default)</td>
+</tr>
+<tr>
+<td>‘w’</td>
+<td>open for writing, truncating  the file first</td>
+</tr>
+<tr>
+<td>‘a’</td>
+<td>open for writing, appending to  the end of the file if it exists</td>
+</tr>
+<tr>
+<td>‘b’</td>
+<td>binary mode</td>
+</tr>
+<tr>
+<td>‘t’</td>
+<td>text mode (default)</td>
+</tr>
+<tr>
+<td>‘+’</td>
+<td>open a disk file for updating  (reading and writing)</td>
+</tr>
+<tr>
+<td>‘U’</td>
+<td>universal newline mode (for  backwards compatibility; should not be used in new code)</td>
+</tr>
+</tbody></table>
+<p>文件往硬盘里存的时候，在内存里是字符串的形式，通过编码之后，以字节的方式存在硬盘里的：</p>
+<p><strong>字符串(内存） —–&gt; encoding ——&gt; bytes（硬盘）</strong></p>
+<p>所以，想让人能看懂，先从硬盘读取，然后解码到内存：</p>
+<p><strong>bytes(硬盘） —–&gt;decode ——&gt; 字符串</strong></p>
+<p>1、使用文件时的一些注意：</p>
+<ul>
+<li>文件有一个迭代器，可以在for循环，列表推导式或其他迭代上下文中自动逐行读取文件</li>
+<li>从文件读取的数据回到脚本时是一个字符串</li>
+<li>文件是被缓冲的以及可定位的。默认情况下，输出文件总是被缓冲的，这意味着写入的文件可能不会立即从内存转移到硬盘——除非关闭该文件，或运行其flush方法</li>
+<li>close通常是可选的：回收时自动关闭</li>
+</ul>
+<h2 id="存储Python对象到文件"><a href="#存储Python对象到文件" class="headerlink" title="存储Python对象到文件"></a>存储Python对象到文件</h2><h3 id="字符转换为对象"><a href="#字符转换为对象" class="headerlink" title="字符转换为对象"></a>字符转换为对象</h3><p>通过eval，可以把字符串转换成对象。eval会执行Python的任何表达式</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916183214690.png" alt="image-20200916183214690" style="zoom:50%;" />
+
+<h3 id="pickle"><a href="#pickle" class="headerlink" title="pickle"></a>pickle</h3><p>pickle可以将对象存储到文件中。但pickle转储的文件，只能在Python中被正确的加载识别</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916183516356.png" alt="image-20200916183516356" style="zoom:50%;" />
+
+<h3 id="json"><a href="#json" class="headerlink" title="json"></a>json</h3><p>json并不想pickle支持种类繁多的Python对象类型，但其格式更为通用。其余法类似于pickle</p>
+<h3 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h3><p>struct能够构造并解析打包二进制数据</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916210815587.png" alt="image-20200916210815587" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916210836175.png" alt="image-20200916210836175" style="zoom:50%;" />
+
+<h2 id="其他文件工具"><a href="#其他文件工具" class="headerlink" title="其他文件工具"></a>其他文件工具</h2><p>open函数及其返回的文件对象是Python脚本中通向外部文件的主要接口。除此外，Python工具集中还有其他类似可用的文件工具，例如：</p>
+<ul>
+<li>标准流：在sys模块中预先打开的文件对象，例如sys.stdout</li>
+<li>os模块中的描述文件：文件的整数参数，能够支持如文件锁定之类的较低级工具</li>
+<li>套接字、管道、FIFO文件：用于同步进程或者通过网络进行通信的类文件对象</li>
+<li>通过键来存取的文件，如shelv模块：通过键直接存储经过pickle模块序列化的不可变python对象</li>
+<li>Shell命令流：像os.popen 和 subprocess.Popen这样的工具，支持shell命令处理，并读取写入到标准流</li>
+</ul>
+<h2 id="核心类型复习"><a href="#核心类型复习" class="headerlink" title="核心类型复习"></a>核心类型复习</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916211711761.png" alt="image-20200916211711761" style="zoom:50%;" />
+
+<ul>
+<li>python3 不再支持非数字混合类型的相对大小比较（如 1 &lt; ‘spam’ ）</li>
+<li>python3中，dict不再可以直接比较（如 D1 &lt; D2）。要么循环根据键比较值，要么手动比较排序的键/值 列表 <code>sorted(D1.items()) &lt; sotred(D2.items())</code></li>
+<li>python中，整数0表示假，整数1表示真。任何空数据结构为假，任何非空数据结构为真</li>
+<li>None对象，是个特殊的对象。一般起到一个空占位符的作用。可以将None视为某些内容，只是这些内容对我们来说没有用</li>
+</ul>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916212505735.png" alt="image-20200916212505735" style="zoom:50%;" />
+
+<h3 id="内置类型陷阱"><a href="#内置类型陷阱" class="headerlink" title="内置类型陷阱"></a>内置类型陷阱</h3><p>注意 <code>Y = [L] *4</code>  , <code>Y = list(L) * 4</code>，这两个list的元素都共享了一个引用。如果想拷贝，应当是 <code>Y = [list(L) for i in range(4)]</code></p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916212701949.png" alt="image-20200916212701949" style="zoom:50%;" />
+
+<h3 id="越界操作与赋值操作"><a href="#越界操作与赋值操作" class="headerlink" title="越界操作与赋值操作"></a>越界操作与赋值操作</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="comment"># L[4] 会提示越界错误</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#分片越界显示所有元素</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[-<span class="number">1000</span>:<span class="number">1000</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[-<span class="number">1000</span>:]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#反向序列赋值，相当于插入了一个元素</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[<span class="number">2</span>:<span class="number">1</span>] = [<span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#赋值操作</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X=<span class="string">&quot;spam&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Y=<span class="string">&quot;eggs&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X,Y=Y,X   <span class="comment">#这样赋值的话，是引用顺序直接调换。注意其和分开赋值的区别</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X,Y</span><br><span class="line">(<span class="string">&#x27;eggs&#x27;</span>, <span class="string">&#x27;spam&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#	字符索引运算</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X</span><br><span class="line"><span class="string">&#x27;eggs&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"><span class="string">&#x27;e&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(X)[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"><span class="string">&#x27;e&#x27;</span></span><br></pre></td></tr></table></figure>
+<h1 id="8、Python语句简介"><a href="#8、Python语句简介" class="headerlink" title="8、Python语句简介"></a>8、Python语句简介</h1><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200917105231036.png" alt="image-20200917105231036" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200917105250030.png" alt="image-20200917105250030" style="zoom:50%;" />
+
+<h1 id="9、赋值、表达式、打印"><a href="#9、赋值、表达式、打印" class="headerlink" title="9、赋值、表达式、打印"></a>9、赋值、表达式、打印</h1><h2 id="赋值语句形式"><a href="#赋值语句形式" class="headerlink" title="赋值语句形式"></a>赋值语句形式</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918144651449.png" alt="image-20200918144651449" style="zoom:50%;" />
+
+<ul>
+<li><p><strong>元组及列表解包赋值</strong></p>
+<p>表中第二行和第三行形式是相关的。在赋值时，Python在内部会为右侧的各项创建一个元组，这就是“元组解包赋值的由来”</p>
+</li>
+<li><p><strong>扩展的序列解包</strong></p>
+<p>倒数第3行，在Python 3.x中出现的新的赋值方式。 <code>a 的值为&#39;s&#39;</code> , <code>b 的值为 [&#39;p&#39;, &#39;a&#39;, &#39;m&#39;]</code></p>
+</li>
+<li><p><strong>多目标赋值</strong></p>
+<p>倒数第2行，相当于 <code>ham = &#39;lunch&#39;</code> ， <code>span = ham</code>，两个变量名使用了同一个引用</p>
+</li>
+<li><p><strong>增量赋值</strong></p>
+<p>最后一行是增量赋值。其运行的会比 <code>spams = spams + 42</code> 更快。但需要注意，如果操作主体是可变的且支持这一操作，那么增量赋值会选择原位置更新而不是复制对象 </p>
+</li>
+</ul>
+<h2 id="命名惯例"><a href="#命名惯例" class="headerlink" title="命名惯例"></a>命名惯例</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918145958769.png" alt="image-20200918145958769" style="zoom:50%;" />
+
+<h2 id="表达式语句和原位置修改"><a href="#表达式语句和原位置修改" class="headerlink" title="表达式语句和原位置修改"></a>表达式语句和原位置修改</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L.append(<span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L = print(L.append(<span class="number">5</span>))</span><br><span class="line"><span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<p><strong>对列表调用 append ， sort ， reverse 这些原位置修改的运算，一定是对列表做原位置的修改，但这些方法在列表修改后不会返回列表，而是返回的None对象</strong>。如果把这类运算的返回结果赋值回原先的变量名，那么只会失去该列表</p>
+<h2 id="打印操作"><a href="#打印操作" class="headerlink" title="打印操作"></a>打印操作</h2><p>Python中，print 是一个程序员友好的标准输出流接口</p>
+<p>从技术上讲，打印是将一个或多个对象转换成的相应的文本表示，然后发送给标准输出或其他类似文件的流。</p>
+<ul>
+<li><p><strong>文件对象方法</strong></p>
+<p>回忆一下写入文本的文件对象方法。例如 <code>file.write(str)</code>。打印操作是类似的。文件写入方法是把字符串写入到任意的文件中。而print则是默认地把对象写入stdout流，同时加入了一些自动的格式化。与写入文件方法不同，打印操作不需要预先把对象转换为字符串</p>
+</li>
+<li><p><strong>标准输出流</strong></p>
+<p>标准输出流（stdout）是发送一个程序文本输出的默认位置。标准输出流通畅映射到Python程序的启动窗口。由于Python输出流在Python中可以作为内置的sys模块中的stdout文件对象来使用（如，sys.stdout），因此你可以用文件的写入方法调用来模拟print</p>
+</li>
+</ul>
+<p>打印是Python3.x和Python2.x最为明显的差异之一：</p>
+<ul>
+<li>在Python3.x中，打印是一个内置函数，提供关键字参数来支持特殊的使用模式</li>
+<li>在Python2.x中，打印是一条语句，拥有自己的特定语法</li>
+</ul>
+<h2 id="Python-3-x的print函数"><a href="#Python-3-x的print函数" class="headerlink" title="Python 3.x的print函数"></a>Python 3.x的print函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方括号中的各式都是可选的</span></span><br><span class="line">print([<span class="built_in">object</span>, ...][, sep=<span class="string">&#x27; &#x27;</span>][, end=<span class="string">&#x27;\n&#x27;</span>][, file=sys.stdout][, flush=<span class="literal">False</span>])</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918152225030.png" alt="image-20200918152225030" style="zoom:50%;" />
+
+<p>待打印对象的文本表示，是通过把该对象传入str内置函数调用而得到的。</p>
+<h2 id="Python-2-x的print语句"><a href="#Python-2-x的print语句" class="headerlink" title="Python 2.x的print语句"></a>Python 2.x的print语句</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918152445798.png" alt="image-20200918152445798" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918152501526.png" alt="image-20200918152501526" style="zoom:50%;" />
+
+<h2 id="打印流重定向"><a href="#打印流重定向" class="headerlink" title="打印流重定向"></a>打印流重定向</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918152639516.png" alt="image-20200918152639516" style="zoom:50%;" />
+
+<p>print 操作只是提供了sys.stdout对象的简单接口，再加上一些默认的格式设置。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918152843159.png" alt="image-20200918152843159" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918152943250.png" alt="image-20200918152943250" style="zoom:50%;" />
+
+<h2 id="2-x支持3-x的print函数"><a href="#2-x支持3-x的print函数" class="headerlink" title="2.x支持3.x的print函数"></a>2.x支持3.x的print函数</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918153132849.png" alt="image-20200918153132849" style="zoom:50%;" />
+
+<h2 id="通用的表达式"><a href="#通用的表达式" class="headerlink" title="通用的表达式"></a>通用的表达式</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918153418924.png" alt="image-20200918153418924" style="zoom:50%;" />
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2021-01-12</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/09/18/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C10%EF%BD%9E13/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/09/14/python/Python%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>

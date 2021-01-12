@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>no title | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="1 、The Virtual Machine Monitor在硬件辅助虚拟化的情况下，引入虚拟机监视器（VMM）的概念非常普遍。 VMM在目标机器软件方面所扮演的角色 与 操作系统内核在多程序系统中所扮演的角色非常相似。（实际上，早期的内核，也称为monitors）。多程序系统的内核会创建多个进程，每个用户程序至少要有一个进程，然后它会监督进程的执行，以使程序不会相互干扰，且不会干扰内核（见图1）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="速查笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/10/Linux/Intel%20VMX%20technology/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="1 、The Virtual Machine Monitor在硬件辅助虚拟化的情况下，引入虚拟机监视器（VMM）的概念非常普遍。 VMM在目标机器软件方面所扮演的角色 与 操作系统内核在多程序系统中所扮演的角色非常相似。（实际上，早期的内核，也称为monitors）。多程序系统的内核会创建多个进程，每个用户程序至少要有一个进程，然后它会监督进程的执行，以使程序不会相互干扰，且不会干扰内核（见图1）">
+<meta property="og:locale">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200910183109461.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200910183127199.png">
+<meta property="article:published_time" content="2020-09-10T10:21:59.531Z">
+<meta property="article:modified_time" content="2020-09-10T11:27:28.691Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200910183109461.png">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        no title
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-10</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="1-、The-Virtual-Machine-Monitor"><a href="#1-、The-Virtual-Machine-Monitor" class="headerlink" title="1 、The Virtual Machine Monitor"></a>1 、The Virtual Machine Monitor</h1><p>在硬件辅助虚拟化的情况下，引入虚拟机监视器（VMM）的概念非常普遍。 VMM在目标机器软件方面所扮演的角色 与 操作系统内核在多程序系统中所扮演的角色非常相似。（实际上，早期的内核，也称为monitors）。多程序系统的内核会创建多个进程，每个用户程序至少要有一个进程，然后它会监督进程的执行，以使程序不会相互干扰，且不会干扰内核（见图1）。 VMM创建几个虚拟机，每个目标机一个，以便在其中运行目标软件。在VM中运行的软件通常称为<code>guest</code>，与物理的<code>host</code>相对。然后，VMM将监视<code>guest</code>的执行情况，以使他们不会干扰自己以及与主机。注意，每个<code>guest</code>可能是一个具有自己的内核和进程的多程序系统（见图2）。由于需求相似，因此用于实现内核和VMM的解决方案也相似。如我们所见，我们需要硬件的帮助，以实现在CPU遵循其指令的同时可以监视进程和<code>guest</code>的操作</p>
+<h1 id="2-、Intel-VMX"><a href="#2-、Intel-VMX" class="headerlink" title="2 、Intel VMX"></a>2 、Intel VMX</h1><p>为了解决我们在上一讲中看到的问题，AMD和英特尔都通过明确设计支持虚拟机监视器的新功能扩展了他们的CPU。 AMD和Intel扩展几乎是等效的，但不兼容。 在下文中，我们将重点介绍称为VMX（Virtual Machine eXtensions）的Intel扩展。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200910183109461.png" alt="image-20200910183109461" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200910183127199.png" alt="image-20200910183127199" style="zoom:50%;" />
+
+<h2 id="2-1-Root-and-non-root-modes"><a href="#2-1-Root-and-non-root-modes" class="headerlink" title="2.1  Root and non-root modes"></a>2.1  Root and non-root modes</h2><p>VMX技术在Intel CPU中引入了两种新的操作模式：<code>root</code>模式和<code>non-root</code>模式。 这些新模式与已经存在的<code>system</code>和<code>user</code>模式正交，因此我们现在有四个组合：</p>
+<ul>
+<li><p>root/system;</p>
+</li>
+<li><p>root/user;</p>
+</li>
+<li><p>non-root/system;</p>
+</li>
+<li><p>non-root/user</p>
+</li>
+</ul>
+<p><code>root</code>模式适用于<code>host</code>上运行的VMM，而<code>non-root</code>模式适用于虚拟机中运行的客户机软件。<code>Root/system</code> 比<code>non-root/system</code> 具有更高的特权，<code>non-root/system</code> 比<code>non-root/user</code>具有更高的特权。这些新模式的主要目的是对<code>guest</code>系统软件执行的操作施加硬件控制的限制。每当系统代码尝试执行违反VMM隔离或必须通过软件进行仿真的指令时，硬件就会捕获该指令并切换回VMM。 CPU通过新的VMLAUNCH和VMRESUME指令进入<code>non-root</code>模式，由于多种原因，它返回<code>root</code>模式，统称为VM Exit。 VM Exit应将控制权交还给VMM，VMM应完成对来宾代码试图执行的操作的仿真，然后通过重新进入<code>non-root</code>模式将控制权交还给来宾。所有新的VM指令仅允许在<code>root / system</code>模式下使用。</p>
+<p>由于我们同时具有 <code>non-root/system</code>  和  <code>non-root/user</code>，因此该体系结构使我们能够自动在虚拟机内部区分用户应用和OS内核。 例如，在<code>non-root/user</code>模式下，INT 指令可能会导致从 <code>non-root/user</code>切换到<code>non-root/system</code>，而IRET指令可能会从 <code>non-root/system</code>返回到<code>non-root/user</code>。</p>
+<p>就特权级别而言，<code>root/user</code>模式不能直接与<code>non-root</code>模式进行比较。 但是，<code>root/system</code>和<code>root/user</code>的存在允许将VMM作为主机上标准OS的一部分实现，因为正常的主机用户空间应用程序可能以<code>root/user</code>模式运行，而虚拟机使用<code>non-root</code>模式</p>
+<h2 id="2-2-The-Virtual-Machine-Control-Structure-VMCS"><a href="#2-2-The-Virtual-Machine-Control-Structure-VMCS" class="headerlink" title="2.2  The Virtual Machine Control Structure (VMCS)"></a>2.2  The Virtual Machine Control Structure (VMCS)</h2><p>Intel VMX添加了新的虚拟机控制结构（VMCS），其中包含管理新的<code>non-root</code>模式所需的所有信息。 VMM可以维护多个VCMS，通常每个虚拟机的每个处理器一个。 但是，但是，一次仅一个VMCS是物理处理器上的当前VMCS：处理器具有一个指向当前VMCS的寄存器，并且所有VM指令（例如VM LAUNCH）都使用当前VMCS。 VMM可以使用VMPTRLD加载VMCS的地址，使其成为当前的VMCS。</p>
+<p>VMCS数据结构具有几个字段，可以将其分组如下：</p>
+<ul>
+<li>Guest state:  处理器的状态在VM enter期间从此处加载，并在VM exit时存储在此处;</li>
+<li>Host state:  在VM exit期间从此处加载处理器的状态;</li>
+<li>VM execution control: 在这里我们可以指定在<code>non-root</code>模式下允许不允许的操作； 不允许的操作将导致VM exit;</li>
+<li>VM enter control:  它包含几个标志和字段，这些标志和字段确定从root 到 non-root过渡的某些可选行为 </li>
+<li>VM exit control:  类似于上条，但用于non-root 到 root 的过渡；</li>
+<li>VM exit reason:  此部分包含导致最近VM退出原因的相关信息。</li>
+</ul>
+<p>Guest state 包含以下寄存器：％cr3（指向页面目录的指针），％idtr（指向中断描述符表的指针），％gdtr（指向全局描述符表的指针）和％tr（当前任务的选择器）。 Guest state 还包含指令指针，我们可以使用该指令指针来确定<code>Guest</code>应在VM上执行的第一条指令，并找到来宾在最近一个VM退出之前试图执行的指令。</p>
+<p>Host state包含的值，在VM退出时必须加载到％cr3，％idtr。 从现在开始，我们有了保存和恢复这些寄存器的方法，来宾软件可以自由操作它们而不会影响主机。 本节还包含在VM exit时必须在指令指针中加载的值。 这应该是VMM例程的入口点，该例程将检查退出原因，执行必要的仿真，然后重新进入non-root用户模式。</p>
+<p>VM execution control 中包含许多标志。 最重要的是：</p>
+<ul>
+<li><p>有1个<code>flag</code>用于确定在non-root模式下运行时CPU接收到外部中断时应如何处理；我们可以让CPU使用guest IDT来处理中断，而不离开 non-root 模式，否则可能导致VM退出； 在后一种情况下，IF标志的值将被忽略（VMM重新获得对外部中断的控制，而不管<code>guest</code>正在做什么）。</p>
+</li>
+<li><p>有一组标志，用于确定某些关键指令是否应导致VM退出； 这些flag 用于hlt，invlpg，从％cr3读取，写入％cr3 和 一些其他指令；</p>
+</li>
+<li><p>每种异常都有一个标志； 因此我们可以说页面错误（举例）应导致VM退出，而其他异常则不应;</p>
+</li>
+<li><p>一组导致VM退出I / O操作的标志； 有一个常规标志（在任何in和out指令上VM退出）和一个更具体的位图，其中65535个可能的I / O寄存器中的每一个都有一个位；</p>
+</li>
+</ul>
+<p>VM enter control 和 VM exit control 部分中最重要的字段与中断有关。我们在这里进行简短描述，但是在另一堂课中我们将不得不回到这个主题。 VM exit control 部分中有一个标志，用于确定在VM退出期间由外部中断引起的情况。回想一下中断控制器发送了请求，但随后处理器必须回复并从控制器获取中断向量。使用该标志，我们可以在两个选项之间进行选择：（i）处理器在VM退出期间获取向量，并将其存储在VMCS中，或者（ii）不执行任何操作。请注意，无论哪种情况，处理器都不会自动跳转到中断处理程序：VM exit始终跳转到存储在VMCS的Host部分中的地址。在情况（i）中，VMM可以读取VMCS中的向量，并通过软件（例如，使用int指令）跳转到处理程序。在情况（ii）中，VMM可以使用以下事实：在VM中禁用了外部中断退出：通过重新启用它们（例如，使用aSTI），处理器将完成与中断控制器的协议，从而获得向量并跳转到适当的中断处理程序。</p>
+<p>VM enter control部分中，有几个字段可以用于在VM输入期间注入事件。这主要用于使来宾接收到伪造的外部中断，但是我们也可以注入异常和错误</p>
+<h2 id="2-3-Examples"><a href="#2-3-Examples" class="headerlink" title="2.3 Examples"></a>2.3 Examples</h2><p>在上一讲中，我们看到了一对难以在Intel x86上虚拟化的示例指令：popf和mov ％cr3，％eax。</p>
+<p>没有VMX，popf指令很难虚拟化，因为：我们不能让来宾系统软件以 host system  特权执行它，因为它可能被用来禁用主机中断；我们不能让来宾系统软件以 host  user 特权执行它，因为这将默默地忽略虚拟机中 中断enabled/disabled 状态的任何更改。现在，使用VMX，我们可以在任何non-root用户模式下执行popf指令。来宾系统软件现在可以自由更改中断标志的值，因此我们不会丢失此信息。同时，如果主机不同意，则来宾系统软件无法禁用或启用主机中断：通过在VMCS结构中设置适当的标志（不能从来宾访问），处理器仍将看到所有在non-root模式下运行时的外部中断，与EFLAGS寄存器中中断标志的状态无关。</p>
+<p>如果没有VMX，则 mov％cr3，％eax指令很难虚拟化，因为它永远不会引起故障。回想一下，没有VMX，我们不能允许来宾软件写入％cr3，因为这将使来宾能够完全访问所有主机内存。因此，在来宾运行时，％cr3的内容将与来宾编写的内容不同。这本身不是问题，但是如果来宾尝试从％cr3中读取内容，则将成为问题：然后它将了解真相，而我们无法阻止它。使用VMX，我们可以强制VM exit 当其进行读取尝试时。然后，VMM将能够将来宾期望看到的值放入％eax中，增加来宾指令指针（在VMCS的来宾部分中）以跳过移动％cr3，％eax指令，最后从新状态重新启动来宾。 </p>
+<h1 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a>原文链接</h1><p><a href="chrome-extension://ikhdkkncnoglghljlkmcimlnlhkeamad/pdf-viewer/web/viewer.html?file=https%3A%2F%2Flettieri.iet.unipi.it%2Fvirtualization%2F2016%2Fvn05.pdf">Intel VMX technology</a></p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-09-10</p></div> 
+    <div class="post-meta__cats"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/heavyfish.github.io/2020/09/14/Linux/KVM/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/09/04/Linux/Centos7%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            no title
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
