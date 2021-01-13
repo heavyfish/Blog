@@ -25,7 +25,7 @@
     <!-- meta -->
 
 
-<title>no title | 速查笔记</title>
+<title>Python学习手册1～9 | 速查笔记</title>
 
 
 
@@ -33,16 +33,14 @@
 
     <!-- OpenGraph -->
  
-    <meta name="description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式 字节码编译当程序执行时，Pyt">
+    <meta name="description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式  字节码编译当程序执行时，Py">
 <meta property="og:type" content="article">
-<meta property="og:title" content="速查笔记">
+<meta property="og:title" content="Python学习手册1～9">
 <meta property="og:url" content="https://heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/index.html">
 <meta property="og:site_name" content="速查笔记">
-<meta property="og:description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式 字节码编译当程序执行时，Pyt">
+<meta property="og:description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式  字节码编译当程序执行时，Py">
 <meta property="og:locale">
-<meta property="og:image" content="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210111233223093.png?token=AJI5TSLNNM5MV5GT6GU6QS277RX4Q">
-<meta property="og:image" content="https://github.com/heavyfish/BlogImage/blob/master/image-20200914172604438.png?raw=true">
-<meta property="og:image" content="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210112230738129.png?token=AJI5TSIEZGX3HFGNSIFKSIS77W5X4">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20200914172258244.png">
 <meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-6827-Vtk4m.png">
 <meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-5882-BO4qO.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916132610249.png">
@@ -85,10 +83,10 @@
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918153132849.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918153418924.png">
 <meta property="article:published_time" content="2020-09-14T10:10:19.019Z">
-<meta property="article:modified_time" content="2021-01-12T15:08:48.640Z">
+<meta property="article:modified_time" content="2021-01-13T14:52:10.327Z">
 <meta property="article:author" content="Shenxr">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210111233223093.png?token=AJI5TSLNNM5MV5GT6GU6QS277RX4Q">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20200914172258244.png">
 
 
     
@@ -128,6 +126,8 @@
                 
                     <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
                 
+                    <a href="/heavyfish.github.io/categories/" class="navbar-menu button">分类</a>
+                
                     <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
                 
                     <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
@@ -152,6 +152,8 @@
                 
                     <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
                 
+                    <a href="/heavyfish.github.io/categories/" class="dropdown-menu button">分类</a>
+                
                     <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
                 
                     <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
@@ -169,11 +171,13 @@
 
 <div class="post-title">
     <h1 class="post-title__text">
-        no title
+        Python学习手册1～9
     </h1>
     <div class="post-title__meta">
         <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-14</a>
         
+    <span class="separate-dot"></span><a href="/heavyfish.github.io/categories/Python/" class="button">Python</a>
+
  
         
     
@@ -199,9 +203,10 @@
 </ol>
 <h2 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h2><p>Python中，每个模块都是一个单独的命名空间。</p>
 <p>在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。</p>
-<h2 id="Python程序的执行方式"><a href="#Python程序的执行方式" class="headerlink" title="Python程序的执行方式"></a>Python程序的执行方式</h2><p><img src="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210111233223093.png?token=AJI5TSLNNM5MV5GT6GU6QS277RX4Q" alt="image-20210111233223093"></p>
+<h2 id="Python程序的执行方式"><a href="#Python程序的执行方式" class="headerlink" title="Python程序的执行方式"></a>Python程序的执行方式</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20200914172258244.png" alt="image-20200914172258244.png" style="zoom:50%;" />
+
 <h3 id="字节码编译"><a href="#字节码编译" class="headerlink" title="字节码编译"></a>字节码编译</h3><p>当程序执行时，Python内部（对用户是透明的）会先将源代码（Python代码文件中的语句）编译成字节码的形式。字节码是源代码底层的、与平台无关的表现形式。一条语句可能对应着一组字节码指令。</p>
-<p><img src="https://github.com/heavyfish/BlogImage/blob/master/image-20200914172604438.png?raw=true" alt="image-20200914172604438.png"></p>
+<p>![image-20200914172604438](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200914172604438.png)</p>
 <p>有时，我们执行Python程序后会看到 .pyc  后缀的文件，这就是字节码文件。 一般被 import 导入的库菜会生成 .pyc文件。有 .pyc 文件，可以加速程序的运行，但没有也没关系。</p>
 <h3 id="Python虚拟机（PVM）"><a href="#Python虚拟机（PVM）" class="headerlink" title="Python虚拟机（PVM）"></a>Python虚拟机（PVM）</h3><p>程序编译成字节码后，会发送给Python虚拟机（Python virtual Machine）上来执行。PVM不是一个独立的程序，它是解释器中的运行引擎。从技术上讲，它是所谓“Python解释器”的最后一步。</p>
 <h3 id="Python解释器"><a href="#Python解释器" class="headerlink" title="Python解释器"></a>Python解释器</h3><p>当Python被安装到机器后，它包含了一些最小化的组件：一个解释器和支持的库。当我们执行脚本时，</p>
@@ -249,7 +254,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class IterationExample &#123;</span><br><span class="line">   public static void main(String args[]) &#123;</span><br><span class="line">      <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">         System.out.println(i + <span class="string">&quot; &quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="3、数值类型"><a href="#3、数值类型" class="headerlink" title="3、数值类型"></a>3、数值类型</h1><p><strong>小数和分数</strong></p>
 <p>重要的是知道浮点数在运算时产生的显示异常（因为硬件本身精度的原因导致）</p>
-<p><img src="https://raw.githubusercontent.com/heavyfish/BlogImage/master/image-20210112230738129.png?token=AJI5TSIEZGX3HFGNSIFKSIS77W5X4" alt="image-20210112230738129"></p>
+<p>![image-20200915154648140](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915154648140.png)</p>
 <p>通过使用小数和分数，可使结果显示的更为精确</p>
 <p>![image-20200915154843008](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915154843008.png)</p>
 <p>![image-20200915154931468](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915154931468.png)</p>
@@ -555,8 +560,8 @@
 <h2 id="通用的表达式"><a href="#通用的表达式" class="headerlink" title="通用的表达式"></a>通用的表达式</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918153418924.png" alt="image-20200918153418924" style="zoom:50%;" />
     </div>
      
-    <div class="post-footer__meta"><p>updated at 2021-01-12</p></div> 
-    <div class="post-meta__cats"></div> 
+    <div class="post-footer__meta"><p>updated at 2021-01-13</p></div> 
+    <div class="post-meta__cats"><a href="/heavyfish.github.io/categories/Python/" class="post-cats__link button">Python</a></div> 
 </article>
 
 
@@ -572,7 +577,7 @@
                             Previous Post
                         </div>
                         <div class="nav__title">
-                            no title
+                            Python学习手册10～13
                         </div>
                     </div>
                 </a>
