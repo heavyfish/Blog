@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head>
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True" >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>Python学习手册14 | 速查笔记</title>
+
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="14、函数基础  函数的两个作用：  最大化代码重用和最小化代码冗余 过程的分解  编写函数一些主要的概念介绍：  def 是可执行的代码：def是一个可执行的语句，在Python运行def前，函数实际不存在 def 创建了一个对象并将其赋值给某一变量名 lambda 创建一个对象并将其作为结果返回 return 将一个结果对象传回给调用者：没有返回值的return 语句返回 None yield">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python学习手册14">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/19/python/python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C14~18/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="14、函数基础  函数的两个作用：  最大化代码重用和最小化代码冗余 过程的分解  编写函数一些主要的概念介绍：  def 是可执行的代码：def是一个可执行的语句，在Python运行def前，函数实际不存在 def 创建了一个对象并将其赋值给某一变量名 lambda 创建一个对象并将其作为结果返回 return 将一个结果对象传回给调用者：没有返回值的return 语句返回 None yield">
+<meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000538642.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000557226.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000605860.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200921165648352.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000614466.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000628179.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000636280.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000707652.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000728158.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000747290.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000801191.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000810838.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000817800.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000848054.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000900403.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000911088.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000924399.png">
+<meta property="article:published_time" content="2020-09-19T09:33:43.404Z">
+<meta property="article:modified_time" content="2021-01-13T16:09:35.061Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000538642.png">
+
+
+    
+<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
+ 
+
+
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
+        
+    
+
+    
+    
+
+     
+
+    <!-- custom head -->
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/heavyfish.github.io/" class="button">
+            <span class="logo__text">Demo</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/categories/" class="navbar-menu button">分类</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
+                
+            </div>
+        
+        
+        
+
+        
+        
+
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/heavyfish.github.io/categories/" class="dropdown-menu button">分类</a>
+                
+                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
+                
+                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Python学习手册14
+    </h1>
+    <div class="post-title__meta">
+        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-19</a>
+        
+    <span class="separate-dot"></span><a href="/heavyfish.github.io/categories/Python/" class="button">Python</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h1 id="14、函数基础"><a href="#14、函数基础" class="headerlink" title="14、函数基础"></a>14、函数基础</h1><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000538642.png" alt="image-20210114000538642" style="zoom:50%;" />
+
+<p>函数的两个作用：</p>
+<ul>
+<li>最大化代码重用和最小化代码冗余</li>
+<li>过程的分解</li>
+</ul>
+<h2 id="编写函数"><a href="#编写函数" class="headerlink" title="编写函数"></a>编写函数</h2><p>一些主要的概念介绍：</p>
+<ul>
+<li>def 是可执行的代码：def是一个可执行的语句，在Python运行def前，函数实际不存在</li>
+<li>def 创建了一个对象并将其赋值给某一变量名</li>
+<li>lambda 创建一个对象并将其作为结果返回</li>
+<li>return 将一个结果对象传回给调用者：没有返回值的return 语句返回 None</li>
+<li>yield 向调用者发回一个结果对象，但是会记住它离开的位置</li>
+<li>global 声明了一个模块级的可被赋值的变量</li>
+<li>nonlocal 声明了一个需要被赋值的外层函数变量：nonlocal 语句允许一个函数对一个在其外层的def 语句作用域中已有的名称进行赋值</li>
+<li>参数是通过赋值（对象引用）传递给函数的：Python的模型中，调用者和函数通过引用共享对象，但是不需要别名。</li>
+<li>实参默认按位置赋值给形参</li>
+<li>参数、返回值与变量不需要被声明：如同Python中的所有对象一样，函数并没有类型约束。你可以传递任意类型的参数给函数，函数也可以返回任意类型的对象</li>
+</ul>
+<h2 id="Python中的多态"><a href="#Python中的多态" class="headerlink" title="Python中的多态"></a>Python中的多态</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">times</span>(<span class="params">x,y</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x*y</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>times(<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line"><span class="number">12</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>times(<span class="string">&quot;NiP&quot;</span>,<span class="number">4</span>)</span><br><span class="line"><span class="string">&#x27;NiPNiPNiPNiP&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>上述函数，在处理数字时，<code>*</code> 代表乘法，在处理字符串时，<code>*</code> 代表重复。 Python把对某一对象在某种语法下的合理性交给那个对象自身来判断。 <code>*</code> 作为一个分派机制，将执行的控制权移交给被处理的对象。</p>
+<p>这种依赖类型的行为称为多态。其含义就是 <strong>一个操作的意义取决于被操作对象的类型</strong>。</p>
+<p>对于函数内部定义好的逻辑而言，如果传入的对象不支持内部的运算符（即不支持这种预期的接口），那么Python将会在 <code>*</code> 表达式运行时检测到错误，并自动抛出一个异常。</p>
+<p>如果检查传入函数的类型，实质上破坏了函数的灵活性，并把函数限制在了特定的类型上。没有这类检查时，函数可以处理更大范围的类型：任何支持函数所预期的接口的对象都将适用（接口一词是指：函数所执行的一组方法和表达式运算符）</p>
+<blockquote>
+<p>这种多态性近年也被称为鸭子类型：其核心思想是，你的代码不必在意一个对象是不是只鸭子，只需要它能向鸭子那样叫就行了。同时鸭子叫 的实现留给对象自己完成</p>
+</blockquote>
+<h2 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">intersect</span>(<span class="params">seq1,seq2</span>):</span></span><br><span class="line">    res=[]</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> seq1:</span><br><span class="line">        <span class="keyword">if</span> x <span class="keyword">in</span> seq2:</span><br><span class="line">            res.append[x]</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+<p>所有在函数内部进行赋值的变量都是局部变量：</p>
+<ul>
+<li>res 被赋过值，所以是局部变量</li>
+<li>参数是通过赋值传入的，所以 seq1 和 seq2 是局部变量</li>
+<li>for 循环将元素赋值给了变量 x，所以 x 也是局部变量</li>
+</ul>
+<p>所有的局部变量会在函数调用时出现，并在函数退出时消失。尽管intersect 函数末尾的return 语句返回了结果对象，但是变量res 却消失了</p>
+<h1 id="15、作用域"><a href="#15、作用域" class="headerlink" title="15、作用域"></a>15、作用域</h1><p>Python作用域，即变量定义和查找的地方。如模块文件一样，作用域能够阻止程序代码中的名称冲突。</p>
+<h2 id="作用域基础"><a href="#作用域基础" class="headerlink" title="作用域基础"></a>作用域基础</h2><p>Python创建、修改或查找变量名时都是在所谓的命名空间（变量名存在的地方）中进行的。作用域这个术语指的就是命名空间。</p>
+<p>Python中一切与变量名有关的事件（包括作用域的分类），都发生在赋值的时候。由于变量最初没有声明，Python将一个变量名被赋值的地点关联为（绑定给）一个特定的命名空间。换句话说，在代码中给一个变量赋值的位置决定了这个变量存在于哪个命名空间，即它的可见范围。</p>
+<p>变量可以在3个不同的地方被赋值，分别对应于3种不同的作用域：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">X = <span class="number">99</span>   <span class="comment"># 全局作用域</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>():</span></span><br><span class="line">    X = <span class="number">88</span>  <span class="comment"># 非局部作用域</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nested</span>():</span></span><br><span class="line">        x = <span class="number">77</span>  <span class="comment"># 局部作用域</span></span><br><span class="line">    <span class="keyword">return</span> nested()</span><br><span class="line"></span><br><span class="line">Y = <span class="built_in">list</span>[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]   <span class="comment"># list这个变量属于 内部作用域</span></span><br></pre></td></tr></table></figure>
+<h2 id="作用域细节"><a href="#作用域细节" class="headerlink" title="作用域细节"></a>作用域细节</h2><p>一般而言，函数定义了局部作用域，模块文件定义了全局作用域。作用域的属性有：</p>
+<ul>
+<li><p>外围模块是全局作用域：</p>
+<p>每个模块都是一个全局作用域。模块被导入后，该模块的全局变量就变成了该模块的属性</p>
+</li>
+<li><p>全局作用域的作用范围仅限于单个文件</p>
+<p>这里的全局指的是在一个文件的顶层的变量名仅对这个文件的代码才是全局的。Python中是没有一个跨文件的单一且无所不包的全局作用概念的</p>
+</li>
+<li><p>函数赋值的变量名称除非被声明为global 或 nonlocal，否则均为局部变量</p>
+</li>
+<li><p>函数内未定义的变量都是外层函数的局部变量、全局变量或内置变量</p>
+</li>
+<li><p>函数的每次调用都会创建一个新的局部作用域</p>
+</li>
+<li><p>交互式命令行是一个名为<code>__main__</code>的模块，它可以打印结果，但不会保存其代码；不过在其他方面，它与模块文件的顶层相同</p>
+</li>
+</ul>
+<p>注意：一个函数内部任何类型的赋值都会把一个名称划定为局部的，这包括：</p>
+<ul>
+<li>=语句</li>
+<li>import中的模块名</li>
+<li>def中的函数名</li>
+<li>函数形式参数名</li>
+</ul>
+<p>另外要注意，函数内，原位置改变对象并不会把变量划分为局部变量（<code>L.append(x)</code>），实际上只有对象变量名赋值才可以（<code>L = X</code>），要明白修改一个对象并不是给一个变量名赋值</p>
+<h2 id="变量名解析：LEGB规则"><a href="#变量名解析：LEGB规则" class="headerlink" title="变量名解析：LEGB规则"></a>变量名解析：LEGB规则</h2><p>对于函数中的变量：</p>
+<ul>
+<li>当你在函数中使用未限定（限定是指使用gloab、nonlocal）的变量名时，Python将查找四个作用域，并在第一次找到时停止查找。首先是局部作用域（L），其次是向外一层的def 或 lambda 的局部作用域（E），之后是全局作用域（G），最后是内置作用域（Buint-in）。如果变量名始终没有找到，则会报错</li>
+<li>使用global，会让Python只查找 全局作用域 和 内置作用域</li>
+<li>使用nonlocal，会让Python只查找 非局部作用域（E）</li>
+</ul>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000557226.png" alt="image-20210114000557226"></p>
+<p>不过，这些规则仅对简单变量名生效，属性变量名（object.spam）存在于特定的对象中，并遵循一种完全不同的查找规则。</p>
+<h2 id="其他的Python作用域"><a href="#其他的Python作用域" class="headerlink" title="其他的Python作用域"></a>其他的Python作用域</h2><p>从技术上，Python还有另外三种作用域，推导语法中的临时循环变量，try处理语句中的异常引用变量，class语句中的局部作用域。前两个是特殊情形，极少影响到真实代码，第三个遵循LEGB原则。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000605860.png" alt="image-20210114000605860"></p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200921165648352.png" alt="image-20200921165648352" style="zoom:50%;" />
+
+<h2 id="内置作用域"><a href="#内置作用域" class="headerlink" title="内置作用域"></a>内置作用域</h2><p>3.x版本中，内置作用域是通过一个名为builtins 的标准库模块来实现的，但是这个变量名自身没有放入内置作用域内，所以必须导入这个文件才能使用它。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> builtins</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>builtins.<span class="built_in">open</span></span><br><span class="line">&lt;built-<span class="keyword">in</span> function <span class="built_in">open</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">open</span></span><br><span class="line">&lt;built-<span class="keyword">in</span> function <span class="built_in">open</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">open</span> <span class="keyword">is</span> builtins.<span class="built_in">open</span></span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000614466.png" alt="image-20210114000614466"></p>
+<h2 id="程序化设计要点"><a href="#程序化设计要点" class="headerlink" title="程序化设计要点"></a>程序化设计要点</h2><ul>
+<li><p>最小化全局变量</p>
+</li>
+<li><p>最小化跨文件修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#不优雅的方式</span></span><br><span class="line"><span class="comment">#first.py</span></span><br><span class="line">x = <span class="number">99</span></span><br><span class="line"><span class="comment">#second.py</span></span><br><span class="line"><span class="keyword">import</span> first</span><br><span class="line">print(first.x)</span><br><span class="line">first.x = <span class="number">88</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#优雅的方式</span></span><br><span class="line"><span class="comment">#first.py</span></span><br><span class="line">x = <span class="number">99</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">setx</span>(<span class="params">new</span>):</span></span><br><span class="line">  <span class="keyword">global</span> x</span><br><span class="line">  x = new</span><br><span class="line">  </span><br><span class="line"><span class="comment">#second.py</span></span><br><span class="line">first.setx(<span class="number">88</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="访问全局变量的方式"><a href="#访问全局变量的方式" class="headerlink" title="访问全局变量的方式"></a>访问全局变量的方式</h2></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#thismod.oy</span></span><br><span class="line">var = <span class="number">99</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">glob1</span>():</span></span><br><span class="line">  <span class="keyword">global</span> var</span><br><span class="line">  var += <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">glob2</span>():</span></span><br><span class="line">  <span class="keyword">import</span> thismod</span><br><span class="line">  thismod.var += <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">glob3</span>():</span></span><br><span class="line">  <span class="keyword">import</span> sys</span><br><span class="line">  glob = sys.modules[<span class="string">&#x27;thismodel&#x27;</span>]</span><br><span class="line">  glob.var += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2 id="嵌套函数与闭包"><a href="#嵌套函数与闭包" class="headerlink" title="嵌套函数与闭包"></a>嵌套函数与闭包</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#嵌套函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span>():</span></span><br><span class="line">  x=<span class="number">88</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">f2</span>():</span></span><br><span class="line">    print(x)</span><br><span class="line">  <span class="keyword">return</span> f2()</span><br><span class="line">f1()</span><br><span class="line"></span><br><span class="line"><span class="comment">#闭包</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span>():</span></span><br><span class="line">  x=<span class="number">88</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">f2</span>():</span></span><br><span class="line">    print(x)</span><br><span class="line">  <span class="keyword">return</span> f2</span><br><span class="line">f=f1()</span><br><span class="line">f()</span><br></pre></td></tr></table></figure>
+<p>闭包（closure）也可以叫做工厂函数（factory function）——前者将其描述成一种函数技巧，后者认为它是一种设计模式。不论叫法如何，这里的关键是，函数对象能够记忆外层作用域里的值（状态记忆），而不管那些嵌套作用域是否还在内存中存在。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一个简单的闭包</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">maker</span>(<span class="params">N</span>):</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="keyword">return</span> x ** N</span><br><span class="line">  <span class="keyword">return</span> action</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = maker(<span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f(<span class="number">3</span>)</span><br><span class="line"><span class="number">9</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g = maker(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>g(<span class="number">3</span>)</span><br><span class="line"><span class="number">27</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#lambda形式的闭包</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">maker</span>(<span class="params">N</span>):</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">lambda</span> x:x**N</span><br></pre></td></tr></table></figure>
+<p>通过对闭包的每次调用，都能得到属于调用自己的状态信息的集合。</p>
+<h3 id="闭包-VS-类"><a href="#闭包-VS-类" class="headerlink" title="闭包 VS 类"></a>闭包 VS 类</h3><p>当需要功能完整的对象时，类是一个更好的实现状态记忆的选择，它们用属性赋值来更加显式地创建它们的内存。类也支持闭包函数所不支持的其他工具，如通过继承的定制化和运算符重载。</p>
+<p>当记忆状态是唯一的目标时，闭包函数是一个更好的轻量级解决方案。</p>
+<h2 id="Python函数记忆状态的方式"><a href="#Python函数记忆状态的方式" class="headerlink" title="Python函数记忆状态的方式"></a>Python函数记忆状态的方式</h2><p>除了类与闭包，从更广阔的角度看，Python函数在调用间记忆状态还有多种方式，包括全局变量、类实例中的属性、外层作用域中的引用、参数默认值和函数属性。</p>
+<h3 id="参数默认值"><a href="#参数默认值" class="headerlink" title="参数默认值"></a>参数默认值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#可有可无的 参数默认值</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span>():</span></span><br><span class="line">  x=<span class="number">88</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">f2</span>(<span class="params">x=x</span>):</span>  <span class="comment">#使用默认值</span></span><br><span class="line">    print(x)</span><br><span class="line">  <span class="keyword">return</span> f2()</span><br><span class="line">f1()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>():</span></span><br><span class="line">  x=<span class="number">4</span></span><br><span class="line">  action=(<span class="keyword">lambda</span> n,x=x:x**n)</span><br><span class="line">  <span class="keyword">return</span> action</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#一定要有的 参数默认值</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#错误示范</span></span><br><span class="line"><span class="comment">#外层作用域的变量，在嵌套的函数被调用时才进行查找，因此 i 始终为4</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">makeActions</span>():</span></span><br><span class="line">  acts=[]</span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">    acts.append(<span class="keyword">lambda</span> x:i ** x)</span><br><span class="line">  <span class="keyword">return</span> acts</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>acts=makeActions()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>acts[<span class="number">0</span>](<span class="number">2</span>)</span><br><span class="line"><span class="number">16</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>acts[<span class="number">1</span>](<span class="number">2</span>)</span><br><span class="line"><span class="number">16</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#正确示范</span></span><br><span class="line"><span class="comment">#通过默认参数将值传入,默认参数的求值是嵌套函数创建时发生的，所以每一个函数记住了属于自己的i变量的值</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">makeActions</span>():</span></span><br><span class="line">  acts=[]</span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">    acts.append(<span class="keyword">lambda</span> x, i=i: i ** x)</span><br><span class="line">  <span class="keyword">return</span> acts</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>acts=makeActions()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>acts[<span class="number">1</span>](<span class="number">2</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>acts[<span class="number">2</span>](<span class="number">2</span>)</span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="类实例的属性"><a href="#类实例的属性" class="headerlink" title="类实例的属性"></a>类实例的属性</h3><p>针对可变状态信息的另一种方式是使用带有属性的类，类的优势在于，类的每个实例都会得到状态信息的一个新副本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">tester</span>:</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,start</span>):</span></span><br><span class="line">    self.state = start</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">nested</span>(<span class="params">self,label</span>):</span></span><br><span class="line">    print(label,self.state)</span><br><span class="line">    self.state += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h3 id="函数属性"><a href="#函数属性" class="headerlink" title="函数属性"></a>函数属性</h3><p>在3.x和2.x中通用的状态记忆备选项，函数属性（用户定义的直接附加给函数的名称）也能达到与nonlocal相同的效果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tester</span>(<span class="params">start</span>):</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">nested</span>(<span class="params">label</span>):</span></span><br><span class="line">    print(label,nested.state)</span><br><span class="line">    nested.state += <span class="number">1</span></span><br><span class="line">  nested.state = start</span><br><span class="line">  <span class="keyword">return</span> nested</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F = tester(<span class="number">0</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F(<span class="string">&#x27;spam&#x27;</span>)</span><br><span class="line">spam <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F(<span class="string">&#x27;ham&#x27;</span>)</span><br><span class="line">ham <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F.state</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="通过可变对象实现"><a href="#通过可变对象实现" class="headerlink" title="通过可变对象实现"></a>通过可变对象实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tester</span>(<span class="params">start</span>):</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">nested</span>(<span class="params">label</span>):</span></span><br><span class="line">    print(label,state[<span class="number">0</span>])</span><br><span class="line">    state[<span class="number">0</span>] += <span class="number">1</span></span><br><span class="line">  state = [start]</span><br><span class="line">  <span class="keyword">return</span> nested</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F=tester(<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F(<span class="string">&#x27;spam&#x27;</span>)</span><br><span class="line">spam <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F(<span class="string">&#x27;ham&#x27;</span>)</span><br><span class="line">ham <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>这利用了列表的可变形，函数内修改原位置对象时，不会将其名称归类为局部。</p>
+<h2 id="定制open"><a href="#定制open" class="headerlink" title="定制open"></a>定制open</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> builtins</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">makeopen</span>(<span class="params"><span class="built_in">id</span></span>):</span></span><br><span class="line">  orginal = builtins.<span class="built_in">open</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">custom</span>(<span class="params">*kargs, **pargs</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;Custom open call %r:&#x27;</span> % <span class="built_in">id</span>,kargs,pargs)</span><br><span class="line">    <span class="keyword">return</span> orginal(*kargs, **pargs)</span><br><span class="line">  builtins.<span class="built_in">open</span> = custom</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>makeopen(<span class="string">&#x27;spam&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>F = <span class="built_in">open</span>(<span class="string">&#x27;/Users/shenshawn/tmp.py&#x27;</span>)</span><br><span class="line">Custom <span class="built_in">open</span> call <span class="string">&#x27;spam&#x27;</span>: (<span class="string">&#x27;/Users/shenshawn/tmp.py&#x27;</span>,) &#123;&#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment"># %r 与 %s 的区别就好比 repr() 函数处理对象与 str() 函数处理对象的差别</span></span><br></pre></td></tr></table></figure>
+<h1 id="16、参数"><a href="#16、参数" class="headerlink" title="16、参数"></a>16、参数</h1><h2 id="参数传递基础"><a href="#参数传递基础" class="headerlink" title="参数传递基础"></a>参数传递基础</h2><ul>
+<li><p>参数的传递是通过自动将对象赋值给局部变量名实现的</p>
+<p>所有参数实际上都是通过指针传入的。作为参数被传递的对象从来不会自动赋值</p>
+<ul>
+<li>不可变参数本质上传入了“值”：像整数和字符串这样的对象是通过对象引用而不是复制传入的。但是你不可能在原位置修改对象，最终的效果就像创建了一份副本</li>
+<li>可变对象本质上传入了“指针”</li>
+</ul>
+</li>
+<li><p>在函数内部赋值参数名不会影响调用者</p>
+</li>
+<li><p>改变函数的可变参数的值也许会对调用者有影响</p>
+</li>
+</ul>
+<h2 id="参数类型"><a href="#参数类型" class="headerlink" title="参数类型"></a>参数类型</h2><ul>
+<li><p>位置参数：从左至右进行匹配</p>
+</li>
+<li><p>关键字参数：通过参数名进行匹配，即使用 name=value 这种语法</p>
+</li>
+<li><p>默认值参数：为没有传入值的可选参数指定参数值</p>
+</li>
+<li><p>可变长参数（Varargs）收集：收集任意多的基于位置（*）或关键字（**）的参数。</p>
+<p>函数能够用一个星号“*” 或两个星号“**”开头的特殊参数，来收集任意多的额外参数。</p>
+<p>*name形式：把多出来不能匹配的关键字参数收集到一个元组中</p>
+<p>**name形式：把多出来不能匹配的关键字参数收集到一个字典中</p>
+</li>
+<li><p>可变长参数解包：收集任意多的基于位置（*）或关键字（**）的参数</p>
+<p>调用者能用一个星号“*” 或两个星号“**”开头的语法，将参数集合解包成单个的参数</p>
+</li>
+<li><p>keyword-only参数：必须按照名称传递参数</p>
+<p>在3.x中，函数也能用关键字参数来指定必须通过名称（而不是位置）来传递的参数。这样的参数通常用来定义实际使用的参数以外的配置选项</p>
+</li>
+</ul>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000628179.png" alt="image-20210114000628179"></p>
+<h2 id="参数顺序"><a href="#参数顺序" class="headerlink" title="参数顺序"></a>参数顺序</h2><p>如果使用并组合特殊参数匹配模式，则需要遵守如下顺序规则：</p>
+<ul>
+<li>在函数调用时，参数必须按此顺序出现：所有基于位置的参数（value），之后是所有关键字参数（name=value）和 *iterable形式的组合，之后是 **dict 的形式</li>
+<li>在函数头部，参数必须按照此顺序出现：所有一般参数（name），之后是所有默认值参数（name=value），之后是 <em>name（或是3.x中的 * ）形式，之后是所有 name 或 name=value的keyword-only参数，之后是 *</em>name形式</li>
+</ul>
+<p>python在赋值前，匹配参数的步骤为：</p>
+<ol>
+<li>通过位置分配无关键字参数</li>
+<li>通过匹配名称分配关键字参数</li>
+<li>将剩下的非关键字参数分配到 *name 中</li>
+<li>将剩下的关键字参数分配到 **name 中</li>
+<li>把默认值分配给在头部未得到匹配的参数</li>
+</ol>
+<p>在此之后，Python会检查以确保每个参数只被传入了一个值，如果不是这样，将引发一个错误。当所有匹配完成后，Python再把传入的对象赋值给参数名称</p>
+<blockquote>
+<p>注意，将函数头部中的 *name 和 在 表达式赋值时的星号区分开</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这种*号创建列表而非元组</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x,*y=<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y</span><br><span class="line">[<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,*b,c=<span class="number">6</span>,**d</span>):</span></span><br><span class="line"><span class="meta">... </span>   print(a,b,c,d)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f(<span class="number">1</span>,*(<span class="number">2</span>,<span class="number">3</span>),**<span class="built_in">dict</span>(x=<span class="number">4</span>,y=<span class="number">5</span>))</span><br><span class="line"><span class="number">1</span> (<span class="number">2</span>, <span class="number">3</span>) <span class="number">6</span> &#123;<span class="string">&#x27;x&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;y&#x27;</span>: <span class="number">5</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a,b,c</span>):</span>a=<span class="number">2</span>;b[<span class="number">0</span>]=<span class="string">&#x27;x&#x27;</span>;c[<span class="string">&#x27;a&#x27;</span>]=<span class="string">&#x27;y&#x27;</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l=<span class="number">1</span>;m=[<span class="number">1</span>];n=&#123;<span class="string">&#x27;a&#x27;</span>:<span class="number">0</span>&#125;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func(l,m,n)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m</span><br><span class="line">[<span class="string">&#x27;x&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n</span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="string">&#x27;y&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b,c=<span class="number">3</span>,d=<span class="number">4</span></span>):</span>print(a,b,c,d)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f(<span class="number">1</span>,*(<span class="number">5</span>,<span class="number">6</span>))</span><br><span class="line"><span class="number">1</span> <span class="number">5</span> <span class="number">6</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h1 id="17、函数的高级话题"><a href="#17、函数的高级话题" class="headerlink" title="17、函数的高级话题"></a>17、函数的高级话题</h1><h2 id="函数设计概念"><a href="#函数设计概念" class="headerlink" title="函数设计概念"></a>函数设计概念</h2><ul>
+<li>耦合性<ul>
+<li>在输入时使用参数，在输出时使用return语句</li>
+<li>只有在真正必要的情况下使用全局变量</li>
+<li>不要改变可变类型的参数，除非调用者希望这样</li>
+</ul>
+</li>
+<li>内聚性<ul>
+<li>每一个函数都应该有一个单一的、统一的目标</li>
+<li>每一个函数应相对较小</li>
+<li>避免直接改变其他模块文件中的变量</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000636280.png" alt="image-20210114000636280"></p>
+<h2 id="递归函数"><a href="#递归函数" class="headerlink" title="递归函数"></a>递归函数</h2><p>递归允许程序遍历拥有任意的、不可预知构型和深度的结构。递归是简单循环和迭代的替代品，尽管它不一定是最简单或高效的一种。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#用递归求和</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mysum</span>(<span class="params">L</span>):</span></span><br><span class="line">  <span class="keyword">if</span> <span class="keyword">not</span> L:</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">return</span> L[<span class="number">0</span>] + mysum(L[<span class="number">1</span>:])</span><br><span class="line">  </span><br><span class="line"><span class="comment">#递归也可以是间接的</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mysum</span>(<span class="params">L</span>):</span></span><br><span class="line">  <span class="keyword">if</span> <span class="keyword">not</span> L: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  <span class="keyword">return</span> nonempty(L)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nonempty</span>(<span class="params">L</span>):</span></span><br><span class="line">  <span class="keyword">return</span> L[<span class="number">0</span>] + mysum(L[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
+<p>一般在确认迭代次数的前提下，while 循环、for循环的效率会更高。递归的优势在于处理简单循环无法处理的结构。</p>
+<p>例子：计算一个嵌套的子列表结构中所有数字的总和：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>,[<span class="number">2</span>,[<span class="number">3</span>,<span class="number">4</span>],<span class="number">5</span>],<span class="number">6</span>,[<span class="number">7</span>,<span class="number">8</span>]]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumtree</span>(<span class="params">L</span>):</span></span><br><span class="line">  tot = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> L:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(x,<span class="built_in">list</span>):</span><br><span class="line">      tot += x</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">      tot += sumtree(x)</span><br><span class="line">  <span class="keyword">return</span> tot</span><br></pre></td></tr></table></figure>
+<p>标准Python限制了运行时调用栈的深度来捕获无限递归的错误。为了扩大这一上限，可以使用sys模块：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>sys.getrecursionlimit()</span><br><span class="line"><span class="number">1000</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sys.setrecursionlimit(<span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="函数对象"><a href="#函数对象" class="headerlink" title="函数对象"></a>函数对象</h2><p>除了一般的调用函数的方法，我们还可以把函数对象存入数据结构中，就好像它们是整数或字符串一样。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">schedule = [(echo,<span class="string">&#x27;Spam!&#x27;</span>),(echo,<span class="string">&#x27;Ham!&#x27;</span>)]</span><br><span class="line"><span class="keyword">for</span> (func,arg) <span class="keyword">in</span> schedule:</span><br><span class="line">  func(arg)</span><br></pre></td></tr></table></figure>
+<p>我们还可以通用的检查函数的属性（函数自省）:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.__name__</span><br><span class="line"><span class="string">&#x27;func&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.__code__</span><br><span class="line">&lt;code <span class="built_in">object</span> func at <span class="number">0x10899a8a0</span>, file <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dir</span>(func.__code__)</span><br><span class="line">[<span class="string">&#x27;__class__&#x27;</span>, <span class="string">&#x27;__delattr__&#x27;</span>, <span class="string">&#x27;__dir__&#x27;</span>, <span class="string">&#x27;__doc__&#x27;</span>, <span class="string">&#x27;__eq__&#x27;</span>, <span class="string">&#x27;__format__&#x27;</span>, <span class="string">&#x27;__ge__&#x27;</span>, <span class="string">&#x27;__getattribute__&#x27;</span>,...,<span class="string">&#x27;co_name&#x27;</span>, <span class="string">&#x27;co_names&#x27;</span>, <span class="string">&#x27;co_nlocals&#x27;</span>, <span class="string">&#x27;co_stacksize&#x27;</span>, <span class="string">&#x27;co_varnames&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.__code__.co_varnames</span><br><span class="line">(<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.__code__.co_argcount</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>还可向函数附加任意的用户定义的属性：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>func</span><br><span class="line">&lt;function func at <span class="number">0x1089c57b8</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.count=<span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.count+=<span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.count</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.handless=<span class="string">&quot;Spam&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.handless</span><br><span class="line"><span class="string">&#x27;Spam&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dir</span>(func)</span><br><span class="line">[<span class="string">&#x27;__annotations__&#x27;</span>, ..., <span class="string">&#x27;count&#x27;</span>, <span class="string">&#x27;handless&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>这样的属性可以直接用来把状态信息附加到函数对象上，而不必使用全局、非局部和类等其他技术。和非局部不同，这样的属性可以从函数自身所在的任何地方被访问，甚至可以从其代码外部访问。</p>
+<h2 id="3-x中的函数注解"><a href="#3-x中的函数注解" class="headerlink" title="3.x中的函数注解"></a>3.x中的函数注解</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000707652.png" alt="image-20210114000707652"  />
+
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a,b,c</span>):</span></span><br><span class="line">  <span class="keyword">return</span> a + b + c</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a:<span class="string">&#x27;spam&#x27;</span>,b:(<span class="params"><span class="number">1</span>,<span class="number">10</span></span>),c:<span class="built_in">float</span></span>) -&gt; int:</span></span><br><span class="line">  <span class="keyword">return</span> a + b + c</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>func.__annotations__</span><br><span class="line">&#123;&#x27;a&#x27;: &#x27;spam&#x27;, &#x27;b&#x27;: (1, 10), &#x27;c&#x27;: &lt;class &#x27;float&#x27;&gt;, &#x27;return&#x27;: &lt;class &#x27;int&#x27;&gt;&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000728158.png" alt="image-20210114000728158"></p>
+<h2 id="匿名函数-lambda"><a href="#匿名函数-lambda" class="headerlink" title="匿名函数:lambda"></a>匿名函数:lambda</h2><p>与def一样，lambda这个表达式创建了一个之后能够调用的函数，但是它返回该函数本身而不是将其赋值给一个变量名。这也是lambda有时称为匿名（没有函数名）的原因。实践中，它们常常以内联函数定义的形式出现，或者用作推迟一些代码的执行。</p>
+<h3 id="lambda表达式基础："><a href="#lambda表达式基础：" class="headerlink" title="lambda表达式基础："></a>lambda表达式基础：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lambda argument1，argument2,...argument N:expresion using arguments</span><br></pre></td></tr></table></figure>
+<p>lambda的特性在于：</p>
+<ul>
+<li><p>lambda是一个表达式，而不是语句</p>
+<p>因为这一点，lambda可以出现在Python语法不允许def出现的地方，如列表生成式</p>
+</li>
+<li><p>lambda的主体是一个单独的表达式，而不是一个代码块</p>
+</li>
+</ul>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000747290.png" alt="image-20210114000747290"></p>
+<h2 id="函数式编程工具"><a href="#函数式编程工具" class="headerlink" title="函数式编程工具"></a>函数式编程工具</h2><p>今天的 Python 混合支持多种编程范式:过程式(使用基础的语句) ，面向对象式（使用类）和函数式。函数式编程的工具包括：</p>
+<ul>
+<li>map：在一个可迭代对象的各项上调用函数的工具</li>
+<li>filter：使用一个测试函数在过滤项的工具</li>
+<li>reduce：把函数作用在成对的项上来运行结果的工具</li>
+<li>一等对象：即函数可以被作为对像一样使用</li>
+<li>嵌套作用域闭包</li>
+<li>匿名函数lambda</li>
+<li>生成器和推导语法</li>
+<li>函数装饰器和修饰器</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#map</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>counters = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">inc</span>(<span class="params">x</span>):</span><span class="keyword">return</span> x+<span class="number">10</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(inc,counters))</span><br><span class="line">[<span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">14</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">pow</span>,[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">2</span>,<span class="number">5</span>,<span class="number">7</span>]))</span><br><span class="line">[<span class="number">1</span>, <span class="number">243</span>, <span class="number">16384</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#filter</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(<span class="built_in">filter</span>((<span class="keyword">lambda</span> x:x&gt;<span class="number">0</span>),<span class="built_in">range</span>(-<span class="number">5</span>,<span class="number">5</span>)))</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#reduce</span></span><br><span class="line"><span class="comment">#每一步，reduce将当前的和或乘积以及列表中的下一个元素传给列出的Lambda函数</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reduce((<span class="keyword">lambda</span> x,y:x+y),[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="number">10</span></span><br></pre></td></tr></table></figure>
+<h1 id="18、推导和生成"><a href="#18、推导和生成" class="headerlink" title="18、推导和生成"></a>18、推导和生成</h1><h2 id="列表推导"><a href="#列表推导" class="headerlink" title="列表推导"></a>列表推导</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[expression <span class="keyword">for</span> target <span class="keyword">in</span> iterable]</span><br><span class="line"></span><br><span class="line">[expression <span class="keyword">for</span> target1 <span class="keyword">in</span> iterable <span class="keyword">if</span> condition1</span><br><span class="line">            <span class="keyword">for</span> target1 <span class="keyword">in</span> iterable <span class="keyword">if</span> condition2 ...</span><br><span class="line">            <span class="keyword">for</span> target1 <span class="keyword">in</span> iterable <span class="keyword">if</span> conditionN]</span><br></pre></td></tr></table></figure>
+<p>列表推导能实现的，一般也能通过map 和 filter 实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[x ** <span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>) <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span>]</span><br><span class="line"><span class="built_in">list</span>( <span class="built_in">map</span>((<span class="keyword">lambda</span> x: x**<span class="number">2</span>),<span class="built_in">filter</span>((<span class="keyword">lambda</span> x:x%<span class="number">2</span>==<span class="number">0</span>),<span class="built_in">range</span>(<span class="number">10</span>))))</span><br></pre></td></tr></table></figure>
+<h2 id="生成器函数与表达式"><a href="#生成器函数与表达式" class="headerlink" title="生成器函数与表达式"></a>生成器函数与表达式</h2><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000801191.png" alt="image-20210114000801191"></p>
+<p>二者都不会一次性地创建一个列表，它们节省了内存空间，并且允许计算时间分摊到各此结果请求上。</p>
+<h3 id="生成器函数：yield-vs-return"><a href="#生成器函数：yield-vs-return" class="headerlink" title="生成器函数：yield vs return"></a>生成器函数：yield vs return</h3><p>生成器函数创建时，它们被特殊地编译成一个支持选代协议的对象。井且在调用的时候它们不会返回一个结果：它们返回一个可以出现在任何迭代上下文中的结果生成器。这个生成器对象支持用一个自动创建的名为<code>__next__</code>的方法接口，来开始恢复或执行。</p>
+<p>和返回一个值并退出的函数不同，生成器函数能够自动挂起并在生成值的时刻 恢复之前的状态（代码位置和整个局部作用域）并继续函数的执行。生成器函数产生（yield）一个值，而不是返回（return）一个值。yield语句会挂起该函数并向调用者返回一个值，但同时保留了足够的状态使函数能从它离开的地方继续。</p>
+<p>生成器函数也可以有一条return语句，不过总是出现在def语句的末尾，用于终止值的生成。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#example</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gensquares</span>(<span class="params">N</span>):</span></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    <span class="keyword">yield</span> i ** <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>生成器函数，自身既是可迭代对象，又是迭代器，且只支持单次扫描</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = gensquares(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">iter</span>(y) <span class="keyword">is</span> y</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(y)</span><br><span class="line"><span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h3 id="扩展生成器函数协议：send-vs-next"><a href="#扩展生成器函数协议：send-vs-next" class="headerlink" title="扩展生成器函数协议：send vs next"></a>扩展生成器函数协议：send vs next</h3><p>send的作用是为yield赋值后，在调用一次<code>__next__</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">dog</span>(<span class="params">name</span>):</span></span><br><span class="line"><span class="meta">... </span>  print(<span class="string">&quot;&#123;&#125;开吃&quot;</span>.<span class="built_in">format</span>(name))</span><br><span class="line"><span class="meta">... </span>  <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line"><span class="meta">... </span>    food = <span class="keyword">yield</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">&quot;狗狗&#123;&#125;吃了:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(name,food))</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dh = dog(<span class="string">&#x27;shawn&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(dh)</span><br><span class="line">shawn开吃</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(dh)</span><br><span class="line">狗狗shawn吃了:<span class="literal">None</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">next</span>(dh)</span><br><span class="line">狗狗shawn吃了:<span class="literal">None</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dh.send(<span class="string">&#x27;骨头&#x27;</span>)</span><br><span class="line">狗狗shawn吃了:骨头</span><br></pre></td></tr></table></figure>
+<p>yield是一个表达式的形式，它的值可通过两种方式调用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">yield</span> X</span><br><span class="line"></span><br><span class="line">A = (<span class="keyword">yield</span> X)</span><br><span class="line">X = (<span class="keyword">yield</span> Y) + <span class="number">42</span></span><br></pre></td></tr></table></figure>
+<p>采用send方法可以编写一个能够被它的调用者终止的生成器，或是一个能够被重新定位内部处理的数据的生成器。</p>
+<h3 id="生成器表达式"><a href="#生成器表达式" class="headerlink" title="生成器表达式"></a>生成器表达式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x ** <span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+<p>生成器表达式可以出现任何迭代上下文中，就像生成器函数调用的结果那样。</p>
+<p>生成器表达式通常等效于3.x版本中的map调用，因为它们都是按需生成元素。</p>
+<p>生成器表达式也支持所有常见列表推导的语法——包括与之前遇到的filter函数调用类似的if 分句</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#filter在3.x版本中是一个可迭代对象</span></span><br><span class="line">line = <span class="string">&#x27;aa bb c&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;</span>.join(x <span class="keyword">for</span> x <span class="keyword">in</span> line.split() <span class="keyword">if</span> <span class="built_in">len</span>(x) &gt; <span class="number">1</span>)</span><br><span class="line"><span class="string">&#x27;&#x27;</span>.join(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: <span class="built_in">len</span>(x)&gt;<span class="number">1</span>, line.split()))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="生成器函数-VS-生成器表达式"><a href="#生成器函数-VS-生成器表达式" class="headerlink" title="生成器函数 VS 生成器表达式"></a>生成器函数 VS 生成器表达式</h3><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000810838.png" alt="image-20210114000810838"></p>
+<h2 id="生成器是单遍迭代对象"><a href="#生成器是单遍迭代对象" class="headerlink" title="生成器是单遍迭代对象"></a>生成器是单遍迭代对象</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000817800.png" alt="image-20210114000817800" style="zoom:50%;" />
+
+<p>内置类型支持多个迭代器与多次迭代，并且在活跃迭代器中传递，并反应它们的原位置修改</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000848054.png" alt="image-20210114000848054" style="zoom:50%;" />
+
+<h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><h3 id="生成器和迭代器的关系"><a href="#生成器和迭代器的关系" class="headerlink" title="生成器和迭代器的关系"></a>生成器和迭代器的关系</h3><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000900403.png" alt="image-20210114000900403" style="zoom:50%;" />
+
+<h3 id="yield语句是做什么的"><a href="#yield语句是做什么的" class="headerlink" title="yield语句是做什么的"></a>yield语句是做什么的</h3><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000911088.png" alt="image-20210114000911088" style="zoom:50%;" />
+
+<h3 id="map调用和列表推导的关系"><a href="#map调用和列表推导的关系" class="headerlink" title="map调用和列表推导的关系"></a>map调用和列表推导的关系</h3><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000924399.png" alt="image-20210114000924399" style="zoom:50%;" />
+
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2021-01-14</p></div> 
+    <div class="post-meta__cats"><a href="/heavyfish.github.io/categories/Python/" class="post-cats__link button">Python</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/heavyfish.github.io/2020/09/18/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C10%EF%BD%9E13/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            Python学习手册10～13
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+
+
+</main>
+
+            <footer class="footer">
+    
+
+
+    
+     
+ 
+
+ 
+    
+        
+        <p class="footer-copyright">
+            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
+        </p>
+    
+    
+    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+  
+
+
+
+ 
+
+
+    
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+    </body>
+</html>
