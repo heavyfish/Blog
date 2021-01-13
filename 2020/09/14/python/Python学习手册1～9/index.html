@@ -33,18 +33,27 @@
 
     <!-- OpenGraph -->
  
-    <meta name="description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式  字节码编译当程序执行时，Py">
+    <meta name="description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式 字节码编译当程序执行时，Pyt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python学习手册1～9">
 <meta property="og:url" content="https://heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/index.html">
 <meta property="og:site_name" content="速查笔记">
-<meta property="og:description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式  字节码编译当程序执行时，Py">
+<meta property="og:description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式 字节码编译当程序执行时，Pyt">
 <meta property="og:locale">
-<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20200914172258244.png">
-<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-6827-Vtk4m.png">
-<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-5882-BO4qO.png">
-<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916132610249.png">
-<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916132627532.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234300363.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234638578.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234737841.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234907384.png">
+<meta property="og:image" content="https://heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/image-20210113234919158.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234939840.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235019327.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235034131.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235044705.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235057829.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235105828.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235118434.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235131085.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235141921.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916132924204.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916133336921.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916133548656.png">
@@ -83,10 +92,10 @@
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918153132849.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918153418924.png">
 <meta property="article:published_time" content="2020-09-14T10:10:19.019Z">
-<meta property="article:modified_time" content="2021-01-13T14:52:10.327Z">
+<meta property="article:modified_time" content="2021-01-13T15:52:07.412Z">
 <meta property="article:author" content="Shenxr">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20200914172258244.png">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234300363.png">
 
 
     
@@ -203,16 +212,15 @@
 </ol>
 <h2 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h2><p>Python中，每个模块都是一个单独的命名空间。</p>
 <p>在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。</p>
-<h2 id="Python程序的执行方式"><a href="#Python程序的执行方式" class="headerlink" title="Python程序的执行方式"></a>Python程序的执行方式</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20200914172258244.png" alt="image-20200914172258244.png" style="zoom:50%;" />
-
+<h2 id="Python程序的执行方式"><a href="#Python程序的执行方式" class="headerlink" title="Python程序的执行方式"></a>Python程序的执行方式</h2><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234300363.png" alt="image-20210113234300363"></p>
 <h3 id="字节码编译"><a href="#字节码编译" class="headerlink" title="字节码编译"></a>字节码编译</h3><p>当程序执行时，Python内部（对用户是透明的）会先将源代码（Python代码文件中的语句）编译成字节码的形式。字节码是源代码底层的、与平台无关的表现形式。一条语句可能对应着一组字节码指令。</p>
-<p>![image-20200914172604438](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200914172604438.png)</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234638578.png" alt="image-20210113234638578"></p>
 <p>有时，我们执行Python程序后会看到 .pyc  后缀的文件，这就是字节码文件。 一般被 import 导入的库菜会生成 .pyc文件。有 .pyc 文件，可以加速程序的运行，但没有也没关系。</p>
 <h3 id="Python虚拟机（PVM）"><a href="#Python虚拟机（PVM）" class="headerlink" title="Python虚拟机（PVM）"></a>Python虚拟机（PVM）</h3><p>程序编译成字节码后，会发送给Python虚拟机（Python virtual Machine）上来执行。PVM不是一个独立的程序，它是解释器中的运行引擎。从技术上讲，它是所谓“Python解释器”的最后一步。</p>
 <h3 id="Python解释器"><a href="#Python解释器" class="headerlink" title="Python解释器"></a>Python解释器</h3><p>当Python被安装到机器后，它包含了一些最小化的组件：一个解释器和支持的库。当我们执行脚本时，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python xxx.py</span><br></pre></td></tr></table></figure>
 <p>实际上命令<code>python</code>就是解释器（一个可执行程序），解释器中，包含了编译和PVM的相关功能。</p>
-<p>![image-20210111233416891](/Users/shenshawn/Library/Application Support/typora-user-images/image-20210111233416891.png)</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234737841.png" alt="image-20210113234737841"></p>
 <p>一般默认的Python解释器都是Cpython，即用C语言编写的解释器。但也有其他语言编写的解释器，如 JPython，用Java编写的解释器。</p>
 <h3 id="Python执行优化工具"><a href="#Python执行优化工具" class="headerlink" title="Python执行优化工具"></a>Python执行优化工具</h3><p>Python还有一些优化工具，使计算机可以更快的速度运行Python代码。如</p>
 <ul>
@@ -254,13 +262,13 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class IterationExample &#123;</span><br><span class="line">   public static void main(String args[]) &#123;</span><br><span class="line">      <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">         System.out.println(i + <span class="string">&quot; &quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="3、数值类型"><a href="#3、数值类型" class="headerlink" title="3、数值类型"></a>3、数值类型</h1><p><strong>小数和分数</strong></p>
 <p>重要的是知道浮点数在运算时产生的显示异常（因为硬件本身精度的原因导致）</p>
-<p>![image-20200915154648140](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915154648140.png)</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234907384.png" alt="image-20210113234907384"></p>
 <p>通过使用小数和分数，可使结果显示的更为精确</p>
-<p>![image-20200915154843008](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915154843008.png)</p>
-<p>![image-20200915154931468](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915154931468.png)</p>
+<p><img src="Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/image-20210113234919158.png" alt="image-20210113234919158"></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234939840.png" alt="image-20210113234939840"></p>
 <p><strong>集合</strong></p>
 <p>集合是不可变对象，因此集合中只能嵌套元组。集合在比较两个数字列表是否一致时很有用，其省去了逐个数字排序比较的开销。</p>
-<p>![image-20200915155319085](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915155319085.png)</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235019327.png" alt="image-20210113235019327"></p>
 <p><strong>布尔型（bool）</strong></p>
 <p>bool实际上是内置整数类型<code>int</code>的子类（从面向对象的角度看）。True和False的行为与整数1和0是一样的，只不过它们有独特的显示逻辑：它们是作为关键字True和False显示的，而不是数字1和0。bool为这两个对象重新定义了str和repr的字符串格式。</p>
 <h1 id="4、动态类型"><a href="#4、动态类型" class="headerlink" title="4、动态类型"></a>4、动态类型</h1><h2 id="变量、对象和引用"><a href="#变量、对象和引用" class="headerlink" title="变量、对象和引用"></a>变量、对象和引用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; 3</span><br></pre></td></tr></table></figure>
@@ -270,7 +278,7 @@
 <li>创建一个变量a，如果它还没有被创建的话</li>
 <li>将变量与新的对象3相连接</li>
 </ol>
-<p>![image-20200915162929466](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915162929466.png)</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235034131.png" alt="image-20210113235034131"></p>
 <p>变量仅仅是个名字，类型的概念存在于对象而不是变量名中。变量是通用的，它只是在一个特定的时间点，简单地引用了一个特定的对象而已。</p>
 <p>当变量出现在表达式中时，它会马上被当前引用的对象所代替，无论这个对象是什么类型。</p>
 <p>根据上图，具体来讲：</p>
@@ -284,21 +292,21 @@
 <p>如上述的 <code>a=3</code>。整数对象3，包含了值3 以及一个标识符，标识符是一个指向int对象的指针。</p>
 <p>因为a引用了3，此时对象3的至少有1个引用。当一个对象的引用为0时，该对象的内存空间会被放入可分配内存池中，这就是Python的垃圾自动回收。</p>
 <h2 id="共享引用"><a href="#共享引用" class="headerlink" title="共享引用"></a>共享引用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;3</span><br><span class="line">b&#x3D;a</span><br></pre></td></tr></table></figure>
-<p>![image-20200915164343173](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915164343173.png)</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235044705.png" alt="image-20210113235044705"></p>
 <p>上述代码是共享引用。共享引用的关键点在于，如果共享引用了可变类型对象，那么需要注意修改该对象时，对其他引用也会产生影响。</p>
 <p>当想让两个变量，拥有相同的列表值时，可以通过：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#共享引用</span></span><br><span class="line">a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b=a</span><br><span class="line"></span><br><span class="line"><span class="comment">#为b生成新的内存区域</span></span><br><span class="line">b=a[:]</span><br><span class="line">b=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b=copy.copy(a)</span><br><span class="line">b=copy.deepcopy(a)</span><br></pre></td></tr></table></figure>
 <p>浅拷贝：嵌套的列表使用同一个引用</p>
-<p><img src="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-6827-Vtk4m.png" alt="img"></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235057829.png" alt="image-20210113235057829"></p>
 <p>深拷贝：嵌套的列表使用不同的引用</p>
-<p><img src="https://www.runoob.com/wp-content/uploads/2017/03/1489720930-5882-BO4qO.png" alt="img"></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235105828.png" alt="image-20210113235105828"></p>
 <h2 id="共享引用和相等"><a href="#共享引用和相等" class="headerlink" title="共享引用和相等"></a>共享引用和相等</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;[1,2,3]</span><br><span class="line">b&#x3D;a</span><br><span class="line">c&#x3D;[1,2,3]</span><br></pre></td></tr></table></figure>
 <p><code>a==b</code>，<code>a==c</code>，返回的是<code>True</code>。==代表的是值的比较</p>
 <p><code>a is b</code> 返回 <code>True</code>，但是<code>a is c</code> 返回<code>False</code>，因为is 判断的是两个变量的引用指针是否是同一个</p>
 <p>如果想查询一个对象的引用次数，可以：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.getrefcount(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h2><p>弱引用不会增加对象的引用数量。</p>
-<p>![image-20200915165557437](/Users/shenshawn/Library/Application Support/typora-user-images/image-20200915165557437.png)</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235118434.png" alt="image-20210113235118434"></p>
 <h1 id="5、字符串基础"><a href="#5、字符串基础" class="headerlink" title="5、字符串基础"></a>5、字符串基础</h1><blockquote>
 <p>首先记住两句话：</p>
 <p><strong>1.将字符转换为字节的方式称为编码</strong></p>
@@ -311,10 +319,8 @@
 <li><strong>Python 2.x中</strong>：unicode字符串表示Unicode文本，str字符串同时处理8位文本和二进制数据，而bytearray从3.X 向后移植，在Python2.6和随后版本可用。普通文件的内容是有str直接表示的字节，但是codes模块打开Unicode文本文件，处理编码，并将内容作为Unicode对象显示。</li>
 </ul>
 <h2 id="字符串基础"><a href="#字符串基础" class="headerlink" title="字符串基础"></a>字符串基础</h2><p>字符串可以用来表示能够编码为文本或字节的任何事物。</p>
-<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916132610249.png" alt="image-20200916132610249" style="zoom:50%;" />
-
-<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916132627532.png" alt="image-20200916132627532" style="zoom:50%;" />
-
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235131085.png" alt="image-20210113235131085"></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235141921.png" alt="image-20210113235141921"></p>
 <p>几个要点：</p>
 <ul>
 <li><p>单引号和双引号字符串是一样的</p>
@@ -560,7 +566,7 @@
 <h2 id="通用的表达式"><a href="#通用的表达式" class="headerlink" title="通用的表达式"></a>通用的表达式</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918153418924.png" alt="image-20200918153418924" style="zoom:50%;" />
     </div>
      
-    <div class="post-footer__meta"><p>updated at 2021-01-13</p></div> 
+    <div class="post-footer__meta"><p>更新于 2021-01-13</p></div> 
     <div class="post-meta__cats"><a href="/heavyfish.github.io/categories/Python/" class="post-cats__link button">Python</a></div> 
 </article>
 
