@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1、概览1.1、容器技术介绍1.1.1、命名空间和Cgroup       UTS 名称空间：又称为主机名名称空间，保存内核名称、版本以及主机名和域名。  ipc 名称空间：进程间通信名称空间，IPC的隔离就是阻断进程间通信，主要是信号量、队列和共享内存。运行主机进程通过上面的机制进行通信。  mnt 名称空间：提供对磁盘挂载点和文件系统的隔离能力。同一主机上的不同进程访问相同的路径会得到相同的内">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes in Action 1～5">
+<meta property="og:url" content="https://heavyfish.github.io/2020/10/29/k8s/Kubernets%20in%20Action%20-%20%E7%AC%94%E8%AE%B01%EF%BD%9E5/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="1、概览1.1、容器技术介绍1.1.1、命名空间和Cgroup       UTS 名称空间：又称为主机名名称空间，保存内核名称、版本以及主机名和域名。  ipc 名称空间：进程间通信名称空间，IPC的隔离就是阻断进程间通信，主要是信号量、队列和共享内存。运行主机进程通过上面的机制进行通信。  mnt 名称空间：提供对磁盘挂载点和文件系统的隔离能力。同一主机上的不同进程访问相同的路径会得到相同的内">
+<meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114230955066.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231005841.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231119419.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029165644793.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231025490.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231034261.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231154199.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231222684.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231235787.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231252601.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029172252484.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231302412.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231317248.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231336882.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029173632935.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029173813286.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029174051789.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029174132223.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029175111203.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029203803094.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029203929099.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029204007577.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029204034572.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029204531837.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029204953445.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029210836745.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029211232513.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029211710312.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029211915638.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029212200216.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029212420815.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029212443564.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029213056944.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029213502340.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029213821336.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029213915166.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029214018322.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029234222394.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029234323102.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029234341428.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029234532119.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029235036169.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029235646469.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029235717681.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029235812649.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029235921158.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201029235943330.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030000011278.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030000506679.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030000657397.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030000959047.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030001349403.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030001656144.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030001852912.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030002212638.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030002747694.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030003035166.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030003412353.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030004023802.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030004113919.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030004335504.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030004806213.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030004857901.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030005255378.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030005417184.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030005525078.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030015151075.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030015401789.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030015536158.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030015847091.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030020154728.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030020445120.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030020612610.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030020707093.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030020925003.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030021214804.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030021351307.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030153025655.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030153711897.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030153821813.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030154059858.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030162935708.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030163120804.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030163150586.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030163308001.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030163327787.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030163554518.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030163952250.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030164152629.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030164239225.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030164608532.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030164634556.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030164735532.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030164923846.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030165029434.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030165233694.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030170142898.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030170313894.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030170404458.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030170550404.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030170743332.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030170842356.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030170955105.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030171024890.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030171138908.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030171249164.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201030171322995.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031150554314.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031154437696.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031154621520.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031154722878.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031154747963.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031155005359.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031155355706.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031155608493.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031155751298.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031160024117.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031160210279.png">
+<meta property="article:published_time" content="2020-10-29T08:32:46.173Z">
+<meta property="article:modified_time" content="2021-01-14T15:14:13.556Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114230955066.png">
+
+<link rel="canonical" href="https://heavyfish.github.io/2020/10/29/k8s/Kubernets%20in%20Action%20-%20%E7%AC%94%E8%AE%B01%EF%BD%9E5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Kubernetes in Action 1～5 | 速查笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">速查笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/heavyfish.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/10/29/k8s/Kubernets%20in%20Action%20-%20%E7%AC%94%E8%AE%B01%EF%BD%9E5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="速查笔记">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kubernetes in Action 1～5
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-29 16:32:46" itemprop="dateCreated datePublished" datetime="2020-10-29T16:32:46+08:00">2020-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-14 23:14:13" itemprop="dateModified" datetime="2021-01-14T23:14:13+08:00">2021-01-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Kubernetes/" itemprop="url" rel="index"><span itemprop="name">Kubernetes</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1、概览"><a href="#1、概览" class="headerlink" title="1、概览"></a>1、概览</h1><h2 id="1-1、容器技术介绍"><a href="#1-1、容器技术介绍" class="headerlink" title="1.1、容器技术介绍"></a>1.1、容器技术介绍</h2><h3 id="1-1-1、命名空间和Cgroup"><a href="#1-1-1、命名空间和Cgroup" class="headerlink" title="1.1.1、命名空间和Cgroup"></a>1.1.1、命名空间和Cgroup</h3><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114230955066.png" alt="image-20210114230955066" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231005841.png" alt="image-20210114231005841" style="zoom:50%;" />
+
+
+
+<ol>
+<li><p>UTS 名称空间：又称为主机名名称空间，保存内核名称、版本以及主机名和域名。</p>
+</li>
+<li><p>ipc 名称空间：进程间通信名称空间，IPC的隔离就是阻断进程间通信，主要是信号量、队列和共享内存。运行主机进程通过上面的机制进行通信。</p>
+</li>
+<li><p>mnt 名称空间：提供对磁盘挂载点和文件系统的隔离能力。同一主机上的不同进程访问相同的路径会得到相同的内容，因为它们共享本地主机的磁盘和文件系统。</p>
+<p>在同一POD内容器之间挂载点名称空间是隔离的，如果该POD的多个容器挂载一个POD级别的Volume，那么它们就可以实现挂载点的共享，但共享的也仅仅是这一个Volume并不是整个文件系统</p>
+</li>
+<li><p>net 名称空间：网络名称空间，同一主机上的不同进程可以进行localhost或者本地unix socket通信。在单独启动容器的时候不同容器是隔离的，但是在POD中不同容器通过一个Infra容器来进行共享网络名称空间，其原理是其他用户自己定义的容器都Join这个Infra容器的网络。</p>
+</li>
+<li><p>PID 名称空间：进程ID名称空间，同一主机上的不同进程在同一PID空间内可以看到其他进程的ID，并且同一PID空间的进程的ID不会重复。另外PID名称空间有层级关系，子空间看不到父空间的内容，但是父空间可以管理子空间，比如发送信号。</p>
+<p>在POD中则对应为同一POD内的不同容器可以看到对方的进程ID。默认不是共享的，可以设置POD的<code>shareProcessNamespace</code>这个值为true来进行共享，默认为false。</p>
+</li>
+<li><p>User 名称空间：隔离用户、组以及相关用户能力的。也就是在不同的User Namespace中，相同的用户可以有不同的UID或者不同的权限。另外还可以通过映射的方式把某个User Namespace的用户映射到另外一个User Namespace的用户上，这样这两个名称可能不同的用户就具有相同的权限。</p>
+</li>
+</ol>
+<blockquote>
+<p>参见这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/rexcheny/p/11017146.html">同一个POD中默认共享哪些名称空间</a></p>
+</blockquote>
+<h3 id="1-1-2、进程与namespace关联"><a href="#1-1-2、进程与namespace关联" class="headerlink" title="1.1.2、进程与namespace关联"></a>1.1.2、进程与namespace关联</h3><p>一个进程可以属于多个namesapce,既然namespace和进程相关，那么在task_struct结构体中就会包含和namespace相关联的变量。在task_struct 结构中有一个指向namespace结构体的指针nsproxy。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct task_struct</span><br><span class="line">&#123;</span><br><span class="line">……..</span><br><span class="line">&#x2F;* namespaces *&#x2F;</span><br><span class="line">         struct nsproxy *nsproxy;</span><br><span class="line">…….</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再看一下<a target="_blank" rel="noopener" href="http://lxr.free-electrons.com/source/include/linux/nsproxy.h#L29">nsproxy</a>是如何定义的，在<a target="_blank" rel="noopener" href="http://lxr.free-electrons.com/source/include/linux/nsproxy.h">include/linux/nsproxy.h</a>文件中，这里一共定义了5个各自的命名空间结构体，在该结构体中定义了5个指向各个类型namespace的指针，由于多个进程可以使用同一个namespace，所以nsproxy可以共享使用，count字段是该结构的引用计数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* &#x27;count&#x27; is the number of tasks holding a reference.</span></span><br><span class="line"><span class="comment"> * The count for each namespace, then, will be the number</span></span><br><span class="line"><span class="comment"> * of nsproxies pointing to it, not the number of tasks.</span></span><br><span class="line"><span class="comment"> * The nsproxy is shared by tasks which share all namespaces.</span></span><br><span class="line"><span class="comment"> * As soon as a single namespace is cloned or unshared, the</span></span><br><span class="line"><span class="comment"> * nsproxy is copied</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">nsproxy</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">         <span class="keyword">atomic_t</span> count;</span><br><span class="line">         <span class="class"><span class="keyword">struct</span> <span class="title">uts_namespace</span> *<span class="title">uts_ns</span>;</span></span><br><span class="line">         <span class="class"><span class="keyword">struct</span> <span class="title">ipc_namespace</span> *<span class="title">ipc_ns</span>;</span></span><br><span class="line">         <span class="class"><span class="keyword">struct</span> <span class="title">mnt_namespace</span> *<span class="title">mnt_ns</span>;</span></span><br><span class="line">         <span class="class"><span class="keyword">struct</span> <span class="title">pid_namespace</span> *<span class="title">pid_ns_for_children</span>;</span></span><br><span class="line">         <span class="class"><span class="keyword">struct</span> <span class="title">net</span>             *<span class="title">net_ns</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="1-1-3、Docker"><a href="#1-1-3、Docker" class="headerlink" title="1.1.3、Docker"></a>1.1.3、Docker</h3><p>Docker是一个打包、分发和运行应用程序的平台。它允许将你的应用程序和应用程序所依赖的整个环境打包在一起。</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231119419.png" alt="image-20210114231119419" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029165644793.png" alt="image-20201029165644793" style="zoom:50%;" />
+
+<h2 id="1-2、Kubernetes介绍"><a href="#1-2、Kubernetes介绍" class="headerlink" title="1.2、Kubernetes介绍"></a>1.2、Kubernetes介绍</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231025490.png" alt="image-20210114231025490" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231034261.png" alt="image-20210114231034261" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231154199.png" alt="image-20210114231154199" style="zoom:50%;" />
+
+<h1 id="2、开始使用Kubetnetes和Docker"><a href="#2、开始使用Kubetnetes和Docker" class="headerlink" title="2、开始使用Kubetnetes和Docker"></a>2、开始使用Kubetnetes和Docker</h1><h2 id="共享容器镜像"><a href="#共享容器镜像" class="headerlink" title="共享容器镜像"></a>共享容器镜像</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231222684.png" alt="image-20210114231222684" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231235787.png" alt="image-20210114231235787" style="zoom:50%;" />
+
+<h2 id="在Kubernetes运行第一个容器"><a href="#在Kubernetes运行第一个容器" class="headerlink" title="在Kubernetes运行第一个容器"></a>在Kubernetes运行第一个容器</h2><h3 id="1、部署Node-js应用"><a href="#1、部署Node-js应用" class="headerlink" title="1、部署Node.js应用"></a>1、部署Node.js应用</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">直接创建一个pod，而不需要json 或 YAML 文件</span></span><br><span class="line">kubectl run kubia --image=luksa/kubia --port=8080 --generator=run/vl</span><br></pre></td></tr></table></figure>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231252601.png" alt="image-20210114231252601" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029172252484.png" alt="image-20201029172252484" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231302412.png" alt="image-20210114231302412" style="zoom:50%;" />
+
+<h3 id="2、访问web应用"><a href="#2、访问web应用" class="headerlink" title="2、访问web应用"></a>2、访问web应用</h3><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231317248.png" alt="image-20210114231317248" style="zoom:50%;" />
+
+<p>要创建服务，需要告知Kubernetes对外暴露之前创建的ReplicationController：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl expose rc kubia --type=LoadBalancer --name kubia-http</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：这里的rc 是 ReplicationController 的缩写。其余的缩写例如，pods 的缩写是po，service的缩写是svc，等等</p>
+</blockquote>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114231336882.png" alt="image-20210114231336882" style="zoom:50%;" />
+
+<h3 id="3、系统的逻辑部分"><a href="#3、系统的逻辑部分" class="headerlink" title="3、系统的逻辑部分"></a>3、系统的逻辑部分</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029173632935.png" alt="image-20201029173632935" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029173813286.png" alt="image-20201029173813286" style="zoom:50%;" />
+
+<h3 id="4、水平伸缩应用"><a href="#4、水平伸缩应用" class="headerlink" title="4、水平伸缩应用"></a>4、水平伸缩应用</h3><p>为了增加Pod 的副本数，需要改变ReplicationController期望的副本数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale re kubia --replicas=3</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029174051789.png" alt="image-20201029174051789" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029174132223.png" alt="image-20201029174132223" style="zoom:50%;" />
+
+<h1 id="3、Pod：运行于Kubernetes中的容器"><a href="#3、Pod：运行于Kubernetes中的容器" class="headerlink" title="3、Pod：运行于Kubernetes中的容器"></a>3、Pod：运行于Kubernetes中的容器</h1><h2 id="3-1、介绍Pod"><a href="#3-1、介绍Pod" class="headerlink" title="3.1、介绍Pod"></a>3.1、介绍Pod</h2><p>Pod是一组并置的容器，一个pod绝不会跨越多个工作节点。</p>
+<h3 id="为何多个容器比单个容器中包含多个进程要好"><a href="#为何多个容器比单个容器中包含多个进程要好" class="headerlink" title="为何多个容器比单个容器中包含多个进程要好"></a>为何多个容器比单个容器中包含多个进程要好</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029175111203.png" alt="image-20201029175111203" style="zoom:50%;" />
+
+<h3 id="容器如何共享相同的IP和端口空间"><a href="#容器如何共享相同的IP和端口空间" class="headerlink" title="容器如何共享相同的IP和端口空间"></a>容器如何共享相同的IP和端口空间</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029203803094.png" alt="image-20201029203803094" style="zoom:50%;" />
+
+<h3 id="Pod间的网络"><a href="#Pod间的网络" class="headerlink" title="Pod间的网络"></a>Pod间的网络</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029203929099.png" alt="image-20201029203929099" style="zoom:50%;" />
+
+<h3 id="何时在Pod中使用多个容器"><a href="#何时在Pod中使用多个容器" class="headerlink" title="何时在Pod中使用多个容器"></a>何时在Pod中使用多个容器</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029204007577.png" alt="image-20201029204007577" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029204034572.png" alt="image-20201029204034572" style="zoom:50%;" />
+
+<h2 id="3-2、以YAML或JSON描述文件创建Pod"><a href="#3-2、以YAML或JSON描述文件创建Pod" class="headerlink" title="3.2、以YAML或JSON描述文件创建Pod"></a>3.2、以YAML或JSON描述文件创建Pod</h2><p>Pod和其他Kubernetes资源通常是通过向 Kubernetes REST API 提供 JSON 或 YAML 描述文件来创建的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">检查现有Pod 的 YAML 描述文件</span></span><br><span class="line">kubectl get po kubia-zxzij -o ymal</span><br></pre></td></tr></table></figure>
+<h3 id="Pod定义的主要部分"><a href="#Pod定义的主要部分" class="headerlink" title="Pod定义的主要部分"></a>Pod定义的主要部分</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029204531837.png" alt="image-20201029204531837" style="zoom:50%;" />
+
+<ul>
+<li>metadata：包括名称、命名空间、标签和关于该容器的信息</li>
+<li>spec：包含pod内容的实际说明，例如Pod的容器、卷和其他数据</li>
+<li>status：包含运行中的pod 的当前信息，例如Pod 所处的条件、每个容器的描述和状态、以及内部IP和其他基本信息。【status 部分包含只读的运行时数据，该数据展示了给定时刻的资源状态。在创建新Pod时，永远不需要提供status 部分】</li>
+</ul>
+<p>其他对象也有着上述相同的结构。</p>
+<h3 id="为Pod创建简单的YMAL描述文件"><a href="#为Pod创建简单的YMAL描述文件" class="headerlink" title="为Pod创建简单的YMAL描述文件"></a>为Pod创建简单的YMAL描述文件</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029204953445.png" alt="image-20201029204953445" style="zoom:50%;" />
+
+
+
+<p><strong>使用 Kubectl explain 来发现可能的API 对象字段</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl explain pods</span><br><span class="line">kubectl explain pods.spec</span><br></pre></td></tr></table></figure>
+<h3 id="创建Pod"><a href="#创建Pod" class="headerlink" title="创建Pod"></a>创建Pod</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> kubectl create -f 用于从 YMAL 或 JSON 文件创建任何资源</span></span><br><span class="line">kubectl create -f kubia-manual.ymal</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 得到运行中 Pod 的完整定义</span></span><br><span class="line">kubectl getpo kubia-manual -o yaml</span><br><span class="line">kubectl getpo kubia-manual -o json</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看新创的 Pod</span></span><br><span class="line">kubectl get pods</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看容器日志</span></span><br><span class="line">docker logs &lt;container id&gt;</span><br><span class="line">kubectl logs kubia-manual</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取多容器pod 的日志时指定容器名称</span></span><br><span class="line">kubectl logs kubia-manual -c kubia</span><br></pre></td></tr></table></figure>
+<h3 id="通过端口转发访问Pod"><a href="#通过端口转发访问Pod" class="headerlink" title="通过端口转发访问Pod"></a>通过端口转发访问Pod</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029210836745.png" alt="image-20201029210836745" style="zoom:50%;" />
+
+<h2 id="3-3、使用标签组织Pod"><a href="#3-3、使用标签组织Pod" class="headerlink" title="3.3、使用标签组织Pod"></a>3.3、使用标签组织Pod</h2><p>标签是可以附加到资源的任意键值对。通常在我们创建资源时就会将标签附加到资源上，但之后我们可以再添加其他标签，或者修改现有的标签值，而无须重新创建资源。</p>
+<h3 id="创建Pod时指定标签"><a href="#创建Pod时指定标签" class="headerlink" title="创建Pod时指定标签"></a>创建Pod时指定标签</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029211232513.png" alt="image-20201029211232513" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f kubia-manual-with-labels.yaml</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出 label</span></span><br><span class="line">kubectl get po --show-labels</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示 指定 label</span></span><br><span class="line">kubectl get po -L creation_method,env</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 手动添加 label</span></span><br><span class="line">kubecl label po test_pod creation_method=manual</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 更改现有标签时，需使用 --overwrite 选项</span></span><br><span class="line">kubecl label po kubia-manual-v2 env=debug --overwrite</span><br></pre></td></tr></table></figure>
+<h3 id="通过标签选择器列出Pod子集"><a href="#通过标签选择器列出Pod子集" class="headerlink" title="通过标签选择器列出Pod子集"></a>通过标签选择器列出Pod子集</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029211710312.png" alt="image-20201029211710312" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 指定键值</span></span><br><span class="line">kubectl get po -1 creation_method=manual</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定键</span></span><br><span class="line">kubectl get po -1 env</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出没有该键的 pod</span></span><br><span class="line">kubectl get po -1 &#x27;!env&#x27;</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029211915638.png" alt="image-20201029211915638" style="zoom:50%;" />
+
+<h3 id="将Pod-调度到特定节点"><a href="#将Pod-调度到特定节点" class="headerlink" title="将Pod 调度到特定节点"></a>将Pod 调度到特定节点</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 使用标签分类 工作节点</span></span><br><span class="line">kubectl label node gke-kubia-85f6-node-Orrx gpu=true</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029212200216.png" alt="image-20201029212200216" style="zoom:50%;" />
+
+<blockquote>
+<p>通过键 kubernetes.io/hostname 可将Pod 调度到指定节点</p>
+</blockquote>
+<h2 id="3-4、注解Pod"><a href="#3-4、注解Pod" class="headerlink" title="3.4、注解Pod"></a>3.4、注解Pod</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029212420815.png" alt="image-20201029212420815" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029212443564.png" alt="image-20201029212443564" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 添加注解</span></span><br><span class="line">kubect1 annotate pod kubia-manual mycompany.com/someannottion=&quot;foo bar&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查找Pod的信息，找到注解</span></span><br><span class="line">kubectl describe pod kubia-manual</span><br></pre></td></tr></table></figure>
+<h2 id="3-5、使用命名空间对资源分组"><a href="#3-5、使用命名空间对资源分组" class="headerlink" title="3.5、使用命名空间对资源分组"></a>3.5、使用命名空间对资源分组</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029213056944.png" alt="image-20201029213056944" style="zoom:50%;" />
+
+<p>大多数类型的资源都与命名空间相关，但仍有例外，比如节点资源</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 列出ns</span></span><br><span class="line">kubectl get ns</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出指定 ns 的 pod</span></span><br><span class="line">kubectl get po --namespace kube-system</span><br><span class="line">kubectl get po -n kube-system</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>除了隔离资源，命名空间还可用于仅允许某些用户访问某些特定资源，甚至限制单个用户可用的计算资源数量</p>
+</blockquote>
+<h3 id="创建命名空间"><a href="#创建命名空间" class="headerlink" title="创建命名空间"></a>创建命名空间</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029213502340.png" alt="image-20201029213502340" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl create - f custom-namespace.yaml</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 直接创建ns</span> </span><br><span class="line">kubectl create namespace custom-namespace</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建资源时指定ns</span></span><br><span class="line">kubectl create -f kubia-manual.yam1 -n custom-namespace</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029213821336.png" alt="image-20201029213821336" style="zoom:50%;" />
+
+<h3 id="命名空间提供的隔离"><a href="#命名空间提供的隔离" class="headerlink" title="命名空间提供的隔离"></a>命名空间提供的隔离</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029213915166.png" alt="image-20201029213915166" style="zoom:50%;" />
+
+<h2 id="3-6、停止和移除Pod"><a href="#3-6、停止和移除Pod" class="headerlink" title="3.6、停止和移除Pod"></a>3.6、停止和移除Pod</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除指定Pod</span></span><br><span class="line">kubectl delete po pod1 pod2</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029214018322.png" alt="image-20201029214018322" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 通过 label 删除 pod</span></span><br><span class="line">kubectl delete po -1 rel=canary</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除整个命名空间，其中的所有资源都会被自动删除</span></span><br><span class="line">kubectl delete ns custom-namespace</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除 命名空间中的 所有 pod</span></span><br><span class="line">kubectl delete po --all</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除 命名空间中的 所有资源（第一个 all 指所有资源类型）</span></span><br><span class="line">kubectl delete all --all</span><br></pre></td></tr></table></figure>
+<h1 id="4、副本机制和其他控制器：部署托管的Pod"><a href="#4、副本机制和其他控制器：部署托管的Pod" class="headerlink" title="4、副本机制和其他控制器：部署托管的Pod"></a>4、副本机制和其他控制器：部署托管的Pod</h1><p>手动创建的未托管Pod（即：未通过ReplicationSet、Deployment…创建的Pod），Kubernetes将自动监控它们，并在它们失败时自动重启它们。但如果整个节点失败，这些Pod将不会再其他节点重建。这就是需要控制器的原因。</p>
+<h2 id="4-1、存活探针"><a href="#4-1、存活探针" class="headerlink" title="4.1、存活探针"></a>4.1、存活探针</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029234222394.png" alt="image-20201029234222394" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029234323102.png" alt="image-20201029234323102" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029234341428.png" alt="image-20201029234341428" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029234532119.png" alt="image-20201029234532119" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看前一个容器的日志（ kubectl logs 查看的是当前容器的日志，容器重启后，要查看前一个容器的日志，就需要加上 --previous ）</span></span><br><span class="line">kubectl logs mypod --previous</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 也可以通过 describe 查看前个容器的重启原因</span></span><br><span class="line">kubectl describe po kubia-liveness</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：当容器被强行终止时，会创建一个全新的容器—-而不是重启原来的容器。</p>
+</blockquote>
+<h3 id="4-1-1、存活探针的属性"><a href="#4-1-1、存活探针的属性" class="headerlink" title="4.1.1、存活探针的属性"></a>4.1.1、存活探针的属性</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029235036169.png" alt="image-20201029235036169" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 设置初识延迟，使用 initalDelaySeconds 属性，kubetnetes会在第一次探测前等待15s</span></span><br><span class="line">livenessProbe:</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /</span><br><span class="line">    prot: 8000</span><br><span class="line">  initalDelaySeconds: 15</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：退出代码137（describe可看到）表示进程被外部信号终止， 表示退出代码为128+9 (SIGKILL)。 同样， 退出代码143对应于128+15 (SIGTERM)。</p>
+</blockquote>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029235646469.png" alt="image-20201029235646469" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029235717681.png" alt="image-20201029235717681" style="zoom:50%;" />
+
+<h2 id="4-2、ReplicationController"><a href="#4-2、ReplicationController" class="headerlink" title="4.2、ReplicationController"></a>4.2、ReplicationController</h2><h3 id="4-2-1、概览"><a href="#4-2-1、概览" class="headerlink" title="4.2.1、概览"></a>4.2.1、概览</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029235812649.png" alt="image-20201029235812649" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029235921158.png" alt="image-20201029235921158" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201029235943330.png" alt="image-20201029235943330" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030000011278.png" alt="image-20201030000011278" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030000506679.png" alt="image-20201030000506679" style="zoom:50%;" />
+
+<h3 id="4-2-2、创建RC"><a href="#4-2-2、创建RC" class="headerlink" title="4.2.2、创建RC"></a>4.2.2、创建RC</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030000657397.png" alt="image-20201030000657397" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030000959047.png" alt="image-20201030000959047" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 获取 rc 的信息</span></span><br><span class="line">kubectl get rc</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看 rc 的详情</span></span><br><span class="line">kubectl describe rc &lt;rc_name&gt;</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030001349403.png" alt="image-20201030001349403" style="zoom:50%;" />
+
+<h3 id="4-2-3、Pod从RC的移入移出"><a href="#4-2-3、Pod从RC的移入移出" class="headerlink" title="4.2.3、Pod从RC的移入移出"></a>4.2.3、Pod从RC的移入移出</h3><p>由ReplicationController创建的pod并不是绑定到ReplicationController。 在任何时刻， ReplicationController管理与标签选择器匹配的pod。 通过更改pod的标 签， 可以将它 从ReplicationController的作用域中添加或删除。 它甚至可以从一个ReplicationController 移动到另一个。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030001656144.png" alt="image-20201030001656144" style="zoom:50%;" />
+
+<h3 id="4-2-4、修改Pod模板"><a href="#4-2-4、修改Pod模板" class="headerlink" title="4.2.4、修改Pod模板"></a>4.2.4、修改Pod模板</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030001852912.png" alt="image-20201030001852912" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">编辑修改 rc（可在其中，修改Pod模板）</span></span><br><span class="line">kubectl edit rc &lt;rc_name&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-4、水平缩放Pod"><a href="#4-2-4、水平缩放Pod" class="headerlink" title="4.2.4、水平缩放Pod"></a>4.2.4、水平缩放Pod</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 直接通过命令修改</span></span><br><span class="line">kubectl scale re &lt;rc_name&gt; --replicas=lO</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030002212638.png" alt="image-20201030002212638" style="zoom:50%;" />
+
+<h3 id="4-2-5、删除rc"><a href="#4-2-5、删除rc" class="headerlink" title="4.2.5、删除rc"></a>4.2.5、删除rc</h3><p>当你通过 kubectl delete 删除 ReplicationController 时， pod 也会被删除。 但是由于由 ReplicationController 创建的 pod 不是 ReplicationController 的组成部分， 只是由其进行管理， 因此可以只删除ReplicationController 并保待 pod 运行。剩下的Pod可以再次被RC 或 ReplicaSet管理</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 只删除 rc</span></span><br><span class="line">kubectl delete re &lt;rc_name&gt; --cascade=false</span><br></pre></td></tr></table></figure>
+<h2 id="4-3、使用ReplicaSet而不是RC"><a href="#4-3、使用ReplicaSet而不是RC" class="headerlink" title="4.3、使用ReplicaSet而不是RC"></a>4.3、使用ReplicaSet而不是RC</h2><p>ReplicaSet 的类似资源 。 它是新一 代的 ReplicationController。但你通常 不会直接创建它们， 而是在创建更高层级的 Deployment 资源时自动创建它们。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030002747694.png" alt="image-20201030002747694" style="zoom:50%;" />
+
+<h3 id="4-3-1、创建ReplicaSet"><a href="#4-3-1、创建ReplicaSet" class="headerlink" title="4.3.1、创建ReplicaSet"></a>4.3.1、创建ReplicaSet</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030003035166.png" alt="image-20201030003035166" style="zoom:50%;" />
+
+<p>唯 一的区别在选择器中。不必在selector属性中直接列出pod需要的标签， 而是在selector.rnatchLabels下指定它们。这是在ReplicaSet中定义标签选择器的更简单(也更不具表达力)的方式</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 检查 rs</span></span><br><span class="line">kubectl get rs</span><br><span class="line">kubectl describe rs rs_name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除</span></span><br><span class="line">kubectl delete rs &lt;rs_name&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-3、RS的标签选择器"><a href="#4-3-3、RS的标签选择器" class="headerlink" title="4.3.3、RS的标签选择器"></a>4.3.3、RS的标签选择器</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030003412353.png" alt="image-20201030003412353" style="zoom:50%;" />
+
+<h2 id="4-4、DaemonSet"><a href="#4-4、DaemonSet" class="headerlink" title="4.4、DaemonSet"></a>4.4、DaemonSet</h2><p>当你希望pod在集群中的每个节点上运行时，例如日志收集器和资源监控器 这些系统级别的守护进程时，可以使用DaemonSet。</p>
+<p>在Kubernetes之外， 此类进程通常在节点启动期间通过系统初始化脚本或systemd守护进程启动。 在Kubernetes 节点上，仍然可以使用systemd运行系统进程，但这样就不能利用所有的Kubernetes特性了。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030004023802.png" alt="image-20201030004023802" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030004113919.png" alt="image-20201030004113919" style="zoom:50%;" />
+
+<h2 id="4-5、Job"><a href="#4-5、Job" class="headerlink" title="4.5、Job"></a>4.5、Job</h2><p>Job允许你运行一 种 pod, 该 pod 在内部进程成功结束时， 不重启容器。 一旦任务完成， pod 就被认为处千完成状态。</p>
+<p>在发生节点故障时，该节点上由 Job 管理的 pod 将按照 ReplicaSet 的 pod 的方式， 重新安排到其他节点。 如果进程本身异常退出(进程返回错误退出代码时)， 可以 将 Job 配置为重新启动容器。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030004335504.png" alt="image-20201030004335504" style="zoom:50%;" />
+
+<p>在一 个pod的定义中， 可以指定在容器中运行的进程结束时，Kubemetes会做什么。 这是通过pod配置的属性restartPo巨cy完成的， 默认为Always。 Job pod不能使用默认策略， 因 为它们不是要无限期地运行 。 因此， 需要明确地将重启 策略设置为OnFailure 或Never。 此设置防止容器在完成任务时重新启动。</p>
+<h3 id="4-5-1、在Job中运行多个Pod实例"><a href="#4-5-1、在Job中运行多个Pod实例" class="headerlink" title="4.5.1、在Job中运行多个Pod实例"></a>4.5.1、在Job中运行多个Pod实例</h3><p>作业可以配置为创建多个pod实例， 并以并行或串行方式运行 它们 。 这是通过 在Job配置中设置 completions和parallelism属性来完成的。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030004806213.png" alt="image-20201030004806213" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030004857901.png" alt="image-20201030004857901" style="zoom:50%;" />
+
+<p>你甚至可以在 Job 运行时更改 Job 的 paralle辽sm 属性。 这与缩放 ReplicaSet 或 ReplicationController 类似， 可以使用 kubectl scale 命令完成：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale job job_name --replicas 3</span><br></pre></td></tr></table></figure>
+<p>通过在 pod 配置中设置 activeDeadlineSeconds 属性，可以限制 pod 的时间。 如果 pod 运行时间超过此时间， 系统将尝试终止 pod, 并将 Job 标记为失败。</p>
+<blockquote>
+<p>注意：通过指定 Job manifest 中的 spec.backoffLimit 字段， 可以配置 Job 在被标记为失败之前可以重试的次数。 如果你没有明确指定它， 则默认为6。</p>
+</blockquote>
+<h2 id="4-6、CronJob"><a href="#4-6、CronJob" class="headerlink" title="4.6、CronJob"></a>4.6、CronJob</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030005255378.png" alt="image-20201030005255378" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030005417184.png" alt="image-20201030005417184" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030005525078.png" alt="image-20201030005525078" style="zoom:50%;" />
+
+<h1 id="5、服务：让客户端发现Pod并与之通信"><a href="#5、服务：让客户端发现Pod并与之通信" class="headerlink" title="5、服务：让客户端发现Pod并与之通信"></a>5、服务：让客户端发现Pod并与之通信</h1><h2 id="5-1、介绍服务"><a href="#5-1、介绍服务" class="headerlink" title="5.1、介绍服务"></a>5.1、介绍服务</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030015151075.png" alt="image-20201030015151075" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030015401789.png" alt="image-20201030015401789" style="zoom:50%;" />
+
+<h3 id="5-1-1、创建服务"><a href="#5-1-1、创建服务" class="headerlink" title="5.1.1、创建服务"></a>5.1.1、创建服务</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030015536158.png" alt="image-20201030015536158" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 通过 kubectl expose 创建服务</span></span><br><span class="line">kubectl expose rc kubia --type=LoadBalancer --name kubia-http</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030015847091.png" alt="image-20201030015847091" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 检查新的服务</span></span><br><span class="line">kubectl get svc</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030020154728.png" alt="image-20201030020154728" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在容器中执行命令</span></span><br><span class="line">kubectl exec kubia-7nogl -- curl -s http: //svc_ip</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>双横杠(–)代表着kubectl命令项的结束。 在两个横杠之后的内容是指 在pod内部需要执行的命令</p>
+</blockquote>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030020445120.png" alt="image-20201030020445120" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030020612610.png" alt="image-20201030020612610" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030020707093.png" alt="image-20201030020707093" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030020925003.png" alt="image-20201030020925003" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: vl </span><br><span class="line">kind: Service </span><br><span class="line">metadata:</span><br><span class="line">  name: kubia </span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - name: http</span><br><span class="line">    port: 80 </span><br><span class="line">    targetPort: 8080</span><br><span class="line">  - name: https</span><br><span class="line">    port: 443 </span><br><span class="line">    targetPort: 8443</span><br><span class="line">  selector:     #（标签选择器应用于整个服务）</span><br><span class="line">    app: kubia</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030021214804.png" alt="image-20201030021214804" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030021351307.png" alt="image-20201030021351307" style="zoom:50%;" />
+
+<h3 id="5-1-2、服务发现"><a href="#5-1-2、服务发现" class="headerlink" title="5.1.2、服务发现"></a>5.1.2、服务发现</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030153025655.png" alt="image-20201030153025655" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030153711897.png" alt="image-20201030153711897" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030153821813.png" alt="image-20201030153821813" style="zoom:50%;" />
+
+<p>​                每个服务从内部DNS服务器中获得一个DNS条目，客户端的Pod在知道服务名称的情况下可以通过全限定域名（FQDN）来访问。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030154059858.png" alt="image-20201030154059858" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在Pod中运行shell</span></span><br><span class="line">kubectl exec -it &lt;podName&gt; -c &lt;containerName&gt; -n &lt;namespace&gt; -- shell comand</span><br><span class="line">kubectl exec -it pod_name bash</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 访问服务</span></span><br><span class="line">curl http://kubia.default.svc.cluster.local</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：服务的IP是虚拟IP，并且只有在与服务端口结合时才有意义。因此服务的IP 一般是ping 不通的</p>
+</blockquote>
+<h2 id="5-2、连接到集群外部的服务"><a href="#5-2、连接到集群外部的服务" class="headerlink" title="5.2、连接到集群外部的服务"></a>5.2、连接到集群外部的服务</h2><p>不要让服务将连接重定向到集群中的Pod，而是让它重定向到外部IP和端口。</p>
+<h3 id="5-2-1、介绍服务endpoint"><a href="#5-2-1、介绍服务endpoint" class="headerlink" title="5.2.1、介绍服务endpoint"></a>5.2.1、介绍服务endpoint</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030162935708.png" alt="image-20201030162935708" style="zoom:50%;" />
+
+<h3 id="5-2-2、手动配置服务的endpoint"><a href="#5-2-2、手动配置服务的endpoint" class="headerlink" title="5.2.2、手动配置服务的endpoint"></a>5.2.2、手动配置服务的endpoint</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030163120804.png" alt="image-20201030163120804" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030163150586.png" alt="image-20201030163150586" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030163308001.png" alt="image-20201030163308001" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030163327787.png" alt="image-20201030163327787" style="zoom:50%;" />
+
+<h3 id="5-2-3、为外部服务创建别名"><a href="#5-2-3、为外部服务创建别名" class="headerlink" title="5.2.3、为外部服务创建别名"></a>5.2.3、为外部服务创建别名</h3><p>除了手动配置服务的Endpoint来代替公开外部服务方法，有 一 种更简单的方法， 就是通过其完全限定域名(FQDN)访问外部服务。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030163554518.png" alt="image-20201030163554518" style="zoom:50%;" />
+
+<p>ExternalName服务仅在DNS级别实施一为服务创建了简单的CNAME DNS记录。 因此，连接到服务的客户端将直接连接到外部服务， 完全绕过服务代理。 出于这个原因， 这些类型的服务甚至不会获得集群IP。</p>
+<blockquote>
+<p>注意CNAME记录指向完全限定的域名而不是数字 IP地址</p>
+</blockquote>
+<h2 id="5-3、将服务暴露给外部客户端"><a href="#5-3、将服务暴露给外部客户端" class="headerlink" title="5.3、将服务暴露给外部客户端"></a>5.3、将服务暴露给外部客户端</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030163952250.png" alt="image-20201030163952250" style="zoom:50%;" />
+
+<h3 id="5-3-1、NodePort"><a href="#5-3-1、NodePort" class="headerlink" title="5.3.1、NodePort"></a>5.3.1、NodePort</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030164152629.png" alt="image-20201030164152629" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030164239225.png" alt="image-20201030164239225" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> kubectl get svc kubia-nodeport</span></span><br><span class="line">NAME           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE</span><br><span class="line">kubia-nodeport 10.111.254.223  &lt;nodes&gt;       80:30123/TCP   2m</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030164608532.png" alt="image-20201030164608532" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030164634556.png" alt="image-20201030164634556" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030164735532.png" alt="image-20201030164735532" style="zoom:50%;" />
+
+<h3 id="5-3-2、通过负载均衡暴露服务"><a href="#5-3-2、通过负载均衡暴露服务" class="headerlink" title="5.3.2、通过负载均衡暴露服务"></a>5.3.2、通过负载均衡暴露服务</h3><p>在云提供商上运行的Kubernetes集群通常支持从云基础架构自动提供负载平衡 器。 所有需要做的就是设置服务的类型为Load Badancer而不是NodePort。 负载均衡器拥有自己独 一 无二的可公开访问的 IP 地址， 并将所有连接重定向到服务。 可以通过负载均衡器的 IP 地址访问服务。</p>
+<p>如果Kubemetes在不支 持Load Badancer服 务的环境中运行， 则不会调配负载平衡器，但该服务仍将表现得像 一 个NodePort服 务。 这是因为Load Badancer服务是NodePort服务的扩展。</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030164923846.png" alt="image-20201030164923846" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030165029434.png" alt="image-20201030165029434" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030165233694.png" alt="image-20201030165233694" style="zoom:50%;" />
+
+<h3 id="5-3-3、了解外部服务的特性"><a href="#5-3-3、了解外部服务的特性" class="headerlink" title="5.3.3、了解外部服务的特性"></a>5.3.3、了解外部服务的特性</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030170142898.png" alt="image-20201030170142898" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030170313894.png" alt="image-20201030170313894" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030170404458.png" alt="image-20201030170404458" style="zoom:50%;" />
+
+<h2 id="5-4、通过Ingress暴露服务"><a href="#5-4、通过Ingress暴露服务" class="headerlink" title="5.4、通过Ingress暴露服务"></a>5.4、通过Ingress暴露服务</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030170550404.png" alt="image-20201030170550404" style="zoom:50%;" />
+
+<h3 id="5-4-1、创建Ingress资源"><a href="#5-4-1、创建Ingress资源" class="headerlink" title="5.4.1、创建Ingress资源"></a>5.4.1、创建Ingress资源</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030170743332.png" alt="image-20201030170743332" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030170842356.png" alt="image-20201030170842356" style="zoom:50%;" />
+
+<h3 id="5-4-2、通过-Ingress-访问服务"><a href="#5-4-2、通过-Ingress-访问服务" class="headerlink" title="5.4.2、通过 Ingress 访问服务"></a>5.4.2、通过 Ingress 访问服务</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030170955105.png" alt="image-20201030170955105" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030171024890.png" alt="image-20201030171024890" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030171138908.png" alt="image-20201030171138908" style="zoom:50%;" />
+
+<h3 id="5-4-3、通过相同的-Ingress-暴露多个服务"><a href="#5-4-3、通过相同的-Ingress-暴露多个服务" class="headerlink" title="5.4.3、通过相同的 Ingress 暴露多个服务"></a>5.4.3、通过相同的 Ingress 暴露多个服务</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030171249164.png" alt="image-20201030171249164" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201030171322995.png" alt="image-20201030171322995" style="zoom:50%;" />
+
+<h3 id="5-4-4、配置-Ingress处理TLS传输"><a href="#5-4-4、配置-Ingress处理TLS传输" class="headerlink" title="5.4.4、配置 Ingress处理TLS传输"></a>5.4.4、配置 Ingress处理TLS传输</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031150554314.png" alt="image-20201031150554314" style="zoom:50%;" />
+
+<blockquote>
+<p>注：TLS传输数据时，用私钥（tls.key）对数据加密，用证书（tls.cert）对数据解密</p>
+</blockquote>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031154437696.png" alt="image-20201031154437696" style="zoom:50%;" />
+
+<h2 id="5-5、就绪指针"><a href="#5-5、就绪指针" class="headerlink" title="5.5、就绪指针"></a>5.5、就绪指针</h2><h3 id="5-5-1、介绍就绪探针"><a href="#5-5-1、介绍就绪探针" class="headerlink" title="5.5.1、介绍就绪探针"></a>5.5.1、介绍就绪探针</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031154621520.png" alt="image-20201031154621520" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031154722878.png" alt="image-20201031154722878" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031154747963.png" alt="image-20201031154747963" style="zoom:50%;" />
+
+<h3 id="5-5-2、向Pod添加就绪探针"><a href="#5-5-2、向Pod添加就绪探针" class="headerlink" title="5.5.2、向Pod添加就绪探针"></a>5.5.2、向Pod添加就绪探针</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改现有rc模板</span></span><br><span class="line">kubectl edit rc kubia</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031155005359.png" alt="image-20201031155005359" style="zoom:50%;" />
+
+<h2 id="5-6、使用handless服务来发现独立的Pod"><a href="#5-6、使用handless服务来发现独立的Pod" class="headerlink" title="5.6、使用handless服务来发现独立的Pod"></a>5.6、使用handless服务来发现独立的Pod</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031155355706.png" alt="image-20201031155355706" style="zoom:50%;" />
+
+<h3 id="5-6-1、创建handless服务"><a href="#5-6-1、创建handless服务" class="headerlink" title="5.6.1、创建handless服务"></a>5.6.1、创建handless服务</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031155608493.png" alt="image-20201031155608493" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031155751298.png" alt="image-20201031155751298" style="zoom:50%;" />
+
+<h2 id="5-7、排除服务故障"><a href="#5-7、排除服务故障" class="headerlink" title="5.7、排除服务故障"></a>5.7、排除服务故障</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031160024117.png" alt="image-20201031160024117" style="zoom:50%;" />
+
+<h2 id="5-8、本章小结"><a href="#5-8、本章小结" class="headerlink" title="5.8、本章小结"></a>5.8、本章小结</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031160210279.png" alt="image-20201031160210279" style="zoom:50%;" />
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/09/19/python/python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C14~18/" rel="prev" title="Python学习手册14">
+      <i class="fa fa-chevron-left"></i> Python学习手册14
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/10/31/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B06%EF%BD%9E7/" rel="next" title="Kubernetes in Action 6～7">
+      Kubernetes in Action 6～7 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81%E6%A6%82%E8%A7%88"><span class="nav-text">1、概览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E3%80%81%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E4%BB%8B%E7%BB%8D"><span class="nav-text">1.1、容器技术介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-1%E3%80%81%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%92%8CCgroup"><span class="nav-text">1.1.1、命名空间和Cgroup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2%E3%80%81%E8%BF%9B%E7%A8%8B%E4%B8%8Enamespace%E5%85%B3%E8%81%94"><span class="nav-text">1.1.2、进程与namespace关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3%E3%80%81Docker"><span class="nav-text">1.1.3、Docker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2%E3%80%81Kubernetes%E4%BB%8B%E7%BB%8D"><span class="nav-text">1.2、Kubernetes介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8Kubetnetes%E5%92%8CDocker"><span class="nav-text">2、开始使用Kubetnetes和Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F"><span class="nav-text">共享容器镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Kubernetes%E8%BF%90%E8%A1%8C%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8"><span class="nav-text">在Kubernetes运行第一个容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E9%83%A8%E7%BD%B2Node-js%E5%BA%94%E7%94%A8"><span class="nav-text">1、部署Node.js应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E8%AE%BF%E9%97%AEweb%E5%BA%94%E7%94%A8"><span class="nav-text">2、访问web应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%80%BB%E8%BE%91%E9%83%A8%E5%88%86"><span class="nav-text">3、系统的逻辑部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E6%B0%B4%E5%B9%B3%E4%BC%B8%E7%BC%A9%E5%BA%94%E7%94%A8"><span class="nav-text">4、水平伸缩应用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81Pod%EF%BC%9A%E8%BF%90%E8%A1%8C%E4%BA%8EKubernetes%E4%B8%AD%E7%9A%84%E5%AE%B9%E5%99%A8"><span class="nav-text">3、Pod：运行于Kubernetes中的容器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1%E3%80%81%E4%BB%8B%E7%BB%8DPod"><span class="nav-text">3.1、介绍Pod</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E5%A4%9A%E4%B8%AA%E5%AE%B9%E5%99%A8%E6%AF%94%E5%8D%95%E4%B8%AA%E5%AE%B9%E5%99%A8%E4%B8%AD%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E8%BF%9B%E7%A8%8B%E8%A6%81%E5%A5%BD"><span class="nav-text">为何多个容器比单个容器中包含多个进程要好</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%A6%82%E4%BD%95%E5%85%B1%E4%BA%AB%E7%9B%B8%E5%90%8C%E7%9A%84IP%E5%92%8C%E7%AB%AF%E5%8F%A3%E7%A9%BA%E9%97%B4"><span class="nav-text">容器如何共享相同的IP和端口空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pod%E9%97%B4%E7%9A%84%E7%BD%91%E7%BB%9C"><span class="nav-text">Pod间的网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%95%E6%97%B6%E5%9C%A8Pod%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%9A%E4%B8%AA%E5%AE%B9%E5%99%A8"><span class="nav-text">何时在Pod中使用多个容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2%E3%80%81%E4%BB%A5YAML%E6%88%96JSON%E6%8F%8F%E8%BF%B0%E6%96%87%E4%BB%B6%E5%88%9B%E5%BB%BAPod"><span class="nav-text">3.2、以YAML或JSON描述文件创建Pod</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pod%E5%AE%9A%E4%B9%89%E7%9A%84%E4%B8%BB%E8%A6%81%E9%83%A8%E5%88%86"><span class="nav-text">Pod定义的主要部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BAPod%E5%88%9B%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84YMAL%E6%8F%8F%E8%BF%B0%E6%96%87%E4%BB%B6"><span class="nav-text">为Pod创建简单的YMAL描述文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAPod"><span class="nav-text">创建Pod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E8%AE%BF%E9%97%AEPod"><span class="nav-text">通过端口转发访问Pod</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3%E3%80%81%E4%BD%BF%E7%94%A8%E6%A0%87%E7%AD%BE%E7%BB%84%E7%BB%87Pod"><span class="nav-text">3.3、使用标签组织Pod</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAPod%E6%97%B6%E6%8C%87%E5%AE%9A%E6%A0%87%E7%AD%BE"><span class="nav-text">创建Pod时指定标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%A0%87%E7%AD%BE%E9%80%89%E6%8B%A9%E5%99%A8%E5%88%97%E5%87%BAPod%E5%AD%90%E9%9B%86"><span class="nav-text">通过标签选择器列出Pod子集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86Pod-%E8%B0%83%E5%BA%A6%E5%88%B0%E7%89%B9%E5%AE%9A%E8%8A%82%E7%82%B9"><span class="nav-text">将Pod 调度到特定节点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4%E3%80%81%E6%B3%A8%E8%A7%A3Pod"><span class="nav-text">3.4、注解Pod</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5%E3%80%81%E4%BD%BF%E7%94%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AF%B9%E8%B5%84%E6%BA%90%E5%88%86%E7%BB%84"><span class="nav-text">3.5、使用命名空间对资源分组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-text">创建命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%8F%90%E4%BE%9B%E7%9A%84%E9%9A%94%E7%A6%BB"><span class="nav-text">命名空间提供的隔离</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6%E3%80%81%E5%81%9C%E6%AD%A2%E5%92%8C%E7%A7%BB%E9%99%A4Pod"><span class="nav-text">3.6、停止和移除Pod</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81%E5%89%AF%E6%9C%AC%E6%9C%BA%E5%88%B6%E5%92%8C%E5%85%B6%E4%BB%96%E6%8E%A7%E5%88%B6%E5%99%A8%EF%BC%9A%E9%83%A8%E7%BD%B2%E6%89%98%E7%AE%A1%E7%9A%84Pod"><span class="nav-text">4、副本机制和其他控制器：部署托管的Pod</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1%E3%80%81%E5%AD%98%E6%B4%BB%E6%8E%A2%E9%92%88"><span class="nav-text">4.1、存活探针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1%E3%80%81%E5%AD%98%E6%B4%BB%E6%8E%A2%E9%92%88%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-text">4.1.1、存活探针的属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2%E3%80%81ReplicationController"><span class="nav-text">4.2、ReplicationController</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1%E3%80%81%E6%A6%82%E8%A7%88"><span class="nav-text">4.2.1、概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2%E3%80%81%E5%88%9B%E5%BB%BARC"><span class="nav-text">4.2.2、创建RC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-3%E3%80%81Pod%E4%BB%8ERC%E7%9A%84%E7%A7%BB%E5%85%A5%E7%A7%BB%E5%87%BA"><span class="nav-text">4.2.3、Pod从RC的移入移出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-4%E3%80%81%E4%BF%AE%E6%94%B9Pod%E6%A8%A1%E6%9D%BF"><span class="nav-text">4.2.4、修改Pod模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-4%E3%80%81%E6%B0%B4%E5%B9%B3%E7%BC%A9%E6%94%BEPod"><span class="nav-text">4.2.4、水平缩放Pod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-5%E3%80%81%E5%88%A0%E9%99%A4rc"><span class="nav-text">4.2.5、删除rc</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3%E3%80%81%E4%BD%BF%E7%94%A8ReplicaSet%E8%80%8C%E4%B8%8D%E6%98%AFRC"><span class="nav-text">4.3、使用ReplicaSet而不是RC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1%E3%80%81%E5%88%9B%E5%BB%BAReplicaSet"><span class="nav-text">4.3.1、创建ReplicaSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3%E3%80%81RS%E7%9A%84%E6%A0%87%E7%AD%BE%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-text">4.3.3、RS的标签选择器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4%E3%80%81DaemonSet"><span class="nav-text">4.4、DaemonSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5%E3%80%81Job"><span class="nav-text">4.5、Job</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-1%E3%80%81%E5%9C%A8Job%E4%B8%AD%E8%BF%90%E8%A1%8C%E5%A4%9A%E4%B8%AAPod%E5%AE%9E%E4%BE%8B"><span class="nav-text">4.5.1、在Job中运行多个Pod实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6%E3%80%81CronJob"><span class="nav-text">4.6、CronJob</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E6%9C%8D%E5%8A%A1%EF%BC%9A%E8%AE%A9%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E7%8E%B0Pod%E5%B9%B6%E4%B8%8E%E4%B9%8B%E9%80%9A%E4%BF%A1"><span class="nav-text">5、服务：让客户端发现Pod并与之通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1%E3%80%81%E4%BB%8B%E7%BB%8D%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.1、介绍服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-1%E3%80%81%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.1.1、创建服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-2%E3%80%81%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-text">5.1.2、服务发现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2%E3%80%81%E8%BF%9E%E6%8E%A5%E5%88%B0%E9%9B%86%E7%BE%A4%E5%A4%96%E9%83%A8%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.2、连接到集群外部的服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1%E3%80%81%E4%BB%8B%E7%BB%8D%E6%9C%8D%E5%8A%A1endpoint"><span class="nav-text">5.2.1、介绍服务endpoint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-2%E3%80%81%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E7%9A%84endpoint"><span class="nav-text">5.2.2、手动配置服务的endpoint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-3%E3%80%81%E4%B8%BA%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1%E5%88%9B%E5%BB%BA%E5%88%AB%E5%90%8D"><span class="nav-text">5.2.3、为外部服务创建别名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3%E3%80%81%E5%B0%86%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2%E7%BB%99%E5%A4%96%E9%83%A8%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">5.3、将服务暴露给外部客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1%E3%80%81NodePort"><span class="nav-text">5.3.1、NodePort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2%E3%80%81%E9%80%9A%E8%BF%87%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%9A%B4%E9%9C%B2%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.3.2、通过负载均衡暴露服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-3%E3%80%81%E4%BA%86%E8%A7%A3%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-text">5.3.3、了解外部服务的特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4%E3%80%81%E9%80%9A%E8%BF%87Ingress%E6%9A%B4%E9%9C%B2%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.4、通过Ingress暴露服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-1%E3%80%81%E5%88%9B%E5%BB%BAIngress%E8%B5%84%E6%BA%90"><span class="nav-text">5.4.1、创建Ingress资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-2%E3%80%81%E9%80%9A%E8%BF%87-Ingress-%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.4.2、通过 Ingress 访问服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-3%E3%80%81%E9%80%9A%E8%BF%87%E7%9B%B8%E5%90%8C%E7%9A%84-Ingress-%E6%9A%B4%E9%9C%B2%E5%A4%9A%E4%B8%AA%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.4.3、通过相同的 Ingress 暴露多个服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-4%E3%80%81%E9%85%8D%E7%BD%AE-Ingress%E5%A4%84%E7%90%86TLS%E4%BC%A0%E8%BE%93"><span class="nav-text">5.4.4、配置 Ingress处理TLS传输</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5%E3%80%81%E5%B0%B1%E7%BB%AA%E6%8C%87%E9%92%88"><span class="nav-text">5.5、就绪指针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-1%E3%80%81%E4%BB%8B%E7%BB%8D%E5%B0%B1%E7%BB%AA%E6%8E%A2%E9%92%88"><span class="nav-text">5.5.1、介绍就绪探针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-2%E3%80%81%E5%90%91Pod%E6%B7%BB%E5%8A%A0%E5%B0%B1%E7%BB%AA%E6%8E%A2%E9%92%88"><span class="nav-text">5.5.2、向Pod添加就绪探针</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6%E3%80%81%E4%BD%BF%E7%94%A8handless%E6%9C%8D%E5%8A%A1%E6%9D%A5%E5%8F%91%E7%8E%B0%E7%8B%AC%E7%AB%8B%E7%9A%84Pod"><span class="nav-text">5.6、使用handless服务来发现独立的Pod</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-6-1%E3%80%81%E5%88%9B%E5%BB%BAhandless%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.6.1、创建handless服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7%E3%80%81%E6%8E%92%E9%99%A4%E6%9C%8D%E5%8A%A1%E6%95%85%E9%9A%9C"><span class="nav-text">5.7、排除服务故障</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-8%E3%80%81%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93"><span class="nav-text">5.8、本章小结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

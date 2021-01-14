@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1、编译原理Go 语言的应用程序在运行之前需要先编译成二进制，在编译的过程中会经过中间代码生成阶段，Go 语言编译器的中间代码具有静态单赋值（Static Single Assignment、SSA）的特性。 12# 我们可以使用如下所示的命令将 Go 语言的源代码编译成汇编语言，然后通过汇编语言分析程序具体的执行过程go build -gcflags -S helloworld.go   然而上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言学习笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2020/11/15/Go/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="1、编译原理Go 语言的应用程序在运行之前需要先编译成二进制，在编译的过程中会经过中间代码生成阶段，Go 语言编译器的中间代码具有静态单赋值（Static Single Assignment、SSA）的特性。 12# 我们可以使用如下所示的命令将 Go 语言的源代码编译成汇编语言，然后通过汇编语言分析程序具体的执行过程go build -gcflags -S helloworld.go   然而上">
+<meta property="og:locale">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201115171004657.png">
+<meta property="og:image" content="https://img.draveness.me/2019-12-20-15768548776645-abstract-syntax-tree.png">
+<meta property="og:image" content="https://img.draveness.me/2019-12-20-15768548776662-complication-process.png">
+<meta property="og:image" content="https://img.draveness.me/2019-12-20-15768548776685-concurrency-compiling.png">
+<meta property="og:image" content="https://img.draveness.me/2019-02-20-golang-slice-struct.png">
+<meta property="og:image" content="https://img.draveness.me/2020-03-12-15839729948451-golang-slice-append.png">
+<meta property="og:image" content="https://img.draveness.me/2019-02-20-golang-slice-copy.png">
+<meta property="og:image" content="https://img.draveness.me/2019-12-31-15777265631608-in-memory-string.png">
+<meta property="og:image" content="https://img.draveness.me/2019-12-31-15777265631620-string-concat-and-copy.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201116171037227.png">
+<meta property="og:image" content="https://img.draveness.me/golang-interface-method-receiver.png">
+<meta property="article:published_time" content="2020-11-15T09:08:57.620Z">
+<meta property="article:modified_time" content="2021-01-12T15:21:25.475Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201115171004657.png">
+
+<link rel="canonical" href="https://heavyfish.github.io/2020/11/15/Go/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Go语言学习笔记 | 速查笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">速查笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/heavyfish.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/11/15/Go/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="速查笔记">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go语言学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-11-15 17:08:57" itemprop="dateCreated datePublished" datetime="2020-11-15T17:08:57+08:00">2020-11-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-12 23:21:25" itemprop="dateModified" datetime="2021-01-12T23:21:25+08:00">2021-01-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Golang/" itemprop="url" rel="index"><span itemprop="name">Golang</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1、编译原理"><a href="#1、编译原理" class="headerlink" title="1、编译原理"></a>1、编译原理</h1><p>Go 语言的应用程序在运行之前需要先编译成二进制，在编译的过程中会经过中间代码生成阶段，Go 语言编译器的中间代码具有静态单赋值（Static Single Assignment、SSA）的特性。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 我们可以使用如下所示的命令将 Go 语言的源代码编译成汇编语言，然后通过汇编语言分析程序具体的执行过程</span></span><br><span class="line">go build -gcflags -S helloworld.go</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201115171004657.png" alt="image-20201115171004657" style="zoom:50%;" />
+
+<p>然而上述的汇编代码只是 Go 语言编译的结果，如果想要了解 Go 语言更详细的编译过程，我们可以通过SSA去了解。</p>
+<h2 id="1-1、预备知识"><a href="#1-1、预备知识" class="headerlink" title="1.1、预备知识"></a>1.1、预备知识</h2><h3 id="1-1-1、抽象语法树"><a href="#1-1-1、抽象语法树" class="headerlink" title="1.1.1、抽象语法树"></a>1.1.1、抽象语法树</h3><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">抽象语法树</a>（AST），是源代码语法的结构的一种抽象表示，它用树状的方式表示编程语言的语法结构<a target="_blank" rel="noopener" href="https://draveness.me/golang/docs/part1-prerequisite/ch02-compile/golang-compile-intro/#fn:1">1</a>。抽象语法树中的每一个节点都表示源代码中的一个元素，每一棵子树都表示一个语法元素，例如一个 if else 语句，我们可以从 <code>2 * 3 + 7</code> 这一表达式中解析出下图所示的抽象语法树。</p>
+<img src="https://img.draveness.me/2019-12-20-15768548776645-abstract-syntax-tree.png" alt="abstract-syntax-tree" style="zoom:50%;" />
+
+<p><strong>抽象语法树抹去了源代码中不重要的一些字符</strong> - 空格、分号或者括号等等。<strong>编译器在执行完语法分析之后会输出一个抽象语法树</strong>，这个抽象语法树会<strong>辅助编译器进行语义分析</strong>，我们可以<strong>用它来确定语法正确的程序是否存在一些类型不匹配或不一致</strong>的问题</p>
+<h3 id="1-1-2、静态单赋值"><a href="#1-1-2、静态单赋值" class="headerlink" title="1.1.2、静态单赋值"></a>1.1.2、静态单赋值</h3><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Static_single_assignment_form">静态单赋值</a>（Static Single Assignment, SSA）是中间代码的一个特性，如果一个中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次<a target="_blank" rel="noopener" href="https://draveness.me/golang/docs/part1-prerequisite/ch02-compile/golang-compile-intro/#fn:2">2</a>。在实践中我们通常会用添加下标的方式实现每个变量只能被赋值一次的特性，这里以下面的代码举个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x := <span class="number">1</span></span><br><span class="line">x := <span class="number">2</span></span><br><span class="line">y := x</span><br></pre></td></tr></table></figure>
+<p>根据分析，我们其实能够发现上述的代码其实并不需要第一个将 <code>1</code> 赋值给 <code>x</code> 的表达式，也就是 <code>x := 1</code> 这一表达式在上述的代码片段中是没有作用的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x1 := <span class="number">1</span></span><br><span class="line">x2 := <span class="number">2</span></span><br><span class="line">y1 := x2</span><br></pre></td></tr></table></figure>
+<p>当我们使用具有 SSA 特性的中间代码时，就可以非常清晰地发现变量 <code>y1</code> 的值和 <code>x1</code> 是完全没有任何关系的，所以在机器码生成时其实就可以省略第一步，这样就能减少需要执行的指令来优化这一段代码。</p>
+<h3 id="1-1-3、指令集"><a href="#1-1-3、指令集" class="headerlink" title="1.1.3、指令集"></a>1.1.3、指令集</h3><p>x86 是目前比较常见的指令集，除了 x86 之外，还有很多其他的指令集，不同的处理器使用了不同的架构和机器语言，所以很多编程语言为了在不同的机器上运行需要将源代码根据架构翻译成不同的机器代码。</p>
+<p>复杂指令集计算机（CISC）和精简指令集计算机（RISC）是目前的两种 CPU 区别，它们在设计理念上会有一些不同，从名字我们就能看出来这两种不同的设计有什么区别：</p>
+<ul>
+<li>复杂指令集通过增加指令的数量减少需要执行的指令数；</li>
+<li>精简指令集能使用更少的指令完成目标的计算任务；</li>
+</ul>
+<h2 id="1-2、编译原理"><a href="#1-2、编译原理" class="headerlink" title="1.2、编译原理"></a>1.2、编译原理</h2><img src="https://img.draveness.me/2019-12-20-15768548776662-complication-process.png" alt="complication-process" style="zoom:50%;" />
+
+<p>图中依次是：词法分析 -》语法分析 -》 语义分析 -》 中间码(IR)生成-》 代码组织-》机器码生成</p>
+<p>Go 的编译器在逻辑上可以被分成四个阶段：</p>
+<ol>
+<li>词法与语法分析</li>
+<li>类型检查和 AST 转换（对应语义分析）</li>
+<li>通用 SSA 生成</li>
+<li>最后的机器代码生成</li>
+</ol>
+<h3 id="1-2-1、词法与语法分析"><a href="#1-2-1、词法与语法分析" class="headerlink" title="1.2.1、词法与语法分析"></a>1.2.1、词法与语法分析</h3><p>词法分析的作用就是解析源代码文件，它将文件中的字符串序列转换成 Token 序列。语法分析的输入就是词法分析器输出的 Token 序列，这些序列会按照顺序被语法分析器进行解析，转换成有意义的结构体，也就是语法树。</p>
+<p>语法解析的结果就是上面介绍过的抽象语法树（AST），每一个 AST 都对应着一个单独的 Go 语言文件，这个抽象语法树中包括当前文件属于的包名、定义的常量、结构体和函数等。</p>
+<h3 id="1-2-2、类型检查"><a href="#1-2-2、类型检查" class="headerlink" title="1.2.2、类型检查"></a>1.2.2、类型检查</h3><p>当拿到一组文件的抽象语法树之后，Go 语言的编译器会对语法树中定义和使用的类型进行检查，类型检查分别会按照以下的顺序对不同类型的节点进行验证和处理：</p>
+<ol>
+<li>常量、类型和函数名及类型；</li>
+<li>变量的赋值和初始化；</li>
+<li>函数和闭包的主体；</li>
+<li>哈希键值对的类型；</li>
+<li>导入函数体；</li>
+<li>外部的声明；</li>
+</ol>
+<h3 id="1-2-3、中间代码生成"><a href="#1-2-3、中间代码生成" class="headerlink" title="1.2.3、中间代码生成"></a>1.2.3、中间代码生成</h3><p>在类型检查之后，就会通过一个名为 <code>compileFunctions</code> 的函数开始对整个 Go 语言项目中的全部函数进行编译，这些函数会在一个编译队列中等待几个后端工作协程的消费，这些并发执行的 Goroutine 会将所有函数对应的抽象语法树转换成中间代码。</p>
+<img src="https://img.draveness.me/2019-12-20-15768548776685-concurrency-compiling.png" alt="concurrency-compiling" style="zoom:50%;" />
+
+<h3 id="1-2-4、机器码生成"><a href="#1-2-4、机器码生成" class="headerlink" title="1.2.4、机器码生成"></a>1.2.4、机器码生成</h3><p>Go 语言源代码的 <a target="_blank" rel="noopener" href="https://github.com/golang/go/tree/master/src/cmd/compile/internal"><code>src/cmd/compile/internal</code></a> 目录中包含了很多机器码生成相关的包，不同类型的 CPU 分别使用了不同的包生成机器码，其中包括 amd64、arm、arm64、mips、mips64、ppc64、s390x、x86 和 wasm</p>
+<h1 id="2、程序结构"><a href="#2、程序结构" class="headerlink" title="2、程序结构"></a>2、程序结构</h1><h2 id="2-1、命名"><a href="#2-1、命名" class="headerlink" title="2.1、命名"></a>2.1、命名</h2><p>Go语言中的所有的命名，都遵循一个简单的命名规则：<strong>一个名字必须以一个字母（Unicode字母）或下划线开头</strong>，后面可以跟任意数量的字母、数字或下划线。<strong>大写字母和小写字母是不同的</strong>：heapSort和Heapsort是两个不同的名字。</p>
+<p>Go语言中类似if和switch的关键字有25个；关键字不能用于自定义名字，只能在特定语法结构中使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">break      default       func     interface   select</span><br><span class="line">case       defer         go       map         struct</span><br><span class="line">chan       else          goto     package     switch</span><br><span class="line">const      fallthrough   if       range       type</span><br><span class="line">continue   for           import   return      var</span><br></pre></td></tr></table></figure>
+<p>此外，还有大约30多个预定义的名字，比如int和true等，主要对应内建的常量、类型和函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">内建常量: true false iota nil</span><br><span class="line"></span><br><span class="line">内建类型: int int8 int16 int32 int64</span><br><span class="line">          uint uint8 uint16 uint32 uint64 uintptr</span><br><span class="line">          float32 float64 complex128 complex64</span><br><span class="line">          bool byte rune string error</span><br><span class="line"></span><br><span class="line">内建函数: make len cap new append copy close delete</span><br><span class="line">          complex real imag</span><br><span class="line">          panic recover</span><br></pre></td></tr></table></figure>
+<p>这些内部预先定义的名字并不是关键字，你可以在定义中重新使用它们。在一些特殊的场景中重新定义它们也是有意义的，但是也要注意避免过度而引起语义混乱。</p>
+<p>如果一个名字是在函数内部定义，那么它就只在函数内部有效。如果是在函数外部定义，那么将在当前包的所有文件中都可以访问。名字的开头字母的大小写决定了名字在包外的可见性。<strong>如果一个名字是大写字母开头的</strong>（译注：必须是在函数外部定义的包级名字；包级函数名本身也是包级名字），<strong>那么它将是导出的，也就是说可以被外部的包访问</strong></p>
+<h2 id="2-2、变量声明"><a href="#2-2、变量声明" class="headerlink" title="2.2、变量声明"></a>2.2、变量声明</h2><p><strong>var声明变量 与 简短变量声明</strong></p>
+<p>var声明语句可以创建一个特定类型的变量，然后给变量附加一个名字，并且设置变量的初始值。简短变量声明，直接使用“名字 := 表达式”</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// var 变量名字 类型 = 表达式</span></span><br><span class="line"><span class="comment">// 名字 := 表达式</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i <span class="keyword">int8</span> = <span class="number">255</span></span><br><span class="line"><span class="keyword">var</span> f <span class="keyword">float32</span> = <span class="number">16777216</span></span><br><span class="line"><span class="keyword">var</span> x <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">s := <span class="string">&quot;hello, world&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 数组声明</span></span><br><span class="line"><span class="keyword">var</span> q [<span class="number">3</span>]<span class="keyword">int</span> = [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">q := [...]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">q := [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 切片声明</span></span><br><span class="line"><span class="keyword">var</span> s []<span class="keyword">int</span> = q[<span class="number">0</span>:<span class="number">1</span>]</span><br><span class="line">s := q[<span class="number">0</span>:<span class="number">1</span>]</span><br><span class="line"><span class="keyword">var</span> s []<span class="keyword">int</span>  <span class="comment">// 这是一个 nil值 切片，等同于 s := []int(nil)</span></span><br><span class="line">s := []<span class="keyword">int</span>&#123;&#125; <span class="comment">// 注意 &#123;&#125;，这是一个空值切片，它的指针和nil值切片不同 ，等同于 s1 := make([]int,0,0)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// map 声明</span></span><br><span class="line">ages := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>&#123;</span><br><span class="line">    <span class="string">&quot;alice&quot;</span>:   <span class="number">31</span>,</span><br><span class="line">    <span class="string">&quot;charlie&quot;</span>: <span class="number">34</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ages := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>)</span><br><span class="line">ages[<span class="string">&quot;alice&quot;</span>] = <span class="number">31</span></span><br><span class="line">ages[<span class="string">&quot;charlie&quot;</span>] = <span class="number">34</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> m <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">bool</span>   <span class="comment">// nil 值map</span></span><br><span class="line">s := <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">bool</span>&#123;&#125;  <span class="comment">// &#123;&#125; 初始化了 map</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// strcut 声明</span></span><br><span class="line"><span class="keyword">type</span> Employee <span class="keyword">struct</span> &#123;</span><br><span class="line">    ID        <span class="keyword">int</span></span><br><span class="line">    Name      <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> S <span class="keyword">struct</span>&#123;&#125;    <span class="comment">// </span></span><br><span class="line"><span class="keyword">type</span> S <span class="keyword">struct</span>&#123;&#125;&#123;&#125;  <span class="comment">// 初始化了 struct</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>各类型没有表达式时的，默认零值。（如 <code>var i int</code>）</p>
+<ul>
+<li>数值类型变量对应的零值是0</li>
+<li>布尔类型变量对应的零值是false</li>
+<li>字符串类型对应的零值是空字符串，即 “”</li>
+<li>接口或引用类型（包括slice、指针、map、chan和函数）变量对应的零值是nil</li>
+<li>数组或结构体等聚合类型对应的零值是每个元素或字段对应该类型的零值</li>
+</ul>
+<p><strong>常量声明</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单常量声明</span></span><br><span class="line"><span class="keyword">const</span> pi = <span class="number">3.14159</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">// 批量声明</span></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    a = <span class="number">1</span></span><br><span class="line">    b     <span class="comment">// 省略初始化表达式则表示使用前面常量的初始化表达式写法，此处代表 b = 1 </span></span><br><span class="line">    c = <span class="number">2</span></span><br><span class="line">    d     <span class="comment">// 代表 d = 2</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// iota 常量生成器，iota 将从0递增</span></span><br><span class="line"><span class="keyword">type</span> Weekday <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    Sunday Weekday = <span class="literal">iota</span>   <span class="comment">// 代表 Sunday = 1</span></span><br><span class="line">    Monday                  <span class="comment">// 代表 Monday = 2 ，依次类推</span></span><br><span class="line">    Tuesday</span><br><span class="line">    Wednesday</span><br><span class="line">    Thursday</span><br><span class="line">    Friday</span><br><span class="line">    Saturday</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="2-3、赋值"><a href="#2-3、赋值" class="headerlink" title="2.3、赋值"></a>2.3、赋值</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通赋值</span></span><br><span class="line">x = <span class="number">1</span>                       <span class="comment">// 命名变量的赋值</span></span><br><span class="line">*p = <span class="literal">true</span>                   <span class="comment">// 通过指针间接赋值，这里的p是指针</span></span><br><span class="line">person.name = <span class="string">&quot;bob&quot;</span>         <span class="comment">// 结构体字段赋值</span></span><br><span class="line">count[x] = count[x] * scale <span class="comment">// 数组、slice或map的元素赋值</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 交换赋值</span></span><br><span class="line"><span class="comment">// 赋值之前，赋值语句右边的所有表达式将会先进行求值，然后再统一更新左边对应变量的值</span></span><br><span class="line">x, y = y, x</span><br><span class="line">a[i], a[j] = a[j], a[i]</span><br><span class="line">i, j, k = <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 接受表达式的多个返回值</span></span><br><span class="line">v, ok = m[key]             <span class="comment">// map lookup</span></span><br><span class="line">v, ok = x.(T)              <span class="comment">// type assertion</span></span><br><span class="line">v, ok = &lt;-ch               <span class="comment">// channel receive</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-4、类型"><a href="#2-4、类型" class="headerlink" title="2.4、类型"></a>2.4、类型</h2><p>变量或表达式的类型定义了对应存储值的属性特征，例如数值在内存的存储大小（或者是元素的bit个数），它们在内部是如何表达的，是否支持一些操作符，以及它们自己关联的方法集等。</p>
+<p><strong>在任何程序中都会存在一些变量有着相同的内部结构，但是却表示完全不同的概念</strong>。例如，一个int类型的变量可以用来表示一个循环的迭代索引、或者一个时间戳、或者一个文件描述符、或者一个月份；一个float64类型的变量可以用来表示每秒移动几米的速度、或者是不同温度单位下的温度；一个字符串可以用来表示一个密码或者一个颜色的名称。</p>
+<p><strong>一个类型声明语句创建了一个新的类型名称，和现有类型具有相同的底层结构</strong>。<strong>但新命名的类型即使底层类型相同也是不兼容的。</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> 类型名字 底层类型</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下面是两种类型，虽然它们底层类型相同，它们的值不能直接进行比较</span></span><br><span class="line"><span class="keyword">type</span> Celsius <span class="keyword">float64</span>    <span class="comment">// 摄氏温度</span></span><br><span class="line"><span class="keyword">type</span> Fahrenheit <span class="keyword">float64</span> <span class="comment">// 华氏温度</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> f1 Celsius = <span class="number">10.0</span></span><br><span class="line"><span class="keyword">var</span> f2 Fahrenheit = <span class="number">10.0</span></span><br><span class="line">c == Celsius(f)      <span class="comment">// 类型转换不会改变值本身，但是会使它们的语义发生变化，因此可比较</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="2、数据结构"><a href="#2、数据结构" class="headerlink" title="2、数据结构"></a>2、数据结构</h1><h2 id="2-1、数组"><a href="#2-1、数组" class="headerlink" title="2.1、数组"></a>2.1、数组</h2><p><strong>数组是由相同类型元素的集合组成的数据结构</strong>，计算机会为数组分配一块连续的内存来保存其中的元素。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化数组</span></span><br><span class="line">arr1 := [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">arr2 := [...]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>如果数组中元素的个数小于或者等于 4 个，那么所有的变量会直接在栈上初始化，如果数组元素大于 4 个，变量就会在静态存储区初始化然后拷贝到栈上，这些转换后的代码才会继续进入<a target="_blank" rel="noopener" href="https://draveness.me/golang/docs/part1-prerequisite/ch02-compile/golang-ir-ssa/">中间代码生成</a>和<a target="_blank" rel="noopener" href="https://draveness.me/golang/docs/part1-prerequisite/ch02-compile/golang-machinecode/">机器码生成</a>两个阶段，最后生成可以执行的二进制文件。</p>
+<h2 id="2-2、切片"><a href="#2-2、切片" class="headerlink" title="2.2、切片"></a>2.2、切片</h2><h3 id="2-2-1、数据结构"><a href="#2-2-1、数据结构" class="headerlink" title="2.2.1、数据结构"></a>2.2.1、数据结构</h3><p>切片就是动态数组，它的长度并不固定，我们可以随意向切片中追加元素，而切片会在容量不足时自动扩容。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[]<span class="keyword">int</span></span><br><span class="line">[]<span class="keyword">interface</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>编译期间的切片是 <code>Slice</code> 类型的，但是在运行时切片由如下的 <code>SliceHeader</code> 结构体表示，其中 <code>Data</code> 字段是指向数组的指针，<code>Len</code> 表示当前切片的长度，而 <code>Cap</code> 表示当前切片的容量，也就是 <code>Data</code> 数组的大小：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> SliceHeader <span class="keyword">struct</span> &#123;</span><br><span class="line">	Data <span class="keyword">uintptr</span></span><br><span class="line">	Len  <span class="keyword">int</span></span><br><span class="line">	Cap  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Data</code> 作为一个指针指向的数组是一片连续的内存空间，这片内存空间可以用于存储切片中保存的全部元素，数组中的元素只是逻辑上的概念，底层存储其实都是连续的，所以我们可以将切片理解成一片连续的内存空间加上长度与容量的标识。</p>
+<img src="https://img.draveness.me/2019-02-20-golang-slice-struct.png" alt="golang-slice-struct" style="zoom:50%;" />
+
+<p>切片与数组的关系非常密切，切片引入了一个抽象层，提供了对数组中部分片段的引用，作为数组的引用，我们可以在运行区间可以修改它的长度，如果底层的数组长度不足就会触发扩容机制，切片中的数组就会发生变化</p>
+<h3 id="2-2-2、初始化"><a href="#2-2-2、初始化" class="headerlink" title="2.2.2、初始化"></a>2.2.2、初始化</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过下标的方式获得数组或者切片的一部分</span></span><br><span class="line">arr[<span class="number">0</span>:<span class="number">3</span>] or slice[<span class="number">0</span>:<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用字面量初始化新的切片</span></span><br><span class="line">slice := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用关键字 make 创建切片</span></span><br><span class="line">slice := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<p>使用下标初始化切片不会造成原始数组或者切片中数据的拷贝，它只会创建一个指向原始数组的切片值，所以修改新切片的数据也会修改原始切片。</p>
+<h3 id="2-2-3、追加和扩容"><a href="#2-2-3、追加和扩容" class="headerlink" title="2.2.3、追加和扩容"></a>2.2.3、追加和扩容</h3><p>在 Go 语言中我们会使用 <code>append</code> 关键字向切片追加元素，根据返回值是否会覆盖原变量，会分别进入两种流程。</p>
+<ul>
+<li><p>如果 <code>append</code> 返回的『新切片』不需要赋值回原有的变量：</p>
+<p>我们会先对切片结构体进行解构获取它的数组指针、大小和容量，如果在追加元素后切片的大小大于容量，那么就会调用 <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/440f7d64048cd94cba669e16fe92137ce6b84073/src/runtime/slice.go#L76-L191"><code>runtime.growslice</code></a> 对切片进行扩容并将新的元素依次加入切片</p>
+</li>
+<li><p>如果 <code>append</code> 后的切片会覆盖原切片，即 <code>slice = append(slice, 1, 2, 3)</code>：</p>
+<p>和是否覆盖原变量的逻辑其实差不多，最大的区别在于最后的结果是不是赋值回原有的变量</p>
+</li>
+</ul>
+<img src="https://img.draveness.me/2020-03-12-15839729948451-golang-slice-append.png" alt="golang-slice-append" style="zoom:50%;" />
+
+<p>当切片的容量不足时就会调用 <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/440f7d64048cd94cba669e16fe92137ce6b84073/src/runtime/slice.go#L76"><code>runtime.growslice</code></a> 函数为切片扩容，扩容就是为切片分配一块新的内存空间并将原切片的元素全部拷贝过去：</p>
+<p>在分配内存空间之前需要先确定新的切片容量，Go 语言根据切片的当前容量选择不同的策略进行扩容：</p>
+<ol>
+<li>如果期望容量大于当前容量的两倍就会使用期望容量；</li>
+<li>如果当前切片的长度小于 1024 就会将容量翻倍；</li>
+<li>如果当前切片的长度大于 1024 就会每次增加 25% 的容量，直到新容量大于期望容量；</li>
+</ol>
+<p>这里只是确定切片的大致容量，接下来还需要根据切片中元素的大小对它们进行对齐</p>
+<h3 id="2-3-4、拷贝切片"><a href="#2-3-4、拷贝切片" class="headerlink" title="2.3.4、拷贝切片"></a>2.3.4、拷贝切片</h3><p>当我们使用 <code>copy(a, b)</code> 的形式对切片进行拷贝时，不论<code>copy</code> 是否是在运行时调用的，都会通过 <code>memmove</code> 将整块内存中的内容拷贝到目标的内存区域中：</p>
+<img src="https://img.draveness.me/2019-02-20-golang-slice-copy.png" alt="golang-slice-copy" style="zoom:50%;" />
+
+<h2 id="2-3、哈希表"><a href="#2-3、哈希表" class="headerlink" title="2.3、哈希表"></a>2.3、哈希表</h2><p>哈希表是除了数组之外，最常见的数据结构，几乎所有的语言都会有数组和哈希表这两种集合元素，<strong>有的语言将数组实现成列表，有的语言将哈希表称作结构体或者字典</strong>，但是它们是两种设计集合元素的思路，<strong>数组用于表示元素的序列，而哈希表示的是键值对之间映射关系，只是不同语言的叫法和实现稍微有些不同</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 字面量定义</span></span><br><span class="line">hash := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>&#123;</span><br><span class="line">	<span class="string">&quot;1&quot;</span>: <span class="number">2</span>,</span><br><span class="line">	<span class="string">&quot;3&quot;</span>: <span class="number">4</span>,</span><br><span class="line">	<span class="string">&quot;5&quot;</span>: <span class="number">6</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-4、字符串"><a href="#2-4、字符串" class="headerlink" title="2.4、字符串"></a>2.4、字符串</h2><p>字符串虽然在 Go 语言中是基本类型 <code>string</code>，但是它实际上是由字符组成的数组，是一片连续的内存空间。</p>
+<p>Go 语言中的字符串其实是一个只读的字节数组：</p>
+<img src="https://img.draveness.me/2019-12-31-15777265631608-in-memory-string.png" alt="in-memory-string" style="zoom:50%;" />
+
+<p>只读只意味着字符串会分配到只读的内存空间并且这块内存不会被修改，但是在运行时我们其实还是可以将这段内存拷贝到堆或者栈上，将变量的类型转换成 <code>[]byte</code> 之后就可以进行，修改后通过类型转换就可以变回 <code>string</code>，Go 语言只是不支持直接修改 <code>string</code> 类型变量的内存空间。</p>
+<h3 id="2-4-1、数据结构"><a href="#2-4-1、数据结构" class="headerlink" title="2.4.1、数据结构"></a>2.4.1、数据结构</h3><p>每一个字符串在运行时都会使用如下的 <code>StringHeader</code> 结构体表示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> StringHeader <span class="keyword">struct</span> &#123;</span><br><span class="line">	Data <span class="keyword">uintptr</span></span><br><span class="line">	Len  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与切片的结构体相比，字符串少了一个表示容量的 <code>Cap</code> 字段，因为字符串作为只读的类型，我们并不会直接向字符串直接追加元素改变其本身的内存空间，所有在字符串上执行的写入操作实际都是通过拷贝实现的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明字符串，双引号 与 反引号</span></span><br><span class="line">str1 := <span class="string">&quot;this is a string&quot;</span></span><br><span class="line">str2 := <span class="string">`this is another </span></span><br><span class="line"><span class="string">string`</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-4-2、拼接"><a href="#2-4-2、拼接" class="headerlink" title="2.4.2、拼接"></a>2.4.2、拼接</h3><p>Go 语言拼接字符串会使用 <code>+</code> 符号，在正常情况下，运行时会调用 <code>copy</code> 将输入的多个字符串拷贝到目标字符串所在的内存空间中，新的字符串是一片新的内存空间，与原来的字符串也没有任何关联，一旦需要拼接的字符串非常大，拷贝带来的性能损失就是无法忽略的。</p>
+<img src="https://img.draveness.me/2019-12-31-15777265631620-string-concat-and-copy.png" alt="string-concat-and-copy" style="zoom:50%;" />
+
+<h1 id="3、语言基础"><a href="#3、语言基础" class="headerlink" title="3、语言基础"></a>3、语言基础</h1><h2 id="3-1、函数调用"><a href="#3-1、函数调用" class="headerlink" title="3.1、函数调用"></a>3.1、函数调用</h2><p>我们先来介绍一下传值和传引用两者的区别：</p>
+<ul>
+<li>传值：函数调用时会对参数进行拷贝，被调用方和调用方两者持有不相关的两份数据；</li>
+<li>传引用：函数调用时会传递参数的指针，被调用方和调用方两者持有相同的数据，任意一方做出的修改都会影响另一方。</li>
+</ul>
+<p>不同语言会选择不同的方式传递参数，Go 语言选择了传值的方式，<strong>无论是传递基本类型、结构体还是指针，都会对传递的参数进行拷贝</strong>。</p>
+<p>将指针作为参数传入某一个函数时，在函数内部会对指针进行复制，也就是会同时出现两个指针指向原有的内存空间，所以 Go 语言中『传指针』也是传值。</p>
+<p>Go 通过栈传递函数的参数和返回值，在调用函数之前会在栈上为返回值分配合适的内存空间，随后将入参从右到左按顺序压栈并拷贝参数，返回值会被存储到调用方预留好的栈空间上，我们可以简单总结出以下几条规则：</p>
+<ol>
+<li>通过堆栈传递参数，入栈的顺序是从右到左，而参数的计算是从左到右；</li>
+<li>函数返回值通过堆栈传递并由调用者预先分配内存空间；</li>
+<li>调用函数时都是传值，接收方会对入参进行复制再计算；</li>
+</ol>
+<h2 id="3-2、接口"><a href="#3-2、接口" class="headerlink" title="3.2、接口"></a>3.2、接口</h2><p>接口的本质就是引入一个新的中间层，调用方可以通过接口与具体实现分离，解除上下游的耦合，上层的模块不再需要依赖下层的具体模块，只需要依赖一个约定好的接口。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义了 error 接口</span></span><br><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span> &#123;</span><br><span class="line">	Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201116171037227.png" alt="image-20201116171037227" style="zoom:50%;" />
+
+<h3 id="3-2-1、reciver-中的-普通类型-和-指针类型"><a href="#3-2-1、reciver-中的-普通类型-和-指针类型" class="headerlink" title="3.2.1、reciver 中的 普通类型 和 指针类型"></a>3.2.1、reciver 中的 普通类型 和 指针类型</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如下，绑定到 struct 的方法，可以接受 原始变量 做reciver，也可接受 指针 做revicer </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Cat <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"><span class="keyword">type</span> Duck <span class="keyword">interface</span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c  Cat)</span> <span class="title">Quack</span></span> &#123;&#125;  <span class="comment">// 使用结构体实现接口</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cat)</span> <span class="title">Quack</span></span> &#123;&#125;  <span class="comment">// 使用结构体指针实现接口</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> d Duck = Cat&#123;&#125;      <span class="comment">// 使用结构体初始化变量</span></span><br><span class="line"><span class="keyword">var</span> d Duck = &amp;Cat&#123;&#125;     <span class="comment">// 使用结构体指针初始化变量</span></span><br></pre></td></tr></table></figure>
+<p>实现接口的类型和初始化返回的类型两个维度组成了四种情况，这四种情况并不都能通过编译器的检查：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>结构体实现接口</th>
+<th>结构体指针实现接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>结构体初始化变量</td>
+<td>通过</td>
+<td><strong>不通过</strong></td>
+</tr>
+<tr>
+<td>结构体指针初始化变量</td>
+<td>通过</td>
+<td>通过</td>
+</tr>
+</tbody></table>
+<p>想要搞清楚这个问题，首先要知道 Go 语言在<a target="_blank" rel="noopener" href="https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-function-call/">传递参数</a>时都是<strong>传值</strong>的</p>
+<img src="https://img.draveness.me/golang-interface-method-receiver.png" alt="golang-interface-method-receive" style="zoom:50%;" />
+
+<p>如上图所示，无论上述代码中初始化的变量 <code>c</code> 是 <code>Cat&#123;&#125;</code> 还是 <code>&amp;Cat&#123;&#125;</code>，使用 <code>c.Quack()</code> 调用方法时都会发生值拷贝：</p>
+<ul>
+<li>如图 左侧，对于 <code>&amp;Cat&#123;&#125;</code> 来说，这意味着拷贝一个新的 <code>&amp;Cat&#123;&#125;</code> 指针，这个指针与原来的指针指向一个相同并且唯一的结构体，所以编译器可以隐式的对变量解引用（dereference）获取指针指向的结构体；</li>
+<li>如图 右侧，对于 <code>Cat&#123;&#125;</code> 来说，这意味着 <code>Quack</code> 方法会接受一个全新的 <code>Cat&#123;&#125;</code>，因为方法的参数是 <code>*Cat</code>，编译器不会无中生有创建一个新的指针；即使编译器可以创建新指针，这个指针指向的也不是最初调用该方法的结构体；</li>
+</ul>
+<blockquote>
+<p>注意：对于方法而言（不涉及到接口时），不管你的method的receiver是指针类型还是非指针类型，都是可以通过指针/非指针类型进行调用的，编译器会帮你做类型转换。</p>
+</blockquote>
+<h3 id="3-2-2、类型断言"><a href="#3-2-2、类型断言" class="headerlink" title="3.2.2、类型断言"></a>3.2.2、类型断言</h3><p>类型断言（Type Assertion）是一个使用在接口值上的操作，用于检查接口类型变量所持有的值是否实现了期望的接口或者具体的类型。</p>
+<p>在Go语言中类型断言的语法格式如下：</p>
+<p>value, ok := x.(T)</p>
+<p>其中，x 表示一个接口的类型，T 表示一个具体的类型（也可为接口类型）。</p>
+<p>该断言表达式会返回 x 的值（也就是 value）和一个布尔值（也就是 ok），可根据该布尔值判断 x 是否为 T 类型：</p>
+<ul>
+<li>如果 T 是具体某个类型，类型断言会检查 x 的动态类型是否等于具体类型 T。如果检查成功，类型断言返回的结果是 x 的动态值，其类型是 T。</li>
+<li>如果 T 是接口类型，类型断言会检查 x 的动态类型是否满足 T。如果检查成功，x 的动态值不会被提取，返回值是一个类型为 T 的接口值。</li>
+<li>无论 T 是什么类型，如果 x 是 nil 接口值，类型断言都会失败。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">interface</span>&#123;&#125;=<span class="number">7</span>  <span class="comment">//x的动态类型为int,值为7</span></span><br><span class="line">i:=x.(<span class="keyword">int</span>)           <span class="comment">// i的类型为int ,值为7</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> I <span class="keyword">interface</span> &#123;m()&#125;</span><br><span class="line"><span class="keyword">var</span> y I</span><br><span class="line"></span><br><span class="line">s:=y.(<span class="keyword">string</span>)      <span class="comment">//非法: string 没有实现接口 I (missing method m)</span></span><br><span class="line">r:=y.(io.Reader)   <span class="comment">//y如果实现了接口io.Reader和I的情况下，  r的类型则为io.Reader</span></span><br></pre></td></tr></table></figure>
+<p>类型断言还可以配合 switch 使用，实现比较类型的效果。</p>
+<p><code>type switch</code>它用于检测的是值<code>x</code>的类型<code>T</code>是否匹配某个类型.</p>
+<p>格式如下，类似类型断言，但是括号内的不是某个具体的类型，而是单词<code>type</code>:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> x.(<span class="keyword">type</span>)&#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> i := x.(<span class="keyword">type</span>) &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="literal">nil</span>:</span><br><span class="line">  printString(<span class="string">&quot;x is nil&quot;</span>) <span class="comment">// i的类型是 x的类型 (interface&#123;&#125;)</span></span><br><span class="line"><span class="keyword">case</span> <span class="keyword">int</span>:</span><br><span class="line">  printInt(i) <span class="comment">// i的类型 int</span></span><br><span class="line"><span class="keyword">case</span> <span class="keyword">float64</span>:</span><br><span class="line">  printFloat64(i) <span class="comment">// i的类型是 float64</span></span><br><span class="line"><span class="keyword">case</span> <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">int</span>)</span> <span class="title">float64</span>:</span></span><br><span class="line">  printFunction(i) <span class="comment">// i的类型是 func(int) float64</span></span><br><span class="line"><span class="keyword">case</span> <span class="keyword">bool</span>, <span class="keyword">string</span>:</span><br><span class="line">  printString(<span class="string">&quot;type is bool or string&quot;</span>) <span class="comment">// i的类型是 x (interface&#123;&#125;)</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">  printString(<span class="string">&quot;don&#x27;t know the type&quot;</span>) <span class="comment">// i的类型是 x的类型 (interface&#123;&#125;)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-3、反射"><a href="#3-3、反射" class="headerlink" title="3.3、反射"></a>3.3、反射</h2><h1 id="4、Goroutines-和-Channels"><a href="#4、Goroutines-和-Channels" class="headerlink" title="4、Goroutines 和 Channels"></a>4、Goroutines 和 Channels</h1><h2 id="4-1、goroutine"><a href="#4-1、goroutine" class="headerlink" title="4.1、goroutine"></a>4.1、goroutine</h2><p>当一个程序启动时，其主函数即在一个单独的goroutine中运行，我们叫它main goroutine。新的goroutine会用go语句来创建。在语法上，go语句是一个普通的函数或方法调用前加上关键字go。go语句会使其语句中的函数在一个新创建的goroutine中运行。而go语句本身会迅速地完成。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f()    <span class="comment">// call f(); wait for it to return</span></span><br><span class="line"><span class="keyword">go</span> f() <span class="comment">// create a new goroutine that calls f(); don&#x27;t wait</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="4-2、channel"><a href="#4-2、channel" class="headerlink" title="4.2、channel"></a>4.2、channel</h2><h3 id="创建channel"><a href="#创建channel" class="headerlink" title="创建channel"></a>创建channel</h3><p>如果说goroutine是Go语言程序的并发体的话，那么channels则是它们之间的通信机制。一个channel是一个通信机制，它可以让一个goroutine通过它给另一个goroutine发送值信息。每个channel都有一个特殊的类型，也就是channels可发送数据的类型。一个可以发送int类型数据的channel一般写为chan int。</p>
+<p>使用内置的make函数，我们可以创建一个channel：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>) <span class="comment">// ch has type &#x27;chan int&#x27;</span></span><br><span class="line">ch = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)    <span class="comment">// unbuffered channel</span></span><br><span class="line">ch = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">0</span>) <span class="comment">// unbuffered channel</span></span><br><span class="line">ch = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">3</span>) <span class="comment">// buffered channel with capacity 3</span></span><br></pre></td></tr></table></figure>
+<p>和map类似，<strong>channel也对应一个make创建的底层数据结构的引用。当我们复制一个channel或用于函数参数传递时，我们只是拷贝了一个channel引用</strong>，因此调用者和被调用者将引用同一个channel对象。和其它的引用类型一样，channel的零值也是nil。</p>
+<p>两个相同类型的channel可以使用==运算符比较。如果两个channel引用的是相同的对象，那么比较的结果为真。一个channel也可以和nil进行比较。</p>
+<p>一个channel有发送和接受两个主要操作，都是通信行为。一个发送语句将一个值从一个goroutine通过channel发送到另一个执行接收操作的goroutine。发送和接收两个操作都使用<code>&lt;-</code>运算符：</p>
+<ul>
+<li>在发送语句中，<code>&lt;-</code>运算符分割channel和要发送的值</li>
+<li>在接收语句中，<code>&lt;-</code>运算符写在channel对象之前。一个不使用接收结果的接收操作也是合法的。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ch &lt;- x  <span class="comment">// a send statement</span></span><br><span class="line">x = &lt;-ch <span class="comment">// a receive expression in an assignment statement</span></span><br><span class="line">&lt;-ch     <span class="comment">// a receive statement; result is discarded</span></span><br></pre></td></tr></table></figure>
+<h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer"></a>buffer</h3><p>channel可以带buffer：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make(chan int, 2)</span><br></pre></td></tr></table></figure>
+<p>表示创建一个length为2的管道，注意这里的length表示数量，而非具体的内存容积，比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make(chan string, 2)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>表示可以容纳2个string的内容，比如”abcdefg”和”h”这样2个string，而不是指只能存”a”和”b”。</li>
+<li>当不设置length时候即为buffer=0</li>
+</ul>
+<p>说明：</p>
+<ul>
+<li>往chan发送数据时候，若buffer没满的时候，则发送数据即刻成功，不会被阻塞。当buffer满了就会被阻塞</li>
+<li>从chan接受数据时候，若buffer是空的则会被阻塞，当buffer不是空的时候则即刻完成，不会被阻塞</li>
+</ul>
+<h3 id="Close"><a href="#Close" class="headerlink" title="Close"></a>Close</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">close</span>(ch)</span><br></pre></td></tr></table></figure>
+<p>有且只有发送者可以关闭管道，接收者不能关闭管道</p>
+<p>接收者可以通过<code>v, ok := &lt;-ch</code>这种方式来测试管道是否关闭，若ok为false则表示管道已关闭</p>
+<p>关闭channe后l，随后对基于该channel的任何发送操作都将导致panic异常。对一个已经被close过的channel进行接收操作依然可以接受到之前已经成功发送的数据；如果channel中已经没有数据的话将产生一个零值的数据。</p>
+<h3 id="select-case"><a href="#select-case" class="headerlink" title="select-case"></a>select-case</h3><p>select和case的组合可以使哪个管道就绪（对端已阻塞），就读取该管道数据并执行相应case的代码块。</p>
+<p>官网译: select 会阻塞，直到条件分支中的某个可以继续执行，这时就会执行那个条件分支。当多个都准备好的时候，会随机选择一个。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">receive</span><span class="params">(ch1, ch2, ch3, quit <span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">2</span>; i++ &#123;</span><br><span class="line">        fmt.Printf(<span class="string">&quot;receive %d from ch1\n&quot;</span>, &lt;-ch1)</span><br><span class="line">        fmt.Printf(<span class="string">&quot;receive %d from ch2\n&quot;</span>, &lt;-ch2)</span><br><span class="line">        fmt.Printf(<span class="string">&quot;receive %d from ch3\n&quot;</span>, &lt;-ch3)</span><br><span class="line">    &#125;</span><br><span class="line">    quit &lt;- <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">(ch1, ch2, ch3, quit <span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> ch1 &lt;- i:</span><br><span class="line">            fmt.Printf(<span class="string">&quot;send %d to ch1\n&quot;</span>, i)</span><br><span class="line">        <span class="keyword">case</span> ch2 &lt;- i:</span><br><span class="line">            fmt.Printf(<span class="string">&quot;send %d to ch2\n&quot;</span>, i)</span><br><span class="line">        <span class="keyword">case</span> ch3 &lt;- i:</span><br><span class="line">            fmt.Printf(<span class="string">&quot;send %d to ch3\n&quot;</span>, i)</span><br><span class="line">        <span class="keyword">case</span> &lt;-quit:</span><br><span class="line">            fmt.Println(<span class="string">&quot;quit&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    ch2 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    ch3 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    quit := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    <span class="keyword">go</span> receive(ch1, ch2, ch3, quit)</span><br><span class="line">    send(ch1, ch2, ch3, quit)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="只读只写channel"><a href="#只读只写channel" class="headerlink" title="只读只写channel"></a>只读只写channel</h3><p>channel支持3种类型（通过%T看到的）：</p>
+<ul>
+<li>读写类型：<code>chan int</code></li>
+<li>只读类型：<code>&lt;-chan int</code>，叫做receive-only</li>
+<li>只写类型：<code>chan&lt;- int</code>，叫做send-only</li>
+</ul>
+<p>通过函数参数传递时候，若原来是读写，则可以转成只读或只写，但如果已经是只读或只写，则只能保持类型，无法转为其他类型（比如原来是只读，则只能是只读，无法转成只写，也无法转为读写），例子如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">(c <span class="keyword">chan</span>&lt;- <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;send: %T\n&quot;</span>, c)</span><br><span class="line">    c &lt;- <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">recv</span><span class="params">(c &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;recv: %T\n&quot;</span>, c)</span><br><span class="line">    fmt.Println(&lt;-c)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;%T\n&quot;</span>, c)</span><br><span class="line">    <span class="keyword">go</span> send(c)</span><br><span class="line">    <span class="keyword">go</span> recv(c)</span><br><span class="line">    time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="5、基于共享变量的并发（sync）"><a href="#5、基于共享变量的并发（sync）" class="headerlink" title="5、基于共享变量的并发（sync）"></a>5、基于共享变量的并发（sync）</h1><h2 id="5-1、竞争条件"><a href="#5-1、竞争条件" class="headerlink" title="5.1、竞争条件"></a>5.1、竞争条件</h2><p>竞争条件指的是程序在多个goroutine交叉执行操作时，没有给出正确的结果。数据竞争会在两个以上的goroutine并发访问相同的变量且至少其中一个为写操作时发生。有三种方式可以避免数据竞争：</p>
+<ol>
+<li>不对变量进行更新操作，只是读取</li>
+<li>避免从多个goroutine访问变量，其它的goroutine使用一个channel来发送请求给指定的goroutine来查询更新变量。这也就是Go的口头禅“不要使用共享数据来通信；使用通信来共享数据”。</li>
+<li>通过“互斥”，保证同一个时刻最多只有一个goroutine在访问变量</li>
+</ol>
+<h2 id="5-2、互斥锁（Mutex）"><a href="#5-2、互斥锁（Mutex）" class="headerlink" title="5.2、互斥锁（Mutex）"></a>5.2、互斥锁（Mutex）</h2><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>用于主动控制Mutex类型的变量或者将Mutex类型作为struct的元素的变量在同一时间只被一个routine访问（即执行Lock()方法的代码块），这个Mutex带有2个方法：Lock()和Unlock()。互斥锁不区分读和写，即无论是print打印还是写操作都是互斥的</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"><span class="keyword">var</span> mutex sync.Mutex</span><br><span class="line">mutex.Lock()</span><br><span class="line">mutex.Unlock()</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> SafeCounter <span class="keyword">struct</span> &#123;</span><br><span class="line">    v   <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span></span><br><span class="line">    mux sync.Mutex</span><br><span class="line">&#125;</span><br><span class="line">c := SafeCounter&#123;v: <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>)&#125;</span><br><span class="line">c.mux.Lock()</span><br><span class="line">c.mux.Unlock()</span><br></pre></td></tr></table></figure>
+<h3 id="互斥锁在共同使用时才生效"><a href="#互斥锁在共同使用时才生效" class="headerlink" title="互斥锁在共同使用时才生效"></a>互斥锁在共同使用时才生效</h3><p>互斥锁的使用是主动控制互斥锁，需要大家一起用才会生效。比如即使一个routine里用了Lock()，但在另一个routine可以不理会这个锁就能访问这个struct，只需要不调用Lock()就行。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> SafeCounter <span class="keyword">struct</span> &#123;</span><br><span class="line">    v   <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span></span><br><span class="line">    mux sync.Mutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *SafeCounter)</span> <span class="title">Inc</span><span class="params">(key <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    c.mux.Lock()</span><br><span class="line">    fmt.Printf(<span class="string">&quot;goroutine start sleep 3s\n&quot;</span>)</span><br><span class="line">    time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">    <span class="comment">// 虽然有锁，但这个++后执行</span></span><br><span class="line">    c.v[key]++</span><br><span class="line">    c.mux.Unlock()</span><br><span class="line">    fmt.Printf(<span class="string">&quot;goroutine stop sleep 3s\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    c := SafeCounter&#123;v: <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>)&#125;</span><br><span class="line">    <span class="keyword">go</span> c.Inc(<span class="string">&quot;somekey&quot;</span>)</span><br><span class="line"></span><br><span class="line">    fmt.Printf(<span class="string">&quot;main start sleep 1s\n&quot;</span>)</span><br><span class="line">    time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;main stop sleep 1s\n&quot;</span>)</span><br><span class="line">    <span class="comment">// 这个 ++ 先执行</span></span><br><span class="line">    c.v[<span class="string">&quot;somekey&quot;</span>]++</span><br><span class="line">    fmt.Println(c.v[<span class="string">&quot;somekey&quot;</span>])</span><br><span class="line"></span><br><span class="line">    fmt.Printf(<span class="string">&quot;main start sleep 3s\n&quot;</span>)</span><br><span class="line">    time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;main stop sleep 3s\n&quot;</span>)</span><br><span class="line">    fmt.Println(c.v[<span class="string">&quot;somekey&quot;</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">main start sleep <span class="number">1</span>s</span><br><span class="line">goroutine start sleep <span class="number">3</span>s</span><br><span class="line">main stop sleep <span class="number">1</span>s</span><br><span class="line"><span class="number">1</span></span><br><span class="line">main start sleep <span class="number">3</span>s</span><br><span class="line">goroutine stop sleep <span class="number">3</span>s</span><br><span class="line">main stop sleep <span class="number">3</span>s</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>上述例子说明了：Lock只是一种人为的互斥，是一种协议，并不是强制</p>
+<h3 id="已经锁定的Mutex与特定的goroutine无关联"><a href="#已经锁定的Mutex与特定的goroutine无关联" class="headerlink" title="已经锁定的Mutex与特定的goroutine无关联"></a><strong>已经锁定的Mutex与特定的goroutine无关联</strong></h3><p>已经锁定的Mutex并不与特定的goroutine相关联，这样可以利用一个goroutine对其加锁，再利用其他goroutine对其解锁</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyStruct <span class="keyword">struct</span> &#123;</span><br><span class="line">    v   <span class="keyword">int</span></span><br><span class="line">    mux sync.Mutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *MyStruct)</span> <span class="title">Lock</span><span class="params">()</span></span> &#123;</span><br><span class="line">    s.mux.Lock()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *MyStruct)</span> <span class="title">Unlock</span><span class="params">()</span></span> &#123;</span><br><span class="line">    s.mux.Unlock()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    s := MyStruct&#123;v: <span class="number">0</span>&#125;</span><br><span class="line">    s.v = <span class="number">1</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;%+v\n&quot;</span>, s)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">go</span> s.Lock()</span><br><span class="line">    time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;%+v\n&quot;</span>, s)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">go</span> s.Unlock()</span><br><span class="line">    time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;%+v\n&quot;</span>, s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="5-3、读写锁（RWMutex）"><a href="#5-3、读写锁（RWMutex）" class="headerlink" title="5.3、读写锁（RWMutex）"></a>5.3、读写锁（RWMutex）</h2><p>读写锁是针对于读写操作的互斥锁。它与普通的互斥锁最大的不同就是，它可以分别针对读操作和写操作进行锁定和解锁操作。读写锁遵循的访问控制规则与互斥锁有所不同。在读写锁管辖的范围内，它允许任意个读操作的同时进行。但是，在同一时刻，它只允许有一个写操作在进行。并且，在某一个写操作被进行的过程中，读操作的进行也是不被允许的。也就是说，读写锁控制下的多个写操作之间都是互斥的，并且写操作与读操作之间也都是互斥的。但是，多个读操作之间却不存在互斥关系。</p>
+<p>换句话说:</p>
+<ol>
+<li>同时只能有一个 goroutine 能够获得写锁定。</li>
+<li>同时可以有任意多个 gorouinte 获得读锁定。</li>
+<li>同时只能存在写锁定或读锁定（读和写互斥）。</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Lock</span>       //写锁定</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Unlock</span>     //写解锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLock</span>      //读锁定</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RUnlock</span>    //读解锁</span></span><br></pre></td></tr></table></figure>
+<p>Mutex和RWMutex都实现了Locker接口。该接口如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">    Lock()</span><br><span class="line">    Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>写锁的优先级比读锁高，读锁和写锁不会无限饥饿。参见<a target="_blank" rel="noopener" href="https://fivezh.github.io/2019/04/09/sync_mutex_translation/">sync.RWMutex - 解决并发读写问题</a></p>
+<h2 id="5-4、WaitGroup"><a href="#5-4、WaitGroup" class="headerlink" title="5.4、WaitGroup"></a>5.4、WaitGroup</h2><p>WaitGroup 用于等待一组 goroutine 结束，用法很简单。它有三个方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Add</span><span class="params">(delta <span class="keyword">int</span>)</span></span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Done</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Wait</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Add 用来添加 goroutine 的个数</li>
+<li>Done 执行一次数量减 1</li>
+<li>Wait 用来等待结束</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">import (</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;sync&quot;</span><br><span class="line">    &quot;time&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    var wg sync.WaitGroup</span><br><span class="line">    fmt.Printf(&quot;init:             %+v\n&quot;, wg)</span><br><span class="line"></span><br><span class="line">    for i :&#x3D; 1; i &lt; 10; i++ &#123;</span><br><span class="line">        &#x2F;&#x2F; 计数加 1</span><br><span class="line">        wg.Add(1)</span><br><span class="line">        go func(i int) &#123;</span><br><span class="line">            fmt.Printf(&quot;goroutine%d start: %+v\n&quot;, i, wg)</span><br><span class="line">            time.Sleep(11 * time.Second)</span><br><span class="line">            &#x2F;&#x2F; 计数减 1</span><br><span class="line">            wg.Done()</span><br><span class="line">            fmt.Printf(&quot;goroutine%d end:   %+v\n&quot;, i, wg)</span><br><span class="line">        &#125;(i)</span><br><span class="line">        time.Sleep(time.Second)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 等待执行结束</span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Printf(&quot;over:             %+v\n&quot;, wg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">init:             &#123;noCopy:&#123;&#125; state1:[0 0 0 0 0 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine1 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 1 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine2 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 2 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine3 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 3 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine4 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 4 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine5 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 5 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine6 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 6 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine7 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 7 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine8 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 8 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine9 start: &#123;noCopy:&#123;&#125; state1:[0 0 0 0 9 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine1 end:   &#123;noCopy:&#123;&#125; state1:[1 0 0 0 8 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine2 end:   &#123;noCopy:&#123;&#125; state1:[1 0 0 0 7 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine3 end:   &#123;noCopy:&#123;&#125; state1:[1 0 0 0 6 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine4 end:   &#123;noCopy:&#123;&#125; state1:[1 0 0 0 5 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine5 end:   &#123;noCopy:&#123;&#125; state1:[1 0 0 0 4 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine6 end:   &#123;noCopy:&#123;&#125; state1:[1 0 0 0 3 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine7 end:   &#123;noCopy:&#123;&#125; state1:[1 0 0 0 2 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine8 end:   &#123;noCopy:&#123;&#125; state1:[1 0 0 0 1 0 0 0 0 0 0 0] sema:0&#125;</span><br><span class="line">goroutine9 end:   &#123;noCopy:&#123;&#125; state1:[0 0 0 0 0 0 0 0 0 0 0 0] sema:1&#125;</span><br><span class="line">over:             &#123;noCopy:&#123;&#125; state1:[0 0 0 0 0 0 0 0 0 0 0 0] sema:0&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>wg.Add() 方法一定要在 goroutine 开始前执行</p>
+</blockquote>
+<h2 id="5-5、条件变量（Cond）"><a href="#5-5、条件变量（Cond）" class="headerlink" title="5.5、条件变量（Cond）"></a>5.5、条件变量（Cond）</h2><p>与互斥量不同，条件变量的作用并不是保证在同一时刻仅有一个线程访问某一个共享数据，而是在对应的共享数据的状态发生变化时，通知其他因此而被阻塞的线程。条件变量总是与互斥量组合使用。互斥量为共享数据的访问提供互斥支持，而条件变量可以就共享数据的状态的变化向相关线程发出通知。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lock := <span class="built_in">new</span>(sync.Mutex)</span><br><span class="line">cond := sync.NewCond(lock)</span><br></pre></td></tr></table></figure>
+<p>也可以写成一行</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cond := sync.NewCond(<span class="built_in">new</span>(sync.Mutex))</span><br></pre></td></tr></table></figure>
+<p>方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 每个Cond都有一个关联的Locker L（通常是*Mutex或*RWMutex），在更改条件和调用Wait方法时必须保持该锁</span></span><br><span class="line">cond.L.Lock()</span><br><span class="line">cond.L.Unlock()</span><br><span class="line"></span><br><span class="line"><span class="comment">//Wait以原子方式解锁c.L并挂起调用goroutine的执行。在稍后恢复执行时，在返回之前等待locks c.L。与其他系统不同，wait 不能返回，除非被 Broadcast或 signal唤醒。</span></span><br><span class="line">cond.Wait()</span><br><span class="line"></span><br><span class="line">cond.Signal() <span class="comment">//唤醒一个等待c的goroutine（如果有）。</span></span><br><span class="line">cond.Broadcast() <span class="comment">//广播唤醒所有等待c的goroutine。</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="5-6、临时对象池"><a href="#5-6、临时对象池" class="headerlink" title="5.6、临时对象池"></a>5.6、临时对象池</h2><p><code>sync.Pool</code> 是 sync 包下的一个组件，可以作为保存临时取还对象的一个“池子”。个人觉得它的名字有一定的误导性，因为 Pool 里装的对象可以被无通知地被回收，可能 <code>sync.Cache</code> 是一个更合适的名字。</p>
+<p>对于很多需要重复分配、回收内存的地方，<code>sync.Pool</code> 是一个很好的选择。频繁地分配、回收内存会给 GC 带来一定的负担，严重的时候会引起 CPU 的毛刺，而 <code>sync.Pool</code> 可以将暂时不用的对象缓存起来，待下次需要的时候直接使用，不用再次经过内存分配，复用对象的内存，减轻 GC 的压力，提升系统的性能。</p>
+<p>参见文档：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/qcrao-2018/p/12736031.html">深度解密 Go 语言之 sync.Pool</a></p>
+<p><a target="_blank" rel="noopener" href="https://cyent.github.io/golang/goroutine/sync_pool/">临时对象池(Pool)</a></p>
+<h1 id="6、包"><a href="#6、包" class="headerlink" title="6、包"></a>6、包</h1><p>见此篇文章：<a target="_blank" rel="noopener" href="http://c.biancheng.net/view/5394.html">Go语言包的基本概念</a></p>
+<h1 id="摘抄文档"><a href="#摘抄文档" class="headerlink" title="摘抄文档"></a>摘抄文档</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://fivezh.github.io/2020/03/09/golang-nil/">理解Golang中的 nil</a></li>
+<li><a target="_blank" rel="noopener" href="https://books.studygolang.com/gopl-zh/">Go语言圣经（中文版）</a></li>
+<li><a target="_blank" rel="noopener" href="https://cyent.github.io/golang/">Go语言学习 - cyent笔记</a></li>
+<li><a target="_blank" rel="noopener" href="https://draveness.me/golang/">Go 语言设计与实现</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/11/09/k8s/%E6%89%8B%E5%8A%A8%E6%90%AD%E5%BB%BAKubernetes/" rel="prev" title="手动搭建Kubernetes">
+      <i class="fa fa-chevron-left"></i> 手动搭建Kubernetes
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/11/16/Go/%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%8D%E5%B0%84-%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/" rel="next" title="什么是反射-官网翻译">
+      什么是反射-官网翻译 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86"><span class="nav-text">1、编译原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E3%80%81%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-text">1.1、预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-1%E3%80%81%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91"><span class="nav-text">1.1.1、抽象语法树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2%E3%80%81%E9%9D%99%E6%80%81%E5%8D%95%E8%B5%8B%E5%80%BC"><span class="nav-text">1.1.2、静态单赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3%E3%80%81%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">1.1.3、指令集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2%E3%80%81%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86"><span class="nav-text">1.2、编译原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1%E3%80%81%E8%AF%8D%E6%B3%95%E4%B8%8E%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-text">1.2.1、词法与语法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2%E3%80%81%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5"><span class="nav-text">1.2.2、类型检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3%E3%80%81%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90"><span class="nav-text">1.2.3、中间代码生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-4%E3%80%81%E6%9C%BA%E5%99%A8%E7%A0%81%E7%94%9F%E6%88%90"><span class="nav-text">1.2.4、机器码生成</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84"><span class="nav-text">2、程序结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E3%80%81%E5%91%BD%E5%90%8D"><span class="nav-text">2.1、命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2%E3%80%81%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E"><span class="nav-text">2.2、变量声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3%E3%80%81%E8%B5%8B%E5%80%BC"><span class="nav-text">2.3、赋值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4%E3%80%81%E7%B1%BB%E5%9E%8B"><span class="nav-text">2.4、类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">2、数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E3%80%81%E6%95%B0%E7%BB%84"><span class="nav-text">2.1、数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2%E3%80%81%E5%88%87%E7%89%87"><span class="nav-text">2.2、切片</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1%E3%80%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">2.2.1、数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">2.2.2、初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3%E3%80%81%E8%BF%BD%E5%8A%A0%E5%92%8C%E6%89%A9%E5%AE%B9"><span class="nav-text">2.2.3、追加和扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-4%E3%80%81%E6%8B%B7%E8%B4%9D%E5%88%87%E7%89%87"><span class="nav-text">2.3.4、拷贝切片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3%E3%80%81%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="nav-text">2.3、哈希表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-text">2.4、字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1%E3%80%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">2.4.1、数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-2%E3%80%81%E6%8B%BC%E6%8E%A5"><span class="nav-text">2.4.2、拼接</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80"><span class="nav-text">3、语言基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1%E3%80%81%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="nav-text">3.1、函数调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2%E3%80%81%E6%8E%A5%E5%8F%A3"><span class="nav-text">3.2、接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-1%E3%80%81reciver-%E4%B8%AD%E7%9A%84-%E6%99%AE%E9%80%9A%E7%B1%BB%E5%9E%8B-%E5%92%8C-%E6%8C%87%E9%92%88%E7%B1%BB%E5%9E%8B"><span class="nav-text">3.2.1、reciver 中的 普通类型 和 指针类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-2%E3%80%81%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80"><span class="nav-text">3.2.2、类型断言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3%E3%80%81%E5%8F%8D%E5%B0%84"><span class="nav-text">3.3、反射</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81Goroutines-%E5%92%8C-Channels"><span class="nav-text">4、Goroutines 和 Channels</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1%E3%80%81goroutine"><span class="nav-text">4.1、goroutine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2%E3%80%81channel"><span class="nav-text">4.2、channel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAchannel"><span class="nav-text">创建channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#buffer"><span class="nav-text">buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Close"><span class="nav-text">Close</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-case"><span class="nav-text">select-case</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AA%E8%AF%BB%E5%8F%AA%E5%86%99channel"><span class="nav-text">只读只写channel</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E5%9F%BA%E4%BA%8E%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F%E7%9A%84%E5%B9%B6%E5%8F%91%EF%BC%88sync%EF%BC%89"><span class="nav-text">5、基于共享变量的并发（sync）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1%E3%80%81%E7%AB%9E%E4%BA%89%E6%9D%A1%E4%BB%B6"><span class="nav-text">5.1、竞争条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2%E3%80%81%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%88Mutex%EF%BC%89"><span class="nav-text">5.2、互斥锁（Mutex）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%92%E6%96%A5%E9%94%81%E5%9C%A8%E5%85%B1%E5%90%8C%E4%BD%BF%E7%94%A8%E6%97%B6%E6%89%8D%E7%94%9F%E6%95%88"><span class="nav-text">互斥锁在共同使用时才生效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%B2%E7%BB%8F%E9%94%81%E5%AE%9A%E7%9A%84Mutex%E4%B8%8E%E7%89%B9%E5%AE%9A%E7%9A%84goroutine%E6%97%A0%E5%85%B3%E8%81%94"><span class="nav-text">已经锁定的Mutex与特定的goroutine无关联</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3%E3%80%81%E8%AF%BB%E5%86%99%E9%94%81%EF%BC%88RWMutex%EF%BC%89"><span class="nav-text">5.3、读写锁（RWMutex）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4%E3%80%81WaitGroup"><span class="nav-text">5.4、WaitGroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5%E3%80%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%EF%BC%88Cond%EF%BC%89"><span class="nav-text">5.5、条件变量（Cond）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6%E3%80%81%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0"><span class="nav-text">5.6、临时对象池</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6%E3%80%81%E5%8C%85"><span class="nav-text">6、包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%91%98%E6%8A%84%E6%96%87%E6%A1%A3"><span class="nav-text">摘抄文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

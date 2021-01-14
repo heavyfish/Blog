@@ -1,39 +1,26 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
-    <head>
-    <meta charset="utf-8">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
 
-    
-
-    <!-- 渲染优化 -->
-    <meta name="renderer" content="webkit">
-    <meta name="force-rendering" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-    <meta name="HandheldFriendly" content="True" >
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <!--icon-->
-
-    
-    
-    
-    
-    
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
 
 
-    <!-- meta -->
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
 
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
 
-<title>Python学习手册1～9 | 速查笔记</title>
-
-
-
-
-
-    <!-- OpenGraph -->
- 
-    <meta name="description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式 字节码编译当程序执行时，Pyt">
+  <meta name="description" content="1、Python如何运行程序Python程序的结构 程序由模块构成 模块包含语句 语句包含表达式 表达式创建并处理对象  命名空间Python中，每个模块都是一个单独的命名空间。 在Python中，命名空间就是变量（即变量名）的封装。它以一个带有属性的对象的形式出现（想象字节码那里，如何将变量放到对象中的）。每个文件自动成为一个命名空间。 Python程序的执行方式 字节码编译当程序执行时，Pyt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python学习手册1～9">
 <meta property="og:url" content="https://heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/index.html">
@@ -94,116 +81,180 @@
 <meta property="article:published_time" content="2020-09-14T10:10:19.019Z">
 <meta property="article:modified_time" content="2021-01-13T16:02:11.797Z">
 <meta property="article:author" content="Shenxr">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234300363.png">
 
-
-    
-<link rel="stylesheet" href="/heavyfish.github.io/css/style/main.css">
- 
+<link rel="canonical" href="https://heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/">
 
 
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
 
-    
-    
-        <link rel="stylesheet" id="hl-default-theme" href="/heavyfish.github.io/css/highlight/default.css" media="none" onload="if(getComputedStyle(document.documentElement).getPropertyValue('--color-mode').indexOf('dark')===-1)this.media='all'">
-        
-    
+  <title>Python学习手册1～9 | 速查笔记</title>
+  
 
-    
-    
 
-     
 
-    <!-- custom head -->
 
-<meta name="generator" content="Hexo 5.3.0"></head>
 
-    <body>
-        <div id="app">
-            <header class="header">
-    <div class="header__left">
-        <a href="/heavyfish.github.io/" class="button">
-            <span class="logo__text">Demo</span>
-        </a>
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
-    <div class="header__right">
-        
-            <div class="navbar__menus">
-                
-                    <a href="/heavyfish.github.io/" class="navbar-menu button">首页</a>
-                
-                    <a href="/heavyfish.github.io/tags/" class="navbar-menu button">标签</a>
-                
-                    <a href="/heavyfish.github.io/categories/" class="navbar-menu button">分类</a>
-                
-                    <a href="/heavyfish.github.io/archives/" class="navbar-menu button">归档</a>
-                
-                    <a href="/heavyfish.github.io/friends/" class="navbar-menu button">友链</a>
-                
-                    <a href="/heavyfish.github.io/page/" class="navbar-menu button">Page</a>
-                
-            </div>
-        
-        
-        
+  </div>
 
-        
-        
+  <div class="site-meta">
 
-        
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">速查笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
 
-        
-            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
-            <div class="dropdown-menus" id="dropdown-menus">
-                
-                    <a href="/heavyfish.github.io/" class="dropdown-menu button">首页</a>
-                
-                    <a href="/heavyfish.github.io/tags/" class="dropdown-menu button">标签</a>
-                
-                    <a href="/heavyfish.github.io/categories/" class="dropdown-menu button">分类</a>
-                
-                    <a href="/heavyfish.github.io/archives/" class="dropdown-menu button">归档</a>
-                
-                    <a href="/heavyfish.github.io/friends/" class="dropdown-menu button">友链</a>
-                
-                    <a href="/heavyfish.github.io/page/" class="dropdown-menu button">Page</a>
-                
-            </div>
-        
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
-</header>
-
-
-            <main class="main">
-    
-
-<div class="post-title">
-    <h1 class="post-title__text">
-        Python学习手册1～9
-    </h1>
-    <div class="post-title__meta">
-        <a href="/heavyfish.github.io/archives/2020/09/" class="post-meta__date button">2020-09-14</a>
-        
-    <span class="separate-dot"></span><a href="/heavyfish.github.io/categories/Python/" class="button">Python</a>
-
- 
-        
-    
-    
-
-
- 
-
- 
-    </div>
+  </div>
 </div>
 
 
 
-<article class="post content-card">
-    <div class="post__header"></div>
-    <div class="post__content">
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/heavyfish.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="速查笔记">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python学习手册1～9
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-14 18:10:19" itemprop="dateCreated datePublished" datetime="2020-09-14T18:10:19+08:00">2020-09-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-14 00:02:11" itemprop="dateModified" datetime="2021-01-14T00:02:11+08:00">2021-01-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
         <h1 id="1、Python如何运行程序"><a href="#1、Python如何运行程序" class="headerlink" title="1、Python如何运行程序"></a>1、Python如何运行程序</h1><h2 id="Python程序的结构"><a href="#Python程序的结构" class="headerlink" title="Python程序的结构"></a>Python程序的结构</h2><ol>
 <li>程序由模块构成</li>
 <li>模块包含语句</li>
@@ -550,103 +601,189 @@
 <h2 id="通用的表达式"><a href="#通用的表达式" class="headerlink" title="通用的表达式"></a>通用的表达式</h2><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000116105.png" alt="image-20210114000116105"></p>
 
     </div>
-     
-    <div class="post-footer__meta"><p>updated at 2021-01-14</p></div> 
-    <div class="post-meta__cats"><a href="/heavyfish.github.io/categories/Python/" class="post-cats__link button">Python</a></div> 
-</article>
-
-
-    <div class="nav">
-        <div class="nav__prev">
-            
-                <a href="/heavyfish.github.io/2020/09/18/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C10%EF%BD%9E13/" class="nav__link">
-                    <div>
-                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
-                    </div>
-                    <div>
-                        <div class="nav__label">
-                            Previous Post
-                        </div>
-                        <div class="nav__title">
-                            Python学习手册10～13
-                        </div>
-                    </div>
-                </a>
-            
-        </div>
-        <div class="nav__next">
-            
-                <a href="/heavyfish.github.io/2020/09/03/python/uWSGI%E7%9B%B8%E5%85%B3/" class="nav__link">
-                    <div>
-                        <div class="nav__label">
-                            Next Post
-                        </div>
-                        <div class="nav__title">
-                            uWSGI相关
-                        </div>
-                    </div>
-                    <div>
-                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
-                    </div>
-                </a>
-            
-        </div>
-    </div>
-
-
-
-
-
-</main>
-
-            <footer class="footer">
-    
-
 
     
-     
- 
-
- 
     
+    
+
+      <footer class="post-footer">
+
         
-        <p class="footer-copyright">
-            Copyright © 2021 <a href="/heavyfish.github.io/">速查笔记</a>
-        </p>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/09/03/python/uWSGI%E7%9B%B8%E5%85%B3/" rel="prev" title="uWSGI相关">
+      <i class="fa fa-chevron-left"></i> uWSGI相关
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/09/18/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C10%EF%BD%9E13/" rel="next" title="Python学习手册10～13">
+      Python学习手册10～13 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
     
-    
-    <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a> | Theme - <a href="https://github.com/ChrAlpha/hexo-theme-cards" target="_blank">Cards</a></p>
-</footer>
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
         </div>
-         
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
- 
+  <aside class="sidebar">
+    <div class="sidebar-inner">
 
- 
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
 
- 
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81Python%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">1、Python如何运行程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-text">Python程序的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="nav-text">Python程序的执行方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E7%BC%96%E8%AF%91"><span class="nav-text">字节码编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88PVM%EF%BC%89"><span class="nav-text">Python虚拟机（PVM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="nav-text">Python解释器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E6%89%A7%E8%A1%8C%E4%BC%98%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="nav-text">Python执行优化工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%BB%E7%BB%93%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6"><span class="nav-text">冻结二进制文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81%E4%BB%8B%E7%BB%8DPython%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B"><span class="nav-text">2、介绍Python对象类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B"><span class="nav-text">核心类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"><span class="nav-text">序列是什么意思</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%92%8C%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">递归和迭代的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="nav-text">3、数值类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B"><span class="nav-text">4、动态类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E3%80%81%E5%AF%B9%E8%B1%A1%E5%92%8C%E5%BC%95%E7%94%A8"><span class="nav-text">变量、对象和引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%A6%82%E4%BD%95%E6%A0%87%E8%AF%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">对象如何标识类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8"><span class="nav-text">共享引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B8%E7%AD%89"><span class="nav-text">共享引用和相等</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="nav-text">弱引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%9F%BA%E7%A1%80"><span class="nav-text">5、字符串基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%9F%BA%E7%A1%80"><span class="nav-text">字符串基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E8%A1%A8%E8%BE%BE"><span class="nav-text">字符传表达</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">字符传格式化表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-text">字符传格式化方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6%E3%80%81%E5%88%97%E8%A1%A8%E4%B8%8E%E5%AD%97%E5%85%B8"><span class="nav-text">6、列表与字典</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E8%A1%A8"><span class="nav-text">列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E5%85%B8"><span class="nav-text">字典</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7%E3%80%81%E5%85%83%E7%BB%84%E3%80%81%E6%96%87%E4%BB%B6%E4%B8%8E%E5%85%B6%E4%BB%96%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B"><span class="nav-text">7、元组、文件与其他核心类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E7%BB%84"><span class="nav-text">元组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8Python%E5%AF%B9%E8%B1%A1%E5%88%B0%E6%96%87%E4%BB%B6"><span class="nav-text">存储Python对象到文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AF%B9%E8%B1%A1"><span class="nav-text">字符转换为对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pickle"><span class="nav-text">pickle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json"><span class="nav-text">json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#struct"><span class="nav-text">struct</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%96%87%E4%BB%B6%E5%B7%A5%E5%85%B7"><span class="nav-text">其他文件工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B%E5%A4%8D%E4%B9%A0"><span class="nav-text">核心类型复习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B%E9%99%B7%E9%98%B1"><span class="nav-text">内置类型陷阱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%8A%E7%95%8C%E6%93%8D%E4%BD%9C%E4%B8%8E%E8%B5%8B%E5%80%BC%E6%93%8D%E4%BD%9C"><span class="nav-text">越界操作与赋值操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8%E3%80%81Python%E8%AF%AD%E5%8F%A5%E7%AE%80%E4%BB%8B"><span class="nav-text">8、Python语句简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9%E3%80%81%E8%B5%8B%E5%80%BC%E3%80%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E3%80%81%E6%89%93%E5%8D%B0"><span class="nav-text">9、赋值、表达式、打印</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5%E5%BD%A2%E5%BC%8F"><span class="nav-text">赋值语句形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E6%83%AF%E4%BE%8B"><span class="nav-text">命名惯例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%8E%9F%E4%BD%8D%E7%BD%AE%E4%BF%AE%E6%94%B9"><span class="nav-text">表达式语句和原位置修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E6%93%8D%E4%BD%9C"><span class="nav-text">打印操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-3-x%E7%9A%84print%E5%87%BD%E6%95%B0"><span class="nav-text">Python 3.x的print函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-2-x%E7%9A%84print%E8%AF%AD%E5%8F%A5"><span class="nav-text">Python 2.x的print语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">打印流重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-x%E6%94%AF%E6%8C%813-x%E7%9A%84print%E5%87%BD%E6%95%B0"><span class="nav-text">2.x支持3.x的print函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">通用的表达式</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+
 
   
 
 
 
- 
-
-
-    
- 
-
- 
-
- 
-
- 
-
- 
 
 
 
 
-    </body>
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
 </html>

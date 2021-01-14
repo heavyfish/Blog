@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="6、将磁盘挂载到容器  6.1、介绍卷  6.1.1、卷的应用示例  6.1.2、可用的卷类型    6.2、对卷的简单使用6.2.1、使用emptyDir卷    6.2.2、使用Git仓库作为存储卷          6.3、hostPath卷      6.4、使用持久化存储        使用NFS的示例：   6.5、从底层存储技术解藕Pod6.5.1、持久卷和持久卷声明    6.5.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes in Action 6～7">
+<meta property="og:url" content="https://heavyfish.github.io/2020/10/31/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B06%EF%BD%9E7/index.html">
+<meta property="og:site_name" content="速查笔记">
+<meta property="og:description" content="6、将磁盘挂载到容器  6.1、介绍卷  6.1.1、卷的应用示例  6.1.2、可用的卷类型    6.2、对卷的简单使用6.2.1、使用emptyDir卷    6.2.2、使用Git仓库作为存储卷          6.3、hostPath卷      6.4、使用持久化存储        使用NFS的示例：   6.5、从底层存储技术解藕Pod6.5.1、持久卷和持久卷声明    6.5.">
+<meta property="og:locale">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031164441918.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101180919902.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101180957339.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181104715.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181128031.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181443766.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181535786.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181623341.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181659454.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181719201.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181812270.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101181945573.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101182055310.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101182156124.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101182255606.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101182358317.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101182656710.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101182725860.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101182821505.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101183116342.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101183131646.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101183425935.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101183655453.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101183808834.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101183830365.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101183922360.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101184016103.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101184239150.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101184414310.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101184646629.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101185221382.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101185312197.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101191023699.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101191436804.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101191531356.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101191602331.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101191907662.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101191923642.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101192036249.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101192126774.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101192210879.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101231456353.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101231556247.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101231611948.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101231717015.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101231902676.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101232004787.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101232151021.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101232219200.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101232407007.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101232530430.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101232723669.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101232814979.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101233020236.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101233051707.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101233112125.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101233249963.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101233401146.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101233841598.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101233916432.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101234128116.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101234200047.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101234415640.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101234635903.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101234816039.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101234931355.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235023092.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235104748.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235137956.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235219089.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235345639.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235516613.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235621589.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235656494.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101235819663.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102000110904.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102000336053.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102000437374.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102000530790.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102000627880.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102000706527.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102005808904.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102005956272.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010031496.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010215437.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010245097.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010346454.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010441850.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010512935.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010649890.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010752866.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010815337.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010914427.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010952198.png">
+<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102011021921.png">
+<meta property="article:published_time" content="2020-10-31T08:03:03.075Z">
+<meta property="article:modified_time" content="2021-01-14T14:49:20.006Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031164441918.png">
+
+<link rel="canonical" href="https://heavyfish.github.io/2020/10/31/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B06%EF%BD%9E7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Kubernetes in Action 6～7 | 速查笔记</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">速查笔记</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/heavyfish.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/10/31/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B06%EF%BD%9E7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="速查笔记">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kubernetes in Action 6～7
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-31 16:03:03" itemprop="dateCreated datePublished" datetime="2020-10-31T16:03:03+08:00">2020-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-14 22:49:20" itemprop="dateModified" datetime="2021-01-14T22:49:20+08:00">2021-01-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Kubernetes/" itemprop="url" rel="index"><span itemprop="name">Kubernetes</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="6、将磁盘挂载到容器"><a href="#6、将磁盘挂载到容器" class="headerlink" title="6、将磁盘挂载到容器"></a>6、将磁盘挂载到容器</h1><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031164441918.png" alt="image-20201031164441918" style="zoom:50%;" />
+
+<h2 id="6-1、介绍卷"><a href="#6-1、介绍卷" class="headerlink" title="6.1、介绍卷"></a>6.1、介绍卷</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101180919902.png" alt="image-20201101180919902" style="zoom:50%;" />
+
+<h3 id="6-1-1、卷的应用示例"><a href="#6-1-1、卷的应用示例" class="headerlink" title="6.1.1、卷的应用示例"></a>6.1.1、卷的应用示例</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101180957339.png" alt="image-20201101180957339" style="zoom:50%;" />
+
+<h3 id="6-1-2、可用的卷类型"><a href="#6-1-2、可用的卷类型" class="headerlink" title="6.1.2、可用的卷类型"></a>6.1.2、可用的卷类型</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181104715.png" alt="image-20201101181104715" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181128031.png" alt="image-20201101181128031" style="zoom:50%;" />
+
+<h2 id="6-2、对卷的简单使用"><a href="#6-2、对卷的简单使用" class="headerlink" title="6.2、对卷的简单使用"></a>6.2、对卷的简单使用</h2><h3 id="6-2-1、使用emptyDir卷"><a href="#6-2-1、使用emptyDir卷" class="headerlink" title="6.2.1、使用emptyDir卷"></a>6.2.1、使用emptyDir卷</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181443766.png" alt="image-20201101181443766" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181535786.png" alt="image-20201101181535786" style="zoom:50%;" />
+
+<h3 id="6-2-2、使用Git仓库作为存储卷"><a href="#6-2-2、使用Git仓库作为存储卷" class="headerlink" title="6.2.2、使用Git仓库作为存储卷"></a>6.2.2、使用Git仓库作为存储卷</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181623341.png" alt="image-20201101181623341" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181659454.png" alt="image-20201101181659454" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181719201.png" alt="image-20201101181719201" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181812270.png" alt="image-20201101181812270" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101181945573.png" alt="image-20201101181945573" style="zoom:50%;" />
+
+<h2 id="6-3、hostPath卷"><a href="#6-3、hostPath卷" class="headerlink" title="6.3、hostPath卷"></a>6.3、hostPath卷</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101182055310.png" alt="image-20201101182055310" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101182156124.png" alt="image-20201101182156124" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101182255606.png" alt="image-20201101182255606" style="zoom:50%;" />
+
+<h2 id="6-4、使用持久化存储"><a href="#6-4、使用持久化存储" class="headerlink" title="6.4、使用持久化存储"></a>6.4、使用持久化存储</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101182358317.png" alt="image-20201101182358317" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101182656710.png" alt="image-20201101182656710" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101182725860.png" alt="image-20201101182725860" style="zoom:50%;" />
+
+
+
+<p>使用NFS的示例：</p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101182821505.png" alt="image-20201101182821505" style="zoom:50%;" />
+
+<h2 id="6-5、从底层存储技术解藕Pod"><a href="#6-5、从底层存储技术解藕Pod" class="headerlink" title="6.5、从底层存储技术解藕Pod"></a>6.5、从底层存储技术解藕Pod</h2><h3 id="6-5-1、持久卷和持久卷声明"><a href="#6-5-1、持久卷和持久卷声明" class="headerlink" title="6.5.1、持久卷和持久卷声明"></a>6.5.1、持久卷和持久卷声明</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101183116342.png" alt="image-20201101183116342" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101183131646.png" alt="image-20201101183131646" style="zoom:50%;" />
+
+<h3 id="6-5-2、创建持久卷"><a href="#6-5-2、创建持久卷" class="headerlink" title="6.5.2、创建持久卷"></a>6.5.2、创建持久卷</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101183425935.png" alt="image-20201101183425935" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 列出 pv，pv 也用作 persistentvolurne 的简写</span></span><br><span class="line">kubectl get pv</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意:持久卷不属于任何命名空间, 它跟节点一样是集群层面的资源</p>
+</blockquote>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101183655453.png" alt="image-20201101183655453" style="zoom:50%;" />
+
+<h3 id="6-5-3、创建持久卷声明-获取持久卷"><a href="#6-5-3、创建持久卷声明-获取持久卷" class="headerlink" title="6.5.3、创建持久卷声明 获取持久卷"></a>6.5.3、创建持久卷声明 获取持久卷</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101183808834.png" alt="image-20201101183808834" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101183830365.png" alt="image-20201101183830365" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101183922360.png" alt="image-20201101183922360" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101184016103.png" alt="image-20201101184016103" style="zoom:50%;" />
+
+<h3 id="6-5-4、在Pod中使用持久卷声明"><a href="#6-5-4、在Pod中使用持久卷声明" class="headerlink" title="6.5.4、在Pod中使用持久卷声明"></a>6.5.4、在Pod中使用持久卷声明</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101184239150.png" alt="image-20201101184239150" style="zoom:50%;" />
+
+<h3 id="6-5-5、PV和PVC的优点"><a href="#6-5-5、PV和PVC的优点" class="headerlink" title="6.5.5、PV和PVC的优点"></a>6.5.5、PV和PVC的优点</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101184414310.png" alt="image-20201101184414310" style="zoom:50%;" />
+
+<h3 id="6-5-6、回收持久卷"><a href="#6-5-6、回收持久卷" class="headerlink" title="6.5.6、回收持久卷"></a>6.5.6、回收持久卷</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101184646629.png" alt="image-20201101184646629" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101185221382.png" alt="image-20201101185221382" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101185312197.png" alt="image-20201101185312197" style="zoom:50%;" />
+
+<h2 id="6-6、持久卷的动态卷配置"><a href="#6-6、持久卷的动态卷配置" class="headerlink" title="6.6、持久卷的动态卷配置"></a>6.6、持久卷的动态卷配置</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101191023699.png" alt="image-20201101191023699" style="zoom:50%;" />
+
+<h3 id="6-6-1、定义StorageClass创建可用存储类型"><a href="#6-6-1、定义StorageClass创建可用存储类型" class="headerlink" title="6.6.1、定义StorageClass创建可用存储类型"></a>6.6.1、定义StorageClass创建可用存储类型</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101191436804.png" alt="image-20201101191436804" style="zoom:50%;" />
+
+<h3 id="6-6-2、指定存储类创建PVC"><a href="#6-6-2、指定存储类创建PVC" class="headerlink" title="6.6.2、指定存储类创建PVC"></a>6.6.2、指定存储类创建PVC</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101191531356.png" alt="image-20201101191531356" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101191602331.png" alt="image-20201101191602331" style="zoom:50%;" />
+
+<h3 id="6-6-3、不指定存储类的动态配置"><a href="#6-6-3、不指定存储类的动态配置" class="headerlink" title="6.6.3、不指定存储类的动态配置"></a>6.6.3、不指定存储类的动态配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">列出存储类,sc 是 storageclass 的缩写</span></span><br><span class="line">kubectl get sc</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101191907662.png" alt="image-20201101191907662" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101191923642.png" alt="image-20201101191923642" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101192036249.png" alt="image-20201101192036249" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101192126774.png" alt="image-20201101192126774" style="zoom:50%;" />
+
+<h2 id="6-7、本章小结"><a href="#6-7、本章小结" class="headerlink" title="6.7、本章小结"></a>6.7、本章小结</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101192210879.png" alt="image-20201101192210879" style="zoom:50%;" />
+
+<h1 id="7、ConfigMap和Secret：配置应用程序"><a href="#7、ConfigMap和Secret：配置应用程序" class="headerlink" title="7、ConfigMap和Secret：配置应用程序"></a>7、ConfigMap和Secret：配置应用程序</h1><h2 id="7-1、配置容器化应用程序"><a href="#7-1、配置容器化应用程序" class="headerlink" title="7.1、配置容器化应用程序"></a>7.1、配置容器化应用程序</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101231456353.png" alt="image-20201101231456353" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101231556247.png" alt="image-20201101231556247" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101231611948.png" alt="image-20201101231611948" style="zoom:50%;" />
+
+<h2 id="7-2、向容器传递命令行参数"><a href="#7-2、向容器传递命令行参数" class="headerlink" title="7.2、向容器传递命令行参数"></a>7.2、向容器传递命令行参数</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101231717015.png" alt="image-20201101231717015" style="zoom:50%;" />
+
+<h3 id="7-2-1、在Docker中定义命令与参数"><a href="#7-2-1、在Docker中定义命令与参数" class="headerlink" title="7.2.1、在Docker中定义命令与参数"></a>7.2.1、在Docker中定义命令与参数</h3><p>容器中运行的完整指令由两部分组成:<strong>命令</strong>与<strong>参数</strong></p>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101231902676.png" alt="image-20201101231902676" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101232004787.png" alt="image-20201101232004787" style="zoom:50%;" />
+
+<h3 id="7-2-2、在Kubernetes中覆盖命令和参数"><a href="#7-2-2、在Kubernetes中覆盖命令和参数" class="headerlink" title="7.2.2、在Kubernetes中覆盖命令和参数"></a>7.2.2、在Kubernetes中覆盖命令和参数</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101232151021.png" alt="image-20201101232151021" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101232219200.png" alt="image-20201101232219200" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101232407007.png" alt="image-20201101232407007" style="zoom:50%;" />
+
+<h2 id="7-3、为容器设置环境变量"><a href="#7-3、为容器设置环境变量" class="headerlink" title="7.3、为容器设置环境变量"></a>7.3、为容器设置环境变量</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101232530430.png" alt="image-20201101232530430" style="zoom:50%;" />
+
+<h3 id="7-3-1、容器定义中指定环境变量"><a href="#7-3-1、容器定义中指定环境变量" class="headerlink" title="7.3.1、容器定义中指定环境变量"></a>7.3.1、容器定义中指定环境变量</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101232723669.png" alt="image-20201101232723669" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101232814979.png" alt="image-20201101232814979" style="zoom:50%;" />
+
+<h2 id="7-4、利用ConfigMap解藕配置"><a href="#7-4、利用ConfigMap解藕配置" class="headerlink" title="7.4、利用ConfigMap解藕配置"></a>7.4、利用ConfigMap解藕配置</h2><h3 id="7-4-1、ConfigMap介绍"><a href="#7-4-1、ConfigMap介绍" class="headerlink" title="7.4.1、ConfigMap介绍"></a>7.4.1、ConfigMap介绍</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101233020236.png" alt="image-20201101233020236" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101233051707.png" alt="image-20201101233051707" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101233112125.png" alt="image-20201101233112125" style="zoom:50%;" />
+
+<h3 id="7-4-2、创建ConfigMap"><a href="#7-4-2、创建ConfigMap" class="headerlink" title="7.4.2、创建ConfigMap"></a>7.4.2、创建ConfigMap</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 直接创建 ConfigMap</span></span><br><span class="line">kubectl create configmap fortune-config -- from-literal=sleep-interval=25</span><br><span class="line"><span class="meta">#</span><span class="bash"> 也可以包含多个键值对</span></span><br><span class="line">kubectl create configmap myconfigmap</span><br><span class="line">--from-literal=foo=bar --from-literal=bar=baz --from-literal=one=two</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101233249963.png" alt="image-20201101233249963" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101233401146.png" alt="image-20201101233401146" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 从 YAML 文件中创建</span></span><br><span class="line">kubectl create -f fortune-config.ymal</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 从文件内容中创建，key默认为文件名 config-file.conf</span></span><br><span class="line">kubectl create configmap my-config --from-file=config-file.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定key，此时key 为 customkey</span></span><br><span class="line">kubectl create configmap my-config -from-file=customkey=config-file.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 从文件夹创建ConfigMap，kuebctl会为文件夹中的每个文件创建单独的条目（仅限文件名可作为合法key的文件）</span></span><br><span class="line">kubectl create configmap my -config --from-file=/path/to/dir</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101233841598.png" alt="image-20201101233841598" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101233916432.png" alt="image-20201101233916432" style="zoom:50%;" />
+
+<h3 id="7-4-3、给容器传递ConfigMap作为环境变量"><a href="#7-4-3、给容器传递ConfigMap作为环境变量" class="headerlink" title="7.4.3、给容器传递ConfigMap作为环境变量"></a>7.4.3、给容器传递ConfigMap作为环境变量</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101234128116.png" alt="image-20201101234128116" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101234200047.png" alt="image-20201101234200047" style="zoom:50%;" />
+
+<h3 id="7-4-4、一次性传递ConfigMap的所有条目作为环境变量"><a href="#7-4-4、一次性传递ConfigMap的所有条目作为环境变量" class="headerlink" title="7.4.4、一次性传递ConfigMap的所有条目作为环境变量"></a>7.4.4、一次性传递ConfigMap的所有条目作为环境变量</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101234415640.png" alt="image-20201101234415640" style="zoom:50%;" />
+
+<h3 id="7-4-5、传递ConfigMap条目作为命令行参数"><a href="#7-4-5、传递ConfigMap条目作为命令行参数" class="headerlink" title="7.4.5、传递ConfigMap条目作为命令行参数"></a>7.4.5、传递ConfigMap条目作为命令行参数</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101234635903.png" alt="image-20201101234635903" style="zoom:50%;" />
+
+<h3 id="7-4-6、使用ConfigMap卷将条目暴露为文件"><a href="#7-4-6、使用ConfigMap卷将条目暴露为文件" class="headerlink" title="7.4.6、使用ConfigMap卷将条目暴露为文件"></a>7.4.6、使用ConfigMap卷将条目暴露为文件</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101234816039.png" alt="image-20201101234816039" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101234931355.png" alt="image-20201101234931355" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235023092.png" alt="image-20201101235023092" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235104748.png" alt="image-20201101235104748" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235137956.png" alt="image-20201101235137956" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235219089.png" alt="image-20201101235219089" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235345639.png" alt="image-20201101235345639" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235516613.png" alt="image-20201101235516613" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235621589.png" alt="image-20201101235621589" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235656494.png" alt="image-20201101235656494" style="zoom:50%;" />
+
+<h3 id="7-4-7、更新应用配置且不重启应用程序"><a href="#7-4-7、更新应用配置且不重启应用程序" class="headerlink" title="7.4.7、更新应用配置且不重启应用程序"></a>7.4.7、更新应用配置且不重启应用程序</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101235819663.png" alt="image-20201101235819663" style="zoom:50%;" />
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改configMap</span></span><br><span class="line">kubect1 edit configmap fortune-config</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 手动通知Nginx重载配置</span></span><br><span class="line">kubectl exec fortune-configmap-volume -c web-server -- nginx -s reload</span><br></pre></td></tr></table></figure>
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102000110904.png" alt="image-20201102000110904" style="zoom:50%;" />
+
+<h2 id="7-5、使用Secret给容器传递敏感数据"><a href="#7-5、使用Secret给容器传递敏感数据" class="headerlink" title="7.5、使用Secret给容器传递敏感数据"></a>7.5、使用Secret给容器传递敏感数据</h2><h3 id="7-5-1、介绍Secret"><a href="#7-5-1、介绍Secret" class="headerlink" title="7.5.1、介绍Secret"></a>7.5.1、介绍Secret</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102000336053.png" alt="image-20201102000336053" style="zoom:50%;" />
+
+<h3 id="7-5-2、默认令牌Secret介绍"><a href="#7-5-2、默认令牌Secret介绍" class="headerlink" title="7.5.2、默认令牌Secret介绍"></a>7.5.2、默认令牌Secret介绍</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102000437374.png" alt="image-20201102000437374" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102000530790.png" alt="image-20201102000530790" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102000627880.png" alt="image-20201102000627880" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102000706527.png" alt="image-20201102000706527" style="zoom:50%;" />
+
+<h3 id="7-5-3、创建Secret"><a href="#7-5-3、创建Secret" class="headerlink" title="7.5.3、创建Secret"></a>7.5.3、创建Secret</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在本地机器生成私钥和证书</span></span><br><span class="line">openssl genrsa -https.key 2048</span><br><span class="line">openssl req -new -x509 -key https.key -out https.cert -days 3650 -subj /CN=www.kubia-example.com</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 额外创建一个字符串文件（后续截图中会看到）</span></span><br><span class="line">echo bar &gt; foo</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建generic secret</span></span><br><span class="line">kubectl create secret generic fortune-https --from-file=https.key --from-file=https.cert --from-file=foo</span><br></pre></td></tr></table></figure>
+<h3 id="7-5-4、对比ConfigMap和Secret"><a href="#7-5-4、对比ConfigMap和Secret" class="headerlink" title="7.5.4、对比ConfigMap和Secret"></a>7.5.4、对比ConfigMap和Secret</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102005808904.png" alt="image-20201102005808904" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102005956272.png" alt="image-20201102005956272" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010031496.png" alt="image-20201102010031496" style="zoom:50%;" />
+
+<h3 id="7-5-5、在Pod中使用Secret"><a href="#7-5-5、在Pod中使用Secret" class="headerlink" title="7.5.5、在Pod中使用Secret"></a>7.5.5、在Pod中使用Secret</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010215437.png" alt="image-20201102010215437" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010245097.png" alt="image-20201102010245097" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010346454.png" alt="image-20201102010346454" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010441850.png" alt="image-20201102010441850" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010512935.png" alt="image-20201102010512935" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010649890.png" alt="image-20201102010649890" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010752866.png" alt="image-20201102010752866" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010815337.png" alt="image-20201102010815337" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010914427.png" alt="image-20201102010914427" style="zoom:50%;" />
+
+<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102010952198.png" alt="image-20201102010952198" style="zoom:50%;" />
+
+<h3 id="7-6、本章小结"><a href="#7-6、本章小结" class="headerlink" title="7.6、本章小结"></a>7.6、本章小结</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102011021921.png" alt="image-20201102011021921" style="zoom:50%;" />
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/10/29/k8s/Kubernets%20in%20Action%20-%20%E7%AC%94%E8%AE%B01%EF%BD%9E5/" rel="prev" title="Kubernetes in Action 1～5">
+      <i class="fa fa-chevron-left"></i> Kubernetes in Action 1～5
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/11/02/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B08%EF%BD%9E9/" rel="next" title="Kubernetes in Action 8～9">
+      Kubernetes in Action 8～9 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#6%E3%80%81%E5%B0%86%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E5%88%B0%E5%AE%B9%E5%99%A8"><span class="nav-text">6、将磁盘挂载到容器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1%E3%80%81%E4%BB%8B%E7%BB%8D%E5%8D%B7"><span class="nav-text">6.1、介绍卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-1%E3%80%81%E5%8D%B7%E7%9A%84%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-text">6.1.1、卷的应用示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-2%E3%80%81%E5%8F%AF%E7%94%A8%E7%9A%84%E5%8D%B7%E7%B1%BB%E5%9E%8B"><span class="nav-text">6.1.2、可用的卷类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2%E3%80%81%E5%AF%B9%E5%8D%B7%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="nav-text">6.2、对卷的简单使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-1%E3%80%81%E4%BD%BF%E7%94%A8emptyDir%E5%8D%B7"><span class="nav-text">6.2.1、使用emptyDir卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-2%E3%80%81%E4%BD%BF%E7%94%A8Git%E4%BB%93%E5%BA%93%E4%BD%9C%E4%B8%BA%E5%AD%98%E5%82%A8%E5%8D%B7"><span class="nav-text">6.2.2、使用Git仓库作为存储卷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3%E3%80%81hostPath%E5%8D%B7"><span class="nav-text">6.3、hostPath卷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4%E3%80%81%E4%BD%BF%E7%94%A8%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8"><span class="nav-text">6.4、使用持久化存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5%E3%80%81%E4%BB%8E%E5%BA%95%E5%B1%82%E5%AD%98%E5%82%A8%E6%8A%80%E6%9C%AF%E8%A7%A3%E8%97%95Pod"><span class="nav-text">6.5、从底层存储技术解藕Pod</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-1%E3%80%81%E6%8C%81%E4%B9%85%E5%8D%B7%E5%92%8C%E6%8C%81%E4%B9%85%E5%8D%B7%E5%A3%B0%E6%98%8E"><span class="nav-text">6.5.1、持久卷和持久卷声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-2%E3%80%81%E5%88%9B%E5%BB%BA%E6%8C%81%E4%B9%85%E5%8D%B7"><span class="nav-text">6.5.2、创建持久卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-3%E3%80%81%E5%88%9B%E5%BB%BA%E6%8C%81%E4%B9%85%E5%8D%B7%E5%A3%B0%E6%98%8E-%E8%8E%B7%E5%8F%96%E6%8C%81%E4%B9%85%E5%8D%B7"><span class="nav-text">6.5.3、创建持久卷声明 获取持久卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-4%E3%80%81%E5%9C%A8Pod%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%8C%81%E4%B9%85%E5%8D%B7%E5%A3%B0%E6%98%8E"><span class="nav-text">6.5.4、在Pod中使用持久卷声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-5%E3%80%81PV%E5%92%8CPVC%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-text">6.5.5、PV和PVC的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-6%E3%80%81%E5%9B%9E%E6%94%B6%E6%8C%81%E4%B9%85%E5%8D%B7"><span class="nav-text">6.5.6、回收持久卷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-6%E3%80%81%E6%8C%81%E4%B9%85%E5%8D%B7%E7%9A%84%E5%8A%A8%E6%80%81%E5%8D%B7%E9%85%8D%E7%BD%AE"><span class="nav-text">6.6、持久卷的动态卷配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-6-1%E3%80%81%E5%AE%9A%E4%B9%89StorageClass%E5%88%9B%E5%BB%BA%E5%8F%AF%E7%94%A8%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B"><span class="nav-text">6.6.1、定义StorageClass创建可用存储类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-6-2%E3%80%81%E6%8C%87%E5%AE%9A%E5%AD%98%E5%82%A8%E7%B1%BB%E5%88%9B%E5%BB%BAPVC"><span class="nav-text">6.6.2、指定存储类创建PVC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-6-3%E3%80%81%E4%B8%8D%E6%8C%87%E5%AE%9A%E5%AD%98%E5%82%A8%E7%B1%BB%E7%9A%84%E5%8A%A8%E6%80%81%E9%85%8D%E7%BD%AE"><span class="nav-text">6.6.3、不指定存储类的动态配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-7%E3%80%81%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93"><span class="nav-text">6.7、本章小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7%E3%80%81ConfigMap%E5%92%8CSecret%EF%BC%9A%E9%85%8D%E7%BD%AE%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">7、ConfigMap和Secret：配置应用程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1%E3%80%81%E9%85%8D%E7%BD%AE%E5%AE%B9%E5%99%A8%E5%8C%96%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">7.1、配置容器化应用程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2%E3%80%81%E5%90%91%E5%AE%B9%E5%99%A8%E4%BC%A0%E9%80%92%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0"><span class="nav-text">7.2、向容器传递命令行参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-1%E3%80%81%E5%9C%A8Docker%E4%B8%AD%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E4%B8%8E%E5%8F%82%E6%95%B0"><span class="nav-text">7.2.1、在Docker中定义命令与参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-2%E3%80%81%E5%9C%A8Kubernetes%E4%B8%AD%E8%A6%86%E7%9B%96%E5%91%BD%E4%BB%A4%E5%92%8C%E5%8F%82%E6%95%B0"><span class="nav-text">7.2.2、在Kubernetes中覆盖命令和参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3%E3%80%81%E4%B8%BA%E5%AE%B9%E5%99%A8%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">7.3、为容器设置环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-1%E3%80%81%E5%AE%B9%E5%99%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E6%8C%87%E5%AE%9A%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">7.3.1、容器定义中指定环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4%E3%80%81%E5%88%A9%E7%94%A8ConfigMap%E8%A7%A3%E8%97%95%E9%85%8D%E7%BD%AE"><span class="nav-text">7.4、利用ConfigMap解藕配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-1%E3%80%81ConfigMap%E4%BB%8B%E7%BB%8D"><span class="nav-text">7.4.1、ConfigMap介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-2%E3%80%81%E5%88%9B%E5%BB%BAConfigMap"><span class="nav-text">7.4.2、创建ConfigMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-3%E3%80%81%E7%BB%99%E5%AE%B9%E5%99%A8%E4%BC%A0%E9%80%92ConfigMap%E4%BD%9C%E4%B8%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">7.4.3、给容器传递ConfigMap作为环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-4%E3%80%81%E4%B8%80%E6%AC%A1%E6%80%A7%E4%BC%A0%E9%80%92ConfigMap%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%A1%E7%9B%AE%E4%BD%9C%E4%B8%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">7.4.4、一次性传递ConfigMap的所有条目作为环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-5%E3%80%81%E4%BC%A0%E9%80%92ConfigMap%E6%9D%A1%E7%9B%AE%E4%BD%9C%E4%B8%BA%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0"><span class="nav-text">7.4.5、传递ConfigMap条目作为命令行参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-6%E3%80%81%E4%BD%BF%E7%94%A8ConfigMap%E5%8D%B7%E5%B0%86%E6%9D%A1%E7%9B%AE%E6%9A%B4%E9%9C%B2%E4%B8%BA%E6%96%87%E4%BB%B6"><span class="nav-text">7.4.6、使用ConfigMap卷将条目暴露为文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-7%E3%80%81%E6%9B%B4%E6%96%B0%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE%E4%B8%94%E4%B8%8D%E9%87%8D%E5%90%AF%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">7.4.7、更新应用配置且不重启应用程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-5%E3%80%81%E4%BD%BF%E7%94%A8Secret%E7%BB%99%E5%AE%B9%E5%99%A8%E4%BC%A0%E9%80%92%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE"><span class="nav-text">7.5、使用Secret给容器传递敏感数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-1%E3%80%81%E4%BB%8B%E7%BB%8DSecret"><span class="nav-text">7.5.1、介绍Secret</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-2%E3%80%81%E9%BB%98%E8%AE%A4%E4%BB%A4%E7%89%8CSecret%E4%BB%8B%E7%BB%8D"><span class="nav-text">7.5.2、默认令牌Secret介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-3%E3%80%81%E5%88%9B%E5%BB%BASecret"><span class="nav-text">7.5.3、创建Secret</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-4%E3%80%81%E5%AF%B9%E6%AF%94ConfigMap%E5%92%8CSecret"><span class="nav-text">7.5.4、对比ConfigMap和Secret</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-5%E3%80%81%E5%9C%A8Pod%E4%B8%AD%E4%BD%BF%E7%94%A8Secret"><span class="nav-text">7.5.5、在Pod中使用Secret</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-6%E3%80%81%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93"><span class="nav-text">7.6、本章小结</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
