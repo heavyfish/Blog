@@ -12,20 +12,22 @@
 
 <link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
 
+</script>
+
 
 <link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="6、将磁盘挂载到容器  6.1、介绍卷  6.1.1、卷的应用示例  6.1.2、可用的卷类型    6.2、对卷的简单使用6.2.1、使用emptyDir卷    6.2.2、使用Git仓库作为存储卷          6.3、hostPath卷      6.4、使用持久化存储        使用NFS的示例：   6.5、从底层存储技术解藕Pod6.5.1、持久卷和持久卷声明    6.5.">
+  <meta name="description" content="本节介绍了 卷的使用，以及 ConfigMap 和 Sercret">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubernetes in Action 6～7">
 <meta property="og:url" content="https://heavyfish.github.io/2020/10/31/k8s/Kubernetes%20in%20Action%20%E7%AC%94%E8%AE%B06%EF%BD%9E7/index.html">
 <meta property="og:site_name" content="速查笔记">
-<meta property="og:description" content="6、将磁盘挂载到容器  6.1、介绍卷  6.1.1、卷的应用示例  6.1.2、可用的卷类型    6.2、对卷的简单使用6.2.1、使用emptyDir卷    6.2.2、使用Git仓库作为存储卷          6.3、hostPath卷      6.4、使用持久化存储        使用NFS的示例：   6.5、从底层存储技术解藕Pod6.5.1、持久卷和持久卷声明    6.5.">
+<meta property="og:description" content="本节介绍了 卷的使用，以及 ConfigMap 和 Sercret">
 <meta property="og:locale">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031164441918.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201101180919902.png">
@@ -123,7 +125,7 @@
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102010952198.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201102011021921.png">
 <meta property="article:published_time" content="2020-10-31T08:03:03.075Z">
-<meta property="article:modified_time" content="2021-01-14T14:49:20.006Z">
+<meta property="article:modified_time" content="2021-01-17T14:41:40.218Z">
 <meta property="article:author" content="Shenxr">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20201031164441918.png">
@@ -213,9 +215,9 @@
     <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
-        <li class="menu-item menu-item-archives">
+        <li class="menu-item menu-item-categories">
 
-    <a href="/heavyfish.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
 
   </li>
   </ul>
@@ -276,7 +278,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-14 22:49:20" itemprop="dateModified" datetime="2021-01-14T22:49:20+08:00">2021-01-14</time>
+                <time title="Modified: 2021-01-17 22:41:40" itemprop="dateModified" datetime="2021-01-17T22:41:40+08:00">2021-01-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -288,7 +290,21 @@
                 </span>
             </span>
 
-          
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
 
         </div>
       </header>
@@ -299,7 +315,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="6、将磁盘挂载到容器"><a href="#6、将磁盘挂载到容器" class="headerlink" title="6、将磁盘挂载到容器"></a>6、将磁盘挂载到容器</h1><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031164441918.png" alt="image-20201031164441918" style="zoom:50%;" />
+        <p>本节介绍了 卷的使用，以及 ConfigMap 和 Sercret</p>
+<a id="more"></a>
+
+<h1 id="6、将磁盘挂载到容器"><a href="#6、将磁盘挂载到容器" class="headerlink" title="6、将磁盘挂载到容器"></a>6、将磁盘挂载到容器</h1><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201031164441918.png" alt="image-20201031164441918" style="zoom:50%;" />
 
 <h2 id="6-1、介绍卷"><a href="#6-1、介绍卷" class="headerlink" title="6.1、介绍卷"></a>6.1、介绍卷</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201101180919902.png" alt="image-20201101180919902" style="zoom:50%;" />
 
@@ -503,6 +522,8 @@
 <h3 id="7-6、本章小结"><a href="#7-6、本章小结" class="headerlink" title="7.6、本章小结"></a>7.6、本章小结</h3><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20201102011021921.png" alt="image-20201102011021921" style="zoom:50%;" />
 
 
+
+
     </div>
 
     
@@ -588,21 +609,24 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shenxr"
+      src="/heavyfish.github.io/images/avatar.gif">
   <p class="site-author-name" itemprop="name">Shenxr</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/heavyfish.github.io/archives/">
-        
+          <a href="/heavyfish.github.io/archives">
           <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">categories</span>
+            <a href="/heavyfish.github.io/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
       </div>
   </nav>
 </div>
@@ -633,9 +657,22 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Shenxr</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">212k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">3:12</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+<!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
+-->
 
         
 
@@ -666,6 +703,9 @@
 <script src="/heavyfish.github.io/js/next-boot.js"></script>
 
 
+  <script defer src="/heavyfish.github.io/lib/three/three.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_sphere.min.js"></script>
 
 
   
@@ -688,5 +728,5 @@
 
   
 
-</body>
+<script src="/heavyfish.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/heavyfish.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":100,"height":250,"hOffset":-7,"vOffset":30},"mobile":{"show":false},"log":false,"tagMode":false});</script></body>
 </html>

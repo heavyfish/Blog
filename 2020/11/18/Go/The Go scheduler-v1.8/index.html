@@ -12,27 +12,29 @@
 
 <link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
 
+</script>
+
 
 <link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="1、Go runtime的调度器在我们研究新的调度程序之前，我们需要了解为什么需要它。当操作系统可以为您安排线程时，为什么要创建用户空间调度程序？ POSIX线程API在很大程度上是对现有Unix进程模型的逻辑扩展，因此，线程可以获得与进程相同的控制。线程有自己的信号掩码，可以分配CPU affinity，可以放入cgroup中，并且可以查询它们使用的资源。所有这些特性都会增加一些控件的开销，而这">
+  <meta name="description" content="介绍了Go的 scheduler">
 <meta property="og:type" content="article">
 <meta property="og:title" content="The Go scheduler-v1.8">
 <meta property="og:url" content="https://heavyfish.github.io/2020/11/18/Go/The%20Go%20scheduler-v1.8/index.html">
 <meta property="og:site_name" content="速查笔记">
-<meta property="og:description" content="1、Go runtime的调度器在我们研究新的调度程序之前，我们需要了解为什么需要它。当操作系统可以为您安排线程时，为什么要创建用户空间调度程序？ POSIX线程API在很大程度上是对现有Unix进程模型的逻辑扩展，因此，线程可以获得与进程相同的控制。线程有自己的信号掩码，可以分配CPU affinity，可以放入cgroup中，并且可以查询它们使用的资源。所有这些特性都会增加一些控件的开销，而这">
+<meta property="og:description" content="介绍了Go的 scheduler">
 <meta property="og:locale">
 <meta property="og:image" content="https://morsmachine.dk/our-cast.jpg">
 <meta property="og:image" content="https://morsmachine.dk/in-motion.jpg">
 <meta property="og:image" content="https://morsmachine.dk/syscall.jpg">
 <meta property="og:image" content="https://morsmachine.dk/steal.jpg">
 <meta property="article:published_time" content="2020-11-18T03:29:33.415Z">
-<meta property="article:modified_time" content="2021-01-14T14:46:34.536Z">
+<meta property="article:modified_time" content="2021-01-17T14:46:42.868Z">
 <meta property="article:author" content="Shenxr">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://morsmachine.dk/our-cast.jpg">
@@ -122,9 +124,9 @@
     <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
-        <li class="menu-item menu-item-archives">
+        <li class="menu-item menu-item-categories">
 
-    <a href="/heavyfish.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
 
   </li>
   </ul>
@@ -185,7 +187,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-14 22:46:34" itemprop="dateModified" datetime="2021-01-14T22:46:34+08:00">2021-01-14</time>
+                <time title="Modified: 2021-01-17 22:46:42" itemprop="dateModified" datetime="2021-01-17T22:46:42+08:00">2021-01-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -197,7 +199,21 @@
                 </span>
             </span>
 
-          
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
 
         </div>
       </header>
@@ -208,7 +224,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="1、Go-runtime的调度器"><a href="#1、Go-runtime的调度器" class="headerlink" title="1、Go runtime的调度器"></a>1、Go runtime的调度器</h1><p>在我们研究新的调度程序之前，我们需要了解为什么需要它。当操作系统可以为您安排线程时，为什么要创建用户空间调度程序？</p>
+        <p>介绍了Go的 scheduler</p>
+<a id="more"></a>
+
+<h1 id="1、Go-runtime的调度器"><a href="#1、Go-runtime的调度器" class="headerlink" title="1、Go runtime的调度器"></a>1、Go runtime的调度器</h1><p>在我们研究新的调度程序之前，我们需要了解为什么需要它。当操作系统可以为您安排线程时，为什么要创建用户空间调度程序？</p>
 <p>POSIX线程API在很大程度上是对现有Unix进程模型的逻辑扩展，因此，线程可以获得与进程相同的控制。线程有自己的信号掩码，可以分配CPU affinity，可以放入cgroup中，并且可以查询它们使用的资源。所有这些特性都会增加一些控件的开销，而这些特性对于Go程序如何使用goroutine是不需要的，而且当程序中有100000个线程时，这些开销会很快增加。</p>
 <p>另一个问题是操作系统无法根据Go模型做出明智的调度决策。例如，Go垃圾收集器要求在垃圾收集时停止所有线程，并且内存必须处于一致状态。这包括等待运行的线程到达一个我们知道内存是一致的时刻。</p>
 <p>当您有许多线程在随机时刻调度时，很可能需要等待它们中的许多线程达到一致的状态。Go调度器可以决定只在它知道内存是一致的时刻上调度。这意味着，当我们等待进行垃圾收集时，我们只需要等待正在CPU核心上活动运行的线程。</p>
@@ -327,21 +346,24 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shenxr"
+      src="/heavyfish.github.io/images/avatar.gif">
   <p class="site-author-name" itemprop="name">Shenxr</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/heavyfish.github.io/archives/">
-        
+          <a href="/heavyfish.github.io/archives">
           <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">categories</span>
+            <a href="/heavyfish.github.io/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
       </div>
   </nav>
 </div>
@@ -372,9 +394,22 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Shenxr</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">212k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">3:12</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+<!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
+-->
 
         
 
@@ -405,6 +440,9 @@
 <script src="/heavyfish.github.io/js/next-boot.js"></script>
 
 
+  <script defer src="/heavyfish.github.io/lib/three/three.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_sphere.min.js"></script>
 
 
   
@@ -427,5 +465,5 @@
 
   
 
-</body>
+<script src="/heavyfish.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/heavyfish.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":100,"height":250,"hOffset":-7,"vOffset":30},"mobile":{"show":false},"log":false,"tagMode":false});</script></body>
 </html>
