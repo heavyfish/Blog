@@ -858,7 +858,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-14 00:13:41" itemprop="dateModified" datetime="2021-01-14T00:13:41+08:00">2021-01-14</time>
+                <time title="Modified: 2021-01-17 22:52:38" itemprop="dateModified" datetime="2021-01-17T22:52:38+08:00">2021-01-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -895,29 +895,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903859815448589">你是否真的了解全局解析锁(GIL)</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/75780308">深入理解Python中的GIL（全局解释器锁）</a></p>
-<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>全局解释器锁（GIL）是一种在计算机语言解释器中使用的机制，用于同步线程的执行，以便一次只能执行一个本机线程。</p>
-<p>我们需要明确的一点是GIL并不是Python的特性，它是在实现Python解析器(CPython)时所引入的一个概念。</p>
-<p>在CPython中，全局解释器锁（即GIL）是一个<code>mutex</code>，可以防止多个本机线程同时执行Python字节码。Lock是必要的，主要是因为CPython的内存管理不是线程安全的。 （但是，由于存在GIL，因此其他功能也逐渐依赖于它所执行的保证。）</p>
-<h1 id="为什么会有GIL"><a href="#为什么会有GIL" class="headerlink" title="为什么会有GIL"></a>为什么会有GIL</h1><p>因为一开始是单核心多任务，所以用GIL锁确保全局变量的一致性。</p>
-<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114001308967.png" alt="image-20210114001308967"></p>
-<h2 id="GIL的缺点"><a href="#GIL的缺点" class="headerlink" title="GIL的缺点"></a>GIL的缺点</h2><h2 id="1、无法充分利用多核"><a href="#1、无法充分利用多核" class="headerlink" title="1、无法充分利用多核"></a>1、无法充分利用多核</h2><p>GIL锁是全局的，因此即使你拥有多核心，<strong>但如果线程2需要在CPU 2 上执行，它需要先等待在CPU 1 上执行的线程1释放GIL（记住：GIL是全局的）</strong>。如果线程1是因为 i/o 阻塞让出的GIL，那么线程2必定拿到Gil。但如果线程1是因为timer ticks计数满100让出GIL，那么这个时候线程1和线程2公平竞争。但要命的是，在Python 2.x, 线程1不会动态的调整自身的优先级，所以很大概率下次被选中执行的还是线程1，在很多个这样的选举周期内，线程2只能安静的看着线程1拿着GIL在CPU 1上欢快的执行。</p>
-<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114001323848.png" alt="image-20210114001323848"></p>
-<h2 id="2、GIL不意味绝对的线程安全"><a href="#2、GIL不意味绝对的线程安全" class="headerlink" title="2、GIL不意味绝对的线程安全"></a>2、GIL不意味绝对的线程安全</h2><p>G一个线程有两种情况下会释放全局解释器锁，一种情况是在该线程进入IO操作之前，会主动释放GIL，另一种情况是解释器不间断运行了1000字节码（Py2）或运行15毫秒（Py3）后，该线程也会放弃GIL。</p>
-<p>GIL虽然从设计的出发点就是考虑到线程安全，但这种线程安全是粗粒度的线程安全，即不需要程序员自己对线程进行加锁处理，但涉及到具体场景时，有时还需要程序员自己加上细粒度的锁（即在代码中编写 <code>mutex</code>）</p>
-<p>首先来看第一种线程释放GIL的情况。假设现在线程A因为进入IO操作而主动释放了GIL，那么在这种情况下，由于线程A的IO操作等待时间不确定，那么等待的线程B一定会得到GIL锁，这种比较“礼貌的”情况我们一般称为“协同式多任务处理”，相当于大家按照协商好的规则来，线程是安全的，不需要额外加锁。</p>
-<p>接下来，我们来看另外一种情况，即线程A是因为解释器不间断执行了1000字节码的指令或不间断运行了15毫秒而放弃了GIL，那么此时实际上线程A和线程B将同时竞争GIL锁。在同时竞争的情况下，实际上谁会竞争成功是不确定的一个结果，所以一般被称为“抢占式多任务处理”，这种情况下当然就看谁抢得厉害了。当然，在python3上由于对GIL做了优化，并且会动态调整线程的优先级，所以线程B的优先级会比较高，但仍然无法肯定线程B就一定会拿到GIL。那么在这种情况下，线程可能就会出现不安全的状态。针对这种纯计算的操作，我们用一段代码来演示下这种线程不安全的状态。代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">import threading</span><br><span class="line"></span><br><span class="line">n &#x3D; 0</span><br><span class="line"></span><br><span class="line">def add():</span><br><span class="line">global n</span><br><span class="line">for i in range(1000000):</span><br><span class="line">n &#x3D; n + 1</span><br><span class="line"></span><br><span class="line">def sub():</span><br><span class="line">global n</span><br><span class="line">for i in range(1000000):</span><br><span class="line">n &#x3D; n - 1</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">t1 &#x3D; threading.Thread(target&#x3D;add)</span><br><span class="line">t2 &#x3D; threading.Thread(target&#x3D;sub)</span><br><span class="line"></span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line"></span><br><span class="line">t1.join()</span><br><span class="line">t2.join()</span><br><span class="line"></span><br><span class="line">print(&quot;n的值为:&quot;, n)</span><br></pre></td></tr></table></figure>
-<p>上面的代码很简单，分别用线程1和线程2对全局变量n进行了1000000次的加和减操作。如果线程安全的话，那么最终的结果n应该还是为0。但实际上，我们运行之后，会发现这个n的值有时大有时小，完全不确定。这个问题的原因在于，上述代码中 涉及 加法 和 减法 的部分不是原子级的。</p>
-<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114001335944.png" alt="image-20210114001335944"></p>
-<p>不管是加法还是减法运算，都会分为4步完成。以加法为例，第一步是LOAD_GLOBAL(加载全局变量n)，第二步LOAD_CONST(加载常量1)，第三步进行二进制的加法，第四步将计算结果存储到全局变量n中，加法计算结束。这四个指令如果能够保证被作为一个整体完整地运行，那么是不会产生问题的，但根据前面说的线程释放GIL的原则，那么很有可能在线程正在执行这四步中的任何一步的时候释放掉GIL而进入等待状态，这个时候发生的事情就比较有意思了。为了方便大家理解，我拿一种比较极端的情况来说明一下。比如我们在加法运算中，正准备执行第四步的时候，很不幸失去了GIL，进入等待状态（注意此时n值仍然为0）。减法运算的线程开始执行，它加载了全局变量n（值为0），并进行减法相关的计算，它也在执行第三步的时候失去了GIL，此时它进入等待状态，加法运算继续。上一次加法计算继续运行第4步，即把加法运算结果赋值给全局变量n，那么此时n的值为1。同样道理，减法操作拿回GIL时，它之前已经加载了为0的n的值，所以它继续操作到最后赋值那步时，n的值就为0-1=-1。换句话说，n的值要么为1，要么为-1，但我们期望的应该是0。这就造成了线程不安全的情形。最终，经过百万次这样不确定的加减操作，那么结果一定是不确定的。这就是引起这个问题的过程和原因。【<strong>核心点在于 字节码不是原子级的</strong>】</p>
-<p>Python有很多操作是原子级的，针对原子级的操作，由于方法本身是<strong>单个字节码</strong>，所以线程没有办法在调用期间放弃GIL。典型的例子比如sort方法。【<strong>非IO操作的多线程是否安全，核心在于字节码是单个还是多个，单个字节码是原子级的，则安全</strong>】</p>
-<h1 id="避免GIL的影响"><a href="#避免GIL的影响" class="headerlink" title="避免GIL的影响"></a>避免GIL的影响</h1><ol>
-<li>在以IO操作为主的IO密集型应用中，多线程和多进程的性能区别并不大，原因在于即使在Python中有GIL锁的存在，由于线程中的IO操作会使得线程立即释放GIL，切换到其他非IO线程继续操作，提高程序执行效率。相比进程操作，线程操作更加轻量级，线程之间的通讯复杂度更低，建议使用多线程。</li>
-<li>如果是计算密集型的应用，尽量使用多进程或者协程来代替多线程。</li>
-</ol>
-
+          <p>介绍了 GIL全局锁</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/heavyfish.github.io/2020/09/03/python/%E5%85%A8%E5%B1%80%E8%A7%A3%E6%9E%90%E9%94%81%EF%BC%88GIL%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
