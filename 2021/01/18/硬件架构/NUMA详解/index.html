@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+</script>
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="NUMA 是一种 CPU 物理架构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NUMA详解">
+<meta property="og:url" content="https://heavyfish.github.io/2021/01/18/%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84/NUMA%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="请问你能包养我吗">
+<meta property="og:description" content="NUMA 是一种 CPU 物理架构">
+<meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118225908413.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230022132.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230130792.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230233884.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230325113.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230350300.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230511286.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230541201.png">
+<meta property="article:published_time" content="2021-01-18T14:56:22.114Z">
+<meta property="article:modified_time" content="2021-01-18T15:11:16.224Z">
+<meta property="article:author" content="Shenxr">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="OpenStack">
+<meta property="article:tag" content="硬件架构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118225908413.png">
+
+<link rel="canonical" href="https://heavyfish.github.io/2021/01/18/%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84/NUMA%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>NUMA详解 | 请问你能包养我吗</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">请问你能包养我吗</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2021/01/18/%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84/NUMA%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NUMA详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-01-18 22:56:22 / Modified: 23:11:16" itemprop="dateCreated datePublished" datetime="2021-01-18T22:56:22+08:00">2021-01-18</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>11 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>NUMA 是一种 CPU 物理架构</p>
+<a id="more"></a>
+
+
+
+<h1 id="1、计算平台体系结构‌"><a href="#1、计算平台体系结构‌" class="headerlink" title="1、计算平台体系结构‌"></a>1、计算平台体系结构‌</h1><h2 id="1-1、SMP对称多处理架构"><a href="#1-1、SMP对称多处理架构" class="headerlink" title="1.1、SMP对称多处理架构"></a>1.1、SMP对称多处理架构</h2><p><strong>SMP（Sysmmetric Multi-Processor，对称多处理器）</strong>，顾名思义，SMP 由多个具有对称关系的处理器组成。所谓对称，即处理器之间是水平的镜像关系，无有主从之分。SMP 的出现使一台计算机不再由单个 CPU 组成。</p>
+<p><strong><em>SMP 的典型特征为*</em>「多个处理器共享一个集中式存储器」*</strong>，且每个处理器访问存储器的时间片相同，使得工作负载能够均匀的分配到所有可用处理器上，极大地提高了整个系统的数据处理能力。</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118225908413.png" alt="image-20210118225908413" style="zoom: 33%;" />
+
+
+
+<p>‌虽然 SMP 具有多个处理器，但由于只有一个共享的集中式存储器，所以 SMP 只能运行一个操作系统和数据库系统的副本（实例)，依旧保持了单机特性。同时，SMP 也会要求多处理器保证共享存储器的数据一致性。如果多个处理器同时请求访问共享资源，就需要由软件或硬件实现的加锁机制来解决资源竞态的问题。由此，SMP 又称为 UMA（Uniform Memory Access，一致性存储器访问)，所谓一致性指的是：‌</p>
+<ul>
+<li><strong>在任意时刻，多个处理器只能为存储器的每个数据保存或共享一个唯一的数值。</strong></li>
+<li><strong>每个处理器访问存储器所需要的时间都是一致的</strong></li>
+</ul>
+<p>显然，这样的架构设计注定没法拥有良好的处理器数量扩展性，因为共享存储的资源竞态总是存在的，<strong>处理器利用率最好的情况只能停留在 2 到 4 颗</strong>。综合来看，SMP 架构广泛的适用于 PC 和移动设备领域，能显著提升并行计算性能。但 SMP 却不适合超大规模的服务器端场景，例如：云计算。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230022132.png" alt="image-20210118230022132"></p>
+<p>‌</p>
+<h2 id="1-2、NUMA非统一内存访问结构"><a href="#1-2、NUMA非统一内存访问结构" class="headerlink" title="1.2、NUMA非统一内存访问结构"></a>1.2、NUMA非统一内存访问结构</h2><p>现代计算机系统中，处理器的处理速度已经超过了主存的读写速度，限制计算机计算性能的瓶颈转移到了存储器带宽之上。SMP 由于集中式共享存储器的设计限制了处理器访问存储器的频次，导致处理器可能会经常处于对数据访问的饥饿状态。</p>
+<p><em>NUMA（Non-Uniform Memory Access，非一致性存储器访问）的设计理念是将处理器和存储器划分到不同的节点（NUMA Node），它们都拥有几乎相等的资源</em>。在 NUMA 节点内部会通过自己的存储总线访问内部的本地内存，而所有 NUMA 节点都可以通过主板上的共享总线来访问其他节点的远程内存。</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230130792.png" alt="image-20210118230130792" style="zoom: 67%;" />
+
+
+
+
+
+<p><strong>很显然，处理器访问本地内存和远程内存的时耗并不一致，NUMA 非一致性存储器访问由此得名。而且因为节点划分并没有实现真正意义上的存储隔离，所以 NUMA 同样只会保存一份操作系统和数据库系统的副本。</strong></p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230233884.png" alt="image-20210118230233884" style="zoom:50%;" />
+
+
+
+
+
+
+
+<p>NUMA「<strong>多节点</strong>」的结构设计能够在一定程度上解决 SMP 低存储带宽的问题。假如有一个 4 NUMA 节点的系统，每一个 NUMA 节点内部具有 1GB/s 的存储带宽，外部共享总线也同样具有 1GB/s 的带宽。理想状态下，如果所有的处理器总是访问本地内存的话，那么系统就拥有了 4GB/s 的存储带宽能力，此时的每个节点可以近似的看作为一个 SMP（这种假设为了便于理解，并不完全正确）；相反，在最不理想的情况下，如果所有处理器总是访问远程内存的话，那么系统就只能有 1GB/s 的存储带宽能力。</p>
+<p>除此之外，使用外部共享总线时可能会触发 NUMA 节点间的 Cache 同步异常，这会严重影响内存密集型工作负载的性能。当 I/O 性能至关重要时，共享总线上的 Cache 资源浪费，会让连接到远程 PCIe 总线上的设备（不同 NUMA 节点间通信）作业性能急剧下降。</p>
+<p>由于这个特性，基于 NUMA 开发的应用程序应该尽可能避免跨节点的远程内存访问。因为，跨节点内存访问不仅通信速度慢，还可能需要处理不同节点间内存和缓存的数据一致性。多线程在不同节点间的切换，是需要花费大成本的。</p>
+<p>虽然 NUMA 相比于 SMP 具有更好的处理器扩展性，但因为 NUMA 没有实现彻底的主存隔离。所以 NUMA 远没有达到无限扩展的水平，最多可支持几百个 CPU。这是为了追求更高的并发性能所作出的妥协，一个节点未必就能完全满足多并发需求，多节点间线程切换实属一个折中的方案。这种做法使得 NUMA 具有一定的伸缩性，更加适合应用在服务器端。</p>
+<p>‌</p>
+<h2 id="1-3、MPP大规模并行处理结构"><a href="#1-3、MPP大规模并行处理结构" class="headerlink" title="1.3、MPP大规模并行处理结构"></a>1.3、MPP大规模并行处理结构</h2><p><strong>MPP（Massive Parallel Processing，大规模并行处理）</strong>，既然 NUMA 扩展性的限制是没有完全实现资源（e.g. 存储器、互联模块）的隔离性，那么 MPP 的解决思路就是为处理器提供彻底的独立资源。</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230325113.png" alt="image-20210118230325113" style="zoom:50%;" />
+
+
+
+<p>MPP 拥有多个真正意义上的独立的 SMP 单元，每个 SMP 单元独占并只会访问自己本地的内存、I/O 等资源，SMP 单元间通过节点互联网络进行连接（Data Redistribution，数据重分配），是一个完全无共享（Share Nothing）的 CPU 计算平台结构。</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230350300.png" alt="image-20210118230350300" style="zoom:50%;" />
+
+
+
+<p>MPP 的典型特征就是<strong>「多 SMP 单元组成，单元之间完全无共享」</strong>。除此之外，MPP 结构还具有以下特点：</p>
+<ul>
+<li>每个 SMP 单元内都可以包含一个操作系统副本，所以每个 SMP 单元都可以运行自己的操作系统</li>
+<li>MPP 需要一种复杂的机制来调度和平衡各个节点的负载和并行处理过程，目前一些基于 MPP 技术的服务器往往通过系统级软件（e.g. 数据库）来屏蔽这种复杂性</li>
+<li>MPP 架构的局部区域内存的访存延迟低于远地内存访存延迟，因此 Linux 会自定采用局部节点分配策略，当一个任务请求分配内存时，首先在处理器自身节点内寻找空闲页，如果没有则到相邻的节点寻找空闲页，如果还没有再到远地节点中寻找空闲页，在操作系统层面就实现了访存性能优化</li>
+</ul>
+<p>因为完全的资源隔离特性，所以 MPP 的扩展性是最好的，理论上其扩展无限制，目前的技术可实现 512 个节点互联，数千个 CPU，多应用于大型机。</p>
+<h1 id="2、Linux上的NUMA"><a href="#2、Linux上的NUMA" class="headerlink" title="2、Linux上的NUMA"></a>2、Linux上的NUMA</h1><h2 id="2-1、基本概念"><a href="#2-1、基本概念" class="headerlink" title="2.1、基本概念"></a>2.1、基本概念</h2><ul>
+<li><strong>Node</strong>：包含有若干个 Socket 的组</li>
+<li><strong>Socket</strong>：表示一颗物理 CPU 的封装，简称插槽。Intel 为了避免将物理处理器和逻辑处理器混淆，所以将物理处理器统称为插槽。</li>
+<li><strong>Core</strong>：Socket 内含有的物理核。</li>
+<li><strong>Thread</strong>：在具有 Intel 超线程技术的处理器上，每个 Core 可以被虚拟为若干个（通常为两个）逻辑处理器，逻辑处理器会共享大多数内核资源（e.g. 内存缓存、功能单元）。逻辑处理器被统称为 Thread。</li>
+<li><strong>Processor</strong>：处理器的统称，可以区分为物理处理器（physical processor）和逻辑处理器（virtual processors），对于大多数应用程序而言，它们并不关心处理器是物理的还是逻辑的。</li>
+<li><strong>Siblings</strong>：表示每一个 physical processor 所含有的 virtual processors 的数量。（如果Siblings的数量等于Core数量，说明没有开启超线程 ）</li>
+</ul>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230511286.png" alt="image-20210118230511286" style="zoom:50%;" />
+
+<p>‌</p>
+<p><strong>包含关系</strong>：<code>NUMA Node &gt; Socket &gt; Core &gt; Thread</code></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118230541201.png" alt="image-20210118230541201"></p>
+<p>‌</p>
+<p><strong>EXAMPLE</strong>：上图为一个 NUMA Topology，表示该服务器具有 2 个 numa node，每个 node 含有一个 socket，每个 socket 含有 6 个 core，每个 core 又被超线程为 2 个 thread，所以服务器总共的 processor = 2*1*6*2 = 24 颗。</p>
+<h2 id="2-2、NUMA调度策略"><a href="#2-2、NUMA调度策略" class="headerlink" title="2.2、NUMA调度策略"></a>2.2、NUMA调度策略</h2><p>Linux 的每个进程或线程都会延续父进程的 NUMA 策略，优先会将其约束在一个 NUMA node 内。当然了，如果 NUMA 策略允许的话，进程也可以调用其他 node 上的资源。</p>
+<p><strong>NUMA 的 CPU 分配策略有下列两种：</strong></p>
+<ul>
+<li>cpunodebind：约束进程运行在指定的若干个 node 内</li>
+<li>physcpubind：约束进程运行在指定的若干个物理 CPU 上</li>
+</ul>
+<p><strong>NUMA 的 Memory 分配策略有下列 4 种：</strong>‌</p>
+<ul>
+<li>localalloc：约束进程只能请求访问本地内存</li>
+<li>preferred：宽松地为进程指定一个优先 node，如果优先 node 上没有足够的内存资源，那么进程允许尝试运行在别的 node 内</li>
+<li>membind：规定进程只能从指定的若干个 node 上请求访问内存，并不严格规定只能访问本地内存</li>
+<li>interleave：规定进程可以使用 RR 算法轮转地从指定的若干个 node 上请求访问内存</li>
+</ul>
+<p>‌</p>
+<h2 id="2-3、获取宿主机的NUMA拓扑"><a href="#2-3、获取宿主机的NUMA拓扑" class="headerlink" title="2.3、获取宿主机的NUMA拓扑"></a>2.3、获取宿主机的NUMA拓扑</h2><p>下方两个脚本都可以使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">脚本一</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function get_nr_processor()</span><br><span class="line">&#123;</span><br><span class="line">   grep &#x27;^processor&#x27; /proc/cpuinfo | wc -l</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function get_nr_socket()</span><br><span class="line">&#123;</span><br><span class="line">   grep &#x27;physical id&#x27; /proc/cpuinfo | awk -F: &#x27;&#123;</span><br><span class="line">           print $2 | &quot;sort -un&quot;&#125;&#x27; | wc -l</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function get_nr_siblings()</span><br><span class="line">&#123;</span><br><span class="line">   grep &#x27;siblings&#x27; /proc/cpuinfo | awk -F: &#x27;&#123;</span><br><span class="line">           print $2 | &quot;sort -un&quot;&#125;&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function get_nr_cores_of_socket()</span><br><span class="line">&#123;</span><br><span class="line">   grep &#x27;cpu cores&#x27; /proc/cpuinfo | awk -F: &#x27;&#123;</span><br><span class="line">           print $2 | &quot;sort -un&quot;&#125;&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &#x27;===== CPU Topology Table =====&#x27;</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &#x27;+--------------+---------+-----------+&#x27;</span><br><span class="line">echo &#x27;| Processor ID | Core ID | Socket ID |&#x27;</span><br><span class="line">echo &#x27;+--------------+---------+-----------+&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">while read line; do</span><br><span class="line">   if [ -z &quot;$line&quot; ]; then</span><br><span class="line">       printf &#x27;| %-12s | %-7s | %-9s |\n&#x27; $p_id $c_id $s_id</span><br><span class="line">       echo &#x27;+--------------+---------+-----------+&#x27;</span><br><span class="line">       continue</span><br><span class="line">   fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   if echo &quot;$line&quot; | grep -q &quot;^processor&quot;; then</span><br><span class="line">       p_id=`echo &quot;$line&quot; | awk -F: &#x27;&#123;print $2&#125;&#x27; | tr -d &#x27; &#x27;`</span><br><span class="line">   fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   if echo &quot;$line&quot; | grep -q &quot;^core id&quot;; then</span><br><span class="line">       c_id=`echo &quot;$line&quot; | awk -F: &#x27;&#123;print $2&#125;&#x27; | tr -d &#x27; &#x27;`</span><br><span class="line">   fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   if echo &quot;$line&quot; | grep -q &quot;^physical id&quot;; then</span><br><span class="line">       s_id=`echo &quot;$line&quot; | awk -F: &#x27;&#123;print $2&#125;&#x27; | tr -d &#x27; &#x27;`</span><br><span class="line">   fi</span><br><span class="line">done &lt; /proc/cpuinfo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">awk -F: &#x27;&#123;</span><br><span class="line">   if ($1 ~ /processor/) &#123;</span><br><span class="line">       gsub(/ /,&quot;&quot;,$2);</span><br><span class="line">       p_id=$2;</span><br><span class="line">   &#125; else if ($1 ~ /physical id/)&#123;</span><br><span class="line">       gsub(/ /,&quot;&quot;,$2);</span><br><span class="line">       s_id=$2;</span><br><span class="line">       arr[s_id]=arr[s_id] &quot; &quot; p_id</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">END&#123;</span><br><span class="line">   for (i in arr)</span><br><span class="line">       printf &quot;Socket %s:%s\n&quot;, i, arr[i];</span><br><span class="line">&#125;&#x27; /proc/cpuinfo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo</span><br><span class="line">echo &#x27;===== CPU Info Summary =====&#x27;</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nr_processor=`get_nr_processor`</span><br><span class="line">echo &quot;Logical processors: $nr_processor&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nr_socket=`get_nr_socket`</span><br><span class="line">echo &quot;Physical socket: $nr_socket&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nr_siblings=`get_nr_siblings`</span><br><span class="line">echo &quot;Siblings in one socket: $nr_siblings&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nr_cores=`get_nr_cores_of_socket`</span><br><span class="line">echo &quot;Cores in one socket: $nr_cores&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">let nr_cores*=nr_socket</span><br><span class="line">echo &quot;Cores in total: $nr_cores&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if [ &quot;$nr_cores&quot; = &quot;$nr_processor&quot; ]; then</span><br><span class="line">   echo &quot;Hyper-Threading: off&quot;</span><br><span class="line">else</span><br><span class="line">   echo &quot;Hyper-Threading: on&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo</span><br><span class="line">echo &#x27;===== END =====&#x27;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 脚本二</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/usr/bin/env python</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> SPDX-License-Identifier: BSD-3-Clause</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Copyright(c) 2010-2014 Intel Corporation</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Copyright(c) 2017 Cavium, Inc. All rights reserved.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">from __future__ import print_function</span><br><span class="line">import sys</span><br><span class="line">try:</span><br><span class="line">    xrange # Python 2</span><br><span class="line">except NameError:</span><br><span class="line">    xrange = range # Python 3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sockets = []</span><br><span class="line">cores = []</span><br><span class="line">core_map = &#123;&#125;</span><br><span class="line">base_path = &quot;/sys/devices/system/cpu&quot;</span><br><span class="line">fd = open(&quot;&#123;&#125;/kernel_max&quot;.format(base_path))</span><br><span class="line">max_cpus = int(fd.read())</span><br><span class="line">fd.close()</span><br><span class="line">for cpu in xrange(max_cpus + 1):</span><br><span class="line">    try:</span><br><span class="line">        fd = open(&quot;&#123;&#125;/cpu&#123;&#125;/topology/core_id&quot;.format(base_path, cpu))</span><br><span class="line">    except IOError:</span><br><span class="line">        continue</span><br><span class="line">    except:</span><br><span class="line">        break</span><br><span class="line">    core = int(fd.read())</span><br><span class="line">    fd.close()</span><br><span class="line">    fd = open(&quot;&#123;&#125;/cpu&#123;&#125;/topology/physical_package_id&quot;.format(base_path, cpu))</span><br><span class="line">    socket = int(fd.read())</span><br><span class="line">    fd.close()</span><br><span class="line">    if core not in cores:</span><br><span class="line">        cores.append(core)</span><br><span class="line">    if socket not in sockets:</span><br><span class="line">        sockets.append(socket)</span><br><span class="line">    key = (socket, core)</span><br><span class="line">    if key not in core_map:</span><br><span class="line">        core_map[key] = []</span><br><span class="line">    core_map[key].append(cpu)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(format(&quot;=&quot; * (47 + len(base_path))))</span><br><span class="line">print(&quot;Core and Socket Information (as reported by &#x27;&#123;&#125;&#x27;)&quot;.format(base_path))</span><br><span class="line">print(&quot;&#123;&#125;\n&quot;.format(&quot;=&quot; * (47 + len(base_path))))</span><br><span class="line">print(&quot;cores = &quot;, cores)</span><br><span class="line">print(&quot;sockets = &quot;, sockets)</span><br><span class="line">print(&quot;&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">max_processor_len = len(str(len(cores) * len(sockets) * 2 - 1))</span><br><span class="line">max_thread_count = len(list(core_map.values())[0])</span><br><span class="line">max_core_map_len = (max_processor_len * max_thread_count)  \</span><br><span class="line">                      + len(&quot;, &quot;) * (max_thread_count - 1) \</span><br><span class="line">                      + len(&#x27;[]&#x27;) + len(&#x27;Socket &#x27;)</span><br><span class="line">max_core_id_len = len(str(max(cores)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">output = &quot; &quot;.ljust(max_core_id_len + len(&#x27;Core &#x27;))</span><br><span class="line">for s in sockets:</span><br><span class="line">    output += &quot; Socket %s&quot; % str(s).ljust(max_core_map_len - len(&#x27;Socket &#x27;))</span><br><span class="line">print(output)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">output = &quot; &quot;.ljust(max_core_id_len + len(&#x27;Core &#x27;))</span><br><span class="line">for s in sockets:</span><br><span class="line">    output += &quot; --------&quot;.ljust(max_core_map_len)</span><br><span class="line">    output += &quot; &quot;</span><br><span class="line">print(output)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for c in cores:</span><br><span class="line">    output = &quot;Core %s&quot; % str(c).ljust(max_core_id_len)</span><br><span class="line">    for s in sockets:</span><br><span class="line">        if (s,c) in core_map:</span><br><span class="line">            output += &quot; &quot; + str(core_map[(s, c)]).ljust(max_core_map_len)</span><br><span class="line">        else:</span><br><span class="line">            output += &quot; &quot; * (max_core_map_len + 1)</span><br><span class="line">    print(output)</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-4、NUMA启动服务"><a href="#2-4、NUMA启动服务" class="headerlink" title="2.4、NUMA启动服务"></a>2.4、NUMA启动服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#启动mongodb时，指定NUMA策略。</span><br><span class="line">numactl --interleave&#x3D;all $&#123;MONGODB_HOME&#125;&#x2F;bin&#x2F;mongod \</span><br><span class="line">--config conf&#x2F;mongodb.conf</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#启动其他进程时，将进程启动命令，跟在numactl 之后</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#python在node0中执行</span><br><span class="line">numactl --cpubind&#x3D;0 --membind&#x3D;0 python param</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#java在node1中执行    </span><br><span class="line">numactl --cpubind&#x3D;1 --membind&#x3D;1 java param    </span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">内核参数zone_reclaim_mode，对NUMA 的影响</span><br><span class="line"></span><br><span class="line">可选值0、1</span><br><span class="line"></span><br><span class="line">当某个节点可用内存不足时：</span><br><span class="line"></span><br><span class="line">0）如果为0的话，那么系统会倾向于从其他节点分配内存</span><br><span class="line"></span><br><span class="line">1）如果为1的话，那么多数时候系统会倾向于从本地节点回收Cache内存</span><br><span class="line"></span><br><span class="line">Cache对性能很重要，所以0是一个更好的选择</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="3、Nova实现NUMA亲和‌"><a href="#3、Nova实现NUMA亲和‌" class="headerlink" title="3、Nova实现NUMA亲和‌"></a>3、Nova实现NUMA亲和‌</h1><p>除了上文中提到的 NUMA 基本概念之外，Nova 还自定义一些对象概念：</p>
+<ul>
+<li><strong>Cell</strong>：NUMA Node 的通名词，供 Libvirt API 使用</li>
+<li><strong>vCPU</strong>：虚拟机的 CPU，根据虚拟机 NUMA 拓扑的不同，一个虚拟机 CPU 可以是一个 socket、core 或 thread。</li>
+<li><strong>pCPU</strong>：宿主机的 CPU，根据宿主机 NUMA 拓扑的不同，一个物理机 CPU 同样可以是一个 socket、core 或 thread。</li>
+<li><strong>Siblings Thread</strong>：兄弟线程，即由同一个 Core 超线程出来的 Threads。</li>
+<li><strong>Host NUMA Topology</strong>：宿主机的 NUMA 拓扑。</li>
+<li><strong>Guest NUMA Topology</strong>：虚拟机的 NUMA 拓扑。</li>
+<li></li>
+</ul>
+<p><strong>NOTE 1</strong>：vCPU 和 pCPU 的定义具有一定的迷惑性，简单来理解：虚拟机实际是宿主机的一个进程，虚拟机 CPU 实际是宿主机进程中的一个特殊的线程。引入 pCPU 和 vCPU 的概念是为了让上层逻辑能够屏蔽机器 NUMA 拓扑的复杂性。</p>
+<p><strong>NOTE 2</strong>：Thread siblings 对象的引入是为了无论服务器是否开启了超线程，Nova 同样能够支持物理 CPU 绑定的功能。</p>
+<p>‌</p>
+<h2 id="3-1、配置Nova使用NUMA亲和"><a href="#3-1、配置Nova使用NUMA亲和" class="headerlink" title="3.1、配置Nova使用NUMA亲和"></a>3.1、配置Nova使用NUMA亲和</h2><h3 id="1）nova-scheduler-启用-NUMATopologyFilter"><a href="#1）nova-scheduler-启用-NUMATopologyFilter" class="headerlink" title="1）nova-scheduler 启用 NUMATopologyFilter"></a>1）<strong>nova-scheduler 启用 NUMATopologyFilter</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># nova.conf</span><br><span class="line">[DEFAULT]</span><br><span class="line">...</span><br><span class="line">scheduler_default_filters&#x3D;...,NUMATopologyFilter</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="2）设置flavor-属性"><a href="#2）设置flavor-属性" class="headerlink" title="2）设置flavor 属性"></a>2）设置flavor 属性</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">openstack flavor set FLAVOR-NAME \</span><br><span class="line">    --property hw:numa_nodes&#x3D;FLAVOR-NODES \</span><br><span class="line">    --property hw:numa_cpus.N&#x3D;FLAVOR-CORES \</span><br><span class="line">    --property hw:numa_mem.N&#x3D;FLAVOR-MEMORY</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li><strong>FLAVOR-NODES（整数）</strong>：设定 Guest NUMA nodes 的个数。如果不指定，则 Guest vCPUs 可以在任意可用的 Host NUMA nodes 上浮动。</li>
+<li><strong>N</strong>：整数，Guest NUMA nodes ID，取值范围在 [0, FLAVOR-NODES-1]。</li>
+<li><strong>FLAVOR-CORES（逗号分隔的整数）</strong>：设定分配到 Guest NUMA node N 上运行的 vCPUs 列表。如果不指定，vCPUs 在 Guest NUMA nodes 之间平均分配。</li>
+<li><strong>FLAVOR-MEMORY（整数）</strong>：单位 MB，设定分配到 Guest NUMA node N 上 Memory Size。如果不指定，Memory 在 Guest NUMA nodes 之间平均分配。</li>
+</ul>
+<p><strong>设定 Guest NUMA Topology 的两种方式：</strong></p>
+<ul>
+<li><strong>自动设定 Guest NUMA Topology</strong>：仅仅需要指定 Guest NUMA nodes 的个数，然后由 Nova 根据 Flavor 设定的虚拟机规格平均将 vCPU/Mem 分布到不同的 Host NUMA nodes 上（默认从 Host NUMA node 0 开始分配）。</li>
+</ul>
+<p><strong>NOTE</strong>：选择使用自动设定方式时，建议一同使用 <code>hw:numa_mempolicy</code> 属性，表示 NUMA 的 Mem 访问策略，有严格访问本地内存的 strict 和宽松的 preferred 两种选择，这样可以最大程度降低配置参数的复杂性。而且对于某些特定工作负载的 NUMA 架构问题，比如：MySQL “swap insanity” 问题 ，或许 preferred 会是一个不错的选择。</p>
+<ul>
+<li><strong>手动设定 Guest NUMA Topology</strong>：不仅指定 Guest NUMA nodes 的个数，还需要通过 <code>hw:numa_cpus.N</code> 和 <code>hw:numa_mem.N</code> 来指定每个 Guest NUMA nodes 上分配的 vCPUs 和 Memory Size。</li>
+</ul>
+<p>‌</p>
+<p>Nova Scheduler 会根据参数 <code>hw:numa_nodes</code> 来决定如何映射 Guest NUMA node。如果没有设置该参数，那么 Scheduler 将自由的决定在哪里运行虚拟机，而无需关心单个 NUMA 节点是否能够满足虚拟机 flavor 中的 vCPU/Mem 配置，但仍会优先考虑选出一个 NUMA 节点就可以满足情况的计算节点。</p>
+<ul>
+<li>如果 numa_nodes = 1，Scheduler 将会选择出单个 NUMA 节点能够满足虚拟机 flavor 配置的计算节点。</li>
+<li>如果 numa_nodes &gt; 1，Scheduler 将会选择出 NUMA 节点数量以及 NUMA 节点中资源情况能够满足虚拟机 flavor 配置的计算节点。</li>
+</ul>
+<p><strong>NOTE 1</strong>：只有在设定了 <code>hw:numa_nodes</code> 后，<code>hw:numa_cpus.N</code> 和 <code>hw:numa_mem.N</code> 才会生效。只有当 Guest NUMA nodes 存在非对称访问 vCPU/Mem 时（Guest NUMA Nodes 之间拥有的 vCPU 数量和 Mem 大小并非是镜像的），才需要去设定这些参数。</p>
+<p><strong>NOTE 2</strong>：N 仅仅是 Guest NUMA node 的索引，并非实际上的 Host NUMA node 的 ID。例如，Guest NUMA node 0，可能会被映射到 Host NUMA node 1。类似的，FLAVOR-CORES 的值也仅仅是 vCPU 的索引。因此，Nova 的 NUMA 特性并不能用来约束 Guest vCPU/Mem 绑定到指定的 Host NUMA node 上。要完成 vCPU 绑定到指定的 pCPU，需要借助 CPU Pinning policy 机制。</p>
+<p><strong>WARNING</strong>：如果 <code>hw:numa_cpus.N</code> 和 <code>hw:numa_mem.N</code> 的设定值大于虚拟机本身可用的 CPUs/Mem，则触发异常。</p>
+<p><strong>EXAMPLE</strong>：定义虚拟机有 4 vCPU，4096MB Mem，设定 Guest NUMA topology 为 2 Guest NUMA node：</p>
+<ul>
+<li>Guest NUMA node 0：vCPU 0、Mem 1024MB</li>
+<li>Guest NUMA node 1：vCPU 1/2/3、Mem 3072MB</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">openstack flavor set aze-FLAVOR \ </span><br><span class="line">  --property hw:numa_nodes&#x3D;2 \ </span><br><span class="line">  --property hw:numa_cpus.0&#x3D;0 \ </span><br><span class="line">  --property hw:numa_cpus.1&#x3D;1,2,3 \ </span><br><span class="line">  --property hw:numa_mem.0&#x3D;1024 \ </span><br><span class="line">  --property hw:numa_mem.1&#x3D;3072 \</span><br></pre></td></tr></table></figure>
+
+
+<p>NOTE：numa_cpus 指定的是 vCPUs 的序号，而非 pCPUs。</p>
+<p>使用该 flavor 创建的虚拟机时，最后由 Libvirt Driver 完成将 Guest NUMA node 映射到 Host NUMA node 上。</p>
+<p>建议加上 numa_cpus 和 numa_mem 参数，手动将flavor 资源平均分配到NUMA Node 中</p>
+<h3 id="3）设置image-属性"><a href="#3）设置image-属性" class="headerlink" title="3）设置image 属性"></a>3）设置image 属性</h3><p>除了通过 Flavor extra-specs 来设定 Guest NUMA topology 之外，还可以通过 Image Metadata 来设定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">glance image-update --property \ </span><br><span class="line">    hw_numa_nodes&#x3D;2 \ </span><br><span class="line">    hw_numa_cpus.0&#x3D;0 \ </span><br><span class="line">    hw_numa_mem.0&#x3D;1024 \ </span><br><span class="line">    hw_numa_cpus.1&#x3D;1,2,3 \ </span><br><span class="line">    hw_numa_mem.1&#x3D;3072 \ </span><br><span class="line">    image_name</span><br></pre></td></tr></table></figure>
+
+
+<p>注意，当镜像的 NUMA 约束与 Flavor 的 NUMA 约束冲突时，以 Flavor 为准。</p>
+<h3 id="4）查看虚机cpu的绑定情况"><a href="#4）查看虚机cpu的绑定情况" class="headerlink" title="4）查看虚机cpu的绑定情况"></a>4）查看虚机cpu的绑定情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># virsh vcpuinfo instance-0000000c</span><br><span class="line">VCPU:           0</span><br><span class="line">CPU:            2</span><br><span class="line">State:          running</span><br><span class="line">CPU time:       3.0s</span><br><span class="line">CPU Affinity:   --y-----</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">VCPU:           1</span><br><span class="line">CPU:            5</span><br><span class="line">State:          running</span><br><span class="line">CPU time:       1.0s</span><br><span class="line">CPU Affinity:   -----y--</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="4、Numa命令"><a href="#4、Numa命令" class="headerlink" title="4、Numa命令"></a>4、Numa命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># numactl -H</span><br><span class="line">available: 1 nodes (0)</span><br><span class="line">node 0 cpus: 0 1 2 3</span><br><span class="line">node 0 size: 8191 MB</span><br><span class="line">node 0 free: 156 MB</span><br><span class="line">node distances:</span><br><span class="line">node   0</span><br><span class="line">  0:  10</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"># numastat -m -c</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Per-node system memory usage (in MBs):</span><br><span class="line">                 Node 0 Total</span><br><span class="line">                 ------ -----</span><br><span class="line">MemTotal           8191  8191</span><br><span class="line">MemFree             157   157</span><br><span class="line">MemUsed            8035  8035</span><br><span class="line">Active             6230  6230</span><br><span class="line">Inactive            866   866</span><br><span class="line">Active(anon)       5229  5229</span><br><span class="line">Inactive(anon)      134   134</span><br><span class="line">Active(file)       1000  1000</span><br><span class="line">Inactive(file)      732   732</span><br><span class="line">Unevictable          75    75</span><br><span class="line">Mlocked              75    75</span><br><span class="line">Dirty                 0     0</span><br><span class="line">Writeback             0     0</span><br><span class="line">FilePages          2137  2137</span><br><span class="line">Mapped               74    74</span><br><span class="line">AnonPages          5034  5034</span><br><span class="line">Shmem               386   386</span><br><span class="line">KernelStack          11    11</span><br><span class="line">PageTables           47    47</span><br><span class="line">NFS_Unstable          0     0</span><br><span class="line">Bounce                0     0</span><br><span class="line">WritebackTmp          0     0</span><br><span class="line">Slab                276   276</span><br><span class="line">SReclaimable        202   202</span><br><span class="line">SUnreclaim           73    73</span><br><span class="line">AnonHugePages       798   798</span><br><span class="line">HugePages_Total       0     0</span><br><span class="line">HugePages_Free        0     0</span><br><span class="line">HugePages_Surp        0     0</span><br></pre></td></tr></table></figure>
+<p>‌</p>
+<h1 id="5、参考文档"><a href="#5、参考文档" class="headerlink" title="5、参考文档"></a>5、参考文档</h1><p><a target="_blank" rel="noopener" href="https://docs.openstack.org/nova/pike/admin/cpu-topologies.html#customizing-instance-numa-placement-policies">openstack-CPU topologies</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.51cto.com/hl914/1557615?source=drt">numastat命令</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jmilkfan-fanguiju/p/10589768.html#Nova__NUMA__408">OpenStack Nova 高性能虚拟机之 NUMA 架构亲和</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1159058">NUMA特性对MySQL性能的影响</a></p>
+<p><a target="_blank" rel="noopener" href="https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux_openstack_platform/7/html/instances_and_images_guide/ch-cpu_pinning">redhat-在openstack中配置NUMA</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/heavyfish.github.io/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/heavyfish.github.io/tags/OpenStack/" rel="tag"># OpenStack</a>
+              <a href="/heavyfish.github.io/tags/%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84/" rel="tag"># 硬件架构</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2021/01/18/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/RPC%E3%80%81REST%E3%80%81RESTful/" rel="prev" title="RPC、REST、RESTful 间的比较">
+      <i class="fa fa-chevron-left"></i> RPC、REST、RESTful 间的比较
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81%E8%AE%A1%E7%AE%97%E5%B9%B3%E5%8F%B0%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E2%80%8C"><span class="nav-text">1、计算平台体系结构‌</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E3%80%81SMP%E5%AF%B9%E7%A7%B0%E5%A4%9A%E5%A4%84%E7%90%86%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1、SMP对称多处理架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2%E3%80%81NUMA%E9%9D%9E%E7%BB%9F%E4%B8%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E7%BB%93%E6%9E%84"><span class="nav-text">1.2、NUMA非统一内存访问结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3%E3%80%81MPP%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%84"><span class="nav-text">1.3、MPP大规模并行处理结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81Linux%E4%B8%8A%E7%9A%84NUMA"><span class="nav-text">2、Linux上的NUMA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">2.1、基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2%E3%80%81NUMA%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="nav-text">2.2、NUMA调度策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3%E3%80%81%E8%8E%B7%E5%8F%96%E5%AE%BF%E4%B8%BB%E6%9C%BA%E7%9A%84NUMA%E6%8B%93%E6%89%91"><span class="nav-text">2.3、获取宿主机的NUMA拓扑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4%E3%80%81NUMA%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1"><span class="nav-text">2.4、NUMA启动服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81Nova%E5%AE%9E%E7%8E%B0NUMA%E4%BA%B2%E5%92%8C%E2%80%8C"><span class="nav-text">3、Nova实现NUMA亲和‌</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1%E3%80%81%E9%85%8D%E7%BD%AENova%E4%BD%BF%E7%94%A8NUMA%E4%BA%B2%E5%92%8C"><span class="nav-text">3.1、配置Nova使用NUMA亲和</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%EF%BC%89nova-scheduler-%E5%90%AF%E7%94%A8-NUMATopologyFilter"><span class="nav-text">1）nova-scheduler 启用 NUMATopologyFilter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%EF%BC%89%E8%AE%BE%E7%BD%AEflavor-%E5%B1%9E%E6%80%A7"><span class="nav-text">2）设置flavor 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%EF%BC%89%E8%AE%BE%E7%BD%AEimage-%E5%B1%9E%E6%80%A7"><span class="nav-text">3）设置image 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%EF%BC%89%E6%9F%A5%E7%9C%8B%E8%99%9A%E6%9C%BAcpu%E7%9A%84%E7%BB%91%E5%AE%9A%E6%83%85%E5%86%B5"><span class="nav-text">4）查看虚机cpu的绑定情况</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81Numa%E5%91%BD%E4%BB%A4"><span class="nav-text">4、Numa命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-text">5、参考文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shenxr"
+      src="/heavyfish.github.io/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description">在被人包养前，记录学习笔记的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/heavyfish.github.io/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/heavyfish.github.io/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">242k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">3:40</span>
+</div>
+<!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+  <script defer src="/heavyfish.github.io/lib/three/three.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/heavyfish.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/heavyfish.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":100,"height":250,"hOffset":-7,"vOffset":30},"mobile":{"show":false},"log":false,"tagMode":false});</script></body>
+</html>

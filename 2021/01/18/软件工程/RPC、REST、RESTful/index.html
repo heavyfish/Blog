@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+</script>
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="根据网上资料整理的  RPC、REST、RESTful  三者比较信息">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RPC、REST、RESTful 间的比较">
+<meta property="og:url" content="https://heavyfish.github.io/2021/01/18/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/RPC%E3%80%81REST%E3%80%81RESTful/index.html">
+<meta property="og:site_name" content="请问你能包养我吗">
+<meta property="og:description" content="根据网上资料整理的  RPC、REST、RESTful  三者比较信息">
+<meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118224457985.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118224527507.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118224947122.png">
+<meta property="article:published_time" content="2021-01-18T14:41:59.180Z">
+<meta property="article:modified_time" content="2021-01-18T14:52:38.402Z">
+<meta property="article:author" content="Shenxr">
+<meta property="article:tag" content="软件工程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118224457985.png">
+
+<link rel="canonical" href="https://heavyfish.github.io/2021/01/18/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/RPC%E3%80%81REST%E3%80%81RESTful/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>RPC、REST、RESTful 间的比较 | 请问你能包养我吗</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">请问你能包养我吗</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2021/01/18/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/RPC%E3%80%81REST%E3%80%81RESTful/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RPC、REST、RESTful 间的比较
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-01-18 22:41:59 / Modified: 22:52:38" itemprop="dateCreated datePublished" datetime="2021-01-18T22:41:59+08:00">2021-01-18</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>5k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>5 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>根据网上资料整理的  RPC、REST、RESTful  三者比较信息</p>
+<a id="more"></a>
+
+<h1 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h1><p>RPC：一种软件架构概念/API设计风格；</p>
+<p>REST：一种软件架构概念/API设计风格；</p>
+<p>RESTful：如果满足REST约束条件和原则的架构，就被称为是RESTful架构。就像URL都是URI(统一资源标识)的表现形式一样，RESTful是符合REST原则的表现形式。</p>
+<p>不管是RPC还是RESTful，它们的传输层协议都是基于TCP/UDP的。而在应用层目前RESTful最常用的是HTTP协议，RPC用的是【JSON-RPC/gRPC/自定制】协议。</p>
+<p>RPC和RESTful的主要区别在于应用层协议和架构上。</p>
+<p>架构上的不同导致了 双方在接口的设计方式上，传输的Header+Body上，函数的调用上存在着区别</p>
+<h1 id="2、RPC"><a href="#2、RPC" class="headerlink" title="2、RPC"></a>2、RPC</h1><p>什么是 RPC 。RPC 是 <code>Remote Procedure Call </code>，字面意思是远程过程调用。但是说白了就是从本地机器去执行服务器上的一个函数。所以说 RPC 指的是一类日常的操作，是个很宽泛的概念。</p>
+<p>如果宽泛而言，HTTP 请求本身也是一种 RPC 的形式。因为HTTP 请求也可以从本地发一个信号到服务器，服务器上执行某个函数，然后返回一些信息给客户端。</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118224457985.png" alt="image-20210118224457985" style="zoom:50%;" />
+
+
+
+<p>如果放窄而言，可将 HTTP 请求和 RPC 作为平行概念来对比。说HTTP 好比普通话，而 RPC 是各地方言。这里的 RPC 此时指的是开发者自己手写的某种 RPC 形式，所以才能跟 HTTP 形成平行关系。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118224527507.png" alt="image-20210118224527507"></p>
+<p>我们在谈到RPC时，一般都是将其放窄而讲的。上图是RPC的架构模式。</p>
+<h2 id="2-1、RPC模式"><a href="#2-1、RPC模式" class="headerlink" title="2.1、RPC模式"></a>2.1、RPC模式</h2><p>RPC 模式分为三层：‌</p>
+<ul>
+<li><strong>RPCRuntime</strong> 负责最底层的网络传输；</li>
+<li><strong>Stub</strong> 处理客户端和服务端约定好的语法、语义的封装和解封装，这些调用远程的细节都被这两层搞定了；</li>
+<li><strong>用户和服务器</strong>这层就只要负责处理业务逻辑，调用本地 Stub 就可以调用远程</li>
+</ul>
+<p>具体而言：‌</p>
+<ol>
+<li>客户端(Client)：服务调用方 </li>
+<li>客户端存根(Client Stub)：存放服务端地址信息，将客户端的请求参数打包成网络消息，再通过网络发送给服务方 </li>
+<li>服务端存根(Server Stub)：接受客户端发送过来的消息并解包，再调用本地服务</li>
+<li> 服务端(Server)：真正的服务提供者</li>
+</ol>
+<p>‌</p>
+<p>更具体的实现步骤：</p>
+<ol>
+<li>服务调用方（client）(客户端)以本地调用方式调用服务；</li>
+<li>client stub接收到调用后负责将方法、参数等组装成能够进行网络传输的消息体；在Java里就是序列化的过程 </li>
+<li> client stub找到服务地址，并将消息通过网络发送到服务端； </li>
+<li>server stub收到消息后进行解码,在Java里就是反序列化的过程； </li>
+<li>server stub根据解码结果调用本地的服务； </li>
+<li>本地服务执行处理逻辑； </li>
+<li>本地服务将结果返回给server stub； </li>
+<li>server stub将返回结果打包成消息，Java里的序列化； </li>
+<li>server stub将打包后的消息通过网络并发送至消费方 </li>
+<li>client stub接收到消息，并进行解码, Java里的反序列化； </li>
+<li>服务调用方（client）得到最终结果。‌</li>
+</ol>
+<p>RPC框架的目标就是把2-10步封装起来，把调用、编码/解码的过程封装起来，让用户像调用本地服务一样的调用远程服务</p>
+<h1 id="3、RESTful"><a href="#3、RESTful" class="headerlink" title="3、RESTful"></a>3、RESTful</h1><p>REST即表述性状态传递（Representational State Transfer，简称REST），是一种软件架构风格。 </p>
+<p>REST通过HTTP协议定义的通用动词方法(GET、PUT、DELETE、POST) ，以URI对网络资源进行唯一标识，响应端根据请求端的不同需求，通过无状态通信，对其请求的资源进行表述。</p>
+<p>我们可以通过具体理解Representational State Transfer的意思，来明白RESTful的架构‌</p>
+<h2 id="3-1、资源（Resources）"><a href="#3-1、资源（Resources）" class="headerlink" title="3.1、资源（Resources）"></a>3.1、资源（Resources）</h2><p>REST的名称”表现层状态转化”中，省略了主语。”表现层”其实指的是”资源”（Resources）的”表现层”。</p>
+<p><strong>所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。</strong>它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源定位符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。</p>
+<p>所谓”上网”，就是与互联网上一系列的”资源”互动，调用它的URI</p>
+<p>‌</p>
+<h2 id="3-2、表现层（Representation）"><a href="#3-2、表现层（Representation）" class="headerlink" title="3.2、表现层（Representation）"></a>3.2、表现层（Representation）</h2><p>“资源”是一种信息实体，它可以有多种外在表现形式。<strong>我们把”资源”具体呈现出来的形式，叫做它的”表现层”（Representation）。</strong></p>
+<p>比如，文本可以用txt格式表现，也可以用HTML格式、XML格式、JSON格式表现，甚至可以采用二进制格式；图片可以用JPG格式表现，也可以用PNG格式表现。</p>
+<p>URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的”.html”后缀名是不必要的，因为这个后缀名表示格式，属于”表现层”范畴，而URI应该只代表”资源”的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对”表现层”的描述。</p>
+<p>‌</p>
+<h2 id="3-3、状态转化（State-Transfer）"><a href="#3-3、状态转化（State-Transfer）" class="headerlink" title="3.3、状态转化（State Transfer）"></a>3.3、状态转化（State Transfer）</h2><p>访问一个网站，就代表了客户端和服务器的一个互动过程。在这个过程中，势必涉及到数据和状态的变化。</p>
+<p>互联网通信协议HTTP协议，是一个无状态协议。这意味着，所有的状态都保存在服务器端。因此，<strong>如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。</strong></p>
+<p>客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：<strong>GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</strong></p>
+<h2 id="3-4、无状态"><a href="#3-4、无状态" class="headerlink" title="3.4、无状态"></a><strong>3.4、无状态</strong></h2><p><strong>无状态</strong> REST设计风格要求Server无状态，无状<strong>态并不等于</strong>不保存用户的状态，而是指服务器不保存请求状态（会话信息），客户端必须每次都<strong>带上自己的状态</strong>去请求服务器，如果确实要维持用户的状态，也应由客户端负责，例如：在服务端上通过Cookie保存Token，之后的请求中都带上Token，而这个Token就保存有了用户的状态（如登录信息）。这里需要注意的是：</p>
+<ul>
+<li>通过Session保存状态<strong>不是REST设计风格</strong>，因为Session是将状态信息（用户信息、过期时间等）保存在了服务器上，比如用户登录成功后，会将Session信息保存在服务器，然后返回个SessionID给客户端并且将SessionID保存在Cookies中,之后的请求客户端都会通过Cookies传递SessionID给服务器，服务器根据客户端传来的SessionID去匹配之前保存的Session状态信息，所以这个状态是保存在服务器上的，是靠服务器维持的，所以不是REST设计风格。</li>
+<li>通过Token保存状态<strong>是REST设计风格</strong>，因为状态信息（用户信息、过期时间等）都是保存在Token中，而Token又是保存在客户端中（如Cookies），比如用户登录成功后，服务器会返回一个Token（包含了用户信息、过期时间等）给服务端，服务端将Token保存在Cookies中，之后的请求客户端都会取出Token放到Request Headers中传给服务器，服务器验证Token的有效性即可。</li>
+</ul>
+<h2 id="3-4、综述"><a href="#3-4、综述" class="headerlink" title="3.4、综述"></a><strong>3.4、综述</strong></h2><p>综合上面的解释，我们总结一下什么是RESTful架构：</p>
+<p>（1）每一个URI代表一种资源；</p>
+<p>（2）客户端和服务器之间，传递这种资源的某种表现层；</p>
+<p>（3）客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。‌</p>
+<p>一句话总结：后端将资源发布为URI，前端通过URI访问资源，并通过HTTP动词表示要对资源进行的操作‌</p>
+<h1 id="4、异同点"><a href="#4、异同点" class="headerlink" title="4、异同点"></a>4、异同点</h1><p>‌RPC和RESTful的主要区别在于通信协议和架构上。</p>
+<h2 id="4-1、序列化和通信协议"><a href="#4-1、序列化和通信协议" class="headerlink" title="4.1、序列化和通信协议"></a>4.1、序列化和通信协议</h2><p>接口调用通常包含两个部分，序列化和通信协议。常见的序列化协议包括json、xml、hession、protobuf、thrift、text、bytes等；通信协议比较流行的是http、soap、websockect。</p>
+<p>RPC通常基于TCP实现，常用框架例如netty，Dubbo</p>
+<p>RESTful通常采用http+JSON实现。 </p>
+<p>JSON-RPC是指通信协议采用二进制方式，而不是http，序列化采用JSON的形式</p>
+<p>不管是RPC还是RESTful，它们的传输层协议都是基于TCP/UDP的。而在应用层目前RESTful最常用的是HTTP协议，RPC用的是【JSON-RPC/gRPC/自定制】协议。</p>
+<p>RPC不使用HTTP协议的原因是因为：HTTP协议在传输过程中有太多的Header浪费了空间‌</p>
+<h2 id="4-2、API设计"><a href="#4-2、API设计" class="headerlink" title="4.2、API设计"></a>4.2、API设计</h2><p>架构上的不同导致了 双方在接口的设计方式上，函数的调用上存在着区别。</p>
+<p>以一个订餐API为例：</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118224947122.png" alt="image-20210118224947122" style="zoom:50%;" />
+
+
+
+<p>RPC<strong>面向过程（或者说是action）</strong>，只发送 GET 和 POST 请求。GET用来查询信息，其他情况下一律用POST。请求参数是<strong>动词</strong>，直接描述动作本身。</p>
+<p>RESTful<strong>面向资源</strong>，使用 POST、DELETE、PUT、GET 请求，分别对应增、删、改、查操作。请求参数是<strong>名词</strong>，这个名词就是“增删改查”想要操作的对象。</p>
+<p>‌</p>
+<h2 id="4-3、传输的Message"><a href="#4-3、传输的Message" class="headerlink" title="4.3、传输的Message"></a>4.3、传输的Message</h2><p>在看一个向用户”发送消息“的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># RPC</span><br><span class="line">POST &#x2F;SendUserMessage HTTP&#x2F;1.1</span><br><span class="line">Host: api.example.com</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;&quot;userId&quot;: 501, &quot;message&quot;: &quot;Hello!&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># RESTful</span><br><span class="line">POST &#x2F;users&#x2F;501&#x2F;messages HTTP&#x2F;1.1</span><br><span class="line">Host: api.example.com</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;&quot;message&quot;: &quot;Hello!&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>RPC永远调用的是一个函数，并将相关参数放在message中传输</p>
+<p>RESTful在调用URI时，就已经知道了自己要操作的对象（资源）</p>
+<h1 id="5、选择建议"><a href="#5、选择建议" class="headerlink" title="5、选择建议"></a>5、选择建议</h1><ul>
+<li>RESTful API：主要用在为第三方提供调用自家系统的一种途径。</li>
+<li>RPC：主要用在自家系统之间的互相调用，即实现系统的分布式</li>
+</ul>
+<p>具体的还是根据业务场景来设计。</p>
+<h1 id="6、其余概念"><a href="#6、其余概念" class="headerlink" title="6、其余概念"></a><strong>6、其余概念</strong></h1><h2 id="6-1、RPC-与-Dubbo"><a href="#6-1、RPC-与-Dubbo" class="headerlink" title="6.1、RPC 与 Dubbo"></a><strong>6.1、</strong>RPC 与 Dubbo</h2><p>RPC虽然经常被当作API设计风格进行讨论，但它更多的是一种通信方式或概念（RPC不是协议！）。而Dubbo是实现了RPC概念的框架，使得调用远程服务就像调用本地方法一样，用过Dubbo的人肯定明白。所以RPC与Dubbo是实现与被实现的关系。我们常说Dubbo是阿里巴巴开源的RPC框架，就是这个道理。</p>
+<p>这里需要提到的一点，就是<strong>Dubbo框架</strong>与<strong>Dubbo协议</strong>，如果只说Dubbo一词，其实是有歧义的，因为Dubbo可以是框架也可以是协议。Dubbo框架默认使用的是Dubbo协议，这个协议是阿里巴巴自己实现的一种应用层协议，传输层还是TCP。所以Dubbo协议与HTTP、FTP，SMTP这些应用层协议是并列的概念。除了默认的Dubbo协议，Dubbo框架还支持RMI、Hessian、HTTP等协议。</p>
+<p>‌</p>
+<h2 id="6-2、Dubbo、RMI、HTTP"><a href="#6-2、Dubbo、RMI、HTTP" class="headerlink" title="6.2、Dubbo、RMI、HTTP"></a>6.2、Dubbo、RMI、HTTP</h2><p>如果将Dubbo与RMI、HTTP并列在一起，那么这个Dubbo就是指Dubbo框架默认的Dubbo协议。</p>
+<p>RMI，这是一种古老的协议，在JDK1.1中就被实现了，我不知道那个时候RPC概念有没有被提出，但是RMI其实就是一种RPC的实现，比Dubbo要早得多。RMI的通信方式是把Java对象序列化为二进制格式，接收方收到以后再进行反序列化，所以局限性就是用RMI通信的系统都必须是用Java语言编写的</p>
+<p>‌</p>
+<h1 id="7、继续深入"><a href="#7、继续深入" class="headerlink" title="7、继续深入"></a>7、继续深入</h1><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1196179">比对了json-RPC和RESTful</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html">RESTful API 最佳实践</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/heavyfish.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"># 软件工程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2021/01/18/Linux/Crash%E8%B0%83%E8%AF%95/" rel="prev" title="系统Crash调试">
+      <i class="fa fa-chevron-left"></i> 系统Crash调试
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2021/01/18/%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84/NUMA%E8%AF%A6%E8%A7%A3/" rel="next" title="NUMA详解">
+      NUMA详解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81%E7%AE%80%E4%BB%8B"><span class="nav-text">1、简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81RPC"><span class="nav-text">2、RPC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E3%80%81RPC%E6%A8%A1%E5%BC%8F"><span class="nav-text">2.1、RPC模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81RESTful"><span class="nav-text">3、RESTful</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1%E3%80%81%E8%B5%84%E6%BA%90%EF%BC%88Resources%EF%BC%89"><span class="nav-text">3.1、资源（Resources）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2%E3%80%81%E8%A1%A8%E7%8E%B0%E5%B1%82%EF%BC%88Representation%EF%BC%89"><span class="nav-text">3.2、表现层（Representation）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3%E3%80%81%E7%8A%B6%E6%80%81%E8%BD%AC%E5%8C%96%EF%BC%88State-Transfer%EF%BC%89"><span class="nav-text">3.3、状态转化（State Transfer）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4%E3%80%81%E6%97%A0%E7%8A%B6%E6%80%81"><span class="nav-text">3.4、无状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4%E3%80%81%E7%BB%BC%E8%BF%B0"><span class="nav-text">3.4、综述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81%E5%BC%82%E5%90%8C%E7%82%B9"><span class="nav-text">4、异同点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1%E3%80%81%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="nav-text">4.1、序列化和通信协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2%E3%80%81API%E8%AE%BE%E8%AE%A1"><span class="nav-text">4.2、API设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3%E3%80%81%E4%BC%A0%E8%BE%93%E7%9A%84Message"><span class="nav-text">4.3、传输的Message</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="nav-text">5、选择建议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6%E3%80%81%E5%85%B6%E4%BD%99%E6%A6%82%E5%BF%B5"><span class="nav-text">6、其余概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1%E3%80%81RPC-%E4%B8%8E-Dubbo"><span class="nav-text">6.1、RPC 与 Dubbo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2%E3%80%81Dubbo%E3%80%81RMI%E3%80%81HTTP"><span class="nav-text">6.2、Dubbo、RMI、HTTP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7%E3%80%81%E7%BB%A7%E7%BB%AD%E6%B7%B1%E5%85%A5"><span class="nav-text">7、继续深入</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shenxr"
+      src="/heavyfish.github.io/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description">在被人包养前，记录学习笔记的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/heavyfish.github.io/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/heavyfish.github.io/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">242k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">3:40</span>
+</div>
+<!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+  <script defer src="/heavyfish.github.io/lib/three/three.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/heavyfish.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/heavyfish.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":100,"height":250,"hOffset":-7,"vOffset":30},"mobile":{"show":false},"log":false,"tagMode":false});</script></body>
+</html>

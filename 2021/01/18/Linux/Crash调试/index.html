@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+</script>
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Crash分析的vmcore来源于kdump，此处将简要介绍kdump和crash。在针对 云平台 宿主机 crash 时，会很有用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统Crash调试">
+<meta property="og:url" content="https://heavyfish.github.io/2021/01/18/Linux/Crash%E8%B0%83%E8%AF%95/index.html">
+<meta property="og:site_name" content="请问你能包养我吗">
+<meta property="og:description" content="Crash分析的vmcore来源于kdump，此处将简要介绍kdump和crash。在针对 云平台 宿主机 crash 时，会很有用">
+<meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223211586.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223444763.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223527865.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223558184.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223624422.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223645946.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223708832.png">
+<meta property="article:published_time" content="2021-01-18T14:29:34.941Z">
+<meta property="article:modified_time" content="2021-01-18T14:38:41.179Z">
+<meta property="article:author" content="Shenxr">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Linux软件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223211586.png">
+
+<link rel="canonical" href="https://heavyfish.github.io/2021/01/18/Linux/Crash%E8%B0%83%E8%AF%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>系统Crash调试 | 请问你能包养我吗</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">请问你能包养我吗</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2021/01/18/Linux/Crash%E8%B0%83%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          系统Crash调试
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-01-18 22:29:34 / Modified: 22:38:41" itemprop="dateCreated datePublished" datetime="2021-01-18T22:29:34+08:00">2021-01-18</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Crash分析的vmcore来源于kdump，此处将简要介绍kdump和crash。在针对 云平台 宿主机 crash 时，会很有用</p>
+<a id="more"></a>
+
+<h1 id="1、简介‌"><a href="#1、简介‌" class="headerlink" title="1、简介‌"></a>1、简介‌</h1><h2 id="1-1、kdump"><a href="#1-1、kdump" class="headerlink" title="1.1、kdump"></a>1.1、kdump</h2><p>Kdump是一种内核崩溃转储机制，可让您保存系统内存的内容以供以后分析。 它依赖于kexec，可用于从另一个内核的上下文引导Linux内核，绕过BIOS并保留第一个内核的内存内容，否则这些内容将丢失。</p>
+<p>万一系统崩溃，kdump将使用kexec引导到第二个内核（即捕获内核）。 第二个内核位于第一个内核无法访问的系统内存的保留部分中。 然后，第二个内核捕获崩溃的内核内存的内容（崩溃转储）并保存。</p>
+<h2 id="1-2、crash"><a href="#1-2、crash" class="headerlink" title="1.2、crash"></a>1.2、crash</h2><p>Crash 是由 Dave Anderson 开发和维护的一个内存转储分析工具，目前它的最新版本是 5.0.0。 在没有统一标准的内存转储文件的格式的情况下，Crash 工具支持众多的内存转储文件格式，包括：</p>
+<ul>
+<li>Live linux 系统</li>
+<li>kdump 产生的正常的和压缩的内存转储文件</li>
+<li>由 makedumpfile 命令生成的压缩的内存转储文件</li>
+<li>由 Netdump 生成的内存转储文件</li>
+<li>由 Diskdump 生成的内存转储文件</li>
+<li>由 Kdump 生成的 Xen 的内存转储文件</li>
+<li>IBM 的 390/390x 的内存转储文件</li>
+<li>LKCD 生成的内存转储文件</li>
+<li>Mcore 生成的内存转储文件</li>
+</ul>
+<p>‌</p>
+<h1 id="2、kdump"><a href="#2、kdump" class="headerlink" title="2、kdump"></a>2、kdump</h1><h2 id="2-1、简介"><a href="#2-1、简介" class="headerlink" title="2.1、简介"></a>2.1、简介</h2><p>kdump从RHEL5以来，已被默认安装，其对应包为<code>kexec-tools</code>。</p>
+<p>为了使kdump顺利运行，<code>生产内核</code>会保留一定的内存给<code>捕获内核</code>使用，查看<code>/etc/grub2.cfg</code>可见：</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223211586.png" alt="image-20210118223211586"></p>
+<p><code>crashkernel=auto</code>即自动设置保留的内存，当然也可自己指令</p>
+<h2 id="2-2、配置"><a href="#2-2、配置" class="headerlink" title="2.2、配置"></a>2.2、配置</h2><p><code>kdump</code>的默认配置文件在<code>/etc/kdump.conf</code>下。其默认有两行生效配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># core dump 被存储的位置</span><br><span class="line">path &#x2F;var&#x2F;crash</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 使用 makedumpfile 来压缩收集到的数据，</span><br><span class="line"># -l 表示 启用 dump file 压缩</span><br><span class="line"># -d 31 表示要忽略的内存页面数据，此处表示只导出内核态的数据</span><br><span class="line">core_collector makedumpfile -l --message-level 1 -d 31</span><br></pre></td></tr></table></figure>
+<p>因为一般生成的 <code>vmcore</code> 文件仅仅是内核崩溃时的一部分信息, 如果全部导出对磁盘和时间都是很大的消耗, 默认情况下, dump 的级别为 31, 仅导出内核态的数据。下表为忽略的内存页面对应的值</p>
+<p><strong>Supported Filtering Levels</strong></p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>1</code></td>
+<td>Zero pages</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>Cache pages</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>Cache private</td>
+</tr>
+<tr>
+<td><code>8</code></td>
+<td>User pages</td>
+</tr>
+<tr>
+<td><code>16</code></td>
+<td>Free pages</td>
+</tr>
+</tbody></table>
+<h2 id="2-3、kdump原理"><a href="#2-3、kdump原理" class="headerlink" title="2.3、kdump原理"></a>2.3、kdump原理</h2><p>kexec是kdump机制的关键，包含两部分：</p>
+<p>内核空间的系统调用kexec_load。负责在生产内核启动时将捕获内核加载到指定地址。</p>
+<p>用户空间的工具kexec-tools。将捕获内核的地址传递给生产内核，从而在系统崩溃的时候找到捕获内核的地址并运行。</p>
+<p>kdump是一种基于kexec的内核崩溃转储机制。当系统崩溃时，kdump使用kexec启动到第二个内核。第二个内核通常叫做捕获内核，以很小内存启动以捕获转储镜像。第一个内核保留了内存的一部分给第二个内核启动使用。</p>
+<p>由于kdump利用kexec启动捕获内核，绕过了BIOS，所以第一个内核的内存得以保留。这是内存崩溃转储的本质。</p>
+<p>捕获内核启动后，会像一般内核一样，去运行为它创建的ramdisk上的init程序。而各种转储机制都可以事先在init中实现。</p>
+<p>为了在生产内核崩溃时能顺利启动捕获内核，捕获内核以及它的ramdisk是事先放到生产内核的内存中的。</p>
+<p>生产内核的内存是通过/proc/vmcore这个文件交给捕获内核的。为了生成它，用户工具在生产内核中分析出内存的使用和分布等情况，然后把这些信息综合起来生成一个ELF头文件保存起来。捕获内核被引导时会被同时传递这个ELF文件头的地址，通过分析它，捕获内核就可以生成出/proc/vmcore。有了/proc/vmcore这个文件，捕获内核的ramdisk中的脚本就可以通过通常的文件读写和网络来实现各种策略了。</p>
+<h1 id="3、Crash‌"><a href="#3、Crash‌" class="headerlink" title="3、Crash‌"></a>3、Crash‌</h1><h2 id="3-1、yum源"><a href="#3-1、yum源" class="headerlink" title="3.1、yum源"></a>3.1、yum源</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[debug]</span><br><span class="line">name&#x3D;CentOS-$releasever - DebugInfo</span><br><span class="line">baseurl&#x3D;http:&#x2F;&#x2F;debuginfo.centos.org&#x2F;$releasever&#x2F;$basearch&#x2F;</span><br><span class="line">gpgcheck&#x3D;0</span><br><span class="line">enabled&#x3D;1</span><br><span class="line">protect&#x3D;1</span><br><span class="line">priority&#x3D;1</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-2、安装"><a href="#3-2、安装" class="headerlink" title="3.2、安装"></a>3.2、安装</h2><p>首先确认故障机器的内核版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@sxr ~]# uname -r</span><br><span class="line">3.10.0-957.21.3.el7.x86_64</span><br></pre></td></tr></table></figure>
+<p>然后安装对应的debuginfo包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yum install kernel-debuginfo-3.10.0-957.21.3.el7.x86_64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#注：kernel-debuginfo-common会被作为依赖而顺便安装</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">yum install crash</span><br></pre></td></tr></table></figure>
+<p>确保运行<code>crash</code>机器的内核版本和故障机器的内核版本至少在同一个大版本下。</p>
+<p>‌</p>
+<h2 id="3-3、分析"><a href="#3-3、分析" class="headerlink" title="3.3、分析"></a>3.3、分析</h2><p>进入<code>/usr/lib/debug/lib/modules/3.10.0-693.5.2.el7.x86_64/</code>下，把<code>vmcore</code>也拷过去，然后执行命令 <code>crash vmlinux vmcore</code> 开始分析：</p>
+<p>进入过后，最先出现的是系统基本信息</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223444763.png" alt="image-20210118223444763">‌</p>
+<p><code>bt</code>可看到堆栈, #是调用到的堆栈</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223527865.png" alt="image-20210118223527865" style="zoom:50%;" />
+
+<p>‌</p>
+<p><code>bt -slf</code>显示函数偏移，函数所在的文件和每一帧的具体内容，从而对照源码和汇编代码，查看函数入参和局部变量</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223558184.png" alt="image-20210118223558184" style="zoom:50%;" />
+
+
+
+<p><code>dis</code>命令进行反汇编，查看对应地址的代码逻辑</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223624422.png" alt="image-20210118223624422"></p>
+<p><code>files</code>查看进程打开的文件</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223645946.png" alt="image-20210118223645946"></p>
+<p>‌</p>
+<h1 id="4、参考文档‌"><a href="#4、参考文档‌" class="headerlink" title="4、参考文档‌"></a>4、参考文档‌</h1><p><a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/latest/admin-guide/tainted-kernels.html">对Tainted的介绍</a></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210118223708832.png" alt="image-20210118223708832"></p>
+<p><a target="_blank" rel="noopener" href="https://linux.die.net/man/8/crash">crash(8)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ad03152a0a53">crash部分命令介绍</a></p>
+<p><a target="_blank" rel="noopener" href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/kernel_administration_guide/kernel_crash_dump_guide#chap-introduction-to-kdump">redhat介绍</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/xuliker/kde/issues/65">crash调试指南</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/heavyfish.github.io/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/heavyfish.github.io/tags/Linux%E8%BD%AF%E4%BB%B6/" rel="tag"># Linux软件</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2021/01/18/Linux/NFS%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA/" rel="prev" title="NFS共享目录分享">
+      <i class="fa fa-chevron-left"></i> NFS共享目录分享
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2021/01/18/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/RPC%E3%80%81REST%E3%80%81RESTful/" rel="next" title="RPC、REST、RESTful 间的比较">
+      RPC、REST、RESTful 间的比较 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81%E7%AE%80%E4%BB%8B%E2%80%8C"><span class="nav-text">1、简介‌</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E3%80%81kdump"><span class="nav-text">1.1、kdump</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2%E3%80%81crash"><span class="nav-text">1.2、crash</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81kdump"><span class="nav-text">2、kdump</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E3%80%81%E7%AE%80%E4%BB%8B"><span class="nav-text">2.1、简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2%E3%80%81%E9%85%8D%E7%BD%AE"><span class="nav-text">2.2、配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3%E3%80%81kdump%E5%8E%9F%E7%90%86"><span class="nav-text">2.3、kdump原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81Crash%E2%80%8C"><span class="nav-text">3、Crash‌</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1%E3%80%81yum%E6%BA%90"><span class="nav-text">3.1、yum源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2%E3%80%81%E5%AE%89%E8%A3%85"><span class="nav-text">3.2、安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3%E3%80%81%E5%88%86%E6%9E%90"><span class="nav-text">3.3、分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3%E2%80%8C"><span class="nav-text">4、参考文档‌</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shenxr"
+      src="/heavyfish.github.io/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description">在被人包养前，记录学习笔记的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/heavyfish.github.io/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/heavyfish.github.io/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">242k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">3:40</span>
+</div>
+<!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+  <script defer src="/heavyfish.github.io/lib/three/three.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/heavyfish.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/heavyfish.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":100,"height":250,"hOffset":-7,"vOffset":30},"mobile":{"show":false},"log":false,"tagMode":false});</script></body>
+</html>
