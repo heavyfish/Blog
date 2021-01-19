@@ -64,14 +64,14 @@
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235829371.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235836285.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235844182.png">
-<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200916210836175.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210119221258578.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235853720.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235902597.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235916648.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235931591.png">
-<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200917105250030.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210119221240932.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235945014.png">
-<meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918145958769.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210119221231319.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000001966.png">
 <meta property="og:image" content="https://heavyfish.github.io/Users/shenshawn/Library/Application%20Support/typora-user-images/image-20200918152445798.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000019521.png">
@@ -81,8 +81,9 @@
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000100357.png">
 <meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000116105.png">
 <meta property="article:published_time" content="2020-09-14T10:10:19.019Z">
-<meta property="article:modified_time" content="2021-01-18T14:00:36.574Z">
+<meta property="article:modified_time" content="2021-01-19T15:06:36.738Z">
 <meta property="article:author" content="Shenxr">
+<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234300363.png">
 
@@ -171,6 +172,11 @@
     <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/heavyfish.github.io/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
@@ -234,7 +240,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-18 22:00:36" itemprop="dateModified" datetime="2021-01-18T22:00:36+08:00">2021-01-18</time>
+                <time title="Modified: 2021-01-19 23:06:36" itemprop="dateModified" datetime="2021-01-19T23:06:36+08:00">2021-01-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,7 +258,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>9.5k</span>
+              <span>10k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -526,8 +532,11 @@
 <td>universal newline mode (for  backwards compatibility; should not be used in new code)</td>
 </tr>
 </tbody></table>
-<p>文件往硬盘里存的时候，在内存里是字符串的形式，通过编码之后，以字节的方式存在硬盘里的：</p>
+<p>文件往硬盘里存的时候，在内存里是字符串（也是二进制形式）的形式，通过编码之后，以字节的方式存在硬盘里的：</p>
 <p><strong>字符串(内存） —–&gt; encoding ——&gt; bytes（硬盘）</strong></p>
+<blockquote>
+<p>这里的 字符串，在 unicode 中相当于 Code Point，在 ASCII 中 相当于ASCII码。</p>
+</blockquote>
 <p>所以，想让人能看懂，先从硬盘读取，然后解码到内存：</p>
 <p><strong>bytes(硬盘） —–&gt;decode ——&gt; 字符串</strong></p>
 <p>1、使用文件时的一些注意：</p>
@@ -544,8 +553,7 @@
 <h3 id="json"><a href="#json" class="headerlink" title="json"></a>json</h3><p>json并不想pickle支持种类繁多的Python对象类型，但其格式更为通用。其余法类似于pickle</p>
 <h3 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h3><p>struct能够构造并解析打包二进制数据</p>
 <p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235844182.png" alt="image-20210113235844182"></p>
-<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200916210836175.png" alt="image-20200916210836175" style="zoom:50%;" />
-
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210119221258578.png" alt="image-20210119221258578"></p>
 <h2 id="其他文件工具"><a href="#其他文件工具" class="headerlink" title="其他文件工具"></a>其他文件工具</h2><p>open函数及其返回的文件对象是Python脚本中通向外部文件的主要接口。除此外，Python工具集中还有其他类似可用的文件工具，例如：</p>
 <ul>
 <li>标准流：在sys模块中预先打开的文件对象，例如sys.stdout</li>
@@ -569,7 +577,7 @@
 <h3 id="越界操作与赋值操作"><a href="#越界操作与赋值操作" class="headerlink" title="越界操作与赋值操作"></a>越界操作与赋值操作</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="comment"># L[4] 会提示越界错误</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#分片越界显示所有元素</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[-<span class="number">1000</span>:<span class="number">1000</span>]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[-<span class="number">1000</span>:]</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#反向序列赋值，相当于插入了一个元素</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L[<span class="number">2</span>:<span class="number">1</span>] = [<span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#赋值操作</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X=<span class="string">&quot;spam&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Y=<span class="string">&quot;eggs&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X,Y=Y,X   <span class="comment">#这样赋值的话，是引用顺序直接调换。注意其和分开赋值的区别</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X,Y</span><br><span class="line">(<span class="string">&#x27;eggs&#x27;</span>, <span class="string">&#x27;spam&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#	字符索引运算</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X</span><br><span class="line"><span class="string">&#x27;eggs&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>X[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"><span class="string">&#x27;e&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(X)[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"><span class="string">&#x27;e&#x27;</span></span><br></pre></td></tr></table></figure>
 <h1 id="8、Python语句简介"><a href="#8、Python语句简介" class="headerlink" title="8、Python语句简介"></a>8、Python语句简介</h1><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235931591.png" alt="image-20210113235931591" style="zoom:50%;" />
 
-<img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200917105250030.png" alt="image-20200917105250030" style="zoom:50%;" />
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210119221240932.png" alt="image-20210119221240932" style="zoom:50%;" />
 
 <h1 id="9、赋值、表达式、打印"><a href="#9、赋值、表达式、打印" class="headerlink" title="9、赋值、表达式、打印"></a>9、赋值、表达式、打印</h1><h2 id="赋值语句形式"><a href="#赋值语句形式" class="headerlink" title="赋值语句形式"></a>赋值语句形式</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113235945014.png" alt="image-20210113235945014" style="zoom:50%;" />
 
@@ -587,7 +595,7 @@
 <p>最后一行是增量赋值。其运行的会比 <code>spams = spams + 42</code> 更快。但需要注意，如果操作主体是可变的且支持这一操作，那么增量赋值会选择原位置更新而不是复制对象 </p>
 </li>
 </ul>
-<h2 id="命名惯例"><a href="#命名惯例" class="headerlink" title="命名惯例"></a>命名惯例</h2><img src="/Users/shenshawn/Library/Application Support/typora-user-images/image-20200918145958769.png" alt="image-20200918145958769" style="zoom:50%;" />
+<h2 id="命名惯例"><a href="#命名惯例" class="headerlink" title="命名惯例"></a>命名惯例</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210119221231319.png" alt="image-20210119221231319" style="zoom:50%;" />
 
 <h2 id="表达式语句和原位置修改"><a href="#表达式语句和原位置修改" class="headerlink" title="表达式语句和原位置修改"></a>表达式语句和原位置修改</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>L=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L.append(<span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>L = print(L.append(<span class="number">5</span>))</span><br><span class="line"><span class="literal">None</span></span><br></pre></td></tr></table></figure>
 <p><strong>对列表调用 append ， sort ， reverse 这些原位置修改的运算，一定是对列表做原位置的修改，但这些方法在列表修改后不会返回列表，而是返回的None对象</strong>。如果把这类运算的返回结果赋值回原先的变量名，那么只会失去该列表</p>
@@ -624,6 +632,30 @@
 <h2 id="2-x支持3-x的print函数"><a href="#2-x支持3-x的print函数" class="headerlink" title="2.x支持3.x的print函数"></a>2.x支持3.x的print函数</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000100357.png" alt="image-20210114000100357" style="zoom:50%;" />
 
 <h2 id="通用的表达式"><a href="#通用的表达式" class="headerlink" title="通用的表达式"></a>通用的表达式</h2><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210114000116105.png" alt="image-20210114000116105"></p>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><h2 id="1、关于字符串、字节、bit的转换说明"><a href="#1、关于字符串、字节、bit的转换说明" class="headerlink" title="1、关于字符串、字节、bit的转换说明"></a>1、关于字符串、字节、bit的转换说明</h2><p>上文中有写到：</p>
+<blockquote>
+<p>文件往硬盘里存的时候，在内存里是字符串（也是二进制形式）的形式，通过编码之后，以字节的方式存在硬盘里的：</p>
+<p><strong>字符串(内存） —–&gt; encoding ——&gt; bytes（硬盘）</strong></p>
+<p>所以，想让人能看懂，先从硬盘读取，然后解码到内存：</p>
+<p><strong>bytes(硬盘） —–&gt;decode ——&gt; 字符串</strong></p>
+</blockquote>
+<p><strong>文件中的数据，无论是在硬盘，还是在内存，都是二进制形式的数据。关键点在于这些二进制数据所代表的意义，以及它将会被谁处理。</strong></p>
+<ul>
+<li>bit：计算机的最小信息单元，值为  1 或 0</li>
+<li>字节（Bytes）：字节是由8bit组成的一个分组</li>
+<li>ASCII码：在ASCII 表中，预定好的 编码号</li>
+<li>unicode码（code point）：在 unicode 编码规则中，预定好的 编码号</li>
+</ul>
+<p>根据不同的编码规则：</p>
+<ol>
+<li>字符串（在内存中，实际是 ASCII码 或 unicode码）</li>
+<li>encoding</li>
+<li>成为 字节（不同的 utf 编码规则，其 字符 对应的 字节数 是不同的）</li>
+<li>字节解开为 bit 存入硬盘</li>
+</ol>
+<p>我们在 屏幕上看到的 字符，本质上 还是 由 显示器 根据 编码表中 字符码（ASCII码 或 unicode码）的对应关系，打出对应的光点在屏幕上的（这个过程比较复杂，这是个人推论）</p>
+<p><strong>重点记住 字符串 的本质 在内存里 还是二进制数据，我们 屏幕上看到的只是 光点组成的图形而已。</strong></p>
+<p><strong>对人而言，“hello” 是字符串，但对计算而言，始终要通过 二进制 识别存储，关键只是 二进制 在何时 被谁处理，并在当时代表了什么</strong></p>
 
     </div>
 
@@ -632,6 +664,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/heavyfish.github.io/tags/Python/" rel="tag"># Python</a>
+          </div>
 
         
 
@@ -704,7 +739,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81Python%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">1、Python如何运行程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-text">Python程序的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="nav-text">Python程序的执行方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E7%BC%96%E8%AF%91"><span class="nav-text">字节码编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88PVM%EF%BC%89"><span class="nav-text">Python虚拟机（PVM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="nav-text">Python解释器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E6%89%A7%E8%A1%8C%E4%BC%98%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="nav-text">Python执行优化工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%BB%E7%BB%93%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6"><span class="nav-text">冻结二进制文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81%E4%BB%8B%E7%BB%8DPython%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B"><span class="nav-text">2、介绍Python对象类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B"><span class="nav-text">核心类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"><span class="nav-text">序列是什么意思</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%92%8C%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">递归和迭代的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="nav-text">3、数值类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B"><span class="nav-text">4、动态类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E3%80%81%E5%AF%B9%E8%B1%A1%E5%92%8C%E5%BC%95%E7%94%A8"><span class="nav-text">变量、对象和引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%A6%82%E4%BD%95%E6%A0%87%E8%AF%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">对象如何标识类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8"><span class="nav-text">共享引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B8%E7%AD%89"><span class="nav-text">共享引用和相等</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="nav-text">弱引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%9F%BA%E7%A1%80"><span class="nav-text">5、字符串基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%9F%BA%E7%A1%80"><span class="nav-text">字符串基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E8%A1%A8%E8%BE%BE"><span class="nav-text">字符传表达</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">字符传格式化表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-text">字符传格式化方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6%E3%80%81%E5%88%97%E8%A1%A8%E4%B8%8E%E5%AD%97%E5%85%B8"><span class="nav-text">6、列表与字典</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E8%A1%A8"><span class="nav-text">列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E5%85%B8"><span class="nav-text">字典</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7%E3%80%81%E5%85%83%E7%BB%84%E3%80%81%E6%96%87%E4%BB%B6%E4%B8%8E%E5%85%B6%E4%BB%96%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B"><span class="nav-text">7、元组、文件与其他核心类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E7%BB%84"><span class="nav-text">元组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8Python%E5%AF%B9%E8%B1%A1%E5%88%B0%E6%96%87%E4%BB%B6"><span class="nav-text">存储Python对象到文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AF%B9%E8%B1%A1"><span class="nav-text">字符转换为对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pickle"><span class="nav-text">pickle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json"><span class="nav-text">json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#struct"><span class="nav-text">struct</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%96%87%E4%BB%B6%E5%B7%A5%E5%85%B7"><span class="nav-text">其他文件工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B%E5%A4%8D%E4%B9%A0"><span class="nav-text">核心类型复习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B%E9%99%B7%E9%98%B1"><span class="nav-text">内置类型陷阱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%8A%E7%95%8C%E6%93%8D%E4%BD%9C%E4%B8%8E%E8%B5%8B%E5%80%BC%E6%93%8D%E4%BD%9C"><span class="nav-text">越界操作与赋值操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8%E3%80%81Python%E8%AF%AD%E5%8F%A5%E7%AE%80%E4%BB%8B"><span class="nav-text">8、Python语句简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9%E3%80%81%E8%B5%8B%E5%80%BC%E3%80%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E3%80%81%E6%89%93%E5%8D%B0"><span class="nav-text">9、赋值、表达式、打印</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5%E5%BD%A2%E5%BC%8F"><span class="nav-text">赋值语句形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E6%83%AF%E4%BE%8B"><span class="nav-text">命名惯例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%8E%9F%E4%BD%8D%E7%BD%AE%E4%BF%AE%E6%94%B9"><span class="nav-text">表达式语句和原位置修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E6%93%8D%E4%BD%9C"><span class="nav-text">打印操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-3-x%E7%9A%84print%E5%87%BD%E6%95%B0"><span class="nav-text">Python 3.x的print函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-2-x%E7%9A%84print%E8%AF%AD%E5%8F%A5"><span class="nav-text">Python 2.x的print语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">打印流重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-x%E6%94%AF%E6%8C%813-x%E7%9A%84print%E5%87%BD%E6%95%B0"><span class="nav-text">2.x支持3.x的print函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">通用的表达式</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81Python%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">1、Python如何运行程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-text">Python程序的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="nav-text">Python程序的执行方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E7%BC%96%E8%AF%91"><span class="nav-text">字节码编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88PVM%EF%BC%89"><span class="nav-text">Python虚拟机（PVM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="nav-text">Python解释器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E6%89%A7%E8%A1%8C%E4%BC%98%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="nav-text">Python执行优化工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%BB%E7%BB%93%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6"><span class="nav-text">冻结二进制文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81%E4%BB%8B%E7%BB%8DPython%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B"><span class="nav-text">2、介绍Python对象类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B"><span class="nav-text">核心类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"><span class="nav-text">序列是什么意思</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%92%8C%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">递归和迭代的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="nav-text">3、数值类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B"><span class="nav-text">4、动态类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E3%80%81%E5%AF%B9%E8%B1%A1%E5%92%8C%E5%BC%95%E7%94%A8"><span class="nav-text">变量、对象和引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%A6%82%E4%BD%95%E6%A0%87%E8%AF%86%E7%B1%BB%E5%9E%8B"><span class="nav-text">对象如何标识类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8"><span class="nav-text">共享引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B8%E7%AD%89"><span class="nav-text">共享引用和相等</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="nav-text">弱引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%9F%BA%E7%A1%80"><span class="nav-text">5、字符串基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%9F%BA%E7%A1%80"><span class="nav-text">字符串基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E8%A1%A8%E8%BE%BE"><span class="nav-text">字符传表达</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">字符传格式化表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%BC%A0%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-text">字符传格式化方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6%E3%80%81%E5%88%97%E8%A1%A8%E4%B8%8E%E5%AD%97%E5%85%B8"><span class="nav-text">6、列表与字典</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E8%A1%A8"><span class="nav-text">列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E5%85%B8"><span class="nav-text">字典</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7%E3%80%81%E5%85%83%E7%BB%84%E3%80%81%E6%96%87%E4%BB%B6%E4%B8%8E%E5%85%B6%E4%BB%96%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B"><span class="nav-text">7、元组、文件与其他核心类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E7%BB%84"><span class="nav-text">元组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-text">文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8Python%E5%AF%B9%E8%B1%A1%E5%88%B0%E6%96%87%E4%BB%B6"><span class="nav-text">存储Python对象到文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AF%B9%E8%B1%A1"><span class="nav-text">字符转换为对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pickle"><span class="nav-text">pickle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json"><span class="nav-text">json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#struct"><span class="nav-text">struct</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%96%87%E4%BB%B6%E5%B7%A5%E5%85%B7"><span class="nav-text">其他文件工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B%E5%A4%8D%E4%B9%A0"><span class="nav-text">核心类型复习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B%E9%99%B7%E9%98%B1"><span class="nav-text">内置类型陷阱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%8A%E7%95%8C%E6%93%8D%E4%BD%9C%E4%B8%8E%E8%B5%8B%E5%80%BC%E6%93%8D%E4%BD%9C"><span class="nav-text">越界操作与赋值操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8%E3%80%81Python%E8%AF%AD%E5%8F%A5%E7%AE%80%E4%BB%8B"><span class="nav-text">8、Python语句简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9%E3%80%81%E8%B5%8B%E5%80%BC%E3%80%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E3%80%81%E6%89%93%E5%8D%B0"><span class="nav-text">9、赋值、表达式、打印</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5%E5%BD%A2%E5%BC%8F"><span class="nav-text">赋值语句形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E6%83%AF%E4%BE%8B"><span class="nav-text">命名惯例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E5%8F%A5%E5%92%8C%E5%8E%9F%E4%BD%8D%E7%BD%AE%E4%BF%AE%E6%94%B9"><span class="nav-text">表达式语句和原位置修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E6%93%8D%E4%BD%9C"><span class="nav-text">打印操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-3-x%E7%9A%84print%E5%87%BD%E6%95%B0"><span class="nav-text">Python 3.x的print函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-2-x%E7%9A%84print%E8%AF%AD%E5%8F%A5"><span class="nav-text">Python 2.x的print语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">打印流重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-x%E6%94%AF%E6%8C%813-x%E7%9A%84print%E5%87%BD%E6%95%B0"><span class="nav-text">2.x支持3.x的print函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">通用的表达式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E5%85%85"><span class="nav-text">补充</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E5%85%B3%E4%BA%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E3%80%81%E5%AD%97%E8%8A%82%E3%80%81bit%E7%9A%84%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E"><span class="nav-text">1、关于字符串、字节、bit的转换说明</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -719,19 +754,20 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/heavyfish.github.io/archives">
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/heavyfish.github.io/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/heavyfish.github.io/tags/">
-        <span class="site-state-item-count">5</span>
+          
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -768,13 +804,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">242k</span>
+    <span title="Symbols count total">282k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">3:40</span>
+    <span title="Reading time total">4:17</span>
 </div>
 <!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
