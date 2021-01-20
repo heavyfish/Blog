@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+</script>
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="CentOS7的启动过程，BIOS和UEFI，MBR和GPT，GRUP，Initial ramdisk 介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS7启动流程详解">
+<meta property="og:url" content="https://heavyfish.github.io/2020/09/04/Linux/Centos7%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="请问你能包养我吗">
+<meta property="og:description" content="CentOS7的启动过程，BIOS和UEFI，MBR和GPT，GRUP，Initial ramdisk 介绍">
+<meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/clip_image001.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/clip_image001-1152728.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120222912899.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120222953397.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223011060.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223022256.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223029318.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223104112.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223108869.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223116235.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223122523.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223128082.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223134692.png">
+<meta property="article:published_time" content="2020-09-03T17:48:36.929Z">
+<meta property="article:modified_time" content="2021-01-20T14:36:06.547Z">
+<meta property="article:author" content="Shenxr">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="系统原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/clip_image001.png">
+
+<link rel="canonical" href="https://heavyfish.github.io/2020/09/04/Linux/Centos7%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>CentOS7启动流程详解 | 请问你能包养我吗</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">请问你能包养我吗</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/heavyfish.github.io/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/09/04/Linux/Centos7%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CentOS7启动流程详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-04 01:48:36" itemprop="dateCreated datePublished" datetime="2020-09-04T01:48:36+08:00">2020-09-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-20 22:36:06" itemprop="dateModified" datetime="2021-01-20T22:36:06+08:00">2021-01-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>16k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>14 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>CentOS7的启动过程，BIOS和UEFI，MBR和GPT，GRUP，Initial ramdisk 介绍</p>
+<a id="more"></a>
+
+
+
+<h1 id="1-Booting-process"><a href="#1-Booting-process" class="headerlink" title="1.  Booting process"></a>1.  Booting process</h1><p>systemd是CentOS / RHEL 7中的新系统和服务管理器。它向后兼容以前版本的RedHat Linux（包括RHEL 6）使用的SysV init脚本。它将Upstart替换为默认初始化系统</p>
+<p>以下步骤总结了RHEL / CentOS 7中引导过程的执行方式。</p>
+<ol>
+<li><p>BIOS/UEFI 执行POST（开机自检）</p>
+</li>
+<li><p>BIOS从MBR读取bootloader</p>
+</li>
+<li><p>GRUB 2 bootloader loads the vmlinuz kernel image.</p>
+</li>
+<li><p>GRUB 2 抓取initramfs image中的内容.</p>
+</li>
+<li><p>The kernel loads driver modules from initramfs.</p>
+</li>
+<li><p>Kernel starts the system’s first process, systemd.</p>
+</li>
+<li><p>The systemd process takes over. It:</p>
+<p>·    读取配置文件从 /etc/systemd 目录</p>
+<p>·    读取链接文件 /etc/systemd/system/default.target</p>
+<p>·    使系统进入system target定义的状态</p>
+<p>·    执行 /etc/rc.local</p>
+</li>
+</ol>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/clip_image001.png" alt="RHEL CentOS 7 Boot process (systemd)"></p>
+<h2 id="1-1-POST-Power-on-Self-Test"><a href="#1-1-POST-Power-on-Self-Test" class="headerlink" title="1.1. POST (Power on Self Test)"></a>1.1. POST (Power on Self Test)</h2><p>从系统固件（可以是现代通用扩展固件接口（UEFI）或经典的基本输入输出系统（BIOS）），执行开机自检（POST），并初始化启动系统所需的硬件</p>
+<h2 id="1-2-Selecting-the-bootable-device-With-MBR"><a href="#1-2-Selecting-the-bootable-device-With-MBR" class="headerlink" title="1.2. Selecting the bootable device (With MBR)"></a>1.2. Selecting the bootable device (With MBR)</h2><p>Master Boot Record (MBR)是boot driver的头512字节。BIOS会将其读入内存中。</p>
+<p>接下来的64个字节包含磁盘的分区表。最后两个字节是“Magic Number”，用于错误检测。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/clip_image001-1152728.png" alt="Master boot record (MBR)"></p>
+<p>MBR发现可引导设备并将GRUB2 boot loader加载到内存中并将控制转移到内存中。（GRUB2在MBR中）</p>
+<h2 id="1-3-Loading-the-boot-loader-GRUB2"><a href="#1-3-Loading-the-boot-loader-GRUB2" class="headerlink" title="1.3. Loading the boot loader (GRUB2)"></a>1.3. Loading the boot loader (GRUB2)</h2><p>RHEL 7上使用的默认bootloader程序是GRUB 2. GRUB代表<strong>GRand Unified Bootloader</strong>。GRUB 2取代了旧的GRUB引导加载程序（传统GRUB）。</p>
+<p>The GRUB 2 configuration file is located at /boot/grub2/grub.cfg (Do not edit this file directly).</p>
+<p>生成grub.cfg时，从/etc/default/grub获取GRUB 2菜单配置设置.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># cat &#x2F;etc&#x2F;default&#x2F;grub</span><br><span class="line"></span><br><span class="line">GRUB_TIMEOUT&#x3D;5</span><br><span class="line"></span><br><span class="line">GRUB_DEFAULT&#x3D;saved</span><br><span class="line"></span><br><span class="line">GRUB_DISABLE_SUBMENU&#x3D;true</span><br><span class="line"></span><br><span class="line">GRUB_TERMINAL_OUTPUT&#x3D;&quot;console&quot;</span><br><span class="line"></span><br><span class="line">GRUB_CMDLINE_LINUX&#x3D;&quot;rd.lvm.lv&#x3D;rhel&#x2F;swap crashkernel&#x3D;auto rd.lvm.lv&#x3D;rhel&#x2F;root rhgb quiet net.ifnames&#x3D;0&quot;</span><br><span class="line"></span><br><span class="line">GRUB_DISABLE_RECOVERY&#x3D;&quot;true&quot;</span><br></pre></td></tr></table></figure>
+
+
+<p>如果对这些参数中的任何一个进行了更改，则需要运行<strong>grub2-mkconfig</strong>以重新生成/boot/grub2/grub.cfg文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># grub2-mkconfig –o &#x2F;boot&#x2F;grub2&#x2F;grub.cfg</span><br></pre></td></tr></table></figure>
+
+
+<ol>
+<li>GRUB2从 /boot 目录中搜索压缩内核镜像（<strong>vmlinuz</strong>）。</li>
+<li>GRUB2将vmlinuz kernel image文件加载到内存中，并将<strong>initramfs</strong> image文件的内容提取到基于内存的临时文件系统（tmpfs）中。</li>
+<li>初始RAM磁盘（initrd）是在真正的根文件系统之前mount前的初始根文件系统。</li>
+</ol>
+<p><strong>initramfs</strong></p>
+<ol>
+<li>初始RAM文件系统（initrd）的工作是预加载块设备模块，例如IDE，SCSI或RAID，以便这些模块通常驻留的根文件系统可以被访问和挂载</li>
+<li> initramfs被绑定到内核，内核mount此initramfs作为两阶段引导过程的一部分</li>
+<li>只要安装了新内核，dracut实用程序就会创建initramfs</li>
+<li>使用lsinitrd命令查看dracut创建的image内容</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># lsinitrd | less</span><br></pre></td></tr></table></figure>
+<h2 id="1-4-Loading-the-kernel"><a href="#1-4-Loading-the-kernel" class="headerlink" title="1.4. Loading the kernel"></a>1.4. Loading the kernel</h2><ol>
+<li>内核启动systemd进程，进程ID为1（PID 1）。</li>
+<li>它还从initrd镜像加载必要的driver模块</li>
+<li>引导加载程序（GRUB2）可以向用户提供引导菜单，或者可将其配置为自动启动默认操作系统</li>
+<li>要加载Linux，kernel将与initramfs一起加载。initramfs包含引导所需的所有硬件的内核模块，以及进入下一个引导阶段所需的初始脚本</li>
+<li>在RHEL 7上，initramfs包含一个完整的操作系统（可用于故障排除）</li>
+</ol>
+<h2 id="1-5-Starting-systemd"><a href="#1-5-Starting-systemd" class="headerlink" title="1.5. Starting systemd"></a>1.5. Starting systemd</h2><ol>
+<li>内核启动systemd进程，进程ID为1（PID 1）。</li>
+<li>systemd是系统引导后启动的第一个进程，是系统关闭时运行的最后一个进程</li>
+<li>它控制引导的最后阶段并准备系统以供使用。它还可以通过同时加载服务来加速启动。</li>
+<li>systemd读取由/etc/systemd/system/default.target链接的文件（例如/usr/lib/systemd/system/multi-user.target）以确定默认system target（相当于运行级别）。system target文件定义systemd启动的服务。</li>
+<li>systemd allows you to manage various types of units on a system, including <strong>services</strong> (name.service) and <strong>targets</strong> (name.target), <strong>devices</strong> (name.device), <strong>file system mount points</strong> (name.mount), and <strong>sockets</strong> (name.socket)</li>
+</ol>
+<p>SysV run levels和Target Units</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120222912899.png" alt="image-20210120222912899"></p>
+<p>systemd 使系统进入system target定义的状态, performing system initialization tasks such as:</p>
+<ol>
+<li>Setting the host name</li>
+<li>Initializing the network</li>
+<li> Initializing SELinux based on its configuration</li>
+<li>Printing a welcome banner</li>
+<li>Initializing the system hardware based on kernel boot arguments</li>
+<li>Mounting the file systems, including virtual file systems such as the /proc file system</li>
+<li>Cleaning up directories in /var</li>
+<li>Starting swapping</li>
+</ol>
+<h2 id="1-6-补充"><a href="#1-6-补充" class="headerlink" title="1.6. 补充"></a>1.6. 补充</h2><p>默认target unit取决于 <strong>/etc/systemd/system/default.target</strong> file. 这个文件链接到当前的 default target unit. For example :</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120222953397.png" alt="image-20210120222953397"></p>
+<p>改变默认target unit</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl set-default multi-user.target</span><br></pre></td></tr></table></figure>
+<p>下表总结了配置特定阶段的位置以及如果出现问题可以采取的解决方法。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223011060.png" alt="image-20210120223011060"></p>
+<h1 id="2-BIOS和UEFI"><a href="#2-BIOS和UEFI" class="headerlink" title="2.  BIOS和UEFI"></a>2.  BIOS和UEFI</h1><p>对于现代操作系统（如Windows NT系列和Linux）而言，BIOS的作用是初始化硬件和引导操作系统，当操作系统引导完毕后，硬件由操作系统及其驱动程序控制，但是BIOS仍然通过<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E6%A8%A1%E5%BC%8F">SMM</a>负责<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/ACPI">ACPI</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/w/index.php?title=%E9%9B%BB%E6%BA%90%E7%AE%A1%E7%90%86&action=edit&redlink=1">电源管理</a>等功能。</p>
+<p>BIOS程序存放于一个断电后内容不会丢失的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%94%AF%E8%AE%80%E8%A8%98%E6%86%B6%E9%AB%94">只读存储器</a>中；系统过电或被重置（reset）时，<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%99%95%E7%90%86%E5%99%A8">处理器</a>第一条<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%8C%87%E4%BB%A4">指令</a>的地址会被定位到BIOS的存储器中，让初始化程序开始运行（实际上对于现在的x86平台而言，UEFI并不是引导时第一个被处理器运行的程序）。</p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%8B%B1%E7%89%B9%E5%B0%94">英特尔</a>公司于2000年开发出<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8F%AF%E6%89%A9%E5%B1%95%E5%9B%BA%E4%BB%B6%E6%8E%A5%E5%8F%A3">可扩展固件接口</a>（Extensible Firmware Interface），后被重命名为UEFI，用以规范UEFI固件的开发。而支持UEFI规范的BIOS也常被称为UEFI BIOS（实际上许多早期的（2011年以前）采用UEFI/EFI规范的BIOS固件并不支持UEFI引导，此种BIOS常见于OEM计算机）。之后为了推广EFI，业界多家著名公司共同成立<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BB%9F%E4%B8%80%E5%8F%AF%E6%89%A9%E5%B1%95%E5%9B%BA%E4%BB%B6%E6%8E%A5%E5%8F%A3%E8%AE%BA%E5%9D%9B">统一可扩展固件接口论坛</a>（UEFI Forum），英特尔公司将EFI 1.1规范贡献给业界，用以制订新的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/UEFI">UEFI</a>规范。2012年以后UEFI已在x86平台上得到普及。</p>
+<p><strong>注意：UEFI是一种规范，只是定义了相关的API，BIOS是具体的代码程序，根据不同的硬件厂商，会有不同的BIOS。UEFI相当于对这些BIOS定义了统一的API接口</strong></p>
+<h2 id="2-1-BIOS"><a href="#2-1-BIOS" class="headerlink" title="2.1. BIOS"></a>2.1. BIOS</h2><h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>BIOS（<strong>Basic Input/Output System</strong>的缩写，也称为System BIOS，ROM BIOS或PC BIOS）是用于在引导过程（开机启动）中执行硬件初始化的固件，并为操作系统和程序提供运行时服务。BIOS固件已预安装在个人计算机的系统板上，并且是开机时运行的第一个软件。</p>
+<p>现代PC中的BIOS初始化并测试系统硬件组件，并从大容量存储设备加载引导加载程序，然后初始化操作系统。在DOS时代，BIOS为键盘，显示器和其他输入/输出（I / O）设备提供了硬件抽象层，从而使与应用程序和操作系统的接口标准化。较新的操作系统在加载后不使用BIOS，而是直接访问硬件组件。</p>
+<h3 id="2-1-1-引导计算机原理"><a href="#2-1-1-引导计算机原理" class="headerlink" title="2.1.1.  引导计算机原理"></a>2.1.1.  引导计算机原理</h3><p>当计算机的电源打开，BIOS就会由<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%BB%E6%A9%9F%E6%9D%BF">主板</a>上的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BF%AB%E9%96%83%E8%A8%98%E6%86%B6%E9%AB%94">闪存</a>（flash memory）运行，并将芯片组和存储器子系统初始化。BIOS会把自己从闪存中，解压缩到系统的主存；并且从那边开始运行。</p>
+<p>PC的BIOS代码也包含诊断功能，以保证某些重要硬件组件，像是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%8D%B5%E7%9B%A4">键盘</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%A3%81%E7%A2%9F">磁盘</a>（BIOS在引导时会侦测硬盘的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/S.M.A.R.T.">S.M.A.R.T.</a>状态）、输出输入端口等等，可以正常运作且正确地初始化。</p>
+<p>几乎所有的BIOS都包含设置程序（BIOS Setup），可以进行BIOS的设置，如设置系统时间，设置引导设备顺序，激活/禁用计算机的某些周边设备。</p>
+<p>主板的CMOS芯片（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/UEFI">UEFI</a>多使用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/NVRAM">NVRAM</a>存储UEFI设置值/硬件侦测信息）用于存储BIOS设置值及硬件侦测信息。主板上的钮扣电池用于让CMOS芯片存储BIOS设置值，以及计算机在断电时依然可以让系统时钟运作。CMOS在没有电力供应（CMOS所需电力由主板上的钮扣电池提供）的情况下会丢失存储的数据。</p>
+<p>现代的BIOS可以让用户选择由哪个设备引导计算机，如<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%85%89%E7%A2%9F%E6%A9%9F">光盘驱动器</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%A1%AC%E7%A2%9F">硬盘</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%BB%9F%E7%A2%9F">软盘</a>、USB <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%9A%A8%E8%BA%AB%E7%A2%9F">U盘</a>等等。这项功能对于安装<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BD%9C%E6%A5%AD%E7%B3%BB%E7%B5%B1">操作系统</a>、以<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LiveCD">LiveCD</a>引导计算机、以及改变计算机找寻引导媒体的顺序特别有用。</p>
+<p>有些BIOS系统允许用户可以选择要加载哪个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BD%9C%E6%A5%AD%E7%B3%BB%E7%B5%B1">操作系统</a>（例如从第二颗硬盘加载其他操作系统），虽然这项功能通常是由第二阶段的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F">引导程序</a>（boot loader）来处理。</p>
+<h3 id="2-1-2-BIOS固件"><a href="#2-1-2-BIOS固件" class="headerlink" title="2.1.2.  BIOS固件"></a>2.1.2.  BIOS固件</h3><p>由于BIOS与硬件系统集成在一起（将BIOS程序指令刻录在IC中），所以有时候也被称为<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%9F%8C%E9%AB%94">固件</a>。</p>
+<p>在大约1990年BIOS是保存在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/ROM">ROM</a>（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%94%AF%E8%AE%80%E8%A8%98%E6%86%B6%E9%AB%94">只读存储器</a>）中而无法被修改。因为BIOS的大小和复杂程度随时间不断增加，而且硬件的更新速度加快，令BIOS也必须不断更新以支持新硬件，于是BIOS就改为存储在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/EEPROM">EEPROM</a>或者<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BF%AB%E9%96%83%E8%A8%98%E6%86%B6%E9%AB%94">闪存</a>中，让用户可以轻易更新BIOS。然而，不适当的运行或是终止BIOS更新可能导致计算机无法使用。为了避免BIOS损坏，有些<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%BB%E6%A9%9F%E6%9D%BF">主板</a>有备份的BIOS（“双BIOS”主板）。</p>
+<p>现在的BIOS有“引导区块”（Boot Block），属于BIOS ROM的一部分，一引导就会被运行。这个程序会在运行BIOS前，验证BIOS其他部分是否正确无误（经由检查码，凑杂码等等）。如果引导区块侦测到主要的BIOS已损坏，则可自动读取U盘/光盘中的特定BIOS文件并更新BIOS。主板厂商/OEM经常发出BIOS升级来更新他们的产品和修正已知的问题</p>
+<h3 id="2-1-3-与CMOS的联系"><a href="#2-1-3-与CMOS的联系" class="headerlink" title="2.1.3.  与CMOS的联系"></a>2.1.3.  与CMOS的联系</h3><h4 id="2-1-3-1-BIOS与CMOS的关系"><a href="#2-1-3-1-BIOS与CMOS的关系" class="headerlink" title="2.1.3.1. BIOS与CMOS的关系"></a>2.1.3.1. BIOS与CMOS的关系</h4><p>CMOS是计算机上另一个重要的存储器。之所以提到它，是因为BIOS程序的<strong>设置值、硬件参数侦测值</strong>就保存在CMOS中。而且，在BIOS程序引导计算机时，需要加载CMOS中的设置值。CMOS通常被集成在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8D%97%E6%A1%A5">南桥</a>芯片组中。UEFI系统则多用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/NVRAM">NVRAM</a>存储设置。</p>
+<h4 id="2-1-3-2-BIOS与CMOS的区别"><a href="#2-1-3-2-BIOS与CMOS的区别" class="headerlink" title="2.1.3.2.    BIOS与CMOS的区别"></a>2.1.3.2.    BIOS与CMOS的区别</h4><p>二者的区别是，BIOS是存储在唯读记忆体（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/EEPROM">EEPROM</a>），而CMOS为随机存储器（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%9A%8F%E6%9C%BA%E5%AD%98%E5%8F%96%E8%AE%B0%E5%BF%86%E4%BD%93">RAM</a>）；BIOS中存储的是<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%A8%8B%E5%BA%8F">程序</a>，而CMOS中存储的是普通信息。</p>
+<p>CMOS的内容在断电会消失。所以，把<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%BB%E6%A9%9F%E6%9D%BF">主板</a>的电池拆出，便可重置其内容。另外，拆出电池也会重置<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%99%82%E9%96%93">时间</a>。UEFI使用NVRAM存储数据，主板电池没有电量会导致时间不正确，可能会导致UEFI设置值丢失。可通过主板的有关Jumper重置UEFI设置。</p>
+<h2 id="2-2-UEFI"><a href="#2-2-UEFI" class="headerlink" title="2.2. UEFI"></a>2.2. <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%B5%B1%E4%B8%80%E5%8F%AF%E5%BB%B6%E4%BC%B8%E9%9F%8C%E9%AB%94%E4%BB%8B%E9%9D%A2">UEFI</a></h2><h3 id="概览-1"><a href="#概览-1" class="headerlink" title="概览"></a>概览</h3><p><strong>统一可扩展固件接口</strong>（英语：Unified Extensible Firmware Interface，缩写<strong>UEFI</strong>）是一个规范，用于定义操作系统和平台固件之间的软件接口。 UEFI用大多数UEFI固件实现提供对旧版BIOS服务的支持，取代了原来在所有与IBM PC兼容的个人计算机中使用的旧版基本输入/输出系统（BIOS）固件接口。即使没有安装操作系统，UEFI也可以支持计算机的远程诊断和修复。【注：固件 其实就是驱动程序】</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223022256.png" alt="image-20210120223022256"></p>
+<p>相比于BIOS，UEFI保持了向前和向后的兼容，采用模块化设计，支持GPT分区。但相对的是更加复杂，并且所需的ROM空间更大。</p>
+<h3 id="UEFI与分区表"><a href="#UEFI与分区表" class="headerlink" title="UEFI与分区表"></a>UEFI与分区表</h3><p>除了使用主引导记录（MBR）的标准PC磁盘分区方案之外，UEFI还可以使用GUID分区表（GPT）分区方案，该方案不受MBR的许多限制。尤其是，MBR限制了磁盘分区的数量和大小（每个磁盘最多四个主分区，每个磁盘最多2个TiB（2 ×2的40次方 字节））。更具体地说，GPT允许的最大磁盘和分区大小为8ZiB（8×2的70次方 字节）。</p>
+<p>Linux中，通过在内核配置过程中打开选项CONFIG_EFI_PARTITION（EFI GUID分区支持）来启用Linux中的GPT支持。在系统固件将对系统的控制权交给Linux之后，此选项使Linux能够识别和使用GPT磁盘。</p>
+<p>为了实现反向兼容性，Linux可以在基于BIOS的系统中使用GPT磁盘进行数据存储和引导，因为GRUB 2和Linux都支持GPT。这种设置通常称为<code>BIOS-GPT</code>。由于GPT包含保护性MBR，基于BIOS的计算机可以使用保护性MBR引导代码区中存储的GPT感知引导加载程序从GPT磁盘引导。对于GRUB，由于GPT分区磁盘中没有MBR后间隙（由GPT的主标头和主分区表接管），因此这种配置需要BIOS引导分区供GRUB嵌入其第二阶段代码。 ）。通常，此分区的全局唯一标识符（GUID）大小为1 MiB，是21686148-6449-6E6F-744E-656564454649，在BIOS-GPT设置中仅由GRUB使用。从GRUB的角度来看，在MBR分区的情况下不存在这种分区类型。如果系统是基于UEFI的，则不需要此分区，因为在这种情况下无需嵌入第二阶段代码。</p>
+<p>UEFI系统可以访问GPT磁盘并直接从中引导，这使Linux可以使用UEFI引导方法。从UEFI系统上的GPT磁盘引导Linux涉及创建<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/EFI_system_partition">EFI system partition</a>（ESP），该分区包含UEFI应用程序，例如引导程序，操作系统内核和实用程序软件。这种设置通常称为UEFI-GPT，而ESP建议至少为512 MiB，并使用FAT32文件系统进行格式化，以实现最大兼容性。</p>
+<h3 id="UEFI的重要概念"><a href="#UEFI的重要概念" class="headerlink" title="UEFI的重要概念"></a>UEFI的重要概念</h3><h4 id="service"><a href="#service" class="headerlink" title="service"></a>service</h4><p>EFI定义了两种服务类型：<em>boot services</em> 和 <em>runtime services</em>. boot service仅在固件拥有平台时（即在<code>ExitBootServices</code>调用之前）可用，其拥有各种设备上的文本和图形控制台以及总线，块和文件服务。Runtime services 在操作系统运行时仍可以访问。其包括date, time , <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Non-volatile_random-access_memory">NVRAM</a> access.等服务</p>
+<h4 id="Applications"><a href="#Applications" class="headerlink" title="Applications"></a>Applications</h4><p>除了加载操作系统之外，UEFI还可以运行UEFI应用程序，这些应用程序作为文件驻留在EFI系统分区上。可以从UEFI command shell，固件的boot manager 或其他UEFI应用程序执行它们。 UEFI应用程序可以独立于系统制造商开发和安装。 </p>
+<p>UEFI应用程序的一种类型是OS loader，例如GRUB，rEFInd，Gummiboot和Windows Boot Manager。它将OS文件加载到内存中并执行它。而且，OS loader可以提供用户界面，以允许选择另一个要运行的UEFI应用程序。 UEFI Shell之类的实用程序也是UEFI应用程序。 </p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223029318.png" alt="image-20210120223029318"></p>
+<h4 id="Protocols"><a href="#Protocols" class="headerlink" title="Protocols"></a>Protocols</h4><p>EFI将协议定义为一组软件接口，用于在两个二进制模块之间进行通信。所有EFI驱动程序都必须通过协议为其他人提供服务。 </p>
+<h4 id="Device-drivers"><a href="#Device-drivers" class="headerlink" title="Device drivers"></a>Device drivers</h4><p>除了特定于标准处理器体系结构的设备驱动程序之外，EFI还提供了与处理器无关的设备驱动程序，以EFI字节码或EBC的形式存储在内存中。</p>
+<p>某些设备类型的某些特定于体系结构的（非EFI字节码）EFI驱动程序可以具有供OS使用的接口。这允许操作系统在加载特定于操作系统的驱动程序之前以及在加载特定于操作系统的驱动程序之后的情况下，依靠EFI驱动程序执行基本的图形和网络功能。 </p>
+<p>在其他情况下，EFI驱动程序可以是允许从其他类型的磁盘卷启动的文件系统驱动程序。例子包括37个文件系统的efif（基于GRUB2代码），Rufus使用它来链式装载NTFS ESP</p>
+<h4 id="Graphics-features"><a href="#Graphics-features" class="headerlink" title="Graphics features"></a>Graphics features</h4><p>EFI规范将UGA（Universal Graphic Adapter）协议作为支持独立于设备的图形的方式。 UEFI不包括UGA，而是将其替换为GOP（Graphics Output Protocol），其明确目标是消除VGA硬件依赖性。两者相似。</p>
+<h4 id="EFI-system-partition"><a href="#EFI-system-partition" class="headerlink" title="EFI system partition"></a>EFI system partition</h4><p>EFI系统分区（通常缩写为ESP）是一种数据存储设备分区，用于遵循UEFI规范的计算机中。 UEFI固件在计算机启动时访问，它存储UEFI应用程序以及这些应用程序需要运行的文件，包括操作系统内核。支持的分区表方案包括MBR和GPT以及光盘上的El Torito卷。为在ESP上使用，UEFI定义了FAT文件系统的特定版本，该版本作为FAT文件系统的一部分进行维护。 UEFI规范独立于原始FAT规范，涵盖了ESP上的FAT32文件系统以及可移动媒体上的FAT16和FAT12文件系统的变体。作为向后BIOS兼容性的一部分，ESP还为引导扇区提供了空间。</p>
+<h3 id="UEFI的启动类型"><a href="#UEFI的启动类型" class="headerlink" title="UEFI的启动类型"></a>UEFI的启动类型</h3><h4 id="UEFI-Booting"><a href="#UEFI-Booting" class="headerlink" title="UEFI Booting"></a>UEFI Booting</h4><p>与旧版PC BIOS不同，UEFI不依赖引导扇区，而是将boot manager定义为UEFI规范的一部分。打开计算机电源后，boot manager会检查启动配置，并根据其设置将其加载到内存中，然后执行指定的OS loader或操作系统内核。boot configuration由存储在NVRAM中的变量定义，包括指示OS加载程序和OS内核的文件系统路径的变量。</p>
+<p>UEFI可以自动检测OS加载程序，从而可以从USB闪存驱动器等可移动设备轻松启动。这种自动检测依赖于到OS加载器的标准化文件路径，并且该路径根据计算机体系结构而有所不同。文件路径的格式定义为<code>&lt;EFI_SYSTEM_PARTITION&gt;/EFI/BOOT/BOOT &lt;MACHINE_TYPE_SHORT_NAME&gt;.EFI</code>；例如，在x86-64系统上，OS加载程序的文件路径为<code>/efi/BOOT/BOOTX64.EFI</code> 和ARM64体系结构上的<code>efi\boot\bootaa64.efi</code>。 </p>
+<p>从GPT分区磁盘引导UEFI系统通常称为<code>UEFI-GPT</code>引导。尽管UEFI规范要求完全支持MBR分区表，但某些UEFI固件实现会根据启动磁盘分区表的类型立即切换到基于BIOS的CSM引导，从而有效地阻止了UEFI引导 执行MBI分区磁盘上的EFI系统分区。这种引导方案通常称为<code>UEFI-MBR</code>。 </p>
+<h4 id="CSM-booting"><a href="#CSM-booting" class="headerlink" title="CSM booting"></a>CSM booting</h4><p>为了确保向后兼容，PC级计算机上的大多数UEFI固件实现也支持通过提供旧版BIOS兼容性的兼容性支持模块（CSM），从MBR分区磁盘以旧版BIOS模式启动。在这种情况下，通过忽略分区表并依赖引导扇区的内容，以与基于旧版BIOS系统相同的方式执行引导。</p>
+<p>从MBR分区磁盘进行BIOS样式的引导通常称为<code>BIOS-MBR</code>，无论它是在UEFI还是基于旧BIOS的系统上执行的。此外，也可以从GPT磁盘引导基于BIOS的旧系统，这种引导方案通常称为<code>BIOS-GPT</code>。</p>
+<p>兼容性支持模块允许仍使用旧版操作系统和某些不支持UEFI的选件ROM。除了UEFI SMM提供的功能外，它还提供了必需的旧版系统管理模式（SMM）功能，称为CompatibilitySmm。这是可选的，并且是特定于芯片组和平台的。此类传统SMM功能的一个示例是，通过模拟经典的PS/2对应产品，为键盘和鼠标提供USB传统支持。</p>
+<h3 id="UEFI分类"><a href="#UEFI分类" class="headerlink" title="UEFI分类"></a>UEFI分类</h3><p>UEFI机器可以具有以下“类别”之一，用于帮助简化向UEFI的过渡。英特尔已在2020年终止了UEFI CSM。 </p>
+<ul>
+<li>Class 0: Legacy BIOS</li>
+<li>Class 1: UEFI in CSM-only mode (i.e. no UEFI booting)</li>
+<li>Class 2: UEFI with CSM</li>
+<li>Class 3: UEFI without CSM</li>
+<li>Class 3+: UEFI with Secure Boot Enabled</li>
+</ul>
+<h3 id="UEFI的启动过程"><a href="#UEFI的启动过程" class="headerlink" title="UEFI的启动过程"></a>UEFI的启动过程</h3><p><strong>SEC - Security Phase</strong></p>
+<p>这是UEFI引导的第一阶段，但可能在其之前具有特定于平台的二进制代码。 （例如Intel ME，AMD PSP）。针对特定体系结构以汇编形式编写的最少代码。<strong>它会初始化一个临时内存</strong>（通常将CPU cache作为RAM），并充当系统的软件信任根，并且可以选择在移交前验证PEI。 </p>
+<p><strong>PEI - Pre-EFI Initialization</strong></p>
+<p>UEFI引导的第二阶段包括一个依赖关系感知的调度程序，该调度程序加载并运行C编写的模块（PEIM），以处理<strong>早期的硬件初始化任务</strong>，例如内存初始化和恢复操作。此外，它负责发现当前的引导模式并处理许多S3操作。在恢复S3的情况下，它负责将许多硬件寄存器还原到预睡眠状态。 </p>
+<p><strong>DXE - Driver Execution Environment</strong></p>
+<p>这个阶段还包括C模块和一个依赖关系感知的调度程序。现在有了可用的内存，大多数硬件驱动程序，功能代码，PCI总线和运行时服务（UEFI -&gt; OS services）都已初始化。 【注：初始化的代码都是UEFI的代码】</p>
+<p><strong>BDS - Boot Device Select</strong></p>
+<p>在此阶段，通常会初始化输入和输出设备，根据系统配置执行PCI设备上的驱动程序或Option ROM，并处理启动选项以实现可用性，排序和设备匹配。 </p>
+<p><strong>TSL - Transient System Load</strong></p>
+<p>这是<code>boot selection</code>和移交给操作系统之间的阶段。此时，您可以进入设置程序，UEFI Shell或执行EFI应用程序（例如OS引导加载程序）。 </p>
+<p><strong>RT - Runtime</strong></p>
+<p>UEFI移交给操作系统。兼容UEFI的OS现在负责退出引导服务，触发固件以卸载所有不再需要的代码和数据，仅保留系统管理模式（SMM）和运行时服务代码/数据。 </p>
+<p>使用旧版OS时，CSM将处理此调用，以确保系统与旧版BIOS预期兼容。 </p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/21672895">UEFI 引导与 BIOS 引导在原理上有什么区别？-知乎</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31365115">科普贴：BIOS和UEFI的启动项-知乎</a></p>
+<h1 id="3-MBR和GPT"><a href="#3-MBR和GPT" class="headerlink" title="3.  MBR和GPT"></a>3.  MBR和GPT</h1><p>MBR与GPT是分区表的不同实现方式。只是MBR不支持2TB以上的分区，而GPT支持。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223104112.png" alt="image-20210120223104112"></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223108869.png" alt="image-20210120223108869"></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223116235.png" alt="image-20210120223116235"></p>
+<p>参考链接</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26098509">MBR与GPT</a></p>
+<p><a href="">GPT 分区详解</a></p>
+<h1 id="4-GRUP"><a href="#4-GRUP" class="headerlink" title="4. GRUP"></a>4. GRUP</h1><p>GNU GRUB（<strong>GNU GRand Unified Bootloader</strong>的缩写，通常称为GRUB）是GNU项目中的引导加载程序包。 GRUB是Free Software Foundation的Multiboot Specification的参考实现，它为用户提供了选择引导安装在计算机上的多个操作系统之一，或选择特定操作系统分区上可用的特定内核。</p>
+<h2 id="两种启动方案"><a href="#两种启动方案" class="headerlink" title="两种启动方案"></a>两种启动方案</h2><p>开启计算机后，BIOS会找到配置的主要可引导设备（通常是计算机的硬盘），并从主引导记录（MBR）中加载并执行初始引导程序。 MBR是硬盘的第一个扇区，其偏移量为零（扇区计数从零开始）。长期以来，一个扇区的大小一直为512字节，但是自2009年以来，有一些可用的扇区大小为4096字节的硬盘称为高级格式化磁盘。截至2013年10月，此类硬盘仍可通过512e仿真访问512字节扇区。</p>
+<p>旧版MBR分区表最多支持四个分区，总共占用64个字节。连同可选的磁盘签名（四个字节）和磁盘时间戳记（六个字节）一起，剩下的434至446字节可用于<code>boot loader</code>的机器代码。尽管对于一个非常简单的引导加载程序来说，这样小的空间就足够了，但是，其不能容纳一个支持多个文件系统、菜单驱动选择的复杂引导加载程序。因此将其拆分为多个部分，其中最小的部分适合MBR并驻留在其中，而较大的部分则存储在其他位置（例如，拆分为MBR和第一个分区之间的空扇区），并由MBR中的boot loader代码调用。</p>
+<p>在大多数情况下，操作系统内核映像是驻留在适当文件系统上的文件，但是BIOS不了解文件系统的概念。因此，在基于BIOS的系统中，引导加载程序的职责是访问那些文件的内容，以便将其加载到RAM中并执行。  </p>
+<p>引导加载程序加载内核映像的一种可能方法是直接访问硬盘扇区而不了解底层文件系统。通常，需要以映射或映射文件的形式进行附加级别的间接访问-辅助文件包含内核映像占用的物理扇区的列表。但由于安装新的内核映像，文件系统碎片整理等原因，内核映像更改其在磁盘上的物理位置时，都需要更新此类映射。如果映射更改了其物理位置，则需要在引导加载程序的MBR代码中更新其位置， 以让扇区间接机制继续起作用。这不仅麻烦，而且在系统更新期间出现问题的情况下，也需要手动修复系统。</p>
+<p>另一种方法是使引导加载程序了解底层文件系统，因此可以使用内核映像的实际文件路径来配置和访问内核映像。这要求引导加载程序包含每个受支持文件系统的驱动程序，以便引导加载程序本身可以理解和访问它们。这种方法消除了对硬盘扇区的硬编码位置和映射文件的需要，并且在添加或移动内核映像后不需要更新MBR。引导加载程序的配置存储在一个常规文件中，也可以通过文件系统感知的方式对其进行访问，以在实际引导任何内核映像之前获取引导配置。这样的好处是大大减少了在各种系统更新期间出现问题的可能性。坏处是引导加载程序增加了内部复杂性，甚至占用了更大的空间。</p>
+<p>GNU GRUB通过了解底层文件系统来使用第二种方法。引导加载程序本身分为多个阶段，从而使其可以适应MBR引导方案。 </p>
+<p>共有两个主要的GRUB版本：GRUB version 1（称为GRUB legacy）仅在Linux发行版的较旧版本中盛行，其中某些仍在使用和受支持，例如CentOS 5。<em>GRUB 2</em> 旨在替换其前身，现在被大多数Linux发行版使用。 </p>
+<h2 id="GRUP2的启动过程"><a href="#GRUP2的启动过程" class="headerlink" title="GRUP2的启动过程"></a>GRUP2的启动过程</h2><h3 id="通过BIOS启动系统"><a href="#通过BIOS启动系统" class="headerlink" title="通过BIOS启动系统"></a>通过BIOS启动系统</h3><p>第一阶段：<code>boot.img</code>写入主引导记录的前440字节（MBR在扇区0中），或者可选地在分区的引导扇区（PBR / VBR）中写入。它通过64位LBA地址寻址<code>diskboot.img</code>，因此可以从MBR的2 GiB限制之上加载。实际的扇区号由<code>grub-install</code>写入。 </p>
+<p>第二阶段：<code>diskboot.img</code>是<code>core.img</code>的第一个扇区（在GRUB Legacy中称为1.5阶段），其唯一目的是加载由LBA扇区号（也由g<code>rub-install</code>编写）标识的其余<code>core.img</code>。 </p>
+<ul>
+<li>在MBR分区磁盘上：core.img存储在MBR和第一个分区之间的空扇区（如果有）中。最近的操作系统建议此处要对齐1 MiB间隙（2047 * 512字节或255 * 4KiB扇区）。这个间隔曾经是62个扇区（31 KiB），这提醒了Bios在1998年之前使用的C/H/S寻址的扇区数限制，因此core.img被设计为小于32 KiB。 </li>
+</ul>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223122523.png" alt="image-20210120223122523"></p>
+<ul>
+<li>在GPT分区磁盘上：分区不限于4个，因此core.img被写入其自身的tiny（1 MiB），无文件系统的BIOS引导分区。 </li>
+</ul>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223128082.png" alt="image-20210120223128082"></p>
+<p>第三阶段：core.img进入32位保护模式，解压缩自身（grub中的内核和文件系统模块到达/boot/grub），然后从<code>grub-install</code>配置的分区中加载<code>/boot/grub/&lt;platform&gt;/normal.mod</code>。如果分区索引已更改，则GRUB将无法找到normal.mod，并向用户显示GRUB Rescue提示，用户可以在其中找到并加载normal.mod或linux内核。 </p>
+<p>/boot/grub目录可以位于任何分区上（GRUB可以读取许多文件系统，包括NTFS）。根据安装方式的不同，它可以位于发行版的根分区中，也可以位于单独的/boot分区中。 </p>
+<p>第4阶段：normal.mod（相当于GRUB Legacy的第2阶段）解析/boot/grub/grub.cfg，可以选择加载模块（例如，用于图形UI）并显示菜单。 </p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120223134692.png" alt="image-20210120223134692"></p>
+<h3 id="通过UEFI启动系统"><a href="#通过UEFI启动系统" class="headerlink" title="通过UEFI启动系统"></a>通过UEFI启动系统</h3><p><code>/efi/&lt;distro&gt;/grubx64.efi</code>作为文件安装在EFI系统分区中，并由固件直接启动，而扇区0中没有boot.img。 </p>
+<p><code>/boot/grub/</code>也可以安装在EFI系统分区上。 </p>
+<h2 id="启动后"><a href="#启动后" class="headerlink" title="启动后"></a>启动后</h2><p>GRUB提供了一个菜单，用户可以在其中选择grub-install找到的操作系统（OS）。可以将GRUB配置为在用户定义的超时后自动加载指定的OS。如果超时设置为零秒，则在计算机引导时按住⇧Shift可以访问引导菜单。</p>
+<p>在操作系统选择菜单中，GRUB接受几个命令： </p>
+<ul>
+<li>通过按e，可以在操作系统启动之前编辑所选菜单项的内核参数。在GRUB中执行此操作的原因（即，在已引导的系统中不编辑参数）可能是紧急情况：系统无法引导。除了使用内核参数行，也可以指定要为内核禁用（列入黑名单）的模块。如果特定的内核模块损坏并因此阻止启动，则可能需要这样做。例如，要将内核模块nvidia-current列入黑名单，可以在内核参数的末尾附加<code>modprobe.blacklist=nvidia-current</code>。 </li>
+<li>通过按c，用户进入GRUB命令行。 GRUB命令行不是常规的Linux shell（例如bash），其仅接受某些Linux发行版所记录的特定于GRUB的命令。</li>
+</ul>
+<p>一旦选择了引导选项，GRUB就会将选定的内核加载到内存中，并将控制权传递给内核。另外，GRUB可以使用链式加载将启动过程的控制权传递给另一个启动加载器。这是用于加载不支持Multiboot规范或GRUB不直接支持的操作系统的方法。 </p>
+<h1 id="4-Initial-ramdisk"><a href="#4-Initial-ramdisk" class="headerlink" title="4.  Initial ramdisk"></a>4.  Initial ramdisk</h1><p>在计算机中（特别是在Linux），*<em><code>initrd</code>**（</em>initial* <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Ramdisk">ramdisk</a>)是一种用于将临时根文件系统加载到内存中的方案，可以将其用作Linux启动过程的一部分。 <code>initrd</code>和<code>initramfs</code>指实现此目的的两种不同方法。两者都通常用于在挂载实际根文件系统之前进行准备。 </p>
+<h2 id="为什么需要ramdisk"><a href="#为什么需要ramdisk" class="headerlink" title="为什么需要ramdisk"></a>为什么需要ramdisk</h2><p>许多Linux发行版附带一个通用的Linux内核映像-发行版的开发人员专门创建该映像以在多种硬件上启动。此通用内核映像的设备驱动程序包含在可加载内核模块中，因为将许多驱动程序静态编译到一个内核中会导致内核映像更大，甚至太大而无法在内存有限的计算机上启动。这就提出了一个问题，即在引导时检测并加载安装根文件系统所需的模块，然后以此判断出根文件系统到底在哪里或是什么。</p>
+<p>更为复杂的是，根文件系统可以位于软件RAID卷，LVM，NFS（在无盘工作站上）或加密分区上。所有这些都需要特殊的mount准备。</p>
+<p>另一个复杂的问题是内核对休眠的支持，通过将内存的全部内容转储到交换分区或常规文件中，然后关闭电源，将计算机挂起到磁盘上。下次启动时，必须先使该kernel可访问，然后才能将其加载回内存。</p>
+<p>为了避免将许多特殊情况硬编码到内核中，使用了具有临时根文件系统的初始引导阶段-现在被称为早期用户空间。该根文件系统可以包含用户空间助手，这些用户空间助手会进行硬件检测，模块加载和设备发现，以安装真正的根文件系统。</p>
+<h2 id="4-1-实现方法"><a href="#4-1-实现方法" class="headerlink" title="4.1. 实现方法"></a>4.1. 实现方法</h2><p>此初始根文件系统的映像（以及内核映像）必须存储在Linux引导程序或计算机的引导固件可访问的位置。这可以是根文件系统本身，光盘上的启动映像，本地磁盘上的一个小分区（启动分区，通常使用ext2或FAT文件系统）或TFTP服务器（可以从以太网启动的系统上） ）。</p>
+<p>引导加载程序（bootloader）会将内核和初始根文件系统映像加载到内存中，然后启动内核，并传入映像的内存地址。然后，内核会尝试从其前几个数据块确定映像的格式，这可能导致使用initrd或initramfs方案。</p>
+<p>在initrd方案中，映像可以是文件系统映像（可选压缩），可以在特殊的块设备（/dev/ram）中使用然后将其mount为初始根文件系统。该文件系统的驱动程序必须静态编译到内核中。许多发行版最初使用压缩的ext2文件系统映像，而其他发行版（包括Debian 3.1）使用cramfs以便在内存受限的系统上启动，因为cramfs映像可以就地安装，而无需额外的解压缩空间。初始根文件系统启动后，内核将执行<code>/linuxrc</code>作为其第一个进程； 当<code>/linuxrc</code>退出时，内核会假定实际的根文件系统已安装，并执行<code>/sbin/init</code>以开始普通的用户空间启动过程。</p>
+<p>在initramfs方案（自Linux内核2.6.13起可用）中，映像可以是cpio 归档（可选压缩）。归档文件由内核解压缩到tmpfs的特殊实例中，该实例成为初始的根文件系统。这种方案的优点是不需要将中间文件系统或块驱动程序编译到内核中。一些系统使用dracut包来创建initramfs映像。在initramfs方案中，内核将<code>/init</code>作为第一个不希望退出的进程执行。对于某些应用程序，initramfs可以通过casper实用程序 使用unionfs在只读根文件系统映像上覆盖持久层，从而创建可写环境。例如，覆盖数据可以存储在USB闪存驱动器上，而存储在实时CD上的压缩的SquashFS只读映像则充当根文件系统。</p>
+<p>根据静态地将哪些算法编译进去，内核可以解压缩用gzip，bzip2，LZMA，XZ，LZO和LZ4压缩的initrd /initramfs图像</p>
+<h2 id="4-2-Mount前的准备"><a href="#4-2-Mount前的准备" class="headerlink" title="4.2.  Mount前的准备"></a>4.2.  Mount前的准备</h2><p>某些Linux发行版（例如Debian）将生成自定义的initrd映像，该映像仅包含启动某些特定计算机所需的任何内容，例如ATA，SCSI和文件系统内核模块。这些通常嵌入根文件系统内。</p>
+<p>其他Linux发行版（例如Fedora和Ubuntu）会生成更通用的initrd映像。它们仅以根文件系统的设备名称（或其UUID）开头，并且必须在引导时发现其他所有内容。在这种情况下，软件必须执行一系列复杂的任务才能mount根文件系统：</p>
+<p>·    必须加载引导过程所依赖的所有硬件驱动程序。一种常见的安排是将用于通用存储设备的内核模块打包到initrd上，然后调用热插拔代理以引入与计算机检测到的硬件匹配的模块。</p>
+<p>·    在显示引导启动屏幕的系统上，必须初始化视频硬件，并且用户空间助手开始在引导过程中同步地将动画绘制到显示器上。</p>
+<p>·    如果根文件系统在NFS上，则它必须启动主网络接口，调用DHCP客户端，通过它可以获取DHCP租约，从租约中提取NFS共享的名称和NFS服务器的地址。 然后挂载NFS共享</p>
+<p>·    如果根文件系统位于软件RAID设备上，则无法知道RAID卷跨越哪些设备；因此，无法确定根目录。必须调用标准MD实用程序以扫描所有可用的块设备并将所需的设备联机。</p>
+<p>·    如果根文件系统在逻辑卷上，则必须调用LVM实用程序以扫描并激活包含该卷的卷组。 </p>
+<p>·    如果根文件系统在加密的块设备上，则该软件需要调用帮助程序脚本来提示用户键入密码和/或插入硬件令牌（例如智能卡或USB安全加密狗），并且然后使用<code>device mapper</code>创建解密目标。 </p>
+<p>一些发行版使用事件驱动的热插拔代理（例如udev），当硬件设备，磁盘分区和与某些规则匹配的存储卷联机时，会调用帮助程序。这使发现可以并行运行，并逐渐地级联为LVM，RAID或加密设备，以获取根文件系统</p>
+<p>当根文件系统最终变得可见时，将结束无法在已安装的根文件系统上运行的所有维护任务，根文件系统被挂载为read-only，必须继续运行的所有进程（例如初始屏幕帮助程序及其命令FIFO）将提升到新安装的根文件系统中。</p>
+<p>最终的根文件系统不能简单地通过<code>/</code>挂载，因为这会使初始的根文件系统上的脚本和工具无法用于任何最终的清理任务：</p>
+<p>·    在initrd上，新的根目录将被安装在一个临时的安装点上，并通过<code>pivot_root</code>（为此目的而专门引入）旋转到位。这会将初始根文件系统留在安装点（例如/initrd），在该安装点，普通的引导脚本以后可以卸载该文件，以释放initrd所拥有的内存。</p>
+<p>·    在initramfs上，初始根文件系统无法旋转。而是将其清空，并将最终的根文件系统安装在顶部。</p>
+<p>大多数初始根文件系统将<code>/linuxrc</code>或<code>/init</code>作为shell脚本实现，因此包括最小的shell（通常为/bin/ash）以及一些必要的用户空间实用程序（通常为BusyBox工具箱）。为了进一步节省空间，通常会在启用空间优化的情况下（例如，使用gcc的“ -Os”标志）编译shell，实用程序及其支持库，并将其与专门为此目的编写的C库的最小版本klibc链接。</p>
+<p>Linux发行版的安装程序通常完全由initramfs运行，因为它们必须能够托管安装程序界面和支持工具，然后才能设置任何持久性存储。</p>
+<h1 id="5-其他参考文档"><a href="#5-其他参考文档" class="headerlink" title="5.  其他参考文档"></a>5.  其他参考文档</h1><p><a target="_blank" rel="noopener" href="https://www.linuxidc.com/Linux/2017-03/141966.htm">CentOS系统启动流程图文详解</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.thegeekdiary.com/centos-rhel-7-booting-process/">CentOS / RHEL 7 : Booting process</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/chen-farsight/p/6119901.html">内核与ramdisk的关系</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/BIOS#Operation">BIOS</a>——维基百科</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface">UEFI</a>——维基百科</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/GNU_GRUB#Operation">GRUB</a>——维基百科</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/heavyfish.github.io/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/heavyfish.github.io/tags/%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/" rel="tag"># 系统原理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/09/03/python/uWSGI%E7%9B%B8%E5%85%B3/" rel="prev" title="uWSGI相关">
+      <i class="fa fa-chevron-left"></i> uWSGI相关
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2020/09/14/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C1%EF%BD%9E9/" rel="next" title="Python学习手册1～9">
+      Python学习手册1～9 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Booting-process"><span class="nav-text">1.  Booting process</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-POST-Power-on-Self-Test"><span class="nav-text">1.1. POST (Power on Self Test)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Selecting-the-bootable-device-With-MBR"><span class="nav-text">1.2. Selecting the bootable device (With MBR)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Loading-the-boot-loader-GRUB2"><span class="nav-text">1.3. Loading the boot loader (GRUB2)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Loading-the-kernel"><span class="nav-text">1.4. Loading the kernel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-Starting-systemd"><span class="nav-text">1.5. Starting systemd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E8%A1%A5%E5%85%85"><span class="nav-text">1.6. 补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-BIOS%E5%92%8CUEFI"><span class="nav-text">2.  BIOS和UEFI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-BIOS"><span class="nav-text">2.1. BIOS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%A7%88"><span class="nav-text">概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-%E5%BC%95%E5%AF%BC%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8E%9F%E7%90%86"><span class="nav-text">2.1.1.  引导计算机原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-BIOS%E5%9B%BA%E4%BB%B6"><span class="nav-text">2.1.2.  BIOS固件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-%E4%B8%8ECMOS%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-text">2.1.3.  与CMOS的联系</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-3-1-BIOS%E4%B8%8ECMOS%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">2.1.3.1. BIOS与CMOS的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-3-2-BIOS%E4%B8%8ECMOS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">2.1.3.2.    BIOS与CMOS的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-UEFI"><span class="nav-text">2.2. UEFI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%A7%88-1"><span class="nav-text">概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UEFI%E4%B8%8E%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="nav-text">UEFI与分区表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UEFI%E7%9A%84%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-text">UEFI的重要概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#service"><span class="nav-text">service</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Applications"><span class="nav-text">Applications</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Protocols"><span class="nav-text">Protocols</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Device-drivers"><span class="nav-text">Device drivers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Graphics-features"><span class="nav-text">Graphics features</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EFI-system-partition"><span class="nav-text">EFI system partition</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UEFI%E7%9A%84%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%9E%8B"><span class="nav-text">UEFI的启动类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UEFI-Booting"><span class="nav-text">UEFI Booting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CSM-booting"><span class="nav-text">CSM booting</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UEFI%E5%88%86%E7%B1%BB"><span class="nav-text">UEFI分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UEFI%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="nav-text">UEFI的启动过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-text">参考文档</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-MBR%E5%92%8CGPT"><span class="nav-text">3.  MBR和GPT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-GRUP"><span class="nav-text">4. GRUP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%90%AF%E5%8A%A8%E6%96%B9%E6%A1%88"><span class="nav-text">两种启动方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GRUP2%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="nav-text">GRUP2的启动过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87BIOS%E5%90%AF%E5%8A%A8%E7%B3%BB%E7%BB%9F"><span class="nav-text">通过BIOS启动系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87UEFI%E5%90%AF%E5%8A%A8%E7%B3%BB%E7%BB%9F"><span class="nav-text">通过UEFI启动系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%90%8E"><span class="nav-text">启动后</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Initial-ramdisk"><span class="nav-text">4.  Initial ramdisk</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81ramdisk"><span class="nav-text">为什么需要ramdisk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-text">4.1. 实现方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Mount%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87"><span class="nav-text">4.2.  Mount前的准备</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%85%B6%E4%BB%96%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-text">5.  其他参考文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shenxr"
+      src="/heavyfish.github.io/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description">在被人包养前，记录学习笔记的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/heavyfish.github.io/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/heavyfish.github.io/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">381k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">5:46</span>
+</div>
+<!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+  <script defer src="/heavyfish.github.io/lib/three/three.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/heavyfish.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/heavyfish.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":100,"height":250,"hOffset":-7,"vOffset":30},"mobile":{"show":false},"log":false,"tagMode":false});</script></body>
+</html>

@@ -154,6 +154,2463 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2021/01/20/Linux/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/heavyfish.github.io/2021/01/20/Linux/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Linux常用命令总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-01-20 22:46:56 / Modified: 23:03:42" itemprop="dateCreated datePublished" datetime="2021-01-20T22:46:56+08:00">2021-01-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>71k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1:04</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <a id="more"></a> 
+
+
+
+<h2 id="1-2-文件和目录操作命令-18个"><a href="#1-2-文件和目录操作命令-18个" class="headerlink" title="1.2. 文件和目录操作命令(18个)"></a>1.2. 文件和目录操作命令(18个)</h2><h3 id="1-2-1-ls（列出目录内容和属性）"><a href="#1-2-1-ls（列出目录内容和属性）" class="headerlink" title="1.2.1. ls（列出目录内容和属性）"></a>1.2.1. ls（列出目录内容和属性）</h3><p>全拼list，功能是列出目录的内容及其内容属性信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">-l（long）       长格式</span><br><span class="line"></span><br><span class="line">-d --directorys当遇到目录时列出目录本身而非目录内的文件</span><br><span class="line"></span><br><span class="line">   ls –d  #只显示. （.表示目录本身）</span><br><span class="line"></span><br><span class="line">   ls –d *&#x2F; #显示当前目录下的目录及其子目录</span><br><span class="line"></span><br><span class="line">-r --reverse：     倒序显示（按字母）</span><br><span class="line"></span><br><span class="line">ls -lrt #显示最近修改的文件</span><br><span class="line"></span><br><span class="line">-R --recursive： 递归列出子目录</span><br><span class="line"></span><br><span class="line">-t(time)：    按时间显示（从现在到过去）</span><br><span class="line"></span><br><span class="line">-h, --human-readable 以易于阅读的格式输出文件大小</span><br><span class="line"></span><br><span class="line">-S：           按文件大小 大到小</span><br><span class="line"></span><br><span class="line">   ls-lhS #文件从小到大排序</span><br><span class="line"></span><br><span class="line">-i --inode：    文件或目录的 索引节点号</span><br><span class="line"></span><br><span class="line">-n：           显示UID和GID（-l显示的是名称）</span><br><span class="line"></span><br><span class="line">-F：           给不同文件结尾加标识（目录是&#x2F;）</span><br><span class="line"></span><br><span class="line">-p：           给目录结尾加&#x2F;</span><br><span class="line"></span><br><span class="line">--color&#x3D;auto 显示颜色</span><br></pre></td></tr></table></figure>
+<p>![img](Linux 常用命令总结/clip_image001.png)</p>
+<p><strong>inode**</strong>节点号**：存储了文件的属性信息。指向一个或多个block（block里存放的是文件的数据信息）</p>
+<p><strong>文件类型与权限</strong>:第1位为文件类型，后9位为权限。若最后有个. 则代表该文件是在SELinux开启时创建的文件。若无. 则不是</p>
+<p><strong>文件类型总结</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">d：文件夹</span><br><span class="line"></span><br><span class="line">-：普通文件</span><br><span class="line"></span><br><span class="line">l：链接（类似Windows的快捷方式）</span><br><span class="line"></span><br><span class="line">b：块设备文件（例如硬盘、光驱等）</span><br><span class="line"></span><br><span class="line">p：管道文件</span><br><span class="line"></span><br><span class="line">c：字符设备文件（例如猫等串口设备）</span><br><span class="line"></span><br><span class="line">s：套接口文件/数据接口文件（例如启动一个MySql服务器时会产生一个mysql.sock文件）</span><br></pre></td></tr></table></figure>
+<p><strong>特殊属性的总结</strong></p>
+<ul>
+<li><p>s，S，t,显示在相应的x权限位上</p>
+</li>
+<li><p>setuid：让执行该命令的用户以该命令拥有者的权限去执行</p>
+</li>
+<li><p>setgid：</p>
+<ul>
+<li>1）执行文件的用户以该文件所属组的权限去执行</li>
+<li>2）在设有该权限位的目录下创建的文件，文件权限和组一致</li>
+</ul>
+</li>
+<li><p>sticky：该文件只有root用户和文件属主可删除</p>
+</li>
+</ul>
+<p><strong>硬链接数</strong>：</p>
+<p>文件为1，目录为2，目录下每多一个子目录，硬链接数加1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">..&#x2F;oldboy  #上层目录下的当前目录</span><br><span class="line"></span><br><span class="line">..&#x2F;oldboy&#x2F;.  #上层目录下的当前目录.</span><br><span class="line"></span><br><span class="line">oldboydir&#x2F;.. #子目录的上层目录</span><br></pre></td></tr></table></figure>
+<p><strong>硬链接与软链接区别：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ln –s 源文件 链接文件 #创建软链接</span><br><span class="line"></span><br><span class="line">ln  源文件 链接文件 #创建硬链接</span><br></pre></td></tr></table></figure>
+<p>1） 在软链接的inode与源文件不同，软链接的block里存放的是源文件的绝对地址。硬链接inode与软链接相同，硬链接与源文件指向同一个block</p>
+<p>2） 删除源文件，软链家会变成红底白字失效。硬链接不受影响</p>
+<p>3） 软链接可以跨文件系统，硬链接不能跨文件系统。（inode和block都是在创建文件系统时生成的。硬链接共享indoe，决定了它不能跨文件系统）</p>
+<p><strong>时间戳</strong>：</p>
+<ul>
+<li><p>atime：访问时间</p>
+</li>
+<li><p>ctime：属性改变时间（mtime变，ctime同步变）</p>
+</li>
+<li><p>mtime：内容改变时间</p>
+</li>
+</ul>
+<p><strong>文件名</strong>：</p>
+<p>  存放在上层目录的block中</p>
+<h3 id="1-2-3-cp（复制）"><a href="#1-2-3-cp（复制）" class="headerlink" title="1.2.3. cp（复制）"></a>1.2.3. cp（复制）</h3><p>全拼copy，其功能为复制文件或目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">-i 覆盖前询问</span><br><span class="line"></span><br><span class="line">-R&#x2F;r:递归，用于复制目录；</span><br><span class="line"></span><br><span class="line">-p：等于--preserve&#x3D;模式,所有权,时间戳</span><br><span class="line"></span><br><span class="line">   --preserve[&#x3D;属性列表 保持指定的属性(默认：模式,所有权,时间戳) </span><br><span class="line"></span><br><span class="line">如果可能保持附加属性：环境、链接、xattr 等</span><br><span class="line"></span><br><span class="line">-d：等于--no-dereference --preserve&#x3D;links</span><br><span class="line"></span><br><span class="line">   --no-dereference：不跟随源文件中的符号链接</span><br><span class="line"></span><br><span class="line">   --preserve&#x3D;links：保持链接的属性</span><br><span class="line"></span><br><span class="line">-a：相当于-pdR;</span><br><span class="line"></span><br><span class="line">-p：保持属性 </span><br><span class="line"></span><br><span class="line">–d：保持连接属性 </span><br><span class="line"></span><br><span class="line">–R：递归复制</span><br><span class="line"></span><br><span class="line">-n --no-clobber ：不覆盖已存在文件</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp dir&#123;3,4&#125; #复制dir3 为dir4</span><br><span class="line"></span><br><span class="line">cp &#x2F;etc&#x2F;&#123;sshd&#x2F;sshd.config,dhcp&#x2F;&#125; #复制sshd.conf到dhcp目录下</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-4-find（查找文件）"><a href="#1-2-4-find（查找文件）" class="headerlink" title="1.2.4. find（查找文件）"></a>1.2.4. <a target="_blank" rel="noopener" href="http://man.linuxde.net/find">find</a>（查找文件）</h3><p>查找的意思，用于查找目录及目录下的文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-name 按照文件名查找文件。</span><br><span class="line"></span><br><span class="line">-perm 按照文件权限来查找文件。</span><br><span class="line"></span><br><span class="line">-user按照文件属主来查找文件。可用nouser查没有属主的文件</span><br><span class="line"></span><br><span class="line">-group 按照文件所属的组来查找文件。可用nogroup查没有属组的文件</span><br><span class="line"></span><br><span class="line">-mtime -n +n 按照文件的更改时间来查找文件 –n 表示n天内，+n表示n天以前</span><br><span class="line"></span><br><span class="line">-maxdepth 查找最大目录层数 如 1，即只查找一层目录</span><br><span class="line"></span><br><span class="line">-size 按文件大小查找  -size 20K –size 30K #查找20K到30K间的文件</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find &#x2F;data -type f -name &quot;oldboy.txt&quot; -exec rm &#123;&#125; \;</span><br><span class="line"></span><br><span class="line"># 删除data目录下所有txt文件</span><br><span class="line">find &#x2F;data -type f -name &quot;*.txt&quot; | xargs rm -</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-5-mkdir（创建目录）"><a href="#1-2-5-mkdir（创建目录）" class="headerlink" title="1.2.5. mkdir（创建目录）"></a>1.2.5. mkdir（创建目录）</h3><p>全拼make directories，其功能是创建目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-p, --parents  需要时创建目标目录的上层目录，但即使这些目录已存在也不当作错误</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir –p &#x2F;dir1&#x2F;dir2&#x2F;dir3</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-6-mv（移动-重命名文件）"><a href="#1-2-6-mv（移动-重命名文件）" class="headerlink" title="1.2.6. mv（移动/重命名文件）"></a>1.2.6. mv（移动/重命名文件）</h3><p>全拼move，其功能是移动或重命名文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mv [选项]... 源文件... 目录 #注意，目的地必须是目录</span><br><span class="line"></span><br><span class="line">mv [选项]... -t 目录 源文件... #-t 会调换source和destination的位置，一般在有管道符时用</span><br><span class="line"></span><br><span class="line">-f –force   覆盖时不询问</span><br><span class="line"></span><br><span class="line">-n --no-clobber 不覆盖已存在文件</span><br><span class="line">-u --update 源文件比目标文件新，或目标文件不存在时才移动</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-7-pwd（当前目录绝对路径）"><a href="#1-2-7-pwd（当前目录绝对路径）" class="headerlink" title="1.2.7. pwd（当前目录绝对路径）"></a>1.2.7. pwd（当前目录绝对路径）</h3><p>全拼print working directory，其功能是显示当前工作目录的绝对路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-P --physical 目录是软连接时，显示实际地址</span><br><span class="line"></span><br><span class="line">-L --logical 显示逻辑地址，即软连接本身地址</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-8-rename（批量重命名文件）"><a href="#1-2-8-rename（批量重命名文件）" class="headerlink" title="1.2.8. rename（批量重命名文件）"></a>1.2.8. rename（批量重命名文件）</h3><p>用于重命名文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rename 源字符 替换字符 文件名 #必须要3个参数</span><br><span class="line"></span><br><span class="line">通配符（用于文件名）</span><br><span class="line"></span><br><span class="line">? 匹配任意一个字符</span><br><span class="line"></span><br><span class="line">\* 匹配任意多个字符 </span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#把所有文件名以100开头的.txt文件替换为200开头</span><br><span class="line">rename 100 200 100*.txt </span><br><span class="line"></span><br><span class="line">#把所有.txt文件的后缀名改为.log</span><br><span class="line">rename .txt .log * </span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-9-rm（删除）"><a href="#1-2-9-rm（删除）" class="headerlink" title="1.2.9. rm（删除）"></a>1.2.9. rm（删除）</h3><p>全拼remove，其功能是删除一个或多个文件或目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-f（force）强制</span><br><span class="line"></span><br><span class="line">-r（recursive）递归，用于删除目录</span><br><span class="line"></span><br><span class="line">-d 删除空目录</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">注意：删除符号链接时，不在目录名后面跟 &#x2F;，如</span><br><span class="line"></span><br><span class="line">rm -f linkdir</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-10-rmdir（删空目录）"><a href="#1-2-10-rmdir（删空目录）" class="headerlink" title="1.2.10.   rmdir（删空目录）"></a>1.2.10.   rmdir（删空目录）</h3><p>全拼remove empty directories，功能是删除空目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-p, --parents 删除指定目录及其上级文件夹，例如</span><br><span class="line">&quot;rmdir -p a&#x2F;b&#x2F;c&#39;&quot;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-11-touch（创文件）"><a href="#1-2-11-touch（创文件）" class="headerlink" title="1.2.11.   touch（创文件）"></a>1.2.11.   touch（创文件）</h3><p>创建新的空文件，改变已有文件的时间戳属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-r --reference&#x3D;文件 使用指定文件的时间属性替代当前时间</span><br><span class="line"></span><br><span class="line">-d, --date&#x3D;字符串   使用指定字符串表示时间替代当前时间。</span><br><span class="line"></span><br><span class="line">mtime和atime会变为修改后的时间，ctime会变为执行命令的当前时间</span><br><span class="line"></span><br><span class="line">touch -r des.php source.php #使用des.php的时间属性，替换source.php的时间属性</span><br><span class="line"></span><br><span class="line">touch -d &quot;2 days ago&quot; test.php  #将test.php日期修改为2天以前</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-12-tree（树形显示）"><a href="#1-2-12-tree（树形显示）" class="headerlink" title="1.2.12.   tree（树形显示）"></a>1.2.12.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/tree">tree</a>（树形显示）</h3><p>功能是以树形结构显示目录下的内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-a 显示所有文件和目录。</span><br><span class="line"></span><br><span class="line">-C 在文件和目录清单加上色彩，便于区分各种类型。</span><br><span class="line"></span><br><span class="line">-d 显示目录名称而非内容</span><br><span class="line"></span><br><span class="line">-i 不以阶梯状列出文件或目录名称，可以方便过滤</span><br><span class="line"></span><br><span class="line">-L 层级显示，后接number，指定显示几层</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-13-basename（用于shell编程）"><a href="#1-2-13-basename（用于shell编程）" class="headerlink" title="1.2.13.   basename（用于shell编程）"></a>1.2.13.   basename（用于shell编程）</h3><p>显示文件名或目录名。总是显示最后的文件名或目录名</p>
+<p>![img](Linux 常用命令总结/clip_image002.png)</p>
+<h3 id="1-2-14-dirname（用于shell编程）"><a href="#1-2-14-dirname（用于shell编程）" class="headerlink" title="1.2.14.   dirname（用于shell编程）"></a>1.2.14.   dirname（用于shell编程）</h3><p>显示文件或目录路径。</p>
+<p>![img](Linux 常用命令总结/clip_image003.png)</p>
+<h3 id="1-2-15-lsattr（查看文件扩展属性）"><a href="#1-2-15-lsattr（查看文件扩展属性）" class="headerlink" title="1.2.15.   lsattr（查看文件扩展属性）"></a>1.2.15.   lsattr（查看文件扩展属性）</h3><p>查看文件扩展属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">文件扩展属性和文件权限最重要的不同在于属性并不依赖于某个用户帐号</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-16-chattr（设置扩展属性）"><a href="#1-2-16-chattr（设置扩展属性）" class="headerlink" title="1.2.16.   chattr（设置扩展属性）"></a>1.2.16.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/chattr">chattr</a>（设置扩展属性）</h3><p>改变文件的扩展属性。</p>
+<p>权限设定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ 增加权限</span><br><span class="line"></span><br><span class="line">- 取消权限</span><br><span class="line"></span><br><span class="line">&#x3D; 唯一设定权限</span><br></pre></td></tr></table></figure>
+<p>属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a：只能在添加模式下打开用于写入. 只有root可以设置或清除该属性</span><br><span class="line"></span><br><span class="line">i：该文件属性无法修改，只有root可设置或清除该属性（在网卡DNS覆盖&#x2F;etc&#x2F;resolv.conf中的DNS时，将resolv.conf的属性设为i，可防止覆盖）</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-17-file（显示文件类型）"><a href="#1-2-17-file（显示文件类型）" class="headerlink" title="1.2.17.   file（显示文件类型）"></a>1.2.17.   file（显示文件类型）</h3><p>显示文件的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-L 显示符号链接文件的原文件</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-2-18-md5sum（加密）"><a href="#1-2-18-md5sum（加密）" class="headerlink" title="1.2.18.   md5sum（加密）"></a>1.2.18.   md5sum（加密）</h3><p>计算和校验文件的MD5值。文件内容相同的文件，MD5值一样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">md5sum file &gt; file.md5 #生成md5加密检验和</span><br><span class="line"></span><br><span class="line">md5sum -c file.md5 #检验与文件是否一致</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<ol>
+<li>不同文件名，相同文件内容的md5值只有文件名不同</li>
+</ol>
+<p>![img](Linux 常用命令总结/clip_image004.png)</p>
+<ol start="2">
+<li>file.md5值只能检验file文件。如果file文件改了名，就不能检验</li>
+</ol>
+<h2 id="1-3-查看文件及内容处理命令（21个）"><a href="#1-3-查看文件及内容处理命令（21个）" class="headerlink" title="1.3. 查看文件及内容处理命令（21个）"></a>1.3. 查看文件及内容处理命令（21个）</h2><h3 id="1-3-1-cat（打印文件）"><a href="#1-3-1-cat（打印文件）" class="headerlink" title="1.3.1. cat（打印文件）"></a>1.3.1. cat（打印文件）</h3><p>全拼concatenate，功能是用于连接多个文件并且打印到屏幕输出或重定向到指定文件中。</p>
+<p>-b, –number-nonblank   对非空输出行编号。该有的空行会空着</p>
+<p>-n, –number       对输出的所有行编号</p>
+<p>-s, –squeeze-blank    多个连续空行合成一个</p>
+<p>![img](Linux 常用命令总结/clip_image005.png)</p>
+<h3 id="1-3-2-tac（倒序打印）"><a href="#1-3-2-tac（倒序打印）" class="headerlink" title="1.3.2. tac（倒序打印）"></a>1.3.2. tac（倒序打印）</h3><p>tac是cat的反向拼写，因此命令的功能为反向显示文件内容。</p>
+<p>![img](Linux 常用命令总结/clip_image006.png)</p>
+<h3 id="1-3-3-rev（反向打印）"><a href="#1-3-3-rev（反向打印）" class="headerlink" title="1.3.3. rev（反向打印）"></a>1.3.3. rev（反向打印）</h3><p>反向输出文件内容。</p>
+<p>![img](Linux 常用命令总结/clip_image007.png)</p>
+<h3 id="1-3-4-more（分屏显示）"><a href="#1-3-4-more（分屏显示）" class="headerlink" title="1.3.4. more（分屏显示）"></a>1.3.4. more（分屏显示）</h3><p>分页显示文件内容。</p>
+<h3 id="1-3-5-less（分屏查看）"><a href="#1-3-5-less（分屏查看）" class="headerlink" title="1.3.5. less（分屏查看）"></a>1.3.5. less（分屏查看）</h3><p>分页显示文件内容，与cat,vim/vi命令相比，less显示文件内容的速度要快一些。因为less是分页显示，而每一页的数据更少，翻一页才读一页，能更快的被读到内存中显示，其他命令要将整个文件读到内存中。</p>
+<p>b     上翻一页</p>
+<p>空格键  下翻一页</p>
+<p>回车键  往下一行</p>
+<p>/ ： 使用一个模式进行搜索，并定位到下一个匹配的文本</p>
+<p>   n ： 向前查找下一个匹配的文本</p>
+<p>  N ： 向后查找前一个匹配的文本</p>
+<p>? ： 使用模式进行搜索，并定位到前一个匹配的文本</p>
+<h3 id="1-3-6-head（显示文件头部）"><a href="#1-3-6-head（显示文件头部）" class="headerlink" title="1.3.6. head（显示文件头部）"></a>1.3.6. head（显示文件头部）</h3><p>显示文件内容的头部。</p>
+<p>-n, –lines=[-]K   显示每个文件的前K 行内容；</p>
+<p>   head –n 10/+10 #显示文件前10行，默认为10</p>
+<p>   head –n -10 #只不显示文件最后10行</p>
+<p>-q, –quiet, –silent 不显示包含给定文件名的文件头，用于head 多个文件时</p>
+<h3 id="1-3-7-tail（显示文件尾部）"><a href="#1-3-7-tail（显示文件尾部）" class="headerlink" title="1.3.7. tail（显示文件尾部）"></a>1.3.7. tail（显示文件尾部）</h3><p>显示文件内容的尾部。</p>
+<p>-n, –lines=[-]K  显示每个文件的前K 行内容；</p>
+<p>   tail –n +10 #从文件第10行向末尾显示</p>
+<p>   tail –n -10/10 #显示文件最后10行</p>
+<p>-q, –quiet, –silent 不显示包含给定文件名的文件头，用于tail 多个文件时</p>
+<p>-f, –follow    当文件增长时,输出后续添加的数据，监控日志 </p>
+<p>-s, –sleep-interval=S 与-f合用,表示在每次反复的间隔休眠S秒</p>
+<p>   tail –s 2 –f /var/log/message #每隔两秒刷新一次该文件最后10行</p>
+<h3 id="1-3-8-cut（分隔字符）"><a href="#1-3-8-cut（分隔字符）" class="headerlink" title="1.3.8. cut（分隔字符）"></a>1.3.8. cut（分隔字符）</h3><p>将文件的每一行按指定分隔符分割并输出。</p>
+<p>-b, –bytes=LIST    指定字节范围 </p>
+<p>-c, –characters=LIST  指定字符范围 </p>
+<p>-d, –delimiter=DELIM  使用 DELIM 取代 TAB 做 字段(field) 分隔符 </p>
+<p>-f, –fields=LIST     指定输出的字段</p>
+<p>cat /etc/passwd | cut -b 1 |head -5   #输出文件的第一个字节</p>
+<p>cat /etc/passwd | cut -f1 -d ‘:’ |head -5  #以:分割文件，输出第一个字段</p>
+<p>N  第 N 个 字节, 字符 或 字段, 从 1 计数 起</p>
+<p>N- 从 第 N 个 字节, 字符 或 字段 直至 行尾 </p>
+<p>N-M从 第 N 到 第 M (并包括 第M) 个 字节, 字符 或 字段 </p>
+<p>-M 从 第 1 到 第 M (并包括 第M) 个 字节, 字符 或 字段</p>
+<h3 id="1-3-9-split（切割）"><a href="#1-3-9-split（切割）" class="headerlink" title="1.3.9. split（切割）"></a>1.3.9. split（切割）</h3><p>分割文件为不同的小片段。</p>
+<p>split 参数 文件 切割文件名_（默认添加的后缀）</p>
+<p>-a 后缀长度，默认为2</p>
+<p>-d 使用数字而不是字母作为切割后的小文件的后缀</p>
+<p>-b 每个分割文件的大小</p>
+<p>-l 指定切割的行数作为切割文件的单位</p>
+<p>![img](Linux 常用命令总结/clip_image008.png)</p>
+<h3 id="1-3-10-paste（合并）"><a href="#1-3-10-paste（合并）" class="headerlink" title="1.3.10.   paste（合并）"></a>1.3.10.   paste（合并）</h3><p>按行合并文件内容。</p>
+<p>-d 指定分隔符 默认是tab</p>
+<p>-s 每个文件占用一行。而不是平行输出</p>
+<p>![img](Linux 常用命令总结/clip_image009.png)![img](Linux 常用命令总结/clip_image010.png)</p>
+<h3 id="1-3-11-sort（排序）"><a href="#1-3-11-sort（排序）" class="headerlink" title="1.3.11.   sort（排序）"></a>1.3.11.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/sort">sort</a>（排序）</h3><p>对文件的文本内容排序。</p>
+<p>-n, –numeric-sort  按数值大小排序</p>
+<p>-r, –reverse    逆序输出排序结果</p>
+<p>-f, –ignore-case   忽略字母大小写</p>
+<p>-t           指定分隔符</p>
+<p>-k           选择排序区域，与-t连用</p>
+<p>cat /etc/passwd | sort -t ‘:’ -k 3nr   #倒序排列，默认是升序排序</p>
+<h3 id="1-3-12-uniq（过滤重复行）"><a href="#1-3-12-uniq（过滤重复行）" class="headerlink" title="1.3.12.   uniq（过滤重复行）"></a>1.3.12.   uniq（过滤重复行）</h3><p>去除重复行</p>
+<p>-c, –count 在每行前加上表示相应行目出现次数的前缀编号</p>
+<h3 id="1-3-13-wc（统计文件内容）"><a href="#1-3-13-wc（统计文件内容）" class="headerlink" title="1.3.13.   wc（统计文件内容）"></a>1.3.13.   wc（统计文件内容）</h3><p>统计文件的行数、单词数或字节数。</p>
+<p>-c, –bytes打印字节数</p>
+<p>-m, –chars 打印字符数 </p>
+<p>-l, –lines 打印行数 </p>
+<p>-L, –max-line-length 打印最长行的长度</p>
+<p>-w, –words 打印单词数</p>
+<p>cat /etc/passwd |wc -l  #查看passwd文件有多少行</p>
+<h3 id="1-3-14-iconv（转换文件编码）"><a href="#1-3-14-iconv（转换文件编码）" class="headerlink" title="1.3.14.   iconv（转换文件编码）"></a>1.3.14.   iconv（转换文件编码）</h3><p>转换文件的编码格式。</p>
+<p>-o, –output=FILE     输出文件</p>
+<h3 id="1-3-15-dos2unix（DOS-gt-UNIX）"><a href="#1-3-15-dos2unix（DOS-gt-UNIX）" class="headerlink" title="1.3.15.   dos2unix（DOS-&gt;UNIX）"></a>1.3.15.   <a target="_blank" rel="noopener" href="http://man.linuxde.net/dos2unix">dos2unix</a>（DOS-&gt;UNIX）</h3><p>将DOS格式文件转换成UNIX格式。</p>
+<p>dos2unix file</p>
+<h3 id="1-3-16-diff（比较文件）"><a href="#1-3-16-diff（比较文件）" class="headerlink" title="1.3.16.   diff（比较文件）"></a>1.3.16.   <a target="_blank" rel="noopener" href="http://man.linuxde.net/diff">diff</a>（比较文件）</h3><p>全拼difference，比较文件的差异，常用于文本文件。若两文件内容相同，则无显示</p>
+<p>-r：递归比较</p>
+<p>diff file1 file2 #常用语修改配置文件出错后，与源文件比较</p>
+<p>推荐使用</p>
+<p>diff -y file1 file2</p>
+<p>  diff -r dir1 dir2 #比较目录</p>
+<p>&lt; ：代表第1个文件</p>
+<p>&gt; ：代表第2个文件</p>
+<h3 id="1-3-17-vimdiff（可视化比较）"><a href="#1-3-17-vimdiff（可视化比较）" class="headerlink" title="1.3.17.   vimdiff（可视化比较）"></a>1.3.17.   vimdiff（可视化比较）</h3><p>命令行可视化文件比较工具，常用于文本文件。</p>
+<h3 id="1-3-18-grep-egrep（过滤字符）"><a href="#1-3-18-grep-egrep（过滤字符）" class="headerlink" title="1.3.18.   grep/egrep（过滤字符）"></a>1.3.18.   grep/egrep（过滤字符）</h3><p>过滤字符串，三剑客老三。</p>
+<p>-i, –ignore-case     不区分大小写</p>
+<p>-w, –word-regexp    匹配整个单词</p>
+<p>-x, –line-regexp      匹配整行</p>
+<p>-n, –line-number     显示的加上匹配所在的行号</p>
+<p>-v, –invert-match     接啥排除啥</p>
+<p>-o, –only-matching    只显示一行中匹配PATTERN 的部分</p>
+<p>-c –count          显示匹配了多少次</p>
+<p>-r 关键字          快速搜索在目录下面含有关键字的文件</p>
+<p>-m <N>        最多匹配N个后停止</p>
+<p>文件控制:</p>
+<p> -B, –before-context=NUM 打印匹配本身以及前面的几个行由NUM控制</p>
+<p> -A, –after-context=NUM  打印匹配本身以及随后的几个行由NUM控制</p>
+<p> -C, –context=NUM     打印匹配本身以及随后，前面的几个行由NUM控制</p>
+<p>–color=auto 对匹配的字符串加颜色</p>
+<p>grep 25 -A 10 a #匹配字符25，并打印25之后的10行</p>
+<p>cat test |grep ‘^(root|zhang)’ #匹配以root开头或者以zhang开头的行。不加-e，则需对正则表达式进行转义</p>
+<h3 id="1-3-19-sed"><a href="#1-3-19-sed" class="headerlink" title="1.3.19.   sed"></a>1.3.19.   sed</h3><p>#将换行符替换为空</p>
+<p>sed “:a;N;s/\n//g;ta” file</p>
+<h3 id="1-3-20-join（得sort排序）"><a href="#1-3-20-join（得sort排序）" class="headerlink" title="1.3.20.   join（得sort排序）"></a>1.3.20.   <a target="_blank" rel="noopener" href="https://www.cnblogs.com/agilework/archive/2012/04/18/2454877.html">join</a>（得sort排序）</h3><p>按两个文件的相同字段合并。</p>
+<h3 id="1-3-21-tr（替换-删除字符）"><a href="#1-3-21-tr（替换-删除字符）" class="headerlink" title="1.3.21.   tr（替换/删除字符）"></a>1.3.21.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/tr">tr（替换/删除字符）</a></h3><p>替换或删除字符。</p>
+<p>-d, –delete      删除匹配SET1 的内容，并不作替换</p>
+<p>-s, –squeeze-repeats  如果匹配于SET1 的字符在输入序列中存在连续的重复，在替换时会被统一缩为一个字符的长度</p>
+<p>cat aaa.txt|tr ‘a’ ‘c’   #字母c替换字母a</p>
+<p>cat aaa.txt|tr -s [a-zA-Z]  #删除重复的字母</p>
+<p>echo “TANK” |tr A-Z a-z  #大写字母转小写</p>
+<h3 id="1-3-22-vi-vim"><a href="#1-3-22-vi-vim" class="headerlink" title="1.3.22.   vi/vim"></a>1.3.22.   vi/vim</h3><p>命令行文本编辑器。</p>
+<p>命令模式的快捷键：  </p>
+<p>Home/gg(1G)：移到行的最前 </p>
+<p>END/G：移到行最后</p>
+<p>   p（小写）：粘贴在光标上一行 </p>
+<p>P（大写）：粘贴在光标下一行</p>
+<p>   x：从光标处开始向后删除一个字符 </p>
+<p>X：删除光标前的一个字符</p>
+<p>   dw：移到单词首字母，删除整个单词</p>
+<p>   /：向下匹配  </p>
+<p>？:向上匹配</p>
+<p>u：取消上次操作</p>
+<p>   Ctrl -r：重复上个操作</p>
+<p>   V：行选择   </p>
+<p>v：字符选择 </p>
+<p>[ctrl] +v ：长方形数据选择。 选择后可以： p：粘贴 d：删除</p>
+<p>   dd：删除    </p>
+<p>yy：复制</p>
+<p>nG：跳到指定行，n为number</p>
+<p>ctrl + $ 跳到一行最末</p>
+<p>ctrl + ^ 跳到一行最前</p>
+<p>常用的字符替换：</p>
+<p>   s/aa/bb/g   #将光标所在行出现的所有包含 aa 的字符串中的 aa 替换为 bb</p>
+<p>   s/<aa>/bb/g #将光标所在行出现的所有 aa 替换为 bb, 仅替换 aa 这个单词</p>
+<p>   %s/aa/bb/g   #将文档中出现的所有包含 aa 的字符串中的 aa 替换为 bb,%表示全局</p>
+<p>   12,23s/aa/bb/g  #将从12行到23行中出现的所有包含 aa 的字符串中的 aa 替换为 bb</p>
+<p>   12,23s/^/#/  #将从12行到23行的行首加入 # 字符</p>
+<p>   %s= *$==    #将所有行尾多余的空格删除</p>
+<p>   g/^s*/d    #将所有不包含字符(空格也不包含)的空行删除.</p>
+<p>  :sh：进入命令行。exit 或 Ctrl+D 退出编辑界面</p>
+<p>了解知识：</p>
+<p>：w [filename] 另存文件</p>
+<p>   ：r [filename]：将该文件数据 累加到光标所在行 后面</p>
+<p>   ：set nu  setnonu</p>
+<p>   Vim test1 test2 （同时打开两个文件）</p>
+<p>​      :n 编辑下个文件</p>
+<p>​      :N编辑上个文件</p>
+<p>   参数文件：/etc/vimrc</p>
+<h3 id="1-3-23-view"><a href="#1-3-23-view" class="headerlink" title="1.3.23.   view"></a>1.3.23.   view</h3><p>以只读模式启动。将无法写入文件。相当于 vim -R</p>
+<h2 id="1-4-文件压缩及解压缩命令（4个）"><a href="#1-4-文件压缩及解压缩命令（4个）" class="headerlink" title="1.4. 文件压缩及解压缩命令（4个）"></a>1.4. 文件压缩及解压缩命令（4个）</h2><h3 id="1-4-1-tar（归档-压缩-解压）"><a href="#1-4-1-tar（归档-压缩-解压）" class="headerlink" title="1.4.1. tar（归档/压缩/解压）"></a>1.4.1. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/tar">tar（归档/压缩/解压）</a></h3><p>打包压缩。注意：只能更新和追加归档文件，用了zjZ后就不能了</p>
+<p>归档压缩文件</p>
+<p>-c: 建立压缩档案</p>
+<p>-x：解压</p>
+<p>-t：查看内容</p>
+<p>-r：向压缩归档文件末尾追加文件</p>
+<p>-u：更新原压缩包中的文件</p>
+<p>这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。</p>
+<p>-z：有gzip属性的</p>
+<p>-j：有bz2属性的</p>
+<p>-Z：有compress属性的，后缀名为.gz</p>
+<p>-v：显示所有过程</p>
+<p>-o：将文件解开到标准输出</p>
+<p>-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。</p>
+<p>文件选择：</p>
+<p>–exclude=PATTERN   排除以 PATTERN 指定的文件</p>
+<p>-C：指定解压目录</p>
+<p>tar -cf 1.tar 1 2 3 #将1,2,3归档到1.tar<br> tar -czf 1.tar.gz 1 2 3 #将1,2,3归档到1.tar,再压缩成1.tar.gz文件<br> tar -xzf 1.tar -C /data #加-C可解压到指定目录</p>
+<h3 id="1-4-2-unzip（解压）"><a href="#1-4-2-unzip（解压）" class="headerlink" title="1.4.2. unzip（解压）"></a>1.4.2. <a target="_blank" rel="noopener" href="http://man.linuxde.net/unzip">unzip</a>（解压）</h3><p>解压文件。</p>
+<p>-j 不处理压缩文件中原有的目录路径</p>
+<p>-n 解压缩时不要覆盖原有的文件。</p>
+<p>-o 不必先询问用户，unzip执行后覆盖原有文件</p>
+<p>-t 检查压缩文件是否正确</p>
+<p>unzip -n test.zip -d /tmp #将压缩文件text.zip在指定目录/tmp下解压缩，如果已有相同的文件存在，不覆盖</p>
+<p>unzip -v test.zip #查看压缩文件目录，但不解压</p>
+<h3 id="1-4-3-gzip（先tar归档）"><a href="#1-4-3-gzip（先tar归档）" class="headerlink" title="1.4.3. gzip（先tar归档）"></a>1.4.3. gzip（先tar归档）</h3><p>gzip压缩工具。</p>
+<p>-d或–decompress或—-uncompress：解开压缩文件；</p>
+<p>-r或——recursive：递归处理，将指定目录下的所有文件及子目录一并处理；</p>
+<p>-l或——list：列出压缩文件的相关信息；</p>
+<p>gzip file #将文件压缩为 file.gz</p>
+<h3 id="1-4-4-gunzip（解压-gz包）"><a href="#1-4-4-gunzip（解压-gz包）" class="headerlink" title="1.4.4. gunzip（解压.gz包）"></a>1.4.4. gunzip（解压.gz包）</h3><p># gunzip test.txt.gz </p>
+<p>它会将文件解压缩为文件 test.txt，原来的文件则没有了，为了保留原有的文件，我们可以加上 -c 选项并利用 linux 的重定向 </p>
+<p># gzip -c test.txt &gt; /root/test.gz </p>
+<p>这样不但可以将原有的文件保留，而且可以将压缩包放到任何目录中，解压缩也一样</p>
+<h3 id="1-4-5-zip（压缩）"><a href="#1-4-5-zip（压缩）" class="headerlink" title="1.4.5. zip（压缩）"></a>1.4.5. <a target="_blank" rel="noopener" href="http://man.linuxde.net/zip">zip</a>（压缩）</h3><p>压缩工具。</p>
+<p>-A 自动解压文件</p>
+<p>-d 删除文件</p>
+<p>-r 递归处理</p>
+<p>-b&lt;目录&gt; 指定压缩到的目录</p>
+<p>zip -r cp3.zip /var/www/   #压缩目录</p>
+<h2 id="1-5-信息显示命令（11个）"><a href="#1-5-信息显示命令（11个）" class="headerlink" title="1.5. 信息显示命令（11个）"></a>1.5. 信息显示命令（11个）</h2><h5 id="1-5-1-1-1-journactl"><a href="#1-5-1-1-1-journactl" class="headerlink" title="1.5.1.1.1.   journactl"></a>1.5.1.1.1.   journactl</h5><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cocowool/p/systemd_journal_log.html">https://www.cnblogs.com/cocowool/p/systemd_journal_log.html</a></p>
+<p>在Systemd出现之前，Linux系统及各应用的日志都是分别管理的，Systemd开始统一管理了所有Unit的启动日志，这样带来的好处就是可以只用一个 journalctl命令，查看所有内核和应用的日志</p>
+<h3 id="1-5-2-uname（系统-内核版本）"><a href="#1-5-2-uname（系统-内核版本）" class="headerlink" title="1.5.2. uname（系统/内核版本）"></a>1.5.2. uname（系统/内核版本）</h3><p>显示操作系统相关信息的命令。</p>
+<p>-a, –all          显示系统信息           </p>
+<p>-n, –nodename     输出网络节点上的主机名</p>
+<p>-r, –kernel-release    输出内核发行号</p>
+<p>-m, –machine      输出主机的硬件架构名称</p>
+<p>cat /proc/version（内核版本命令）</p>
+<p>cat /etc/issue（系统版本命令）</p>
+<h3 id="1-5-3-hostname（主机名）"><a href="#1-5-3-hostname（主机名）" class="headerlink" title="1.5.3. hostname（主机名）"></a>1.5.3. hostname（主机名）</h3><p>显示或者设置当前系统的主机名。</p>
+<p>-a：显示主机别名；</p>
+<p>-d：显示DNS域名；</p>
+<p>-i：显示主机的ip地址；</p>
+<p>hostname new_name # 临时修改主机名</p>
+<p>/etc/syconfig/network 永久修改主机名，在本机上</p>
+<p>/etc/hosts 永久修改主机名，在网络节点上</p>
+<h3 id="1-5-4-hostnamectl（永久修改主机名）"><a href="#1-5-4-hostnamectl（永久修改主机名）" class="headerlink" title="1.5.4. hostnamectl（永久修改主机名）"></a>1.5.4. hostnamectl（永久修改主机名）</h3><p>hostnamectl set-hsotname <hostname></p>
+<h3 id="1-5-5-dmesg（开机信息）"><a href="#1-5-5-dmesg（开机信息）" class="headerlink" title="1.5.5. dmesg（开机信息）"></a>1.5.5. dmesg（开机信息）</h3><p>显示开机信息，用于诊断系统故障。</p>
+<p># dmesg | grep -i usb   #查看usb信息</p>
+<p># dmesg | grep -i dma   #查看dma信息</p>
+<p># dmesg | grep -i tty   #查看串行接口信息</p>
+<p># dmesg | grep -i memory #查看内存信息</p>
+<p># dmesg | grep eth    #查看网卡信息</p>
+<h3 id="1-5-6-uptime（系统运行时间及负载）"><a href="#1-5-6-uptime（系统运行时间及负载）" class="headerlink" title="1.5.6. uptime（系统运行时间及负载）"></a>1.5.6. uptime（系统运行时间及负载）</h3><p>显示系统运行时间及负载。</p>
+<p>![img](Linux 常用命令总结/clip_image011.png)</p>
+<p>cat /proc/loadavg #查看系统负载，同上负载显示</p>
+<h3 id="1-5-7-stat（主要看时间戳）"><a href="#1-5-7-stat（主要看时间戳）" class="headerlink" title="1.5.7. stat（主要看时间戳）"></a>1.5.7. stat（主要看时间戳）</h3><p>显示文件或文件系统的状态。</p>
+<p>stat file #显示该文件的状态。主要是查看时间戳</p>
+<p>stat /dev/sda1 #查看该分区的状态</p>
+<h3 id="1-5-8-du（看文件目录大小）"><a href="#1-5-8-du（看文件目录大小）" class="headerlink" title="1.5.8. du（看文件目录大小）"></a>1.5.8. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/du">du</a>（看文件目录大小）</h3><p>计算磁盘空间使用情况。</p>
+<p>-a, –all 显示对所有文件的统计，而不只是包含子目录。</p>
+<p>-c, –total 在处理完所有参数后给出所有这些参数的总计。这个选项被 用给出指定的一组文件或目录使用的空间的总和</p>
+<p>–exclude=pattern忽略与指定模式相匹配的文件或子目录</p>
+<p>-h, –human-readable 易读显示</p>
+<p>-s, –summarize 对每个参数只显示总和</p>
+<p>–max-depth=n  目录深度</p>
+<p>du -ah     #详细查看当前目录，子目录下的，所有文件和目录</p>
+<p>du -sm * | sort -n  #统计当前目录大小，并安大小排序（m表兆，即M）</p>
+<p>du -c file_1 file_2 #显示几个文件或目录各自占用磁盘空间的大小，还统计它们的总和</p>
+<p>![img](Linux 常用命令总结/clip_image012.png)</p>
+<h3 id="1-5-9-df（看分区block和indoe情况）"><a href="#1-5-9-df（看分区block和indoe情况）" class="headerlink" title="1.5.9. df（看分区block和indoe情况）"></a>1.5.9. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/df">df</a>（看分区block和indoe情况）</h3><p>报告文件系统磁盘空间的使用情况。</p>
+<p>-h, –human-readable 易读显示</p>
+<p>-i, –inodes  用信息索引点代替块表示使用状况</p>
+<p>-t, –type=TYPE 只显示指定类型(TYPE)的文件系统 </p>
+<p>-T, –print-type 输出每个文件系统的类型</p>
+<p>![img](Linux 常用命令总结/clip_image013.png)</p>
+<h3 id="1-5-10-top（系统资源详细信息）"><a href="#1-5-10-top（系统资源详细信息）" class="headerlink" title="1.5.10.   top（系统资源详细信息）"></a>1.5.10.   <a target="_blank" rel="noopener" href="http://www.jb51.net/LINUXjishu/34604.html">top</a>（系统资源详细信息）</h3><p>实时显示系统资源使用情况。</p>
+<p>-u&lt;用户名&gt; 指定用户名  </p>
+<p><strong>-c</strong> <strong>显示完整命令</strong></p>
+<p>-d：屏幕刷新间隔时间</p>
+<p>-p&lt;进程号&gt; 指定进程</p>
+<p>-n&lt;次数&gt; 循环显示的次数</p>
+<p># top -n 2  #设置信息更新次数,表示更新2次后终止更新显示</p>
+<p># top -d -3  #设置信息更新时间,表示更新周期为3秒</p>
+<p># top -p 1138 #显示进程号为1138的进程信息，CPU、内存占用率等</p>
+<p>![img](Linux 常用命令总结/clip_image014.png)</p>
+<p>Cpu(s): 0.0% us    用户空间占用CPU百分比</p>
+<p>0.0% sy        内核空间占用CPU百分比</p>
+<p>0.0% ni        用户进程空间内改变过优先级的进程占用CPU百分比</p>
+<p>100% id      空闲CPU百分比</p>
+<p>0.0% wa        等待输入输出的CPU时间百分比</p>
+<p>0.0% hi   </p>
+<p>0.0% si  </p>
+<p>序号  列名  含义</p>
+<p>a    PID    进程id</p>
+<p>b    PPID  父进程id</p>
+<p>c    RUSER  Real user name</p>
+<p>d    UID    进程所有者的用户id</p>
+<p>e    USER  进程所有者的用户名</p>
+<p>f    GROUP  进程所有者的组名</p>
+<p>g    TTY    启动进程的终端名。不是从终端启动的进程则显示为 ?</p>
+<p>h    PR    优先级</p>
+<p>i    NI    nice值。负值表示高优先级，正值表示低优先级</p>
+<p>j    P    最后使用的CPU，仅在多CPU环境下有意义</p>
+<p>k    %CPU  上次更新到现在的CPU时间占用百分比</p>
+<p>l    TIME  进程使用的CPU时间总计，单位秒</p>
+<p>m    TIME+  进程使用的CPU时间总计，单位1/100秒</p>
+<p>n    %MEM  进程使用的物理内存百分比</p>
+<p>o    VIRT  进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES</p>
+<p>p     SWAP  进程使用的虚拟内存中，被换出的大小，单位kb。</p>
+<p>q    RES    进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA</p>
+<p>r    CODE  可执行代码占用的物理内存大小，单位kb</p>
+<p>s    DATA  可执行代码以外的部分(数据段+栈)占用的物理内存大小，单位kb</p>
+<p>t    SHR    共享内存大小，单位kb</p>
+<p>u    nFLT  页面错误次数</p>
+<p>v    nDRT  最后一次写入到现在，被修改过的页面数。</p>
+<p>w    S    进程状态。</p>
+<p>​        D=不可中断的睡眠状态</p>
+<p>​        R=运行</p>
+<p>​        S=睡眠</p>
+<p>​        T=跟踪/停止</p>
+<p>​        Z=僵尸进程</p>
+<p>x    COMMAND  命令名/命令行</p>
+<p>y    WCHAN  若该进程在睡眠，则显示睡眠中的系统函数名</p>
+<p>z    Flags  任务标志，参考 sched.h</p>
+<p>交互式命令</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Enter, Space</td>
+<td>立即刷新显示</td>
+</tr>
+<tr>
+<td>h</td>
+<td>Displays  a help screen for interactive commands.</td>
+</tr>
+<tr>
+<td>h, ?</td>
+<td>Displays  a help screen for windows and field groups.</td>
+</tr>
+<tr>
+<td>k</td>
+<td>杀死指定进程</td>
+</tr>
+<tr>
+<td>n</td>
+<td>显示指定进程.</td>
+</tr>
+<tr>
+<td>u</td>
+<td>按user排序</td>
+</tr>
+<tr>
+<td>M</td>
+<td>按内存使用排序</td>
+</tr>
+<tr>
+<td>P</td>
+<td>按cpu使用率排序</td>
+</tr>
+<tr>
+<td>q</td>
+<td>退出交互式页面</td>
+</tr>
+<tr>
+<td>f</td>
+<td>从当前显示中添加/删除 条目，通过 space 选中/取消</td>
+</tr>
+<tr>
+<td>shift + &gt;  shift + &lt;</td>
+<td>top默认的排序列是“%CPU”,可如此向 右/左 改变排序</td>
+</tr>
+</tbody></table>
+<h3 id="1-5-11-htop（top的升级版）"><a href="#1-5-11-htop（top的升级版）" class="headerlink" title="1.5.11.   htop（top的升级版）"></a>1.5.11.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/htop">htop</a>（top的升级版）</h3><p>htop提供所有进程的列表，并且使用彩色标识出处理器、swap和内存状态。</p>
+<p>用户一般可以在top无法提供详尽系统信息的情况下选择安装并使用htop。比如，在查找应用程序的内存泄漏问题时。与top相比，htop提供更方便、光标控制的界面来杀死进程。</p>
+<h3 id="1-5-12-iftop（实时流量监控工具）"><a href="#1-5-12-iftop（实时流量监控工具）" class="headerlink" title="1.5.12.   iftop（实时流量监控工具）"></a>1.5.12.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/iftop">iftop</a>（实时流量监控工具）</h3><p>iftop是一款实时流量监控工具,监控TCP/IP连接等,缺点就是无报表功能。必须以root身份才能运行</p>
+<h3 id="1-5-13-free（系统内存）"><a href="#1-5-13-free（系统内存）" class="headerlink" title="1.5.13.   free（系统内存）"></a>1.5.13.   free（系统内存）</h3><p>查看系统内存。</p>
+<p>-b 显示内存的单位为字节</p>
+<p>-k 显示内存的单位为 KB</p>
+<p>-m 显示内存的单位为 M</p>
+<p>-t 总和信息</p>
+<p>-s&lt;时间&gt; 每隔指定时间执行一次命令，单位为s</p>
+<p>补充（清楚虚拟内存）：</p>
+<p>swapoff 命令：可以关闭交换分区</p>
+<p>swapon命令：可以打开交换分区。</p>
+<p>![img](Linux 常用命令总结/clip_image015.png)</p>
+<h3 id="1-5-14-ethtool（查询及设置网卡参数）"><a href="#1-5-14-ethtool（查询及设置网卡参数）" class="headerlink" title="1.5.14.   ethtool（查询及设置网卡参数）"></a>1.5.14.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/ethtool">ethtool</a>（查询及设置网卡参数）</h3><p>ethtool eth*   #查询eth*网口基本设置</p>
+<p>ethtool –i eth*  #查询eth*网口的相关信息 </p>
+<p>ethtool –S eth*  #查询eth*网口收发包统计</p>
+<p>ethtool –s eth*  [speed 10|100|1000]\     #设置网口速率10/100/1000M</p>
+<p>[duplex half|full]\      #设置网口半/全双工</p>
+<p>[autoneg on|off]\      #设置网口是否自协商</p>
+<p>[port tp|aui|bnc|mii]\     #设置网口类型</p>
+<p>ethtool -s eth1 autoneg off speed 100 duplex full  #设置eth1网口速率</p>
+<h3 id="1-5-15-date（系统时间）"><a href="#1-5-15-date（系统时间）" class="headerlink" title="1.5.15.   date（系统时间）"></a>1.5.15.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/date">date</a>（系统时间）</h3><p>显示与设置系统时间。</p>
+<p>-s, –set=STRING 根据 STRING 设置时间</p>
+<p>%Y 年(用 4 位表示) (1970…)</p>
+<p>%m月份(用两位表示) (01..12) </p>
+<p>%d (月份中的)几号(用两位表示) (01..31) </p>
+<p>%F : 等于%Y-%m-%d</p>
+<p>%H 小时(按 24 小时制显示，用两位表示) (00..23)</p>
+<p>%M 分钟数(用两位表示) (00..59)</p>
+<p>%S 秒数(用两位表示)(00..60)</p>
+<p>%x 按照 (mm/dd/yy) 格式显示当前日期 </p>
+<p>%X 按照 (%H:%M:%S) 格式显示当前时间</p>
+<p>date –s “13:00:00 2018-03-21” #字符串设置时间 </p>
+<p>date +%Y%m%d #获取日期格式为20180321</p>
+<p>补充：</p>
+<p>   <a target="_blank" rel="noopener" href="https://www.cnblogs.com/zydev/p/5172782.html">ntpdate</a> -u ntp.api.bz #同步网络时间</p>
+<p>   hwclock查看硬件时间</p>
+<p>clock –w同步系统时间</p>
+<h3 id="1-5-16-cal（日历）"><a href="#1-5-16-cal（日历）" class="headerlink" title="1.5.16.   cal（日历）"></a>1.5.16.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/cal">cal</a>（日历）</h3><p>查看日历等时间信息。</p>
+<p>-m 以星期一开头，显示日历</p>
+<p>-s 以星期日开头，显示日历</p>
+<p>![img](Linux 常用命令总结/clip_image016.png)</p>
+<h3 id="1-5-17-hexdump"><a href="#1-5-17-hexdump" class="headerlink" title="1.5.17.   hexdump"></a>1.5.17.   hexdump</h3><p><a target="_blank" rel="noopener" href="http://man7.org/linux/man-pages/man1/hexdump.1.html">链接</a></p>
+<p>以十六进制，十进制，八进制或十进制或ASCII显示文件内容。一般用来看磁盘里有没有数据。</p>
+<p>-C ： 规范的十六进制+ ASCII显示</p>
+<p>hexdump -C </p>
+<h3 id="1-5-18-strace"><a href="#1-5-18-strace" class="headerlink" title="1.5.18.   strace"></a>1.5.18.   strace</h3><p>  <a target="_blank" rel="noopener" href="https://linux.die.net/man/1/strace">man page</a></p>
+<p>  <a target="_blank" rel="noopener" href="https://www.linuxidc.com/Linux/2018-01/150654.htm">Linux公社</a></p>
+<p>  监控用户空间进程和内核的交互，比如系统调用、信号传递、进程状态变更等。</p>
+<p>  strace底层使用内核的ptrace特性来实现其功能。</p>
+<p>-tt 在每行输出的前面，显示毫秒级别的时间</p>
+<p>-T 显示每次系统调用所花费的时间</p>
+<p>-v 对于某些相关调用，把完整的环境变量，文件stat结构等打出来。</p>
+<p>-f 跟踪目标进程，以及目标进程创建的所有子进程</p>
+<p>-e 控制要跟踪的事件和跟踪行为,比如指定要跟踪的系统调用名称</p>
+<p>-o 把strace的输出单独写到指定的文件</p>
+<p>-s 当系统调用的某个参数是字符串时，最多输出指定长度的内容，默认是32个字节</p>
+<p>-p 指定要跟踪的进程pid, 要同时跟踪多个pid, 重复多次-p选项即可。</p>
+<p>  要跟踪某个具体的系统调用，-e trace=xxx即可。但有时候我们要跟踪一类系统调用，比如所有和文件名有关的调用、所有和内存分配有关的调用。如果人工输入每一个具体的系统调用名称，可能容易遗漏。于是strace提供了几类常用的系统调用组合名字。</p>
+<p>-e trace=file   跟踪和文件访问相关的调用(参数中有文件名)</p>
+<p>-e trace=process 和进程管理相关的调用，比如fork/exec/exit_group</p>
+<p>-e trace=network 和网络通信相关的调用，比如socket/sendto/connect</p>
+<p>-e trace=signal  信号发送和处理相关，比如kill/sigaction</p>
+<p>-e trace=desc 和文件描述符相关，比如write/read/select/epoll等</p>
+<p>-e trace=ipc 进程见同学相关，比如shmget等</p>
+<p>注意：比如我们知道创建进程使用的是fork系统调用，但在glibc里面，fork的调用实际上映射到了更底层的clone系统调用。使用strace时，得指定-e trace=clone, 指定-e trace=fork什么也匹配不上。</p>
+<p>strace -tt -T -v -o /root/test.log cat /dev/null</p>
+<p>strace -tt -T -v -e trace=file -o /root/test.log cat /dev/null</p>
+<h2 id="1-6-搜索文件命令（4个）"><a href="#1-6-搜索文件命令（4个）" class="headerlink" title="1.6. 搜索文件命令（4个）"></a>1.6. 搜索文件命令（4个）</h2><h3 id="1-6-1-which（找二进制命令）"><a href="#1-6-1-which（找二进制命令）" class="headerlink" title="1.6.1. which（找二进制命令）"></a>1.6.1. which（找二进制命令）</h3><p>查找二进制命令，按环境变量PATH路径查找。</p>
+<p>which 是从环境变量的路径中找的命令</p>
+<p>![img](Linux 常用命令总结/clip_image017.png)</p>
+<h3 id="1-6-2-find（找file-dir）"><a href="#1-6-2-find（找file-dir）" class="headerlink" title="1.6.2. find（找file/dir）"></a>1.6.2. find（找file/dir）</h3><p>从磁盘遍历查找文件或目录。</p>
+<h3 id="1-6-3-whereis（找二进制命令）"><a href="#1-6-3-whereis（找二进制命令）" class="headerlink" title="1.6.3. whereis（找二进制命令）"></a>1.6.3. whereis（找二进制命令）</h3><p>查找二进制命令，按环境变量PATH路径查找。</p>
+<p>-b  定位可执行文件。</p>
+<p>-m  定位帮助文件。</p>
+<p>-s  定位源代码文件。</p>
+<p>![img](Linux 常用命令总结/clip_image018.png)</p>
+<h3 id="1-6-4-locate（找file-dir）"><a href="#1-6-4-locate（找file-dir）" class="headerlink" title="1.6.4. locate（找file/dir）"></a>1.6.4. <a target="_blank" rel="noopener" href="https://www.cnblogs.com/xqzt/p/5426666.html">locate</a>（找file/dir）</h3><p>相当于find –name，但比find更快。从数据库 (/var/lib/mlocate/mlocate.db) 查找命令，使用updatedb更新库。</p>
+<p>locate 查询文件时，需跟绝对路径</p>
+<p>usr/bin/updatedb  主要用来更新数据库，通过crontab自动完成的</p>
+<p>/usr/bin/locate     查询文件位置</p>
+<p>/etc/updatedb.conf  updatedb的配置文件</p>
+<p>/var/lib/mlocate/mlocate.db 存放文件信息的文件</p>
+<p>locate /etc/my #搜索etc目录下所有以my开头的文件</p>
+<h2 id="1-7-用户管理命令（10个）"><a href="#1-7-用户管理命令（10个）" class="headerlink" title="1.7. 用户管理命令（10个）"></a>1.7. 用户管理命令（10个）</h2><h3 id="1-7-1-useradd"><a href="#1-7-1-useradd" class="headerlink" title="1.7.1. useradd"></a>1.7.1. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/useradd">useradd</a></h3><p>添加用户。</p>
+<p>创建用户账号（root的uid是0，1-499系统保留，500开始为用户uid。gid同此）</p>
+<p>-u 指定uid</p>
+<p>-s 指定登录shell</p>
+<p>-d home_dir 登录时的home_dir目录</p>
+<p>-m 若指定目录不存在，创建目录</p>
+<p>-M 不创建家目录</p>
+<p>-e expire_date 账号终止日期。格式MM/DD/YY</p>
+<p>-f inactive_days 过期几日停权。默认-1（关闭功能）</p>
+<p>-g initial_group 主组 -G group 附组</p>
+<p>-r 建立系统账号</p>
+<p>   补充：</p>
+<p>   useradd –D 参数（修改/etc/default/useradd的参数）</p>
+<p>-b default_home 定义使用者所属目录的前一个目录。使用者名称会附加在default_home后面用来建立新使用者的目录。当然使用-d后则此选项无效。</p>
+<p>-e default_expire_date使用者帐号停止日期。</p>
+<p>-f default_inactive帐号过期几日后停权。</p>
+<p>-g default_group新帐号起始群组名或ID。群组名须为现有存在的名称。群组ID也须</p>
+<p>为现有存在的群组。</p>
+<p>-s default_shell使用者登入后使用的shell名称。往后新加入的帐号都将使用此shell.</p>
+<p>/etc/login.defs（控制user的umask等参数）</p>
+<p>/etc/skel 是用户创建家目录时的模板</p>
+<p>![img](Linux 常用命令总结/clip_image019.png)</p>
+<h3 id="1-7-2-usermod（修改用户属性）"><a href="#1-7-2-usermod（修改用户属性）" class="headerlink" title="1.7.2. usermod（修改用户属性）"></a>1.7.2. usermod（修改用户属性）</h3><p>修改系统已经存在的用户属性。</p>
+<p>-c&lt;备注&gt;：修改用户帐号的备注文字；</p>
+<p>-d&lt;登入目录&gt;：修改用户登入时的目录；</p>
+<p>-e&lt;有效期限&gt;：修改帐号的有效期限；</p>
+<p>-f&lt;缓冲天数&gt;：修改在密码过期后多少天即关闭该帐号；</p>
+<p>-g&lt;群组&gt;：修改用户所属的群组；</p>
+<p>-G&lt;群组&gt;；修改用户所属的附加群组；</p>
+<p>-l&lt;帐号名称&gt;：修改用户帐号名称；</p>
+<p>-L：锁定用户密码，用户无法更改自己的密码，其他普通用户无法切换到他；</p>
+<p>-s<shell>：修改用户登入后所使用的shell；</p>
+<p>-u<uid>：修改用户ID；</p>
+<p>-U:解除密码锁定。</p>
+<p>usermod -l new_name old_name # 修改用户名</p>
+<p>usermod -G 附加组 user #将user加入附加组</p>
+<h3 id="1-7-3-userdel"><a href="#1-7-3-userdel" class="headerlink" title="1.7.3. userdel"></a>1.7.3. userdel</h3><p>删除用户。</p>
+<p>f：强制删除用户，即使用户当前已登录；</p>
+<p>-r：删除用户的同时，删除与用户相关的所有文件。</p>
+<p>userdel user #删除用户</p>
+<h3 id="1-7-4-groupadd"><a href="#1-7-4-groupadd" class="headerlink" title="1.7.4. groupadd"></a>1.7.4. groupadd</h3><p>添加用户组。</p>
+<p>-g gid 指定gid</p>
+<h3 id="1-7-5-groupmod（修改组属性）"><a href="#1-7-5-groupmod（修改组属性）" class="headerlink" title="1.7.5. groupmod（修改组属性）"></a>1.7.5. groupmod（修改组属性）</h3><p>修改gid或组名</p>
+<p>-n group_name 更改群组名</p>
+<p>groupmod old_name –n new_name</p>
+<h3 id="1-7-6-passwd（修改用户密码）"><a href="#1-7-6-passwd（修改用户密码）" class="headerlink" title="1.7.6. passwd（修改用户密码）"></a>1.7.6. <a target="_blank" rel="noopener" href="https://www.cnblogs.com/Alanf/p/7994324.html">passwd</a>（修改用户密码）</h3><p>修改用户密码。</p>
+<p>-d     关闭使用者的密码认证功能, 使用者在登入时将可以不用输入密码</p>
+<p>-k, –keep-tokens 保留即将过期的用户在期满后能仍能使用；</p>
+<p>-l, –lock    同usermod - L，锁住用户密码，其不能修改，其他普通用户不能切换到他</p>
+<p>-u, –unlock 同usermod - U解除锁定；</p>
+<p>-f, –force   强制操作；仅root权限才能操作；</p>
+<p>-x, –maximum=DAYS 两次密码修正的最大天数，后面接数字；仅能root权限操作；</p>
+<p>-n, –minimum=DAYS  两次密码修改的最小天数，后面接数字，仅能root权限操作；</p>
+<p>-w, –warning=DAYS 在距多少天提醒用户修改密码；仅能root权限操作；</p>
+<p>-i, –inactive=DAYS  在密码过期后多少天，用户被禁掉，仅能以root操作；（注意区分密码过期和账号到期）</p>
+<p>-S, –status     显示指定使用者的密码认证种类，仅能root用户操作；</p>
+<p>–sidin 从标准输入中读取，用于非交互式修改密码<br> echo “123” | passwd –stdin user # 修改user的密码</p>
+<h3 id="1-7-7-chage（修改用户密码属性）"><a href="#1-7-7-chage（修改用户密码属性）" class="headerlink" title="1.7.7. chage（修改用户密码属性）"></a>1.7.7. chage（修改用户密码属性）</h3><p>修改用户密码有效期限。</p>
+<p>-m 密码可更改的最小天数。为零时代表任何时候都可以更改密码。</p>
+<p>-M 密码保持有效的最大天数。</p>
+<p>-W 用户密码到期前，提前收到警告信息的天数。</p>
+<p>-E 帐号到期的日期。过了这天，此帐号将不可用。</p>
+<p>-d 上一次更改的日期</p>
+<p>-I(大写i) 停滞时期。如果一个密码已过期这些天，那么此帐号将不可用。</p>
+<p>-l 列出当前的设置。由非特权用户来确定他们的密码或帐号何时过期。</p>
+<p>chage -d 0 -m 0 -M 90 -W 15 user  #强制用户下次登陆时修改密码，并且设置密码最低有效期0和最高有限期90，提前15天发警报提示</p>
+<p>用户和组的账号密码存储解析：</p>
+<ol>
+<li>/etc/passwd：存储用户的账号信息</li>
+</ol>
+<p>用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell</p>
+<ol start="2">
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/yaofeino1/article/details/54616440">/etc/shadow</a>：存储用户密码信息</li>
+</ol>
+<p>登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间[用户没有登录活动但账号仍能保持有效的最大天数] :失效时间[expire_days]:保留</p>
+<ol start="3">
+<li>/etc/group：存储组账号信息</li>
+</ol>
+<p>组名:口令:组标识号:组内用户列表</p>
+<ol start="4">
+<li>/etc/gshadow：存储组密码信息</li>
+</ol>
+<p>组名：口令：组管理者：组内用户列表 </p>
+<h3 id="1-7-8-id（查user的uid-gid）"><a href="#1-7-8-id（查user的uid-gid）" class="headerlink" title="1.7.8. id（查user的uid/gid）"></a>1.7.8. id（查user的uid/gid）</h3><p>查看用户的uid,gid及归属的用户组。</p>
+<h3 id="1-7-9-su（切换用户）"><a href="#1-7-9-su（切换用户）" class="headerlink" title="1.7.9. su（切换用户）"></a>1.7.9. su（切换用户）</h3><p>切换用户身份。</p>
+<p>su 和 su – 的区别是su不切换环境变量，su – 切换环境变量</p>
+<h3 id="1-7-10-visudo（编辑-etc-sudoers）"><a href="#1-7-10-visudo（编辑-etc-sudoers）" class="headerlink" title="1.7.10.   visudo（编辑/etc/sudoers）"></a>1.7.10.   visudo（编辑/etc/sudoers）</h3><p>编辑/etc/sudoers文件的专属命令。</p>
+<p>注意别名的使用，可以提高效率。凡是命令必须用绝对路径</p>
+<p>Defaults logfile=/var/adm/sudo.log #在配置文件中增加这一行，以监控用户对sudo的操作。logfile 是自己指定的目录</p>
+<h3 id="1-7-11-sudo（以其他身份执行命令）"><a href="#1-7-11-sudo（以其他身份执行命令）" class="headerlink" title="1.7.11.   sudo（以其他身份执行命令）"></a>1.7.11.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/sudo">sudo</a>（以其他身份执行命令）</h3><p>以另外一个用户身份（默认root用户）执行事先在sudoers文件允许的命令。</p>
+<p>sudo的时间戳默认是5分钟，5分钟内重复用sudo，不需要密码</p>
+<p>-k：结束密码的有效期限，也就是下次再执行sudo时便需要输入密码</p>
+<p>-l：列出用户能执行的命令</p>
+<p>-v：更新时间戳，时间戳默认5分钟，五分钟到就需要再次密码，使用-v可以续5分钟</p>
+<p>-E：在执行命令时，保留用户环境</p>
+<p>-i: 为了频繁的执行某些只有超级用户才能执行的权限，而不用每次输入密码，可以使用该命令。提示输入密码时该密码为当前账户的密码。没有时间限制。执行该命令后提示符变为“#”而不是“$”。想退回普通账户时可以执行“exit”或“logout”</p>
+<p>sudo –l user #列出用户被授予的权限命令</p>
+<h3 id="1-7-12-Openssl"><a href="#1-7-12-Openssl" class="headerlink" title="1.7.12.   Openssl"></a>1.7.12.   Openssl</h3><p>OpenSSL是用于传输层安全（Transport Layer Security / TLS）和安全套接字层（Secure Sockets Layer / SSL）协议的健壮、商业级和功能齐全的工具包。它也是一个通用密码库。</p>
+<p>OpenSSL是一个加密工具包，实现了安全套接字层（sslv2/v3）和传输层安全（TLS v1）网络协议以及它们所需的相关加密标准。</p>
+<p>openssl程序是一个命令行程序，用于从shell使用openssl加密库的各种加密功能。它可以用于：</p>
+<p>o创建和管理私钥、公钥和参数</p>
+<p>o公钥加密操作</p>
+<p>o创建X.509证书、CSR和CRL</p>
+<p>o计算消息摘要和消息认证码</p>
+<p>o用密码加密和解密</p>
+<p>o SSL/TLS客户端和服务器测试</p>
+<p>o处理S/MIME签名或加密邮件</p>
+<p>o时间戳请求、生成和验证</p>
+<p>语法格式：</p>
+<p>openssl command [ command_opts ] [ command_args ]</p>
+<p>常用command:</p>
+<p>version   用于查看版本信息</p>
+<p>enc     用于加解密</p>
+<p>ciphers   列出加密套件</p>
+<p>genrsa   用于生成私钥</p>
+<p>rsa     RSA密钥管理(例如:从私钥中提取公钥)</p>
+<p>req     生成证书签名请求(CSR)</p>
+<p>crl     证书吊销列表(CRL)管理</p>
+<p>ca     CA管理(例如对证书进行签名)</p>
+<p>dgst    生成信息摘要</p>
+<p>rsautl   用于完成RSA签名、验证、加密和解密功能</p>
+<p>passwd   生成散列密码</p>
+<p>rand    生成伪随机数</p>
+<p>speed    用于测试加解密速度          </p>
+<p>s_client  通用的SSL/TLS客户端测试工具</p>
+<p>X509    X.509证书管理</p>
+<p>verify    X.509证书验证</p>
+<p>pkcs7    PKCS#7协议数据管理</p>
+<h2 id="1-8-基础网络操作命令（11个）"><a href="#1-8-基础网络操作命令（11个）" class="headerlink" title="1.8. 基础网络操作命令（11个）"></a>1.8. 基础网络操作命令（11个）</h2><h3 id="1-8-1-telnet"><a href="#1-8-1-telnet" class="headerlink" title="1.8.1. telnet"></a>1.8.1. telnet</h3><p>使用TELNET协议远程登录。</p>
+<p>telnet 127.0.0.1 6379   #当前用户登录远程主机</p>
+<h3 id="1-8-2-ssh"><a href="#1-8-2-ssh" class="headerlink" title="1.8.2. ssh"></a>1.8.2. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/ssh">ssh</a></h3><p>使用SSH加密协议远程登录。</p>
+<p>-l login_name 指定登录远程主机的用户. 可以在配置文件中对每个主机单独设定这个参数</p>
+<p>-p port 指定远程主机的端口. 可以在配置文件中对每个主机单独设定这个参数</p>
+<p>-D port 指定一个本地机器动态的应用程序端口转发。工作原理是这样的, 本地机器上分配了一个 socket 侦听 port 端口, 一旦这个端口上有了连接, 该连接就经过安全通道转发出去, 根据应用程序的协议可以判断出远程主机将和哪里连接. 目前支持 SOCKS4 协议, 将充当 SOCKS4 服务器. 只有 root 才能转发特权端口. 可以在配置文件中指定动态端口的转发</p>
+<p>ssh 192.168.1.108   #当前用户登录远程主机</p>
+<p>ssh 192.168.1.108 -l tank  #以tank用户登录远程主机</p>
+<p>ssh <a href="mailto:&#116;&#x61;&#x6e;&#107;&#64;&#49;&#x39;&#50;&#46;&#x31;&#x36;&#x38;&#46;&#49;&#x2e;&#49;&#48;&#56;">&#116;&#x61;&#x6e;&#107;&#64;&#49;&#x39;&#50;&#46;&#x31;&#x36;&#x38;&#46;&#49;&#x2e;&#49;&#48;&#56;</a> -p 2222 #指定端口登录</p>
+<p>ssh -D 7575 <a href="mailto:&#116;&#x61;&#110;&#x6b;&#64;&#49;&#x39;&#50;&#x2e;&#49;&#54;&#56;&#46;&#49;&#46;&#49;&#48;&#56;">&#116;&#x61;&#110;&#x6b;&#64;&#49;&#x39;&#50;&#x2e;&#49;&#54;&#56;&#46;&#49;&#46;&#49;&#48;&#56;</a> #通过代理登录</p>
+<p>ssh 192.168.1.2 date  #远程执行date命令</p>
+<p>ssh-copy-id -i .ssh/id_rsa.pub 10.90.0.136  #发送公钥</p>
+<h3 id="1-8-3-ssh-keygen"><a href="#1-8-3-ssh-keygen" class="headerlink" title="1.8.3. ssh-keygen"></a>1.8.3. ssh-keygen</h3><p>注：公钥内容拷贝到authorized_keys中使用</p>
+<p>  <strong>-a</strong> <em>trials</em></p>
+<p>​       在使用 <strong>-T</strong> 对 DH-GEX 候选素数进行安全筛选时需要执行的基本测试数量。</p>
+<p>   <strong>-B</strong>    显示指定的公钥/私钥文件的 bubblebabble 摘要。</p>
+<p>   <strong>-b</strong> <em>bits</em></p>
+<p>​       指定密钥长度。对于RSA密钥，最小要求768位，默认是2048位。DSA密钥必须恰好是1024位(FIPS 186-2 标准的要求)。</p>
+<p>   <strong>-C</strong> <em>comment</em></p>
+<p>​       提供一个新注释</p>
+<p>   <strong>-c</strong>    要求修改私钥和公钥文件中的注释。本选项只支持 RSA1 密钥。</p>
+<p>​       程序将提示输入私钥文件名、密语(如果存在)、新注释。</p>
+<p>   <strong>-D</strong> <em>reader</em></p>
+<p>​       下载存储在智能卡 <em>reader</em> 里的 RSA 公钥。</p>
+<p>   <strong>-e</strong>    读取OpenSSH的私钥或公钥文件，并以 RFC 4716 SSH 公钥文件格式在 stdout 上显示出来。</p>
+<p>​       该选项能够为多种商业版本的 SSH 输出密钥。</p>
+<p>   <strong>-F</strong> <em>hostname</em></p>
+<p>​       在 <em>known_hosts</em> 文件中搜索指定的 <em>hostname</em> ，并列出所有的匹配项。</p>
+<p>​       这个选项主要用于查找散列过的主机名/ip地址，还可以和 <strong>-H</strong> 选项联用打印找到的公钥的散列值。</p>
+<p>   <strong>-f</strong> <em>filename</em></p>
+<p>​       指定密钥文件名。</p>
+<p>   <strong>-G</strong> <em>output_file</em></p>
+<p>​       为 DH-GEX 产生候选素数。这些素数必须在使用之前使用 <strong>-T</strong> 选项进行安全筛选。</p>
+<p>   <strong>-g</strong>    在使用 <strong>-r</strong> 打印指纹资源记录的时候使用通用的 DNS 格式。</p>
+<p>   <strong>-H</strong>    对 <em>known_hosts</em> 文件进行散列计算。这将把文件中的所有主机名/ip地址替换为相应的散列值。</p>
+<p>​       原来文件的内容将会添加一个”.old”后缀后保存。这些散列值只能被 <strong>ssh</strong> 和 <strong>sshd</strong> 使用。</p>
+<p>​       这个选项不会修改已经经过散列的主机名/ip地址，因此可以在部分公钥已经散列过的文件上安全使用。</p>
+<p>   <strong>-i</strong>    读取未加密的SSH-2兼容的私钥/公钥文件，然后在 stdout 显示OpenSSH兼容的私钥/公钥。</p>
+<p>​       该选项主要用于从多种商业版本的SSH中导入密钥。</p>
+<p>   <strong>-l</strong>    显示公钥文件的指纹数据。它也支持 RSA1 的私钥。</p>
+<p>​       对于RSA和DSA密钥，将会寻找对应的公钥文件，然后显示其指纹数据。</p>
+<p>   <strong>-M</strong> <em>memory</em></p>
+<p>​       指定在生成 DH-GEXS 候选素数的时候最大内存用量(MB)。</p>
+<p>   <strong>-N</strong> <em>new_passphrase</em></p>
+<p>​       提供一个新的密语。</p>
+<p>   <strong>-P</strong> <em>passphrase</em></p>
+<p>​       提供(旧)密语。</p>
+<p>   <strong>-p</strong>    要求改变某私钥文件的密语而不重建私钥。程序将提示输入私钥文件名、原来的密语、以及两次输入新密语。</p>
+<p>   <strong>-q</strong>    安静模式。用于在 <em>/etc/rc</em> 中创建新密钥的时候。</p>
+<p>   <strong>-R</strong> <em>hostname</em></p>
+<p>​       从 <em>known_hosts</em> 文件中删除所有属于 <em>hostname</em> 的密钥。</p>
+<p>​       这个选项主要用于删除经过散列的主机(参见 <strong>-H</strong> 选项)的密钥。</p>
+<p>   <strong>-r</strong> <em>hostname</em></p>
+<p>​       打印名为 <em>hostname</em> 的公钥文件的 SSHFP 指纹资源记录。</p>
+<p>   <strong>-S</strong> <em>start</em></p>
+<p>​       指定在生成 DH-GEX 候选模数时的起始点(16进制)。</p>
+<p>   <strong>-T</strong> <em>output_file</em></p>
+<p>​       测试 Diffie-Hellman group exchange 候选素数(由 <strong>-G</strong> 选项生成)的安全性。</p>
+<p>   <strong>-t</strong> <em>type</em></p>
+<p>​       指定要创建的密钥类型。可以使用：”rsa1”(SSH-1) “rsa”(SSH-2) “dsa”(SSH-2)</p>
+<p>   <strong>-U</strong> <em>reader</em></p>
+<p>​       把现存的RSA私钥上传到智能卡 <em>reader</em></p>
+<p>   <strong>-v</strong>    详细模式。<strong>ssh-keygen</strong> 将会输出处理过程的详细调试信息。常用于调试模数的产生过程。</p>
+<p>​       重复使用多个 <strong>-v</strong> 选项将会增加信息的详细程度(最大3次)。</p>
+<p>   <strong>-W</strong> <em>generator</em></p>
+<p>​       指定在为 DH-GEX 测试候选模数时想要使用的 generator</p>
+<p>   <strong>-y</strong>    读取OpenSSH专有格式的公钥文件，并将OpenSSH公钥显示在 stdout 上。</p>
+<h3 id="1-8-4-scp（不同主机间复制）"><a href="#1-8-4-scp（不同主机间复制）" class="headerlink" title="1.8.4. scp（不同主机间复制）"></a>1.8.4. scp（不同主机间复制）</h3><p>全拼securecopy，用于不同主机之间复制文件，使用SSH（1）作为数据传输。</p>
+<p>-P port 指定连接远程连接端口。注意这个选项需要写成大写的模式</p>
+<p>-r 递归的复制整个文件夹</p>
+<p>-i identity_file选择被RSA认证读取私有密码的文件。这个选项可以直接被传递到ssh(1)</p>
+<p>scp -r <a href="mailto:&#x74;&#97;&#x6e;&#107;&#x40;&#x31;&#57;&#50;&#x2e;&#49;&#x36;&#46;&#49;&#46;&#49;&#x30;&#56;">&#x74;&#97;&#x6e;&#107;&#x40;&#x31;&#57;&#50;&#x2e;&#49;&#x36;&#46;&#49;&#46;&#49;&#x30;&#56;</a>:/var/www/blog /home/www/blog #以tank用户登录并将服务器文件夹copy到本地</p>
+<p>scp /home/www/blog/index.php 192.16.1.108:/var/www/blog #将本地文件copy到服务器，添填写用户，默认当前用户</p>
+<p>scp -P 20022 -r ../vhost/ <a href="mailto:&#122;&#104;&#117;&#x71;&#105;&#97;&#110;&#x67;&#x40;&#49;&#57;&#50;&#x2e;&#x31;&#x36;&#x38;&#46;&#48;&#46;&#x32;&#x30;&#48;">&#122;&#104;&#117;&#x71;&#105;&#97;&#110;&#x67;&#x40;&#49;&#57;&#50;&#x2e;&#x31;&#x36;&#x38;&#46;&#48;&#46;&#x32;&#x30;&#48;</a>:/home/test/ #使用指定端口从本地拷到远程服务器</p>
+<p>sudo scp -r -i /Users/test/wx_Document/private.crt -P 2323 <a href="mailto:&#x72;&#111;&#x6f;&#x74;&#x40;&#49;&#x30;&#46;&#49;&#x33;&#x35;&#46;&#49;&#55;&#56;&#x2e;&#x36;">&#x72;&#111;&#x6f;&#x74;&#x40;&#49;&#x30;&#46;&#49;&#x33;&#x35;&#46;&#49;&#55;&#56;&#x2e;&#x36;</a>:/data/htdocs/www/logs /Users/local #使用证书登录，并递归的将远程目录下载到本地，同时指定了所需要的端口号</p>
+<h3 id="1-8-5-wget（下载）"><a href="#1-8-5-wget（下载）" class="headerlink" title="1.8.5. wget（下载）"></a>1.8.5. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/wget">wget</a>（下载）</h3><p>命令行下载文件。</p>
+<p>-c, –continue     断点续传下载文件</p>
+<p>-r, –recursive     递归下载</p>
+<p>-O             将文档写入file</p>
+<p>-Q, –quota=NUMBER  设置获取配额为 NUMBER 字节</p>
+<p>-P, –directory-prefix=PREFIX 以 PREFIX/… 保存文件</p>
+<p>-nd, –no-directories      不创建目录</p>
+<p>-np, –no-parent         不追溯至父目录</p>
+<p>wget -r -np -nd <a target="_blank" rel="noopener" href="http://tel.mirrors.163.com/centos/6.4/os/x86_64/">http://tel.mirrors.163.com/centos/6.4/os/x86_64/</a>  #下载 <a target="_blank" rel="noopener" href="http://tel.mirrors.163.com/centos/6.4/os/x86_64/">http://tel.mirrors.163.com/centos/6.4/os/x86_64/</a> 目录中的所有文件</p>
+<h3 id="1-8-6-ping"><a href="#1-8-6-ping" class="headerlink" title="1.8.6. ping"></a>1.8.6. ping</h3><p>测试主机之间网络的连通性。</p>
+<p>-c：count 在发送(和接收)了正好数量为 count 的回显应答分组后停止操作</p>
+<p>-i：wait 在发送每个分组时等待 wait 个秒数</p>
+<p>-q：静态输出。在程序启动和结束时只显示摘要行</p>
+<p>-w：waitsecs 在 waitsecs 秒后停止 ping 程序的执行。即指定ping多久</p>
+<p>-s：packetsize 指定要发送数据的字节量</p>
+<p>-t：设置TTL值（TTL是网络包经过的最大网段数量，最大255）</p>
+<p>ping -i 3 -s 1024 -t 255 192.168.120.206 # -i 3 发送周期为 3秒 -s 设置发送包的大小为1024 -t 设置TTL值为 255</p>
+<h3 id="1-8-7-route"><a href="#1-8-7-route" class="headerlink" title="1.8.7. route"></a>1.8.7. route</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/snake-hand/p/3143041.html">route 结果参数详解</a></p>
+<p>显示和设置linux系统的路由表。</p>
+<p>-n：以数字形式代替解释主机名形式来显示地址。此项对试图检测对域名服务器进行路由发生故障的原因非常有用。</p>
+<p>-net：路由目标为网络。</p>
+<p>-host：路由目标为主机。</p>
+<p>-F：显示内核的FIB选路表。其格式可以用-e 和 -ee选项改变。# FIB表是路由表中的最优路由条目导入到FIB中的也可以是由ARP生成的,是真正指导数据转发的表。</p>
+<p>-e：netstat格式显示路由表</p>
+<p>-C：显示内核的路由缓存。</p>
+<p>-f 清除所有网关入口的路由表。</p>
+<p>-p 与 add 命令一起使用时使路由具有永久性。</p>
+<p>del：删除一条路由。</p>
+<p>add：添加一条路由。</p>
+<p>target：指定目标网络或主机。可以用点分十进制形式的IP地址或主机/网络名。</p>
+<p>netmask Nm：为添加的路由指定网络掩码。</p>
+<p>gw Gw：为发往目标网络/主机的任何分组指定网关。注意：指定的网关首先必须是可达的。也就是说必须为该网关预先指定一条静态路由。如果你为本地接口之一指定这个网关地址的话，那么此网关地址将用于决定此接口上的分组将如何进行路由。</p>
+<p>route add -net 224.0.0.0 netmask 240.0.0.0 reject #增加一条屏蔽的路由，目的地址为224.x.x.x将被拒绝</p>
+<p>route add -host 192.168.0.2 gw 192.168.0.1   #所有去往192.168.0.2主机的数据包发往网关地址192.168.0.1</p>
+<p>#添加路由</p>
+<p>route add -net 192.168.0.0/24 gw 192.168.0.1</p>
+<p>route add -host 192.168.1.1 dev 192.168.0.1</p>
+<p>ip route add 192.168.0.0/24 via 192.168.0.1</p>
+<p>ip route add 192.168.1.1 dev 192.168.0.1</p>
+<p>#删除路由</p>
+<p>route del -net 192.168.0.0/24 gw 192.168.0.1</p>
+<p>ip route del 192.168.0.0/24 via 192.168.0.1</p>
+<p>#添加默认路由</p>
+<p>route add default gw 192.168.0.1</p>
+<h3 id="1-8-8-ifconfig（网络接口管理）"><a href="#1-8-8-ifconfig（网络接口管理）" class="headerlink" title="1.8.8. ifconfig（网络接口管理）"></a>1.8.8. ifconfig（网络接口管理）</h3><p>查看、配置、启用或禁用网络接口的命令。</p>
+<p>up 启动指定网络设备/网卡</p>
+<p>down 关闭指定网络设备/网卡</p>
+<p>-arp 设置指定网卡是否支持ARP协议（arp 开启 –arp 关闭）</p>
+<p>ifconfig -a #所有配置的网络接口，不论其是否激活</p>
+<p>ifconfig eth0 192.168.1.56 netmask 255.255.255.0 broadcast 192.168.1.255  #给eth0网卡配置IP地址,加上子掩码,加上个广播地址</p>
+<h3 id="1-8-9-ip（重点，网络管理命令）"><a href="#1-8-9-ip（重点，网络管理命令）" class="headerlink" title="1.8.9. ip（重点，网络管理命令）"></a>1.8.9. ip（重点，网络管理命令）</h3><p>是一个比ifconfig更强大的网络管理命令</p>
+<p>-s,-stats,-statistics 输出更为详尽的信息。如果这个选项出现两次或者多次，输出的信息将更为详尽。</p>
+<p>-f,-family 这个选项后面接协议种类，包括：inet、inet6或者link，强调使用的协议种类。如果没有足够的信息告诉ip使用的协议种类，ip就会使用默认值inet或者any。link比较特殊，它表示不涉及任何网络协议。</p>
+<p>-4 是-family inet的简写。</p>
+<p>-6 是-family inet6的简写。</p>
+<p>-0 是-family link的简写。</p>
+<p>-o,-oneline 对每行记录都使用单行输出，回行用字符代替。如果你需要使用wc、grep等工具处理ip的输出，会用到这个选项。</p>
+<p>-r,-resolve 查询域名解析系统，用获得的主机名代替主机IP地址</p>
+<p>ip [OPTIONS] OBJECT [COMMAND [ARGUMENTS]]</p>
+<p>OBJECT是你要管理或者获取信息的对象。目前ip认识的对象包括：</p>
+<p>link 网络设备</p>
+<p>address 一个设备的协议（IP或者IPV6）地址</p>
+<p>neighbour ARP或者NDISC缓冲区条目</p>
+<p>route 路由表条目</p>
+<p>rule 路由策略数据库中的规则</p>
+<p>maddress 多播地址</p>
+<p>mroute 多播路由缓冲区条目</p>
+<p>tunnel IP上的通道</p>
+<p>netns 命名空间</p>
+<p>另外，所有的对象名都可以简写，例如：address可以简写为addr，甚至是a</p>
+<p>COMMAND：add、delete、show/list</p>
+<p>ARGUMENTS：命令的一些参数</p>
+<p> ip link set dev eth0 up   #up/down 起动／关闭设备</p>
+<p> ip link set dev eth0 txqueuelen 100   #改变设备传输队列的长度</p>
+<p> ip link set dev eth0 mtu 1500    #改变网络设备MTU(最大传输单元)的值</p>
+<p> ip link set dev eth0 address 00:01:4f:00:15:f1   #修改网络设备的MAC地址</p>
+<p> ip -s -s link ls eth0   #查看eth0网卡信息 等同于ifconfig eth0</p>
+<p> ip addr add local 192.168.4.1/28 brd + label eth0:1 dev eth0   #为每个地址设置一个字符串作为标签</p>
+<p> ip addr add 192.168.4.2/24 brd + dev eth1 label eth1:1   #在以太网接口eth0上增加一个地址192.168.4.2，掩码长度为24位(155.155.155.0)，标准广播地址，标签为eth0:Alias</p>
+<p> ip addr del 192.168.4.1/24 brd + dev eth0 label eth0:1   #ip address delete–删除一个协议地址. 缩写：delete、del、d</p>
+<p> ip addr ls eth0    #ip address show–显示协议地址. 缩写：show、list、lst、sh、ls、l</p>
+<p> ip -s -s a f to 10/8   #删除属于私网10.0.0.0/8的所有地址</p>
+<p> ip -4 addr flush label “eth0”   #取消eth0的IP地址</p>
+<p> ip neigh add 10.0.0.3 lladdr 0:0:0:0:0:1 dev eth0 nud perm   #在设备eth0上，为地址10.0.0.3添加一个permanent ARP条目</p>
+<p> ip neigh chg 10.0.0.3 dev eth0 nud reachable   #把状态改为reachable</p>
+<p> ip neigh del 10.0.0.3 dev eth0   #删除设备eth0上的一个ARP条目10.0.0.3</p>
+<h4 id="1-8-9-1-ip-netns（namespace）"><a href="#1-8-9-1-ip-netns（namespace）" class="headerlink" title="1.8.9.1. ip netns（namespace）"></a>1.8.9.1. ip netns（namespace）</h4><p>namespace管理命令。注意：虚拟网络空间除了网络是虚的以外，文件系统完全和当前系统共享，也就是说所有本地可以使用的命令都可以在虚拟网络中使用</p>
+<p>ip netns</p>
+<p>add ns1：添加一个命名空间namespace1</p>
+<p>exec ns1 bash：进入ns1。通过exit退出</p>
+<p>ip link add name ns1-nic veth peer name ns1-vnic：添加一对veth设备</p>
+<p>ip link set ns1-vnic netns ns1：添加ns1-vnic到命名空间ns1</p>
+<p>我们这时再把另一个veth设备挂到bridge上。bridge即可与ns1通信。详情看<a href="#_brctl%EF%BC%88bridge%EF%BC%89">brctl</a></p>
+<p>常用命令总结：</p>
+<p>ip netns list ：列出所有namespace</p>
+<p>ip netns exec ns1 ip link set lo up:在ns1中启用设备lo</p>
+<p>ip link set 【dev-name】 netns ns1：在ns1中添加一个新设备</p>
+<p>ip netns exec ns1 ip addr show 【dev-name】 permanent scope global：查看ns1中指定设备的参数信息</p>
+<p>ip netns exec [name] ip -4 addr add 192.168.1.2/24 brd 192.168.1.255 scope global dev [dev-name]</p>
+<p>ip netns exec [name] ip addr add 192.168.56.1/24 dev [dev-name]</p>
+<p>为namespace中指定设备设置ip</p>
+<p>Usage: ip netns list</p>
+<p>​    ip netns add NAME</p>
+<p>​    ip netns set NAME NETNSID</p>
+<p>​    ip [-all] netns delete [NAME]</p>
+<p>​    ip netns identify [PID]</p>
+<p>​    ip netns pids NAME</p>
+<p>​    ip [-all] netns exec [NAME] cmd …</p>
+<p>​    ip netns monitor</p>
+<p>​    ip netns list-id</p>
+<h3 id="1-8-10-brctl（bridge）"><a href="#1-8-10-brctl（bridge）" class="headerlink" title="1.8.10.   brctl（bridge）"></a>1.8.10.   brctl（bridge）</h3><p>网桥管理工具包</p>
+<p>brrctl</p>
+<p>addbr br1：添加网桥br1</p>
+<p>delbr br1：删除网桥br1</p>
+<p>addif br1 eth0：将eth0端口加入br1</p>
+<p>delif br1 eth0：删除eth0端口从br1</p>
+<p>show/show br1：显示所有网桥信息/指定网桥信息</p>
+<p>ip addr add 192.168.56.1/24 dev br1：给br1添加IP</p>
+<p>ip addr del 192.168.56.1/24 dev br1：给br1删除IP</p>
+<p>命令参数</p>
+<p>Usage: brctl [commands]</p>
+<p>commands:</p>
+<p>​    addbr      <bridge>        add bridge</p>
+<p>​     delbr      <bridge>        delete bridge</p>
+<p>​    addif      <bridge> <device>    add interface to bridge</p>
+<p>​    delif      <bridge> <device>    delete interface from bridge</p>
+<p>​    setageing    <bridge> <time>     set ageing time</p>
+<p>​    setbridgeprio  <bridge> <prio>     set bridge priority</p>
+<p>​    setfd      <bridge> <time>     set bridge forward delay</p>
+<p>​    sethello    <bridge> <time>     set hello time</p>
+<p>​    setmaxage    <bridge> <time>     set max message age</p>
+<p>​    sethashel    <bridge> <int>     set hash elasticity</p>
+<p>​    sethashmax   <bridge> <int>     set hash max</p>
+<p>​    setmclmc    <bridge> <int>     set multicast last member count</p>
+<p>​    setmcrouter   <bridge> <int>     set multicast router</p>
+<p>​    setmcsnoop   <bridge> <int>     set multicast snooping</p>
+<p>​    setmcsqc     <bridge> <int>     set multicast startup query count</p>
+<p>​    setmclmi    <bridge> <time>     set multicast last member interval</p>
+<p>​    setmcmi     <bridge> <time>     set multicast membership interval</p>
+<p>​    setmcqpi    <bridge> <time>     set multicast querier interval</p>
+<p>​    setmcqi     <bridge> <time>     set multicast query interval</p>
+<p>​    setmcqri    <bridge> <time>     set multicast query response interval</p>
+<p>​    setmcqri    <bridge> <time>     set multicast startup query interval</p>
+<p>​    setpathcost   <bridge> <port> <cost> set path cost</p>
+<p>​    setportprio   <bridge> <port> <prio> set port priority</p>
+<p>​    setportmcrouter <bridge> <port> <int>  set port multicast router</p>
+<p>​    show      [ <bridge> ]      show a list of bridges</p>
+<p>​    showmacs    <bridge>        show a list of mac addrs</p>
+<p>​    showstp     <bridge>        show bridge stp info</p>
+<p>​    stp       <bridge> {on|off}    turn stp on/off</p>
+<h3 id="1-8-11-ifup"><a href="#1-8-11-ifup" class="headerlink" title="1.8.11.   ifup"></a>1.8.11.   ifup</h3><p>启动网卡。</p>
+<h3 id="1-8-12-ifdown"><a href="#1-8-12-ifdown" class="headerlink" title="1.8.12.   ifdown"></a>1.8.12.   ifdown</h3><p>关闭网卡。</p>
+<h3 id="1-8-13-netstat（获取socket信息）"><a href="#1-8-13-netstat（获取socket信息）" class="headerlink" title="1.8.13.   netstat（获取socket信息）"></a>1.8.13.   netstat（获取socket信息）</h3><p>查看网络状态。</p>
+<p>-a或–all：显示所有连线中的Socket；</p>
+<p>-c或–continuous：每秒列出所选信息 ；</p>
+<p>-C或–cache：显示路由缓冲中的路由信息；</p>
+<p>-e或–extend：显示附加信息。使用这个选项两次来获得所有细节；</p>
+<p>-F或–fib：显示FIB；</p>
+<p>-i或–interfaces：显示所有网络接口列表或者是指定的 interface；</p>
+<p>-l或–listening：只显示正在侦听的套接字；</p>
+<p>-n或–numeric：显示数字形式地址而不是去解析主机、端口或用户名；</p>
+<p>-p或–programs：显示套接字所属进程的PID和名称；</p>
+<p>-r或–route：显示内核路由表；</p>
+<p>-s或–statistice：显示每种协议的统计信息；</p>
+<p>-t或–tcp：显示TCP传输协议的连线状况；</p>
+<p>-u或–udp：显示UDP传输协议的连线状况；</p>
+<p>netstat –tnpl #显示已连接的TCP端口，以及PID</p>
+<p>netstat -ntu | grep :80 | awk ‘{print $5}’ | cut -d: -f1 | awk ‘{++ip[$1]} END {for(i in ip) print ip[i],”\t”,i}’ | sort –nr #查看连接某服务端口最多的的IP地址</p>
+<h3 id="1-8-14-ss（快速获取socket统计信息）"><a href="#1-8-14-ss（快速获取socket统计信息）" class="headerlink" title="1.8.14.   ss（快速获取socket统计信息）"></a>1.8.14.   ss（快速获取socket统计信息）</h3><p>查看网络状态。</p>
+<p>-n：不解析服务名称，以数字方式显示；</p>
+<p>-a：显示所有的套接字；</p>
+<p>-l：显示处于监听状态的套接字；</p>
+<p>-m：显示套接字的内存使用情况；</p>
+<p>-p：显示使用套接字的进程信息；</p>
+<p>-i：显示内部的TCP信息；</p>
+<p>-4：只显示ipv4的套接字；</p>
+<p>-6：只显示ipv6的套接字；</p>
+<p>-t：只显示tcp套接字；</p>
+<p>-u：只显示udp套接字；</p>
+<p>-d：只显示DCCP套接字；</p>
+<p>-w：仅显示RAW套接字；</p>
+<p>-x：仅显示UNIX域套接字。</p>
+<p>ss -p | grep 1372 #找出pid为1372进程正在使用的套接字</p>
+<h2 id="1-9-深入网络操作命令（10个）"><a href="#1-9-深入网络操作命令（10个）" class="headerlink" title="1.9. 深入网络操作命令（10个）"></a>1.9. 深入网络操作命令（10个）</h2><h3 id="1-9-1-nmap（网络探测和安全审核）"><a href="#1-9-1-nmap（网络探测和安全审核）" class="headerlink" title="1.9.1. nmap（网络探测和安全审核）"></a>1.9.1. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/nmap">nmap</a>（网络探测和安全审核）</h3><p>网络扫描命令（ping扫描，端口扫描，操作系统检测）。</p>
+<p>-O 获得远程主机操作系统类型</p>
+<p>-sP ping扫描，用ping方式检查网络上哪些主机正在运行。当主机阻塞ICMP echo请求包时，ping扫描是无效的。nmap在任何情况下都会进行ping扫描，只有目标主机处于运行状态，才会进行后续的扫描。</p>
+<p>-sU 如果你想知道在某台主机上提供哪些UDP(用户数据报协议,RFC768)服务，可以使用此选项。</p>
+<p>nmap -O 192.168.1.19       #探测目标主机的操作系统</p>
+<p>nmap -sP 192.168.1.0/24    #进行ping扫描，打印出对扫描做出响应的主机</p>
+<p>nmap -sL 192.168.1.0/24    #仅列出指定网络上的每台主机，不发送任何报文到目标主机</p>
+<p>nmap -PS 192.168.1.234     #探测目标主机开放的端口，可以指定一个以逗号分隔的端口列表(如-PS22，23，25，80)</p>
+<h3 id="1-9-2-mail"><a href="#1-9-2-mail" class="headerlink" title="1.9.2. mail"></a>1.9.2. mail</h3><p>命令行的电子邮件发送和接收工具。</p>
+<p>-s&lt;邮件主题&gt;：指定邮件的主题</p>
+<p>mail -s “Hello from linuxde.net by shell” <a href="mailto:admin@linuxde.net">admin@linuxde.net</a> #直接使用shell当编辑器</p>
+<p>mail -s “Hello from linuxde.net by file” <a href="mailto:&#97;&#100;&#x6d;&#x69;&#x6e;&#x40;&#x6c;&#105;&#x6e;&#117;&#x78;&#100;&#x65;&#x2e;&#x6e;&#101;&#116;">&#97;&#100;&#x6d;&#x69;&#x6e;&#x40;&#x6c;&#105;&#x6e;&#117;&#x78;&#100;&#x65;&#x2e;&#x6e;&#101;&#116;</a> &lt; mail.txt #使用文件发送</p>
+<h3 id="1-9-3-mutt"><a href="#1-9-3-mutt" class="headerlink" title="1.9.3. mutt"></a>1.9.3. mutt</h3><p>邮件管理命令。</p>
+<h3 id="1-9-4-nslookup（查找域名服务器）"><a href="#1-9-4-nslookup（查找域名服务器）" class="headerlink" title="1.9.4. nslookup（查找域名服务器）"></a>1.9.4. nslookup（查找域名服务器）</h3><p>交互式查询互联网DNS服务器的命令。</p>
+<p>![img](Linux 常用命令总结/clip_image020.png)</p>
+<h3 id="1-9-5-dig（域名解析过程）"><a href="#1-9-5-dig（域名解析过程）" class="headerlink" title="1.9.5. dig（域名解析过程）"></a>1.9.5. dig（域名解析过程）</h3><p>查找DNS解析过程。</p>
+<p>@&lt;服务器地址&gt;：指定进行域名解析的域名服务器；</p>
+<p>-b&lt;ip地址&gt;：当主机具有多个IP地址，指定使用本机的哪个IP地址向域名服务器发送域名查询请求；</p>
+<p>-f&lt;文件名称&gt;：指定dig以批处理的方式运行，指定的文件中保存着需要批处理查询的DNS任务信息；</p>
+<p>-P：指定域名服务器所使用端口号；</p>
+<p>-x&lt;IP地址&gt;：执行逆向域名查询；</p>
+<p>dig baidu.com</p>
+<h3 id="1-9-6-host（分析域名查询工具）"><a href="#1-9-6-host（分析域名查询工具）" class="headerlink" title="1.9.6. host（分析域名查询工具）"></a>1.9.6. host（分析域名查询工具）</h3><p>查询DNS的命令，它将指定的主机名称转化为IP地址。</p>
+<p>-a：显示详细的DNS信息；</p>
+<p>![img](Linux 常用命令总结/clip_image021.png)</p>
+<h3 id="1-9-7-traceroute（追踪网络数据包的路由途径）"><a href="#1-9-7-traceroute（追踪网络数据包的路由途径）" class="headerlink" title="1.9.7. traceroute（追踪网络数据包的路由途径）"></a>1.9.7. traceroute（追踪网络数据包的路由途径）</h3><p>追踪数据传输路由状况。</p>
+<p> -d  使用Socket层级的排错功能。</p>
+<p>-m&lt;存活数值&gt;  设置检测数据包的最大存活数值TTL的大小。</p>
+<p> -n  直接使用IP地址而非主机名称。</p>
+<p> -p&lt;通信端口&gt;  设置UDP传输协议的通信端口。</p>
+<p> -q<nqueries>  设置每一跳的探测包数量。默认是3 。</p>
+<p> -r  忽略普通的Routing Table，直接将数据包送到远端主机上。</p>
+<p> -s&lt;来源地址&gt;  设置本地主机送出数据包的IP地址。</p>
+<p> -w&lt;超时秒数&gt;  设置等待远端主机回报的时间。</p>
+<p>traceroute baidu.com     #最常用的方法</p>
+<p>traceroute -m 10 baidu.com  #把跳数设置为10次；</p>
+<p>traceroute -n baidu.com   #显示IP地址，不查主机名</p>
+<p>traceroute -p 6888 baidu.com #探测包使用的是UDP端口设置6888</p>
+<p>traceroute -q 4 baidu.com  #把探测包的个数设置为值4</p>
+<p>traceroute -r baidu.com   #绕过正常的路由表，直接发送到网络相连的主机</p>
+<p>traceroute -w 3 baidu.com  #把对外发探测包的等待响应时间设置为3秒</p>
+<h3 id="1-9-8-tcpdump（抓包）"><a href="#1-9-8-tcpdump（抓包）" class="headerlink" title="1.9.8. tcpdump（抓包）"></a>1.9.8. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/tcpdump">tcpdump</a>（抓包）</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ct20150811/p/9431976.html">Tcpdump命令抓包示例</a></p>
+<p>命令行的抓包工具。</p>
+<p>-i interface指定tcpdump 需要监听的接口。如果没有指定, tcpdump 会从系统接口列表中搜寻编号最小的已配置好的接口(不包括 loopback 接口)</p>
+<p>tcpdump -i eth1 #监视指定网络接口的数据包</p>
+<p>tcpdump host webserver  #打印所有进入或离开webserver的数据包（也可指定IP）</p>
+<p>tcpdump host 210.27.48.1 and  (210.27.48.2 or 210.27.48.3) #截获主机210.27.48.1 和主机210.27.48.2 或210.27.48.3的通信</p>
+<p>tcpdump tcp -i eth1 -t -s 0 -c 100 and dst port ! 22 and src net 192.168.1.0/24 -w ./target.cap</p>
+<p>#(1)tcp: ip icmp arp rarp 和 tcp、udp、icmp这些选项等都要放到第一个参数的位置，用来过滤数据报的类型</p>
+<p>#(2)-i eth1 : 只抓经过接口eth1的包</p>
+<p>#(3)-t : 不显示时间戳</p>
+<p>#(4)-s 0 : 抓取数据包时默认抓取长度为68字节。加上-S 0 后可以抓到完整的数据包</p>
+<p>#(5)-c 100 : 只抓取100个数据包</p>
+<p>#(6)dst port ! 22 : 不抓取目标端口是22的数据包</p>
+<p>#(7)src net 192.168.1.0/24 : 数据包的源网络地址为192.168.1.0/24</p>
+<p>#(8)-w ./target.cap : 保存成cap文件，方便用ethereal(即wireshark)分析</p>
+<h3 id="1-9-9-curl-url下载工具"><a href="#1-9-9-curl-url下载工具" class="headerlink" title="1.9.9. curl(url下载工具)"></a>1.9.9. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/curl">curl</a>(url下载工具)</h3><p>-o/–output： 把输出写到该文件中</p>
+<p>-O/–remote-name： 把输出写到该文件中，保留远程文件的文件名</p>
+<p>-x/–proxy &lt;host[:port]&gt;在给定的端口上使用HTTP代理</p>
+<p>-X/–request <command>：指定什么命令</p>
+<p>-I/–head：只显示文档信息</p>
+<p>#可以用正则抓东西</p>
+<p>curl -O <a target="_blank" rel="noopener" href="http://blog.51yip.com/wp-content/uploads/2010/[0-9][0-9]/aaaaa.jpg">http://blog.51yip.com/wp-content/uploads/2010/[0-9][0-9]/aaaaa.jpg</a></p>
+<p>#当我们经常用curl去搞人家东西的时候，人家会把你的IP给屏蔽掉的,这个时候用代理</p>
+<p>curl -x 24.10.28.84:32779 -o home.html <a target="_blank" rel="noopener" href="http://blog.51yip.com/">http://blog.51yip.com</a></p>
+<h3 id="1-9-10-iptables（防火墙）"><a href="#1-9-10-iptables（防火墙）" class="headerlink" title="1.9.10.   iptables（防火墙）"></a>1.9.10.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/iptables">iptables</a>（防火墙）</h3><p>IP包过滤器管理</p>
+<h4 id="1-9-10-1-基础概念"><a href="#1-9-10-1-基础概念" class="headerlink" title="1.9.10.1.   基础概念"></a>1.9.10.1.   基础概念</h4><h5 id="1-9-10-1-1-iptables与netfilter"><a href="#1-9-10-1-1-iptables与netfilter" class="headerlink" title="1.9.10.1.1.  iptables与netfilter"></a>1.9.10.1.1.  iptables与netfilter</h5><p><strong>iptables</strong>其实并不是真正的防火墙。可以把它理解为一个客户端代理。用户通过<strong>iptables</strong>这个代理，将用户的安全设定执行到对应的“安全框架”中。这个“安全框架”——<strong>netfilter</strong>才是真正的防火墙。</p>
+<p><strong>netfilter</strong>是防火墙真正的安全框架（framework），位于<strong>内核空间</strong></p>
+<p>iptables是一个命令行工具，位于用户空间</p>
+<p><strong>netfilter</strong>是Linux操作系统核心层内部的一个数据包处理模块，它有如下功能：</p>
+<p>l 网络地址转换（Network Address Translate）</p>
+<p>l 数据包内容修改</p>
+<p>l 数据包过滤</p>
+<h5 id="1-9-10-1-2-如何过滤"><a href="#1-9-10-1-2-如何过滤" class="headerlink" title="1.9.10.1.2.  如何过滤"></a>1.9.10.1.2.  如何过滤</h5><p>iptables -t filter -R INPUT 3 -s 192.168.1.146 -j ACCEPT</p>
+<p>  IP数据包的过滤需要依靠规则来处理，上面的例子就是一条规则。iptables负责编写规则。而规则存储在内核空间的信息包过滤表中。这些规则分别指定了<strong>源地址，目的地址，传输协议</strong>（如TCP，UDP，ICMP）和<strong>服务类型</strong>（如HTTP，FTP，SMTP）等。当数据包与规则匹配，就用定以的对应方法来处理数据包，如<strong>ACCEPT**</strong>，REJECT**<strong>，DROP**</strong>。**</p>
+<p>iptables的主要工作就是增删改这些规则。规则有四部分组成：<strong>链（**</strong>chain**<strong>），表（tables**</strong>），匹配条件，处理动作**</p>
+<h5 id="1-9-10-1-3-规则"><a href="#1-9-10-1-3-规则" class="headerlink" title="1.9.10.1.3.  规则"></a>1.9.10.1.3.  规则</h5><h6 id="1-9-10-1-3-1-链（chain）"><a href="#1-9-10-1-3-1-链（chain）" class="headerlink" title="1.9.10.1.3.1. 链（chain）"></a>1.9.10.1.3.1. 链（chain）</h6><p>![img](Linux 常用命令总结/clip_image022.png)</p>
+<p>链可以理解为“关卡”，根据实际情况，数据包会经过不同的“关卡”。比如：</p>
+<p>l 到本机进程：PREROUTING–》INPUT</p>
+<p>l 由本机转发的报文：PREROUTING–》FORWARD–》POSTROUTING</p>
+<p>l 本机进程发出报文（通常为响应报文）：OUTPUT–》POSTROUTING</p>
+<h6 id="1-9-10-1-3-2-表（tables）"><a href="#1-9-10-1-3-2-表（tables）" class="headerlink" title="1.9.10.1.3.2. 表（tables）"></a>1.9.10.1.3.2. 表（tables）</h6><p>表我们可以理解为“关卡”的“武器”。一类表就负责了一类的功能。</p>
+<p>iptables的表分类如下：</p>
+<p>l <strong>filter</strong>表：负责过滤功能，防火墙作用；内核模块：iptables_filter</p>
+<p>l <strong>nat</strong>表：network address translation。网络地址转换功能。内核模块：iptables_nat</p>
+<p>l <strong>mangle</strong>表：拆解报文，作出修改，并重新封装的功能。iptables_mangle</p>
+<p>l <strong>raw</strong>表：关闭nat表上启用的连接追踪机制（即是否判断一个数据包的state）。iptables_raw。</p>
+<p>在同一链中的表优先级如下：</p>
+<p>raw &gt; mangle &gt; nat &gt; filter</p>
+<p>1.9.10.1.3.2.1.  链与表的关系</p>
+<p>由于“关卡”不同，那用到的“武器”，及“武器”的作用也会不同。链的位置决定了它能使用的表。而表的功能决定了它能被哪些链使用。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>filter</th>
+<th>nat</th>
+<th>mangle</th>
+<th>raw</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PERROUTING</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>INPUT</td>
+<td>√</td>
+<td>√（centos7）</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>FORWARD</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>OUTPUT</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>POSTROUTING</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>![img](Linux 常用命令总结/clip_image023.png)</p>
+<h6 id="1-9-10-1-3-3-匹配条件"><a href="#1-9-10-1-3-3-匹配条件" class="headerlink" title="1.9.10.1.3.3. 匹配条件"></a>1.9.10.1.3.3. 匹配条件</h6><p>匹配条件分为基本匹配条件和扩展匹配条件</p>
+<p>1.9.10.1.3.3.1.  基本匹配条件</p>
+<p>源地址Source IP</p>
+<p>目标地址 Destination IP</p>
+<p>1.9.10.1.3.3.2.  扩展匹配条件</p>
+<p>除了基本匹配条件外，其余的匹配条件泛称为扩展条件。这些扩展条件在使用时，需要指明相应的模块才能使用。</p>
+<h6 id="1-9-10-1-3-4-处理动作"><a href="#1-9-10-1-3-4-处理动作" class="headerlink" title="1.9.10.1.3.4. 处理动作"></a>1.9.10.1.3.4. 处理动作</h6><p>处理动作在iptables中被称为target。动作也分为基本动作和扩展动作</p>
+<p>1.9.10.1.3.4.1.  基本动作</p>
+<p>ACCEPT</p>
+<p>DROP</p>
+<p>REJECT</p>
+<p>1.9.10.1.3.4.2.  扩展动作</p>
+<p>需要指明模块，才能使用的动作。</p>
+<p>SNAT</p>
+<p>MASQUERADE：是SNAT的一种特殊形式，适用于动态的、临时的IP上</p>
+<p>DNAT</p>
+<p>REDIRECT：本机做端口映射。比如可将本机的80端口映射到本机的8080端口上</p>
+<p>LOG：在/var/log/message文件记录日志信息，然后将数据传递给下一条规则。除了记录外不做任何其他操作</p>
+<h4 id="1-9-10-2-参数详解"><a href="#1-9-10-2-参数详解" class="headerlink" title="1.9.10.2.   参数详解"></a>1.9.10.2.   参数详解</h4><p>我们可以定义不同的表，每个表都包含几个内部的链，也能包含用户定义的链。 每个链都是一个规则列表，对对应的包进行匹配：每条规则指定应当如何处理与之相匹配的包。这被称作’target’（目标），也可以跳向同一个表内的用户定义的链。</p>
+<h5 id="1-9-10-2-1-指明操作表"><a href="#1-9-10-2-1-指明操作表" class="headerlink" title="1.9.10.2.1.  指明操作表"></a>1.9.10.2.1.  指明操作表</h5><p>-t table</p>
+<p>table：【filter（默认），nat，mangle，raw】</p>
+<p>如果不指定-t table，则默认操作filter表</p>
+<h5 id="1-9-10-2-2-增删改查"><a href="#1-9-10-2-2-增删改查" class="headerlink" title="1.9.10.2.2.  增删改查"></a>1.9.10.2.2.  增删改查</h5><p>-A -append：在所选择的链末添加一条或更多规则。默认加到末尾</p>
+<p>iptables -t filter -A INPUT -s 192.168.1.146 -j DROP</p>
+<p>-D -delete：从所选链中删除一条或更多规则。通过–line-number获取规则行号删除</p>
+<p>iptables -t filter -D INPUT 3</p>
+<p>iptables -t filter -D INPUT -s 192.168.1.146 -j DROP</p>
+<p>-R -replace：从选中的链中取代一条规则。除了改变的地方外，其余部分必须完全一样</p>
+<p>iptables -t filter -R INPUT 3 -s 192.168.1.146 -j ACCEPT</p>
+<p>-I -insert：根据给出的规则序号向所选链中插入一条或更多规则。默认加入首部</p>
+<p>iptables -t filter -I INPUT -s 192.168.1.146 -j ACCEPT</p>
+<p>-L -list：显示所选链的所有规则。如果没有选择链，所有链将被显示。也可以和z选项一起 使用，这时链会被自动列出和归零。精确输出受其它所给参数影响。</p>
+<p>   -v –verbose详细输出</p>
+<p>-n –numeric数字输出。IP地址和端口会以数字的形式打印。</p>
+<p>-x -exact扩展数字。显示包和字节计数器的精确值，代替用K,M,G表示的约数。</p>
+<p>–line-numbers：当列表显示规则时，在每个规则的前面加上行号，与该规则在链中的位置相对应。</p>
+<p>iptables -t filter -nxvL INPUT –line-number</p>
+<p>-F -flush：清空所选链。这等于把所有规则一个个的删除。</p>
+<p>iptables -t filter -F INPUT</p>
+<p>iptables -t filter -F</p>
+<p>–Z -zero：把所有链的包及字节的计数器清空。它可以和 -L配合使用，在清空前察看计数器，请参见前文。</p>
+<p>-N -new-chain：根据给出的名称建立一个新的用户定义链。这必须保证没有同名的链存在。</p>
+<p>iptables -t filter -N IN_WEB</p>
+<p>-X -delete-chain：删除指定的用户自定义链。这个链必须没有被引用，如果被引用，在删除之前你必须删除或者替换与之有关的规则。如果没有给出参数，这条命令将试着删除每个非 内建的链。</p>
+<p>iptables -X WEB</p>
+<p>-P -policy：设置链的默认策略</p>
+<p>iptables -t filter -P FORWARD ACCEPT</p>
+<p>-E -rename-chain：根据用户给出的名字对指定链进行重命名，这仅仅是修饰，对整个表的结构没有影响</p>
+<p>iptables -E IN_WEB WEB</p>
+<p>-S –list-rules [chain]：显示指定chain的rule，不指定则显示所有，可以指定tables</p>
+<h5 id="1-9-10-2-3-条件参数"><a href="#1-9-10-2-3-条件参数" class="headerlink" title="1.9.10.2.3.  条件参数"></a>1.9.10.2.3.  条件参数</h5><p>-p -protocal [!]protocol</p>
+<p>规则或者包检查(待检查包)的协议。指定协议可以是tcp、udp、icmp、udplite、esp、ah、sctp（CentOS7还支持icmpv6、mh）中的一个或者全部，也可以是数值，数字0相当于所有 all。Protocol all会匹配所有协议，而且这是缺省时的选项。</p>
+<p>iptables -t filter -I INPUT -p tcp -s 192.168.1.146 -j ACCEPT</p>
+<p>-s -source [!] address[/mask]</p>
+<p>指定源地址，可以是主机名、网络名和清楚的IP地址。mask可以是网络掩码或清楚的数字， mask 值为24等于255.255.255.0。在指定地址前加上”!”说明指定了相反的地址段。标志–src 是这个选项的简写。</p>
+<p>iptables -t filter -I INPUT -s 192.168.1.111,192.168.1.118 -j DROP</p>
+<p>-d –destination [!] address[/mask]</p>
+<p>指定目标地址，要获取详细说明请参见 -s标志的说明。标志 –dst 是这个选项的简写。</p>
+<p>iptables -t filter -I OUTPUT -d 192.168.1.111,192.168.1.118 -j DROP</p>
+<p>-j –jump target</p>
+<p>(-j 目标跳转)指定规则的目标；也就是说，如果包匹配应当做什么。目标可以是用户自定义链（不是这条规则所在的）。</p>
+<p>iptables -t filter -I INPUT -p tcp –dport 80 -j IN_WEB</p>
+<p>-i -in-interface [!] [name]</p>
+<p>(i -进入的（网络）接口 [!][名称])这是包经由该接口接收的可选的入口名称，包通过 该接口接收（在链INPUT、FORWORD和PREROUTING中进入的包）。当在接口名 前使用”!”说明后，指的是相反的名称。如果接口名后面加上”+”，则所有以此接口名开头的接口都会被匹配。如果这个选项被忽略，会假设为”+”，那么将匹配任意接口。</p>
+<p>iptables -t filter -I INPUT -p icmp -i eth4 -j DROP</p>
+<p>-o –out-interface [!][name]</p>
+<p>(-o –输出接口[名称])这是包经由该接口送出的可选的出口名称，包通过该口输出（在 链FORWARD、OUTPUT和POSTROUTING中送出的包）。当在接口名前使用”!”说明 后，指的是相反的名称。如果接口名后面加上”+”，则所有以此接口名开头的接口都会 被匹配。如果这个选项被忽略，会假设为”+”，那么将匹配所有任意接口。</p>
+<p>iptables -t filter -I OUTPUT -p icmp -o eth4 -j DROP</p>
+<p>[!]</p>
+<p>方括号的!是可选项，相当于取反。</p>
+<p>iptables -t filter -I INPUT ! -d 192.168.1.0/24 -j ACCEPT</p>
+<p>注意：如果INPUTE链中只有这一条规则，并不意味着192.168.1.0/24这个网段就不被接受了。当192.168.1.0/24数据进入时，由于没有后续的匹配规则，就会根据INPUT的默认动作来选择ACCEPT或DROP</p>
+<h5 id="1-9-10-2-4-扩展模块"><a href="#1-9-10-2-4-扩展模块" class="headerlink" title="1.9.10.2.4.  扩展模块"></a>1.9.10.2.4.  扩展模块</h5><p>扩展条件的使用需要扩展模块的支持。-m指明要使用的模块，指定模块后，就可以使用对应的扩展匹配条件。当模块名与-p的协议名一样时，可以省略-m，直接使用扩展匹配条件。</p>
+<h6 id="1-9-10-2-4-1-tcp"><a href="#1-9-10-2-4-1-tcp" class="headerlink" title="1.9.10.2.4.1. tcp"></a>1.9.10.2.4.1. tcp</h6><p>-p tcp -m tcp –sport 用于匹配tcp协议报文的源端口，可以使用冒号指定一个连续的端口范围</p>
+<p>-p tcp -m tcp –dport 用于匹配tcp协议报文的目标端口，可以使用冒号指定一个连续的端口范围</p>
+<p><a target="_blank" rel="noopener" href="http://www.zsythink.net/archives/1578">–tcp-flags</a> 匹配报文的tcp头的标志位</p>
+<p>–syn 匹配tcp新建连接的请求报文。相当于使用“–tcp-flags SYN,RST,ACK,FIN SYN”</p>
+<p>iptables -t filter -I OUTPUT -d 192.168.1.146 -p tcp -m tcp –sport 22 -j REJECT</p>
+<p>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m tcp –dport 22:25 -j REJECT</p>
+<p>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m tcp –dport :22 -j REJECT</p>
+<p>iptables -t filter -I INPUT -p tcp -m tcp –dport 22 –tcp-flags SYN,ACK,FIN,RST,URG,PSH SYN -j REJECT</p>
+<p>iptables -t filter -I INPUT -p tcp -m tcp –dport 22 –syn -j REJECT</p>
+<h6 id="1-9-10-2-4-2-udp"><a href="#1-9-10-2-4-2-udp" class="headerlink" title="1.9.10.2.4.2. udp"></a>1.9.10.2.4.2. udp</h6><p>同tcp</p>
+<h6 id="1-9-10-2-4-3-icmp"><a href="#1-9-10-2-4-3-icmp" class="headerlink" title="1.9.10.2.4.3. icmp"></a>1.9.10.2.4.3. <a target="_blank" rel="noopener" href="http://www.zsythink.net/archives/1588">icmp</a></h6><p>–icmp-type 匹配icmp报文的具体类型</p>
+<p># 8是类型表示回传报文，0是code码。这些都是icmp协议定义的。还有其他的type，code</p>
+<p>iptables -t filter -I INPUT -p icmp -m icmp –icmp-type 8/0 -j REJECT</p>
+<p># 用报文描述名称匹配。意义同上</p>
+<p>iptables -t filter -I INPUT -p icmp –icmp-type “echo-request” -j REJECT</p>
+<h6 id="1-9-10-2-4-4-state"><a href="#1-9-10-2-4-4-state" class="headerlink" title="1.9.10.2.4.4. state"></a>1.9.10.2.4.4. <a target="_blank" rel="noopener" href="http://www.zsythink.net/archives/1597">state</a></h6><p>state模块让iptables实现“连接追踪机制”。它可以记录连接的报文状态，保证安全。</p>
+<p>对于state的“连接”而言，报文状态有5种：</p>
+<p>l NEW：连接中的第一个包</p>
+<p>l ESTABLISHED：NEW之后的的包</p>
+<p>l RELATED：比如FTP有命令进程和数据进程。数据进程的报文与命令连接是有关系的，则数据进程的报文就可能是RELATED</p>
+<p>l INVALID：无法识别包，或包无状态</p>
+<p>l UNTRACKED：表示报文未被追踪</p>
+<p>iptables -t filter -I INPUT -m state –state RELATED,ESTABLISHED -j ACCEPT</p>
+<h6 id="1-9-10-2-4-5-multiport"><a href="#1-9-10-2-4-5-multiport" class="headerlink" title="1.9.10.2.4.5. multiport"></a>1.9.10.2.4.5. multiport</h6><p>-p tcp -m tcp –sport 用于匹配tcp协议报文的源端口，可以指定离散的的多个端口号，端口号之间用“，”隔开</p>
+<p>-p udp -m tcp –dport 用于匹配udp协议报文的目标端口，可以指定离散的的多个端口号，端口号之间用“，”隔开</p>
+<p>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m multiport ! –dports 22,80 -j REJECT</p>
+<p>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m multiport –dports 22,80:88 -j REJECT</p>
+<h6 id="1-9-10-2-4-6-iprang"><a href="#1-9-10-2-4-6-iprang" class="headerlink" title="1.9.10.2.4.6. iprang"></a>1.9.10.2.4.6. <a target="_blank" rel="noopener" href="http://www.zsythink.net/archives/1564">iprang</a></h6><p>–src-range</p>
+<p>–dst-range</p>
+<p>iptables -t filter -I INPUT -m iprange –src-range 192.168.1.127-192.168.1.146 -j DROP</p>
+<h6 id="1-9-10-2-4-7-string"><a href="#1-9-10-2-4-7-string" class="headerlink" title="1.9.10.2.4.7. string"></a>1.9.10.2.4.7. <a target="_blank" rel="noopener" href="http://www.zsythink.net/archives/1564">string</a></h6><p>匹配数据包中的字符</p>
+<p>–algo：指定对应的匹配算法，可用算法为bm、kmp。必选项</p>
+<p>–string：指定需要匹配的字符串</p>
+<p>iptables -t filter -I INPUT -p tcp –sport 80 -m string –algo bm –string “OOXX” -j REJECT</p>
+<h6 id="1-9-10-2-4-8-time"><a href="#1-9-10-2-4-8-time" class="headerlink" title="1.9.10.2.4.8. time"></a>1.9.10.2.4.8. <a target="_blank" rel="noopener" href="http://www.zsythink.net/archives/1564">time</a></h6><p>![img](Linux 常用命令总结/clip_image024.png)</p>
+<p>iptables -t filter -I OUTPUT -p tcp –dport 80 -m time –timestart 09:00:00 –timestop 18:00:00 –weekdays 6,7 -j REJECT</p>
+<p>iptables -t filter -I OUTPUT -p tcp –dport 80 -m time –weekdays 5 –monthdays 22,23,24,25,26,27,28 -j REJECT</p>
+<p>iptables -t filter -I OUTPUT -p tcp –dport 80 -m time –datestart 2017-12-24 –datestop 2017-12-27 -j REJECT</p>
+<h6 id="1-9-10-2-4-9-connlimit"><a href="#1-9-10-2-4-9-connlimit" class="headerlink" title="1.9.10.2.4.9. connlimit"></a>1.9.10.2.4.9. <a target="_blank" rel="noopener" href="http://www.zsythink.net/archives/1564">connlimit</a></h6><p>![img](Linux 常用命令总结/clip_image025.png)</p>
+<p>iptables -I INPUT -p tcp –dport 22 -m connlimit –connlimit-above 2 -j REJECT</p>
+<p>iptables -I INPUT -p tcp –dport 22 -m connlimit –connlimit-above 20 –connlimit-mask 24 -j REJECT</p>
+<h6 id="1-9-10-2-4-10-limit"><a href="#1-9-10-2-4-10-limit" class="headerlink" title="1.9.10.2.4.10. limit"></a>1.9.10.2.4.10. <a target="_blank" rel="noopener" href="http://www.zsythink.net/archives/1564">limit</a></h6><p>![img](Linux 常用命令总结/clip_image026.png)</p>
+<p>iptables -t filter -I INPUT -p icmp -m limit –limit-burst 3 –limit 10/minute -j ACCEPT</p>
+<p>iptables -t filter -A INPUT -p icmp -j REJECT</p>
+<h5 id="1-9-10-2-5-动作详解"><a href="#1-9-10-2-5-动作详解" class="headerlink" title="1.9.10.2.5.  动作详解"></a>1.9.10.2.5.  动作详解</h5><h6 id="1-9-10-2-5-1-REJECT"><a href="#1-9-10-2-5-1-REJECT" class="headerlink" title="1.9.10.2.5.1. REJECT"></a>1.9.10.2.5.1. REJECT</h6><p>![img](Linux 常用命令总结/clip_image027.png)</p>
+<h6 id="1-9-10-2-5-2-LOG"><a href="#1-9-10-2-5-2-LOG" class="headerlink" title="1.9.10.2.5.2. LOG"></a>1.9.10.2.5.2. LOG</h6><p>LOG动作会将报文的相关信息默认记录在/var/log/message文件中。但你也可以修改/etc/rsyslog.conf自己指定文件</p>
+<p>![img](Linux 常用命令总结/clip_image028.png)</p>
+<p>LOG常用选项有：</p>
+<p>![img](Linux 常用命令总结/clip_image029.png)</p>
+<h6 id="1-9-10-2-5-3-SNAT"><a href="#1-9-10-2-5-3-SNAT" class="headerlink" title="1.9.10.2.5.3. SNAT"></a>1.9.10.2.5.3. SNAT</h6><p>要正常使用NAT功能，需先开启Linux主机的核心转发功能</p>
+<p>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</p>
+<p>iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT –to-source 公网IP</p>
+<h6 id="1-9-10-2-5-4-DNAT"><a href="#1-9-10-2-5-4-DNAT" class="headerlink" title="1.9.10.2.5.4. DNAT"></a>1.9.10.2.5.4. DNAT</h6><p>iptables -t nat -I PREROUTING -d 公网IP -p tcp –dport 公网端口 -j DNAT –to-destination 私网IP:端口号</p>
+<p>iptables -t nat -I PREROUTING -d 公网IP -p tcp –dport 8080 -j DNAT –to-destination 10.1.0.1:80</p>
+<p>iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT –to-source 公网IP</p>
+<h6 id="1-9-10-2-5-5-MASQUERADE"><a href="#1-9-10-2-5-5-MASQUERADE" class="headerlink" title="1.9.10.2.5.5. MASQUERADE"></a>1.9.10.2.5.5. MASQUERADE</h6><p>iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE</p>
+<h6 id="1-9-10-2-5-6-REDIRECT"><a href="#1-9-10-2-5-6-REDIRECT" class="headerlink" title="1.9.10.2.5.6. REDIRECT"></a>1.9.10.2.5.6. REDIRECT</h6><p>将本机的80端口映射到本机的8080端口上。别的机器访问80端口时，报文会被重定向到8080端口</p>
+<p>iptables -t nat -A PREROUTING -p tcp –dport 80 -j REDIRECT –to-ports 8080</p>
+<h5 id="1-9-10-2-6-保存规则"><a href="#1-9-10-2-6-保存规则" class="headerlink" title="1.9.10.2.6.  保存规则"></a>1.9.10.2.6.  保存规则</h5><p>CentOS6</p>
+<p>直接“service iptables save”即可将命令保存到/etc/sysconfig/iptables文件中</p>
+<p>CentOS7</p>
+<p>centos7中，用firewall替换了原来的iptables service。</p>
+<p>  方法一：关闭firewall服务，下载iptables-services服务管理</p>
+<p>  方法二：</p>
+<p>  将规则重定向到文件保存</p>
+<p>iptables-save &gt; /etc/sysconfig/iptables</p>
+<p>从文件恢复</p>
+<p>iptables-restore &lt; /etc/sysconfig/iptables</p>
+<h2 id="1-10-有关磁盘与文件系统的命令（17个）"><a href="#1-10-有关磁盘与文件系统的命令（17个）" class="headerlink" title="1.10.  有关磁盘与文件系统的命令（17个）"></a>1.10.  有关磁盘与文件系统的命令（17个）</h2><h3 id="1-10-1-知识点"><a href="#1-10-1-知识点" class="headerlink" title="1.10.1.   知识点"></a>1.10.1.   知识点</h3><h4 id="1-10-1-1-磁盘性能评价指标—IOPS和吞吐量"><a href="#1-10-1-1-磁盘性能评价指标—IOPS和吞吐量" class="headerlink" title="1.10.1.1.   磁盘性能评价指标—IOPS和吞吐量"></a>1.10.1.1.   <a target="_blank" rel="noopener" href="https://blog.csdn.net/hanchengxi/article/details/19089589">磁盘性能评价指标—IOPS和吞吐量</a></h4><p>IOPS：在一秒内，磁盘进行多少次 I/O 读写</p>
+<p>吞吐量：每秒磁盘 I/O 的流量，即磁盘写入加上读出的数据的大小</p>
+<h3 id="1-10-2-mount"><a href="#1-10-2-mount" class="headerlink" title="1.10.2.   mount"></a>1.10.2.   <a target="_blank" rel="noopener" href="https://www.linuxidc.com/Linux/2016-08/134666.htm">mount</a></h3><p>挂载文件系统。</p>
+<p>-a 加载文件/etc/fstab中设置的所有设备。 </p>
+<p>-f 不实际加载设备。可与-v等参数同时使用以查看mount的执行过程。 </p>
+<p>-F 需与-a参数同时使用。所有在/etc/fstab中设置的设备会被同时加载，可加快执行速度。 </p>
+<p>-L&lt;标签&gt; 加载卷标为&lt;标签&gt;的设备。 </p>
+<p>-l 显示已加载的文件系统列表（同直接执行mount） </p>
+<p>-n 不将加载信息记录在/etc/mtab文件中。 </p>
+<p>-o&lt;选项&gt; 指定加载文件系统时的选项。常用选项包括： </p>
+<p>async 以非同步的方式执行文件系统的输入输出动作。 </p>
+<p>sync 以同步方式执行文件系统的输入输出动作。</p>
+<p>defaults 使用默认的选项。默认选项为rw、suid、dev、exec、anto nouser与async。 </p>
+<p>  ro 以只读模式加载。 </p>
+<p>  rw 以可读写模式加载。 </p>
+<p>-r 以只读方式加载设备。 </p>
+<p>-t&lt;文件系统类型&gt; 指定设备的文件系统类型。常用的选项说明有： </p>
+<p>  ext2 Linux目前的常用文件系统。 </p>
+<p>  nfs 网络文件系统。 </p>
+<p>  iso9660 CD-ROM光盘的标准文件系统。 </p>
+<p>  ntfs Windows NT的文件系统。 </p>
+<p>-v 执行时显示详细的信息。 </p>
+<p>-w 以可读写模式加载设备，默认设置。</p>
+<p><strong>注意：</strong></p>
+<ol>
+<li><p>没有指定文件系统，块设备也可以正常挂载</p>
+</li>
+<li><p>指定与块设备不一致的文件系统类型则命令报错</p>
+</li>
+<li><p>挂载点有内容的文件夹，在挂载后内容消失，卸载后内容重现，也就是说挂载后会将原文件内容掩盖，但并不对其进行其他操作</p>
+</li>
+<li><p>目录的挂载实质上是硬链接，挂载后可以对里面的文件内容进行修改与删除。</p>
+</li>
+</ol>
+<p><strong>开机自动挂载**</strong>：**</p>
+<p><strong>实现开机自动挂载，修改</strong> <strong>文件挂载的配置文件</strong> <strong>/etc/fstab**</strong>即可**</p>
+<p>![img](Linux 常用命令总结/clip_image030.png)</p>
+<p><strong>该文件每行定义一个要挂载的文件系统，格式如下：</strong></p>
+<p>![img](Linux 常用命令总结/clip_image031.png)</p>
+<p><strong>1)</strong> <strong>要挂载的设备或伪文件系统**</strong>：设备文件、**<strong>LABEL(LABEL=””)**</strong>、**<strong>UUID(UUID=””)**</strong>、伪文件系统名称**<strong>(proc, sysfs)</strong></p>
+<p><strong>2)</strong> <strong>挂载点**</strong>：指定的文件夹**</p>
+<p><strong>3)</strong> <strong>挂载选项**</strong>：**<strong>defaults**</strong>，**<strong>ro**</strong>等，同**<strong>-o</strong> <strong>选项</strong></p>
+<p><strong>4)</strong> <strong>转储频率**</strong>：**</p>
+<p>   <strong>0**</strong>：不做备份**</p>
+<p>   <strong>1**</strong>：每天转储**</p>
+<p>   <strong>2**</strong>：每隔一天转储**</p>
+<p><strong>5)</strong> <strong>自检次序**</strong>：**</p>
+<p>   <strong>0**</strong>：不自检**</p>
+<p>   <strong>1**</strong>：首先自检；一般只有**<strong>rootfs**</strong>才用**<strong>1**</strong>；**</p>
+<p>   <strong>2**</strong>：自检次序。数字依次往后排**</p>
+<p><strong>/etc/fstab**</strong>和**<strong>/etc/mtab**</strong>的区别：**</p>
+<p><strong>1)</strong> <strong>/etc/fstab</strong></p>
+<p><strong>记录了计算机上硬盘分区的相关信息，启动</strong> <strong>Linux</strong> <strong>的时候，检查分区的</strong> <strong>fsck</strong> <strong>命令，和挂载分区的</strong> <strong>mount</strong> <strong>命令，都需要</strong> <strong>fstab</strong> <strong>中的信息，来正确的检查和挂载硬盘。**</strong>是系统在启动时，准备装载的**</p>
+<p><strong>2)</strong> <strong>/etc/mtab</strong></p>
+<p><strong>每当</strong> <strong>mount</strong> <strong>挂载分区、**</strong>umount** <strong>卸载分区，都会动态更新</strong> <strong>mtab**</strong>，**<strong>mtab</strong> <strong>总是保持着当前系统中已挂载的分区信息，**</strong>fdisk**<strong>、**</strong>df** <strong>这类程序，必须要读取</strong> <strong>mtab</strong> <strong>文件，才能获得当前系统中的分区挂载情况。当然我们自己还可以通过读取**</strong>/proc/mount**<strong>也可以来获取当前挂载信息。**</strong>记载的是现在系统已经装载的文件系统，包括操作系统建立的虚拟文件等**</p>
+<h3 id="1-10-3-umount"><a href="#1-10-3-umount" class="headerlink" title="1.10.3.   umount"></a>1.10.3.   umount</h3><p>卸载文件系统。</p>
+<p>-a  卸除/etc/mtab中记录的所有文件系统。</p>
+<p>-n  卸除时不要将信息存入/etc/mtab文件中。</p>
+<p>-r  若无法成功卸除，则尝试以只读的方式重新挂入文件系统。</p>
+<p>-t&lt;文件系统类型&gt;  仅卸除选项中所指定的文件系统。</p>
+<p>-l  强制卸载</p>
+<p>umount /dev/sdb1     #通过设备名卸载</p>
+<h3 id="1-10-4-fsck（检查多种文件系统）"><a href="#1-10-4-fsck（检查多种文件系统）" class="headerlink" title="1.10.4.   fsck（检查多种文件系统）"></a>1.10.4.   fsck（检查多种文件系统）</h3><p>检查并修复Linux文件系统。</p>
+<p>fsck -t ext3 /dev/sda1 #检查ext3 类型的分区/dev/sad1</p>
+<h3 id="1-10-5-badblocks"><a href="#1-10-5-badblocks" class="headerlink" title="1.10.5.   badblocks"></a>1.10.5.   badblocks</h3><p>badblocks是Linux下常用的坏道修复工具。当你觉得硬盘上可能有坏道，或者是SMART数据显示有坏道的时候，都可以用badblocks来检查一下。</p>
+<p>假设我们要检查的硬盘是/dev/sdb</p>
+<p>$sudo badblocks -s -v -o sdbbadblocks.log /dev/sdb</p>
+<p>这样就可以对硬盘进行只读扫描，自动获取硬盘块数目并扫描全部块，将扫描日志输出到屏幕同时记录在sdbbadblocks.log文件中。</p>
+<p>由于扫描速度比较低，一次不一定能扫完，可以分多次进行。</p>
+<p>sudo badblocks -s -v -o sdbbadblocks.log /dev/sdb END START</p>
+<p>将END和START换成结束和开始的块的编号就可以了。</p>
+<p>如果找到了坏道，可以进行写入扫描进行修复。写入扫描遇到坏道的时候会自动重映射。写入扫描会覆盖原有数据，所以请先备份。写入扫描速度很低，所以应该只扫描只读扫描时候发现错误的部分。</p>
+<p>$sudo badblocks -w -s /dev/sdb END START</p>
+<h3 id="1-10-6-losetup"><a href="#1-10-6-losetup" class="headerlink" title="1.10.6.   losetup"></a>1.10.6.   losetup</h3><p>losetup命令用来设置loop设备。loop设备可把文件虚拟成块设备，籍此来模拟整个文件系统，让用户得以将其视为硬盘驱动器，光驱或软驱等设备，并挂载当作目录来使用。</p>
+<p>l loop_device：循环设备可以是/dev/loop0, /dev/loop1 … /dev/loop7。</p>
+<p>l file：要与循环设备相关联的文件名，这个往往是一个磁盘镜象文件，如 *.img</p>
+<p>在类 UNIX 系统里，loop 设备是一种伪设备(pseudo-device)，或者也可以说是仿真设备。它能使我们像块设备一样访问一个文件。在使用之前，一个 loop 设备必须要和一个文件进行连接。这种结合方式给用户提供了一个替代块特殊文件的接口。因此，如果这个文件包含有一个完整的文件系统，那么这个文件就可以像一个磁盘设备一样被 mount 起来。</p>
+<p>上面说的文件格式，我们经常见到的是 cd 或 DVD 的 ISO 光盘镜像文件或者是软盘(硬盘)的 *.img 镜像文件。通过这种 loop mount (回环mount)的方式，这些镜像文件就可以被 mount 到当前文件系统的一个目录下。</p>
+<p>至此，顺便可以再理解一下 loop 之含义：对于第一层文件系统，它直接安装在我们计算机的物理设备之上；而对于这种被 mount 起来的镜像文件(它也包含有文件系统)，它是建立在第一层文件系统之上，这样看来，它就像是在第一层文件系统之上再绕了一圈的文件系统，所以称为 loop。</p>
+<p>\1. 创建空的磁盘镜像文件，这里创建一个1.44M的软盘：</p>
+<p>dd if=/dev/zero of=floppy.img bs=512 count=2880</p>
+<p>\2. 使用 losetup将磁盘镜像文件虚拟成快设备：</p>
+<p>losetup /dev/loop1 floppy.img</p>
+<p>\3. 挂载块设备：</p>
+<p>mount /dev/loop0 /tmp</p>
+<p>经过上面的三步之后，我们就可以通过/tmp目录，像访问真实快设备一样来访问磁盘镜像文件floppy.img。</p>
+<p>\4. 卸载loop设备：</p>
+<p>umount /tmp</p>
+<p>losetup -d /dev/loop1</p>
+<h3 id="1-10-7-dd（转换-复制文件）"><a href="#1-10-7-dd（转换-复制文件）" class="headerlink" title="1.10.7.   dd（转换/复制文件）"></a>1.10.7.   <a target="_blank" rel="noopener" href="https://blog.csdn.net/xizaihui/article/details/53307578">dd（转换/复制文件）</a></h3><p>转换或复制文件。</p>
+<p>当进行非强制的转换的时候，使用指定的输入和输出块大小拷贝文件 （默认是从标准输入到标准输出。）</p>
+<p>if=文件名：输入文件名，缺省为标准输入。即指定源文件。&lt; if=input file &gt;</p>
+<p>of=文件名：输出文件名，缺省为标准输出。即指定目的文件。&lt; of=output file &gt;</p>
+<p>bs=bytes：同时设置读入/输出的块大小为bytes个字节。</p>
+<p>count=blocks：仅拷贝blocks个块，块大小等于ibs指定的字节数。</p>
+<p>dd if=/dev/hdx of=/dev/hdy     #将本地的/dev/hdx整盘备份到/dev/hdy</p>
+<p>dd if=/dev/zero bs=1024 count=1000000 of=/root/1Gb.file #测试硬盘的读写速度</p>
+<p>dd if=/dev/zero of=/swapfile bs=1024 count=262144 #创建一个大小为256M的文件</p>
+<h3 id="1-10-8-dumpe2fs（查ext-文件系统信息）"><a href="#1-10-8-dumpe2fs（查ext-文件系统信息）" class="headerlink" title="1.10.8.   dumpe2fs（查ext*文件系统信息）"></a>1.10.8.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/dumpe2fs">dumpe2fs</a>（查ext*文件系统信息）</h3><p>导出ext2/ext3/ext4文件系统信息。</p>
+<p>dumpe2fs/dev/sda1 #查看sda1的磁盘信息</p>
+<h3 id="1-10-9-dump（备份）"><a href="#1-10-9-dump（备份）" class="headerlink" title="1.10.9.   dump（备份）"></a>1.10.9.   <a target="_blank" rel="noopener" href="https://www.linuxidc.com/Linux/2012-06/61865.htm">dump</a>（备份）</h3><p>ext2/3/4文件系统备份工具。</p>
+<p>xfs文件系统的备份工具是xfsdump</p>
+<p>-0123456789 备份的层级。0是初始全备份，1是在0的基础上备份，2在1的基础上…</p>
+<p>-f&lt;设备名称&gt; 　指定备份设备。</p>
+<p>-T&lt;日期&gt; 　指定开始备份的时间与日期。</p>
+<p>-u 　备份完毕后，在/etc/dumpdates中记录备份的文件系统，层级，日期与时间等。</p>
+<p>-w 　与-W类似，但仅显示需要备份的文件。</p>
+<p>-W 　显示需要备份的文件及其最后一次备份的层级，时间与日期。</p>
+<p>dump -0 -u -f /dev/hda3 /home/pyegrp/  #备份磁盘分区</p>
+<p>restore rf /dev/hda3 /home/pyegrp    #还原</p>
+<h3 id="1-10-10-fdisk（磁盘分区）"><a href="#1-10-10-fdisk（磁盘分区）" class="headerlink" title="1.10.10. fdisk（磁盘分区）"></a>1.10.10. fdisk（磁盘分区）</h3><p>磁盘分区命令，适用于2TB以下磁盘分区。</p>
+<p>-l 列出指定设备的分区表信息并退出。 如果不跟设备名，使用在 /proc/partitions （如果存在）提到的</p>
+<p>fdisk菜单参数：</p>
+<p>  a  toggle a bootable flag     #设置引导扇区</p>
+<p>  b  edit bsd disklabel       #修改bsd版本的磁盘标签</p>
+<p>  c  toggle the dos compatibility flag #切换DOS兼容</p>
+<p>  d  delete a partition       #删除分区</p>
+<p>  l  list known partition types    #列举已知分区类型</p>
+<p>  m  print this menu        #显示菜单</p>
+<p>  n  add a new partition       #增加分区</p>
+<p>  o  create a new empty DOS partition table #创建一个新的空DOS分区表</p>
+<p>  p  print the partition table     #显示分区表</p>
+<p>  q  quit without saving changes   #不保存退出分区</p>
+<p>  s  create a new empty Sun disklabel</p>
+<p>  t  change a partition’s system id  #改变分区ID</p>
+<p>  u  change display/entry units   #改变显示/输入单元</p>
+<p>  v  verify the partition table    #验证分区表</p>
+<p>  w  write table to disk and exit   #保存分区操作</p>
+<p>  x  extra functionality (experts only) #额外功能（专家用）</p>
+<p>Disk /dev/hdc: 41.1 GB, 41174138880 bytes    #磁盘名称和大小</p>
+<p>255 heads, 63 sectors/track, 5005 cylinders    #磁头、扇区与柱面数量，多少</p>
+<p>Units = cylinders of 16065 * 512 = 8225280 bytes  #每个柱面的大小</p>
+<p>存储容量=磁头数×柱面数×扇区数×每扇区字节数</p>
+<h3 id="1-10-11-parted（磁盘分区）"><a href="#1-10-11-parted（磁盘分区）" class="headerlink" title="1.10.11. parted（磁盘分区）"></a>1.10.11. <a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhangpengme/archive/2011/12/29/2305963.html">parted</a>（磁盘分区）</h3><p>磁盘分区命令，没有磁盘大小限制，常用于2TB以上磁盘分区。</p>
+<p>检查 MINOR              #对文件系统进行一个简单的检查 </p>
+<p>cp [FROM-DEVICE] FROM-MINOR TO-MINOR #将文件系统复制到另一个分区 </p>
+<p>help [COMMAND]            #打印通用求助信息，或关于 COMMAND 的信息 </p>
+<p>mklabel 标签类型           #创建新的磁盘标签 (分区表) </p>
+<p>mkfs MINOR 文件系统类型     #在 MINOR 创建类型为“文件系统类型”的文件系统 </p>
+<p>mkpart 分区类型 [文件系统类型] 起始点 终止点  #创建一个分区 </p>
+<p>mkpartfs 分区类型 文件系统类型 起始点 终止点  #创建一个带有文件系统的分区 </p>
+<p>move MINOR 起始点 终止点       #移动编号为 MINOR 的分区 </p>
+<p>name MINOR 名称           #将编号为 MINOR 的分区命名为“名称” </p>
+<p>print [MINOR]            #打印分区表，或者分区 </p>
+<p>quit                 #退出程序 </p>
+<p>rescue 起始点 终止点         #挽救临近“起始点”、“终止点”的遗失的分区 </p>
+<p>resize MINOR 起始点 终止点     #改变位于编号为 MINOR 的分区中文件系统的大小 </p>
+<p>rm MINOR               #删除编号为 MINOR 的分区 </p>
+<p>select 设备             #选择要编辑的设备 </p>
+<p>set MINOR 标志 状态          #改变编号为 MINOR 的分区的标志</p>
+<p>parted /dev/sdx -s – mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1 </p>
+<h3 id="1-10-12-mkfs（创建文件系统）"><a href="#1-10-12-mkfs（创建文件系统）" class="headerlink" title="1.10.12. mkfs（创建文件系统）"></a>1.10.12. mkfs（创建文件系统）</h3><p>格式化创建Linux文件系统。</p>
+<p>mkfs -t ext3 /dev/sda6 #把该设备格式化成ext3文件系统</p>
+<h3 id="1-10-13-partprobe（更新硬盘分区表）"><a href="#1-10-13-partprobe（更新硬盘分区表）" class="headerlink" title="1.10.13. partprobe（更新硬盘分区表）"></a>1.10.13. partprobe（更新硬盘分区表）</h3><p>更新内核的硬盘分区表信息。</p>
+<p>partprobe命令用于重读分区表，当出现删除文件后，出现仍然占用空间。可以partprobe在不重启的情况下重读分区</p>
+<h3 id="1-10-14-e2fsck（检查ex-文件系统）"><a href="#1-10-14-e2fsck（检查ex-文件系统）" class="headerlink" title="1.10.14. e2fsck（检查ex*文件系统）"></a>1.10.14. <a target="_blank" rel="noopener" href="http://man.linuxde.net/e2fsck">e2fsck</a>（检查ex*文件系统）</h3><p>检查ext2/ext3/ext4类型文件系统。</p>
+<p>-a：不询问使用者意见，便自动修复文件系统；</p>
+<p>-f：即使文件系统没有错误迹象，仍强制地检查正确性；</p>
+<p>-y：采取非互动方式执行，所有的问题均设置以”yes”回答。</p>
+<p>e2fsck -a /dev/sda1 #检查sda1是否有问题，如发现问题自动修复</p>
+<p>fsck和e2fsck的区别：</p>
+<p>fsck是为检查各种不同的文件系统提供一个统一的用户界面。</p>
+<p>e2fsck是用于ext2/ext3类型的文件系统检查的一个工具。</p>
+<h3 id="1-10-15-xfs（xfs相关命令）"><a href="#1-10-15-xfs（xfs相关命令）" class="headerlink" title="1.10.15. xfs（xfs相关命令）"></a>1.10.15. <a target="_blank" rel="noopener" href="https://www.cnblogs.com/createyuan/p/5345539.html">xfs</a>（xfs相关命令）</h3><p>xfs_admin: 调整 xfs 文件系统的各种参数 </p>
+<p>xfs_copy: 拷贝 xfs 文件系统的内容到一个或多个目标系统（并行方式） </p>
+<p>xfs_db: 调试或检测 xfs 文件系统（查看文件系统碎片等） </p>
+<p>xfs_check: 检测 xfs 文件系统的完整性 </p>
+<p>xfs_bmap: 查看一个文件的块映射 </p>
+<p>xfs_repair &lt;-L&gt;: 尝试修复受损的 xfs 文件系统 </p>
+<p>xfs_fsr: 碎片整理 </p>
+<p>xfs_quota: 管理 xfs 文件系统的磁盘配额 </p>
+<p>xfs_metadump: 将 xfs 文件系统的元数据 (metadata) 拷贝到一个文件中 </p>
+<p>xfs_mdrestore: 从一个文件中将元数据 (metadata) 恢复到 xfs 文件系统 </p>
+<p>xfs_growfs: 调整一个 xfs 文件系统大小（只能扩展） </p>
+<p>xfs_freeze  暂停（-f）和恢复（-u）xfs 文件系统</p>
+<p>xfs_logprint: 打印xfs文件系统的日志 </p>
+<p>xfs_mkfile: 创建xfs文件系统  </p>
+<p>xfs_info: 查询文件系统详细信息 </p>
+<p>xfs_ncheck: generate pathnames from i-numbers for XFS </p>
+<p>xfs_rtcp: XFS实时拷贝命令  </p>
+<p>xfs_io: 调试xfs I/O路径</p>
+<h3 id="1-10-16-mkswap（创建Linux交换分区）"><a href="#1-10-16-mkswap（创建Linux交换分区）" class="headerlink" title="1.10.16. mkswap（创建Linux交换分区）"></a>1.10.16. mkswap（创建Linux交换分区）</h3><p>创建Linux交换分区。</p>
+<p>-c  建立交换区前，先检查是否有损坏的区块。</p>
+<p>dd if=/dev/zero of=/extra-swap bs=1024 count=1024  #创建交换分区文件</p>
+<p>mkswap /extra-swap 1024   #格式化交换分区</p>
+<p>swapon /extra-swap     #加载交换分区</p>
+<h3 id="1-10-17-swapon"><a href="#1-10-17-swapon" class="headerlink" title="1.10.17. swapon"></a>1.10.17. swapon</h3><p>启用交换分区。</p>
+<h3 id="1-10-18-swapoff"><a href="#1-10-18-swapoff" class="headerlink" title="1.10.18. swapoff"></a>1.10.18. swapoff</h3><p>关闭交换分区。</p>
+<h3 id="1-10-19-sync（同步）"><a href="#1-10-19-sync（同步）" class="headerlink" title="1.10.19. sync（同步）"></a>1.10.19. sync（同步）</h3><p>将内存缓冲区内的数据写入磁盘。</p>
+<h3 id="1-10-20-resize2fs（调ext-系统大小）"><a href="#1-10-20-resize2fs（调ext-系统大小）" class="headerlink" title="1.10.20. resize2fs（调ext*系统大小）"></a>1.10.20. resize2fs（调ext*系统大小）</h3><p>调整ext2/ext3/ext4文件系统大小。</p>
+<p>假设sdc被分成两个分区，sdc1在使用，但硬盘容量不够了，而sdc2没有使用。</p>
+<ol>
+<li><p>  unmount掉当前的文件盘/dev/sdc1，若提示磁盘忙的话请使用fuser 命令将正在使用磁盘的程序kill掉</p>
+</li>
+<li><p>  使用 fdisk /dev/sdb 命令调整分区大小</p>
+</li>
+<li><p>  删除掉这你需要变化的分区（/dev/sdc1）和需要借用的分区（/dev/sdc2）然后再使用n命令建立分区，注意开始的磁柱号要和原来的一致，结束的磁柱号可以是你期望的磁柱号。不知道的就输入你想要的磁盘大小即可 如+150GB </p>
+</li>
+<li><p>  建立需要调整的分区（/dev/sdc1）</p>
+</li>
+<li><p>  保存分区表</p>
+</li>
+<li><p>  使用e2fsck –f /dev/sdb1，检查分区文件系统</p>
+</li>
+<li><p>  resize2fs  /dev/sdc1</p>
+</li>
+</ol>
+<h3 id="1-10-21-LVM"><a href="#1-10-21-LVM" class="headerlink" title="1.10.21. LVM"></a>1.10.21. LVM</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/1584779745qq/p/6862374.html">LVM逻辑卷管理器配置使用详解</a></p>
+<h4 id="1-10-21-1-一次理解"><a href="#1-10-21-1-一次理解" class="headerlink" title="1.10.21.1.  一次理解"></a>1.10.21.1.  一次理解</h4><p>LVM就是动态卷管理，可以将多个硬盘和硬盘分区做成一个逻辑卷，并把这个逻辑卷作为一个整体来统一管理，动态对分区进行扩缩空间大小，安全快捷方便管理。</p>
+<p>  ![img](Linux 常用命令总结/clip_image032.png)</p>
+<p>![img](Linux 常用命令总结/clip_image033.png)</p>
+<p>l PV(physical volume)：物理卷在逻辑卷管理系统最底层，可为整个物理硬盘或实际物理硬盘上的分区。</p>
+<p>l VG(volume group)：卷组建立在物理卷上，一卷组中至少要包括一物理卷，卷组建立后可动态的添加卷到卷组中，一个逻辑卷管理系统工程中可有多个卷组。</p>
+<p>l LV(logical volume)：逻辑卷建立在卷组基础上，卷组中未分配空间可用于建立新的逻辑卷，逻辑卷建立后可以动态扩展和缩小空间。</p>
+<p>l PE(physical extent)：物理区域是物理卷中可用于分配的最小存储单元，物理区域大小在建立卷组时指定，一旦确定不能更改，同一卷组所有物理卷的物理区域大小需一致，新的pv加入到vg后，pe的大小自动更改为vg中定义的pe大小。</p>
+<p>l LE(logical extent)：逻辑区域是逻辑卷中可用于分配的最小存储单元，逻辑区域的大小取决于逻辑卷所在卷组中的物理区域的大小。</p>
+<p>l 卷组描述区域：卷组描述区域存在于每个物理卷中，用于描述物理卷本身、物理卷所属卷组、卷组中逻辑卷、逻辑卷中物理区域的分配等所有信息，它是在使用pvcreate建立物理卷时建立的。</p>
+<h4 id="1-10-21-2-二次理解"><a href="#1-10-21-2-二次理解" class="headerlink" title="1.10.21.2.  二次理解"></a>1.10.21.2.  二次理解</h4><p>物理存储介质（The physical media）</p>
+<p>这里指系统的存储设备：硬盘，如：/dev/hda、/dev/sda等等，是存储系统最低层的存储单元。</p>
+<p>物理卷（physicalvolume）</p>
+<p>物理卷就是指硬盘分区或从逻辑上与磁盘分区具有同样功能的设备(如RAID)，是LVM的基本存储逻辑块，但和基本的物理存储介质（如分区、磁盘等）比较，却包含有与LVM相关的管理参数。</p>
+<p>卷组（Volume Group）</p>
+<p>LVM卷组类似于非LVM系统中的物理硬盘，其由物理卷组成。可以在卷组上创建一个或多个“LVM分区”（逻辑卷），LVM卷组由一个或多个物理卷组成。</p>
+<p>逻辑卷（logicalvolume）</p>
+<p>LVM的逻辑卷类似于非LVM系统中的硬盘分区，在逻辑卷之上可以建立文件系统(比如/home或者/usr等)。</p>
+<p>PE（physical extent）</p>
+<p>每一个物理卷被划分为称为PE(Physical Extents)的基本单元，具有唯一编号的PE是可以被LVM寻址的最小单元。PE的大小是可配置的，默认为4MB。</p>
+<p>LE（logical extent）</p>
+<p>逻辑卷也被划分为被称为LE(Logical Extents) 的可被寻址的基本单位。在同一个卷组中，LE的大小和PE是相同的，并且一一对应。</p>
+<p>![<a target="_blank" rel="noopener" href="http://my.csdn.net/uploads/201205/14/1336985514_3949.jpg]">http://my.csdn.net/uploads/201205/14/1336985514_3949.jpg]</a>(Linux 常用命令总结/clip_image034.jpg)</p>
+<p>   首先可以看到，物理卷（PV）被由大小等同的基本单元PE组成。</p>
+<p>![<a target="_blank" rel="noopener" href="http://my.csdn.net/uploads/201205/14/1336985523_4607.jpg]">http://my.csdn.net/uploads/201205/14/1336985523_4607.jpg]</a>(Linux 常用命令总结/clip_image034.jpg)</p>
+<p>   一个卷组由一个或多个物理卷组成：</p>
+<p>![<a target="_blank" rel="noopener" href="http://my.csdn.net/uploads/201205/14/1336985569_6900.jpg]">http://my.csdn.net/uploads/201205/14/1336985569_6900.jpg]</a>(Linux 常用命令总结/clip_image035.jpg)</p>
+<p>   从上图可以看到，PE和LE有着一一对应的关系。逻辑卷建立在卷组上。逻辑卷就相当于非LVM系统的磁盘分区，可以在其上创建文件系统。</p>
+<p>   下图是磁盘分区、卷组、逻辑卷和文件系统之间的逻辑关系的示意图：</p>
+<p>![<a target="_blank" rel="noopener" href="http://my.csdn.net/uploads/201205/14/1336985596_6935.jpg]">http://my.csdn.net/uploads/201205/14/1336985596_6935.jpg]</a>(Linux 常用命令总结/clip_image036.jpg)</p>
+<p>​    和非LVM系统将包含分区信息的元数据保存在位于分区的起始位置的分区表中一样，逻辑卷以及卷组相关的元数据也是保存在位于物理卷起始处的VGDA(卷组描述符区域)中。VGDA包括以下内容： PV描述符、VG描述符、LV描述符、和一些PE描述符 。</p>
+<p>​    系统启动LVM时激活VG，并将VGDA加载至内存，来识别LV的实际物理存储位置。当系统进行I/O操作时，就会根据VGDA建立的映射机制来访问实际的物理位置。</p>
+<h4 id="1-10-21-3-PV"><a href="#1-10-21-3-PV" class="headerlink" title="1.10.21.3.  PV"></a>1.10.21.3.  PV</h4><p>一般维护命令：</p>
+<p>pvscan #在系统的所有磁盘中搜索已存在的物理卷</p>
+<p>pvdisplay 物理卷全路径名称 #用于显示指定物理卷的属性。<br> pvdata 物理卷全路径名称 #用于显示物理卷的卷组描述区域信息，用于调试目的。<br> pvchange Cx|–allocation {y|n} 物理卷全路径名 #用于改变物理卷的分配许可设置物理卷的创建与删除命令<br> pvcreate 设备全路径名 #用于在磁盘或磁盘分区上创建物理卷初始化信息，以便对该物理卷进行逻辑卷管理。<br> pvmove 源物理卷全路径 [目的物理卷全路径名] #用于把某物理卷中的数据转移到同卷组中其他的特刊卷中。</p>
+<h4 id="1-10-21-4-VG"><a href="#1-10-21-4-VG" class="headerlink" title="1.10.21.4.  VG"></a>1.10.21.4.  VG</h4><p>一般维护命令</p>
+<p>vgscan #检测系统中所有磁盘</p>
+<p>vgck [卷组名] #用于检查卷组中卷组描述区域信息的一致性。</p>
+<p>vgdisplay [卷组名] #显示卷组的属性信息</p>
+<p>vgrename 原卷组名 新卷组名</p>
+<p>vgchange -a y|n [卷组名] #改变卷组的相应属性。是否可分配</p>
+<p>vgchange -l 最大逻辑卷数 #卷组可容纳最大逻辑卷数</p>
+<p>vgchange -x y|n [卷组名] #卷是否有效</p>
+<p>vgmknodes [卷组名|卷组路径] #用于建立（重新建立）已有卷组目录和其中的设备文件卷</p>
+<p>vgremove vg_name pv_name # 移除VG</p>
+<p>配置文件的恢复与备份</p>
+<p>vgcfgbackup [卷组名] #把卷组中的VGDA信息备份到“/etc/lvmconf”目录中的文件</p>
+<p>vgcfgrestore -n 卷组名 物理卷全路命名 #从备份文件中必得指定物理卷的信息卷组的建立与删除命令</p>
+<p>vgcreate 卷组名 物理卷全路径名[物理卷全路径名]</p>
+<p>vgmove 卷组名</p>
+<p>卷组的扩充与缩小命令<br> vgextend 卷组名 物理卷全路径名[物理卷全路径名]<br> vgreduce 卷组名 物理卷全路径名[物理卷全路径名]</p>
+<p>卷组的合并与拆分<br> vgmerge 目的卷组名 源卷组名 #合并两个已经存在的卷组，要求两个卷组的物理区域大小相等且源卷组是非活动的。<br> vgsplit 现有卷组 新卷组 物理卷全路径名[物理卷全路径名]</p>
+<p>卷组的输入与输出命令<br> vgexport 卷组名<br> vgimport 卷组名 卷组中的物理卷[卷组中的物理卷]</p>
+<h4 id="1-10-21-5-LV"><a href="#1-10-21-5-LV" class="headerlink" title="1.10.21.5.  LV"></a>1.10.21.5.  LV</h4><p>一般命令<br> lvscan<br> lvdisplay 逻辑卷全路径名[逻辑卷全路径名]<br> lvrename 旧逻辑卷全路径名 新逻辑卷全路径名<br> lvrename 卷组名 旧逻辑卷名 新逻辑卷名<br> lvchange<br> e2fsadm -L +|- 逻辑卷增减量 逻辑卷全路径名</p>
+<p>逻辑卷的创建与删除命令<br> lvcreate<br> lvremove vg_name/lv_name # 删除lv</p>
+<p>逻辑卷的扩充与缩小命令<br> lvextend -L|–size +逻辑卷大小增量 逻辑卷全路径名</p>
+<p>lvextend -l +100%FREE /dev/vg_name/lv_name</p>
+<p> lvreduce q -L|–size +逻辑卷减小量 逻辑卷全路径名<br> lvmdiskscan #检测所有的SCSI、IDE等存储设备<br> lvmchange -R|–reset #复位逻辑卷管理器<br> lvmsadc [日志文件全路径名] #收信逻辑卷管理器读写统计信息，保存到日志文件中。<br> lvmsar 日志文件全路径名 #从lvmsadc命令生成的日志文件中读取并报告逻辑卷管理器的读写统计信息。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wangkai_123456/article/details/79132333">跟新文档系统大小</a></p>
+<h4 id="1-10-21-6-lvconvert"><a href="#1-10-21-6-lvconvert" class="headerlink" title="1.10.21.6.  lvconvert"></a>1.10.21.6.  l<a target="_blank" rel="noopener" href="https://linux.die.net/man/8/lvconvert">vconvert</a></h4><p>convert a logical volume from linear to mirror or snapshot</p>
+<p>将逻辑卷从线性转换为镜像或快照</p>
+<h2 id="1-11-系统权限及用户授权相关命令（4个）"><a href="#1-11-系统权限及用户授权相关命令（4个）" class="headerlink" title="1.11.  系统权限及用户授权相关命令（4个）"></a>1.11.  系统权限及用户授权相关命令（4个）</h2><h3 id="1-11-1-chmod（改file-dir的权限）"><a href="#1-11-1-chmod（改file-dir的权限）" class="headerlink" title="1.11.1.   chmod（改file/dir的权限）"></a>1.11.1.   chmod（改file/dir的权限）</h3><p>改变文件或目录权限。</p>
+<p>操作对像：</p>
+<ol>
+<li><p>  u文件属主权限</p>
+</li>
+<li><p>  g同组用户权限</p>
+</li>
+<li><p>  o其它用户权限</p>
+</li>
+<li><p>  a所有用户（包括以上三种）</p>
+</li>
+</ol>
+<p>权限设定</p>
+<ol>
+<li><p>  +增加权限</p>
+</li>
+<li><p>  -取消权限</p>
+</li>
+<li><p>  =唯一设定权限</p>
+</li>
+</ol>
+<ol start="4">
+<li>  也可直跟接数字</li>
+</ol>
+<p>chmod 777 file</p>
+<h3 id="1-11-2-chown（改file-dir的属主-组）"><a href="#1-11-2-chown（改file-dir的属主-组）" class="headerlink" title="1.11.2.   chown（改file/dir的属主/组）"></a>1.11.2.   chown（改file/dir的属主/组）</h3><p>改变文件或目录的属主和属组。</p>
+<p>-R,–recursive递归处理所有的文件及子目录</p>
+<p>chown user file #改变文件所属用户</p>
+<p>chown :group file #改变文件属组</p>
+<p>chown user:group file  #改变文件属主和属组</p>
+<h3 id="1-11-3-chgrp（改file属组）"><a href="#1-11-3-chgrp（改file属组）" class="headerlink" title="1.11.3.   chgrp（改file属组）"></a>1.11.3.   chgrp（改file属组）</h3><p>更改文件用户组。</p>
+<p>chgrp sxr  phpinfo.php  #改变用户组</p>
+<h3 id="1-11-4-umask（权限掩码）"><a href="#1-11-4-umask（权限掩码）" class="headerlink" title="1.11.4.   umask（权限掩码）"></a>1.11.4.   umask（权限掩码）</h3><p>显示或设置权限掩码。</p>
+<p>![img](Linux 常用命令总结/clip_image037.png)</p>
+<p>注意：</p>
+<p>第一个零表示后续的数字是以八进制表示的，具体设置的时候能够将第一个零省略的原因是，程序会默认为八进制输入。</p>
+<h2 id="1-12-查看系统用户登陆信息的命令（8个）"><a href="#1-12-查看系统用户登陆信息的命令（8个）" class="headerlink" title="1.12.  查看系统用户登陆信息的命令（8个）"></a>1.12.  查看系统用户登陆信息的命令（8个）</h2><h3 id="1-12-1-whoami（当前用户）"><a href="#1-12-1-whoami（当前用户）" class="headerlink" title="1.12.1.   whoami（当前用户）"></a>1.12.1.   whoami（当前用户）</h3><p>显示当前有效的用户名称，相当于执行id-un命令。</p>
+<p>![img](Linux 常用命令总结/clip_image038.png)</p>
+<h3 id="1-12-2-who（目前登录用户）"><a href="#1-12-2-who（目前登录用户）" class="headerlink" title="1.12.2.   who（目前登录用户）"></a>1.12.2.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/who">who</a>（目前登录用户）</h3><p>显示目前登录系统的用户信息。</p>
+<p>-a, –all       等于-b -d –login -p -r -t -T -u 选项的组合</p>
+<p>-b, –boot      上次系统启动时间</p>
+<p>-q, –count      列出所有已登录用户的登录名与用户数量</p>
+<p>-u, –users      列出已登录的用户</p>
+<h3 id="1-12-3-w（目前登录用户-正执行程序）"><a href="#1-12-3-w（目前登录用户-正执行程序）" class="headerlink" title="1.12.3.   w（目前登录用户+正执行程序）"></a>1.12.3.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/who">w</a>（目前登录用户+正执行程序）</h3><p>显示已经登陆系统的用户列表，并显示用户正在执行的指令。</p>
+<p>补充说明：执行这项指令可得知目前登入系统的用户有那些人，以及他们正在执行的程序。单独执行linux w 命令会显示所有的用户，您也可指定用户名称，仅显示某位用户的相关信息。</p>
+<p>-l 　使用详细格式列表，此为预设值。</p>
+<p>-s 　使用简洁格式列表，不显示用户登入时间，终端机阶段作业和程序所耗费的CPU时间。</p>
+<p>-u 　忽略执行程序的名称，以及该程序耗费CPU时间的信息。</p>
+<h3 id="1-12-4-last（可查过去登入用户）"><a href="#1-12-4-last（可查过去登入用户）" class="headerlink" title="1.12.4.   last（可查过去登入用户）"></a>1.12.4.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/last">last</a>（可查过去登入用户）</h3><p>列出目前与过去登入系统的用户相关信息。读取的日志文件是**/var/log/wtmp**</p>
+<p>－n：指定输出记录的条数 last –n 6 == last -6</p>
+<p>—t：指定时间</p>
+<p>tty：只显示指定的虚拟控制台上登录情况。</p>
+<p>－h 节点：只显示指定的节点上的登录情况。</p>
+<p>－x:显示系统关闭、用户登录和退出的历史</p>
+<p>last -n 10 sxr  #输出10条sxr的登录记录</p>
+<h3 id="1-12-5-lastb（登录失败用户）"><a href="#1-12-5-lastb（登录失败用户）" class="headerlink" title="1.12.5.   lastb（登录失败用户）"></a>1.12.5.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/lastb">lastb</a>（登录失败用户）</h3><p>列出了所有登录系统失败的用户的信息，读取的日志文件是**/var/log/wtmp**</p>
+<p>-d 对于非本地登录的用户，将显示的IP地址转换为主机名</p>
+<p>-x 显示系统登录等级</p>
+<p>-n 显示的行数</p>
+<h3 id="1-12-6-lastlog（用户上一次登录时间）"><a href="#1-12-6-lastlog（用户上一次登录时间）" class="headerlink" title="1.12.6.   lastlog（用户上一次登录时间）"></a>1.12.6.   lastlog（用户上一次登录时间）</h3><p>显示系统中所有用户最近一次登录信息。</p>
+<h3 id="1-12-7-users（谁正在系统里）"><a href="#1-12-7-users（谁正在系统里）" class="headerlink" title="1.12.7.   users（谁正在系统里）"></a>1.12.7.   users（谁正在系统里）</h3><p>显示当前登录系统的所有用户的用户列表。</p>
+<p>根据文件判断输出当前有谁正登录在系统上。如果文件未予指定，则使用/var/run/utmp，/var/log/wtmp 是通用的相关文件</p>
+<h3 id="1-12-8-finger（用户信息查找）"><a href="#1-12-8-finger（用户信息查找）" class="headerlink" title="1.12.8.   finger（用户信息查找）"></a>1.12.8.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/finger">finger</a>（用户信息查找）</h3><p>查找并显示用户信息。</p>
+<p>![img](Linux 常用命令总结/clip_image039.png)</p>
+<h2 id="1-13-内置命令及其它（19个）"><a href="#1-13-内置命令及其它（19个）" class="headerlink" title="1.13.  内置命令及其它（19个）"></a>1.13.  内置命令及其它（19个）</h2><h3 id="1-13-1-echo"><a href="#1-13-1-echo" class="headerlink" title="1.13.1.   echo"></a>1.13.1.   echo</h3><p>打印变量，或直接输出指定的字符串</p>
+<p>-n 不输出行尾的换行符.</p>
+<p>-e 允许对下面列出的加反斜线转义的字符进行解释.</p>
+<p>注意：</p>
+<p>‘’ 单引号：输什么显示什么</p>
+<p><strong>“”</strong> <strong>双引号：</strong>会将变量解析出来显示</p>
+<h3 id="1-13-2-printf"><a href="#1-13-2-printf" class="headerlink" title="1.13.2.   printf"></a>1.13.2.   printf</h3><p>将结果格式化输出到标准输出。</p>
+<h3 id="1-13-3-rpm（管理rpm包）"><a href="#1-13-3-rpm（管理rpm包）" class="headerlink" title="1.13.3.   rpm（管理rpm包）"></a>1.13.3.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/rpm">rpm</a>（管理rpm包）</h3><p>管理rpm包的命令。</p>
+<p>-i –install安装</p>
+<p>-e –erase 删除</p>
+<p>-U –upgrade 升级</p>
+<p>-q –query 查询</p>
+<p>   -p (or ``-‘’) 查询软件包的文件 </p>
+<p>-f 查询文件属于哪个软件包 </p>
+<p>-a 查询所有安装的软件包 </p>
+<p>-l 显示软件包中的文件列表</p>
+<p>-c 显示配置文件列表</p>
+<p>-V –verify校验已安装的软件包</p>
+<p>-K –checksig校验软件包中的文件</p>
+<p>rpm -ivh ipchains-1.3.6-1.i386.rpm   #安装包，并显示详细进度</p>
+<p>rpm -Va              #校验所有的rpm包，查找丢失的文件</p>
+<p>rpm -qf /usr/bin/who        #查找一个文件属于哪个rpm包</p>
+<p>rpm -qpi mon-0.37j-1.i386.rpm   #列出一个rpm包的描述信息</p>
+<p>rpm -qpl mon-0.37j-1.i386.rpm       #列出一个rpm包的文件信息</p>
+<p>rpm -qi httpd       #得到httpd安装包的信息</p>
+<p>rpm -ql httpd      #列出httpd中有哪些文件</p>
+<h3 id="1-13-4-yum（自动解决包依赖）"><a href="#1-13-4-yum（自动解决包依赖）" class="headerlink" title="1.13.4.   yum（自动解决包依赖）"></a>1.13.4.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/yum">yum</a>（自动解决包依赖）</h3><p>自动化简单化地管理rpm包的命令。<a target="_blank" rel="noopener" href="https://blog.csdn.net/im5437/article/details/53445142">yum的配置文件yum.conf详解</a></p>
+<p>-e 静默执行</p>
+<p>-y 自动应答yes</p>
+<p>check-update 检查可更新的包</p>
+<p>clean packages 清除临时包文件（/var/cache/yum 下文件）</p>
+<p>deplist 列出包的依赖</p>
+<p>search[关键词] 搜索包</p>
+<p>provides[关键词] 搜索特定包文件名</p>
+<p>reinstall[RPM包] 重新安装包</p>
+<p>repolist 显示资源库的配置</p>
+<p>resolvedep 指定依赖</p>
+<p>upgrade   只升级所有包，不升级软件和系统内核</p>
+<p>update 升级所有包的同时也升级软件和系统内核</p>
+<p>yum install php53    #安装php5.3</p>
+<p>yum check-update    #检查可更新的程序</p>
+<p>yum deplist php53   #查看php53依赖情况</p>
+<p>yum clean packages      #清除缓存目录下的软件包</p>
+<p>yum search iftop #搜索安装包</p>
+<p>yum history #查看历史记录，然后根据Id可以用undo撤销指定的yum操作</p>
+<h4 id="1-13-4-1-yum有未完成事务"><a href="#1-13-4-1-yum有未完成事务" class="headerlink" title="1.13.4.1.   yum有未完成事务"></a>1.13.4.1.   yum有未完成事务</h4><p>1、 安装 yum-complete-transaction</p>
+<p>yum -y install yum-utils</p>
+<p>这是一个能发现未完成或被中断的yum事务的程序</p>
+<p>2、 清除yum缓存</p>
+<p>yum clean all</p>
+<p>3、 执行清理未完成事务</p>
+<p>yum-complete-transaction –cleanup-only</p>
+<p>4、 扩展</p>
+<p># 清除可能存在的重复包</p>
+<p>package-cleanup –dupes</p>
+<p># 清除可能存在的损坏包</p>
+<p>package-cleanup –problems</p>
+<h3 id="1-13-5-watch（周期执行命令）"><a href="#1-13-5-watch（周期执行命令）" class="headerlink" title="1.13.5.   watch（周期执行命令）"></a>1.13.5.   watch（周期执行命令）</h3><p>周期性的执行给定的命令，并将命令的输出以全屏方式显示。</p>
+<p>-n 或–interval watch缺省每2秒运行一下程序，可以用-n或-interval来指定间隔的时间。</p>
+<p>-d 或–differences watch 会高亮显示变化的区域。 </p>
+<p>-d=cumulative 把变动过的地方(不管最近的那次有没有变动)都高亮显示出来。</p>
+<p>watch -n 10 netstat -tpnl  #每10秒显示一下，已连接的TCP连接</p>
+<h3 id="1-13-6-alias（别名）"><a href="#1-13-6-alias（别名）" class="headerlink" title="1.13.6.   alias（别名）"></a>1.13.6.   alias（别名）</h3><p>设置系统别名。</p>
+<p>alias的效力仅及于该次登入的操作。若要每次登入是即自动设好别名，可在/etc/profile或自己的~/.bashrc中设定指令的别名</p>
+<p>alias yy=’ls -ar’ #设置别名，可以是命令带参数</p>
+<h3 id="1-13-7-unalias"><a href="#1-13-7-unalias" class="headerlink" title="1.13.7.   unalias"></a>1.13.7.   unalias</h3><p>取消系统别名。</p>
+<p>-a 　删除全部的别名</p>
+<p>unalias yy       #删除别名</p>
+<h3 id="1-13-8-date（系统时间）"><a href="#1-13-8-date（系统时间）" class="headerlink" title="1.13.8.   date（系统时间）"></a>1.13.8.   date（系统时间）</h3><p>查看或设置系统时间。</p>
+<p>显示与设置系统时间。</p>
+<p>-s, –set=STRING 根据 STRING 设置时间</p>
+<p>%F 相当于%Y-%m-%d</p>
+<p>%Y 年(用 4 位表示) (1970…)</p>
+<p>%m月份(用两位表示) (01..12) </p>
+<p>%d (月份中的)几号(用两位表示) (01..31) </p>
+<p>%H 小时(按 24 小时制显示，用两位表示) (00..23)</p>
+<p>%M 分钟数(用两位表示) (00..59)</p>
+<p>%S 秒数(用两位表示)(00..60)</p>
+<p>%x 按照 (mm/dd/yy) 格式显示当前日期 </p>
+<p>%X 按照 (%H:%M:%S) 格式显示当前时间</p>
+<p>date –s “13:00:00 2018-03-21” #字符串设置时间 </p>
+<p>date +%Y%m%d #获取日期格式为20180321</p>
+<p>补充：</p>
+<p>   <a target="_blank" rel="noopener" href="https://www.cnblogs.com/zydev/p/5172782.html">ntpdate</a> -u ntp.api.bz #同步网络时间，这里可以写ntp服务器</p>
+<p>   hwclock查看硬件时间</p>
+<p>clock –w同步系统时间</p>
+<h3 id="1-13-9-clear"><a href="#1-13-9-clear" class="headerlink" title="1.13.9.   clear"></a>1.13.9.   clear</h3><p>清除屏幕，简称清屏。</p>
+<h3 id="1-13-10-history"><a href="#1-13-10-history" class="headerlink" title="1.13.10. history"></a>1.13.10. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/history">history</a></h3><p>查看命令执行的历史纪录。</p>
+<p>-c：清空当前历史命令；</p>
+<p>-a：将历史命令缓冲区中命令写入历史命令文件中；</p>
+<p>-r：将历史命令文件中的命令读入当前历史命令缓冲区；</p>
+<p>-w：将当前历史命令缓冲区命令写入历史命令文件中。</p>
+<p>history属性的控制：</p>
+<ol>
+<li>  <strong>HISTSIZE</strong>：控制历史命令记录的总行数，设为0时，将禁用history</li>
+</ol>
+<p>![img](Linux 常用命令总结/clip_image040.png)</p>
+<ol start="2">
+<li>  <strong>HISTFILE</strong>：更改历史文件名称</li>
+</ol>
+<p>![img](Linux 常用命令总结/clip_image041.png)</p>
+<ol start="3">
+<li>  HISTCONTROL：命令记录的控制</li>
+</ol>
+<p>= ignoredups：从命令历史中剔除连续重复的条目</p>
+<p>= erasedups: 清除整个命令历史中的重复条目</p>
+<p>=ignorespace：强制 history 不记住特定的命令，在不想被记住的命令前面输入一个空格</p>
+<ol start="4">
+<li>  <strong>HISTIGNORE</strong>：忽略历史中的特定命令</li>
+</ol>
+<p>![img](Linux 常用命令总结/clip_image042.png)</p>
+<ol start="5">
+<li>  HISTTIMEFORMAT：显示该命令执行时间</li>
+</ol>
+<p>HISTTIMEFORMAT=”%Y%m%d-%H%M%S: “或 HISTTIMEFORMAT=”%Y%m%d %T “</p>
+<p>history的技巧解析：</p>
+<ol>
+<li><p>  <strong>!n</strong>  这个n表示序号，假如你想重新执行第528条命令ls -a，那么你可以使用!528</p>
+</li>
+<li><p>  <strong>!!</strong>   这将会重新执行上一条命令 同crtl p</p>
+</li>
+<li><p>  <strong>!String</strong> 这个String可以随便输，Shell会从最后一条历史命令向前搜索，最先匹配的一条命令将会得到执行。</p>
+</li>
+<li><p>  <strong>fc n</strong>  这个n表示某个历史命令的序号，这将打开一个文本编辑窗口并显示这条命令。然后你可以编辑修改这条命令，</p>
+</li>
+<li><p>  使用 Ctrl+R 搜索历史。很有用</p>
+</li>
+</ol>
+<p>! -N       #执行倒数第N条命令</p>
+<h3 id="1-13-11-eject（弹出光驱）"><a href="#1-13-11-eject（弹出光驱）" class="headerlink" title="1.13.11. eject（弹出光驱）"></a>1.13.11. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/eject">eject</a>（弹出光驱）</h3><p>弹出光驱。</p>
+<h3 id="1-13-12-time（计算命令执行时间）"><a href="#1-13-12-time（计算命令执行时间）" class="headerlink" title="1.13.12. time（计算命令执行时间）"></a>1.13.12. time（计算命令执行时间）</h3><p>计算命令执行时间。</p>
+<p>-o or –output=FILE 设定结果输出档。这个选项会将 time 的输出写入 所指定的档案中。如果档案已经存在，系统将覆写其内容。 </p>
+<p>-a or –append 配合 -o 使用，会将结果写到档案的末端，而不会覆盖掉原来的内容。</p>
+<p>time ls -al #查看执行ls -al所要的时间</p>
+<h3 id="1-13-13-nc（网络工具）"><a href="#1-13-13-nc（网络工具）" class="headerlink" title="1.13.13. nc（网络工具）"></a>1.13.13. nc（网络工具）</h3><p>功能强大的网络工具。</p>
+<p>-i&lt;延迟秒数&gt;  设置时间间隔，以便传送信息及扫描通信端口。</p>
+<p>-l  使用监听模式，管控传入的资料。</p>
+<p>-n  直接使用IP地址，而不通过域名服务器。</p>
+<p>-p&lt;通信端口&gt;  设置本地主机使用的通信端口。</p>
+<p>-s&lt;来源位址&gt;  设置本地主机送出数据包的IP地址。</p>
+<p>-u  使用UDP传输协议。</p>
+<p>-v  显示指令执行过程。</p>
+<p>-w&lt;超时秒数&gt;  设置等待连线的时间。</p>
+<p>-z  使用0输入/输出模式，只在扫描通信端口时使用。</p>
+<p>nc -z -v -n 172.31.100.7 21-25 #端口扫描</p>
+<p>nc -p 1234 -w 5 blog.51yip.com 80 #建立从本地1234端口到host.example.com的80端口连接，5秒超时</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zhangxiao93/article/details/52705642">nc实例详解</a></p>
+<h3 id="1-13-14-xargs"><a href="#1-13-14-xargs" class="headerlink" title="1.13.14. xargs"></a>1.13.14. xargs</h3><h3 id="1-13-15-（管道命令）"><a href="#1-13-15-（管道命令）" class="headerlink" title="1.13.15. （管道命令）"></a>1.13.15. （管道命令）</h3><p>将标准输入转换成命令行参数。</p>
+<p>又称为管道命令，把 其他命令的给它的数据 传递给它后面的命令作为参数。过滤字符时常用</p>
+<p>-i 用 {} 代替 传递的数据</p>
+<p>-n 选项限制单个命令行的参数个数</p>
+<h3 id="1-13-16-exec（执行命令）"><a href="#1-13-16-exec（执行命令）" class="headerlink" title="1.13.16. exec（执行命令）"></a>1.13.16. exec（执行命令）</h3><p>调用并执行指令的命令。exec 执行完命令后，退出所在用户权限</p>
+<p>![img](Linux 常用命令总结/clip_image043.png)</p>
+<h3 id="1-13-17-export（设环境变量）"><a href="#1-13-17-export（设环境变量）" class="headerlink" title="1.13.17. export（设环境变量）"></a>1.13.17. export（设环境变量）</h3><p>设置或者显示环境变量。</p>
+<p>-n 删除指定的环境变量</p>
+<p>export PATH=$PATH:/usr/local/bin #将/usr/local/bin加入环境变量中</p>
+<p>export -n HISTCONTROL #删除环境变量HISTCONTROL</p>
+<h3 id="1-13-18-unset"><a href="#1-13-18-unset" class="headerlink" title="1.13.18. unset"></a>1.13.18. unset</h3><p>删除变量或函数。</p>
+<p> -f 　仅删除函数。 </p>
+<p> -v 　仅删除变量。</p>
+<h3 id="1-13-19-type（判断命令是否内置）"><a href="#1-13-19-type（判断命令是否内置）" class="headerlink" title="1.13.19. type（判断命令是否内置）"></a>1.13.19. type（判断命令是否内置）</h3><p>用于判断另外一个命令是否是内置命令。</p>
+<h3 id="1-13-20-bc（计算器）"><a href="#1-13-20-bc（计算器）" class="headerlink" title="1.13.20. bc（计算器）"></a>1.13.20. bc（计算器）</h3><p>命令行科学计算器</p>
+<p>echo ‘obase=2; 12’|bc   #将12转换成2进制</p>
+<p>echo ‘obase=2; ibase=16; 2301’|bc  #将2301 从16进制转换成2进制</p>
+<h2 id="1-14-系统管理与性能监视命令-10个"><a href="#1-14-系统管理与性能监视命令-10个" class="headerlink" title="1.14.  系统管理与性能监视命令(10个)"></a>1.14.  系统管理与性能监视命令(10个)</h2><h3 id="1-14-1-fio-（测试磁盘性能）"><a href="#1-14-1-fio-（测试磁盘性能）" class="headerlink" title="1.14.1.   fio （测试磁盘性能）"></a>1.14.1.   fio （测试磁盘性能）</h3><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1519501">云硬盘性能测试</a></p>
+<p>numjobs == CPU逻辑核数</p>
+<p>filename=/dev/emcpowerb　支持文件系统或者裸设备，-filename=/dev/sda2或-filename=/dev/sdb</p>
+<p>direct=1         测试过程绕过机器自带的buffer，使测试结果更真实</p>
+<p>rw=randwread       测试随机读的I/O</p>
+<p>rw=randwrite       测试随机写的I/O</p>
+<p>rw=randrw        测试随机混合写和读的I/O</p>
+<p>rw=read         测试顺序读的I/O</p>
+<p>rw=write         测试顺序写的I/O</p>
+<p>rw=rw          测试顺序混合写和读的I/O</p>
+<p>bs=4k          单次io的块文件大小为4k</p>
+<p>bsrange=512-2048     同上，提定数据块的大小范围</p>
+<p>size=5g         本次的测试文件大小为5g，以每次4k的io进行测试</p>
+<p>numjobs=30        本次的测试线程为30</p>
+<p>runtime=1000       测试时间为1000秒，如果不写则一直将5g文件分4k每次写完为止</p>
+<p>ioengine=psync      io引擎使用pync方式，如果要使用libaio引擎，需要yum install libaio-devel包</p>
+<p>rwmixwrite=30      在混合读写的模式下，写占30%</p>
+<p>group_reporting     关于显示结果的，汇总每个进程的信息</p>
+<p>此外</p>
+<p>lockmem=1g        只使用1g内存进行测试</p>
+<p>zero_buffers       用0初始化系统buffer</p>
+<p>nrfiles=8        每个进程生成文件的数量</p>
+<p>runtime=3000       设置运行时间（秒）</p>
+<p> fio中的I/O延迟包括三种：slat，clat，lat</p>
+<p>关系是 lat = slat + clat。</p>
+<p>slat 表示fio submit某个I/O的延迟。</p>
+<p>clat 表示fio complete某个I/O的延迟。</p>
+<p>lat 表示从fio将请求提交给内核，再到内核完成这个I/O为止所需要的时间。</p>
+<p>4\8k\1M-100%顺序读</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=read -ioengine=psync -bs=4k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_4k_read</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=read -ioengine=psync -bs=8k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_8k_read</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=read -ioengine=psync -bs=1M -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_1m_read</p>
+<p>4\8k\1M-100%随机读</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=randread -ioengine=psync -bs=4k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_4k_rread</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=randread -ioengine=psync -bs=8k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_8k_rread</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=randread -ioengine=psync -bs=1M -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_1m_rread</p>
+<p>4\8k-100%顺序写</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=write -ioengine=psync -bs=4k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_4k_write</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=write -ioengine=psync -bs=8k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_8k_write</p>
+<p>#fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=write -ioengine=psync -bs=1M -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_1m_write</p>
+<p>4\8k-30%写，70%读，100%随机</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=randrw -rwmixwrite=30 -ioengine=psync -bs=4k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_4k_mixrw37</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=randrw -rwmixwrite=30 -ioengine=psync -bs=8k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_8k_mixrw37 </p>
+<p>4\8k-50%写，50%读，100%随机</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=randrw -rwmixwrite=50 -ioengine=psync -bs=4k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_4k_mixrw55</p>
+<p>fio -filename=/dev/vdb -direct=1 -iodepth 2 -thread -rw=randrw -rwmixwrite=50 -ioengine=psync -bs=8k -size=100G -numjobs=10 -runtime=300 -group_reporting -name=test_8k_mixrw55</p>
+<p><a target="_blank" rel="noopener" href="https://www.ksyun.com/blog/fioshu-chu-zi-duan-shuo-ming/">下面是使用FIO测试金山私有云KingStack环境下磁盘性能的输出字段说明</a>：</p>
+<p>[root@KingStack-FIO ~]# fio -ioengine=libaio -bs=4k -direct=1 -thread -rw=randwrite -size=1000G -filename=/dev/vdb -name=”KingStack EBS 4K randwrite test” -iodepth=16 -runtime=60 KingStack EBS 4K randwrite test: (g=0): rw=randwrite, bs=4K-4K/4K-4K/4K-4K, ioengine=libaio, iodepth=16</p>
+<p>fio-2.2.8</p>
+<p>Starting 1 thread</p>
+<p>## Jobs: 1表示运行的IO线程数; [w(1)]表示使用模式, w为随机写; [100.0% done]表示当前进程执行的进度; [0KB/2092KB/0KB /s]表示吞吐率瞬时值; [0/523/0 iops]表示IOPS瞬时值; [eta 00m:00s]表示持续时间；命令执行期间，可看到值在实时变化</p>
+<p>Jobs: 1 (f=1): [w(1)] [100.0% done] [0KB/47784KB/0KB /s] [0/11.1K/0 iops] [eta 00m:00s]</p>
+<p>## 分别表示任务名称: (当前的GID, job个数): 错误个数; job对应的PID, 任务结束时间</p>
+<p>KingStack EBS 4K randwrite test: (groupid=0, jobs=1): err= 0: pid=5424: Wed Jul 26 15:21:26 2017</p>
+<p>## 输出结果: 模式为write, io大小为2794.3MB, 吞吐率为 47687KB/s, IOPS为11921, 执行时间为60s</p>
+<p>write: io=2794.3MB, bw=47687KB/s, iops=11921, runt= 60003msec</p>
+<p>## 提交响应时间</p>
+<p>slat (usec): min=1, max=1550, avg= 4.95, stdev= 8.24</p>
+<p>## 完成响应时间=提交时间+完成时间(avg较为重要)</p>
+<p>clat (usec): min=27, max=25162, avg=1335.00, stdev=1015.81</p>
+<p>## 响应时间</p>
+<p>lat (usec): min=137, max=25166, avg=1340.28, stdev=1015.86</p>
+<p>## 95.00th=[ 3440]: 表示95%的IO请求的响应时间小于等于3.44s clat percentiles (usec): | 1.00th=[ 247], 5.00th=[ 306], 10.00th=[ 354], 20.00th=[ 442], | 30.00th=[ 524], 40.00th=[ 660], 50.00th=[ 964], 60.00th=[ 1464], | 70.00th=[ 1704], 80.00th=[ 2192], 90.00th=[ 2928], 95.00th=[ 3440], | 99.00th=[ 3696], 99.50th=[ 3760], 99.90th=[ 4080], 99.95th=[ 4384], | 99.99th=[ 9536]</p>
+<p>## 带宽情况</p>
+<p>bw (KB /s): min=45333, max=55131, per=100.00%, avg=47722.74, stdev=1267.38</p>
+<p>## Request延迟情况</p>
+<p>lat (usec) : 50=0.01%, 100=0.01%, 250=1.12%, 500=25.93%, 750=16.29% lat (usec) : 1000=7.43% lat (msec) : 2=24.02%, 4=25.09%, 10=0.12%, 20=0.01%, 50=0.01%</p>
+<p>## cpu使用率</p>
+<p>cpu : usr=3.13%, sys=8.57%, ctx=86552, majf=0, minf=6</p>
+<p>## IO队列深度分布</p>
+<p>IO depths : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=100.0%, 32=0.0%, &gt;=64=0.0%</p>
+<p>## 每次IO需要提交的IO个数</p>
+<p>submit : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, &gt;=64=0.0%</p>
+<p>## 每次IO完成的IO个数</p>
+<p>complete : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.1%, 32=0.0%, 64=0.0%, &gt;=64=0.0%</p>
+<p>## 执行的读写IO操作的情况</p>
+<p>issued : total=r=0/w=715339/d=0, short=r=0/w=0/d=0, drop=r=0/w=0/d=0</p>
+<p>## IO完成延迟的分布情况</p>
+<p>latency : target=0, window=0, percentile=100.00%, depth=16</p>
+<p>## IO操作情况汇总: 全部IO大小, group总带宽, 最小平均带宽, 最大平均带宽, group中的最短线程运行时间, group中的最长线程运行时间</p>
+<p>Run status group 0 (all jobs):</p>
+<p>WRITE: io=2794.3MB, aggrb=47686KB/s, minb=47686KB/s, maxb=47686KB/s, mint=60003msec, maxt=60003msec</p>
+<p>## 所有group总共执行的IO情况: IO数量, IO合并情况, 表示磁盘繁忙的tick数量, 队列消耗时间, 磁盘使用率</p>
+<p>Disk stats (read/write):</p>
+<p>vdb: ios=59/714790, merge=0/0, ticks=28/915069, in_queue=914950, util=99.52%</p>
+<h3 id="1-14-2-lscpu（查看cpu型号）"><a href="#1-14-2-lscpu（查看cpu型号）" class="headerlink" title="1.14.2.   lscpu（查看cpu型号）"></a>1.14.2.   lscpu（查看cpu型号）</h3><p>Architecture:     x86_64</p>
+<p>CPU op-mode(s):    32-bit, 64-bit</p>
+<p>Byte Order:      Little Endian</p>
+<p>CPU(s): 逻辑CPU颗数       40</p>
+<p>On-line CPU(s) list:  0-39</p>
+<p>Thread(s) per core: 每个核心线程数 2</p>
+<p>Core(s) per socket: 每一个插槽对应的物理CPU上有多少个核  10</p>
+<p>Socket(s): CPU插槽数      2</p>
+<p>NUMA node(s):     2</p>
+<p>Vendor ID:       GenuineIntel</p>
+<p>CPU family:      6</p>
+<p>Model:         63</p>
+<p>Model name:      Intel(R) Xeon(R) CPU E5-2650 v3 @ 2.30GHz</p>
+<p>Stepping:       2</p>
+<p>CPU MHz: CPU主频       2599.988</p>
+<p>BogoMIPS:       4595.41</p>
+<p>Virtualization: CPU支持的虚拟化技术   VT-x</p>
+<p>L1d cache:       32K</p>
+<p>L1i cache:       32K</p>
+<p>L2 cache:       256K</p>
+<p>L3 cache:       25600K</p>
+<p>NUMA node0 CPU(s):   0-9,20-29</p>
+<p>NUMA node1 CPU(s):   10-19,30-39</p>
+<p>![<a target="_blank" rel="noopener" href="https://img-blog.csdn.net/20160722212730845?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center%5D">https://img-blog.csdn.net/20160722212730845?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center]</a>(Linux 常用命令总结/clip_image044.png)</p>
+<p>有两个物理CPU，每个物理CPU上有1个Core，每个Core上有两个逻辑处理器，共有4个逻辑处理器</p>
+<p>搞明白以下几个概念</p>
+<p>* processor 条目包括这一逻辑处理器的唯一标识符。</p>
+<p>* physical id 条目包括每个物理封装的唯一标识符。</p>
+<p>* core id 条目保存每个内核的唯一标识符。</p>
+<p>* siblings 条目列出了位于相同物理封装中的逻辑处理器的数量。</p>
+<p>* cpu cores 条目包含位于相同物理封装中的内核数量。</p>
+<p>* 如果处理器为英特尔处理器，则 vendor id 条目中的字符串是GenuineIntel。</p>
+<h3 id="1-14-3-chkconfig（服务自启动）"><a href="#1-14-3-chkconfig（服务自启动）" class="headerlink" title="1.14.3.   chkconfig（服务自启动）"></a>1.14.3.   chkconfig（服务自启动）</h3><p>管理Linux系统开机启动项。</p>
+<p>–add 开启指定的服务程序</p>
+<p>–del 关闭指定的服务程序</p>
+<p>–list 列出chkconfig所知道的所有服务</p>
+<p>–level&lt;代号&gt; 设置服务程序的等级代号</p>
+<p>chkconfig –level httpd 35 on #设置httpd在运行级别为3、5的情况下开启</p>
+<h3 id="1-14-4-systemctl（服务自启动）"><a href="#1-14-4-systemctl（服务自启动）" class="headerlink" title="1.14.4.   systemctl（服务自启动）"></a>1.14.4.   systemctl（服务自启动）</h3><p>CentOS7管理服务的工具</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>旧指令</th>
+<th>新指令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>使某服务自动启动</td>
+<td>chkconfig –level 3 httpd on</td>
+<td>systemctl enable httpd.service</td>
+</tr>
+<tr>
+<td>使某服务不自动启动</td>
+<td>chkconfig –level 3 httpd off</td>
+<td>systemctl disable httpd.service</td>
+</tr>
+<tr>
+<td>检查服务状态</td>
+<td>service httpd status</td>
+<td>systemctl status httpd.service （服务详细信息）    systemctl is-enabled httpd.service （仅显示是否 Active)</td>
+</tr>
+<tr>
+<td>显示所有已启动的服务</td>
+<td>chkconfig –list</td>
+<td>systemctl list -units –type=service</td>
+</tr>
+<tr>
+<td>启动某服务</td>
+<td>service httpd start</td>
+<td>systemctl start httpd.service</td>
+</tr>
+<tr>
+<td>停止某服务</td>
+<td>service httpd stop</td>
+<td>systemctl stop httpd.service</td>
+</tr>
+<tr>
+<td>重启某服务</td>
+<td>service httpd restart</td>
+<td>systemctl restart httpd.service</td>
+</tr>
+<tr>
+<td>某服务重新加载配置文件</td>
+<td>service httpd reload</td>
+<td>systemctl reload httpd.service</td>
+</tr>
+</tbody></table>
+<h3 id="1-14-5-vmstat（虚拟内存-磁盘信息）"><a href="#1-14-5-vmstat（虚拟内存-磁盘信息）" class="headerlink" title="1.14.5.   vmstat（虚拟内存/磁盘信息）"></a>1.14.5.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/vmstat">vmstat</a>（虚拟内存/磁盘信息）</h3><p>虚拟内存统计。</p>
+<p>虚拟内存 = 物理内存 + swap分区</p>
+<p>-d：显示磁盘相关统计信息。</p>
+<p>-p：显示指定磁盘分区统计信息</p>
+<p>-S：使用指定单位显示k，K，m，M。小写表示1000，大写表示1024</p>
+<p>vmstat 2  #每二秒显示一次系统内存的统计信息</p>
+<p>vmstat 2 5  #每二秒显示一次系统内存的统计信息，总共5次</p>
+<p>vmstat结果参数解析：</p>
+<p>![img](Linux 常用命令总结/clip_image045.png)</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>项目</th>
+<th>含义</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>proces</td>
+<td>r</td>
+<td>等待执行的任务数</td>
+<td>展示了正在执行和等待CPU资源的任务个数。当这个值超过了CPU数目，就会出现CPU瓶颈了</td>
+</tr>
+<tr>
+<td>b</td>
+<td>处在非中断睡眠状态的进程数</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>swpd</td>
+<td>正在使用的swap大小单位K</td>
+<td></td>
+</tr>
+<tr>
+<td>free</td>
+<td>空闲的内存空间</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>buff</td>
+<td>已使用的buff大小，对块设备的读写进行缓冲</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>cache</td>
+<td>已使用的cache大小，文件系统的cache</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>inact</td>
+<td>非活跃内存大小</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>active</td>
+<td>活跃的内存大小</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Swap</td>
+<td>si</td>
+<td>交换内存使用，由swap调入内存</td>
+<td></td>
+</tr>
+<tr>
+<td>so</td>
+<td>交换内存使用，由内存调入swap</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>IO</td>
+<td>bi</td>
+<td>从块设备读入的数据总量(读磁盘)  (KB/s)</td>
+<td></td>
+</tr>
+<tr>
+<td>bo</td>
+<td>写入到块设备的数据总理(写磁盘)  (KB/s)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>System</td>
+<td>in</td>
+<td>每秒产生的中断次数</td>
+<td>这2个值越大，会看到由内核消耗的CPU时间会越多</td>
+</tr>
+<tr>
+<td>cs</td>
+<td>每秒产生的上下文切换次数</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>us</td>
+<td>用户进程消耗的CPU时间百分比</td>
+<td>us 的值比较高时，说明用户进程消耗的CPU时间多，但是如果长期超过50% 的使用，那么我们就该考虑优化程序算法或者进行加速了</td>
+</tr>
+<tr>
+<td>sy</td>
+<td>内核进程消耗的CPU时间百分比</td>
+<td>sy 的值高时，说明系统内核消耗的CPU资源多，这并不是良性的表现，我们应该检查原因</td>
+<td></td>
+</tr>
+<tr>
+<td>id</td>
+<td>空闲</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>wa</td>
+<td>IO等待消耗的CPU时间百分比</td>
+<td>wa 的值高时，说明IO等待比较严重，这可能是由于磁盘大量作随机访问造成，也有可能是磁盘的带宽出现瓶颈(块操作)</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="1-14-6-mpstat（CPU状态）"><a href="#1-14-6-mpstat（CPU状态）" class="headerlink" title="1.14.6.   mpstat（CPU状态）"></a>1.14.6.   mpstat（CPU状态）</h3><p>显示各个可用CPU的状态统计。报告与CPU的一些统计信息，这些信息存放在/proc/stat文件中</p>
+<p>mpstat -P ALL 2   #查看多核CPU核心的当前运行状况信息， 每2秒更新一次</p>
+<p><a target="_blank" rel="noopener" href="http://linux.51yip.com/search/mpstat">参数解析点这里</a></p>
+<h3 id="1-14-7-iostat（系统IO）"><a href="#1-14-7-iostat（系统IO）" class="headerlink" title="1.14.7.   iostat（系统IO）"></a>1.14.7.   iostat（系统IO）</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33417860">辩证看待 iostat</a>（文章从源码分析了饿iostat的几个指标，核心是%util不一定能用来分析磁盘性能，用blktrace更靠谱。但%util能看出磁盘i/o是否频繁）</p>
+<p>统计系统IO。</p>
+<p>-c   只显示CPU行</p>
+<p>-d   显示设备（磁盘）使用状态</p>
+<p>-k   以千字节为单位显示磁盘输出</p>
+<p>-t    在输出中包括时间戳</p>
+<p>-x   在输出中包括扩展的磁盘指标</p>
+<p><a target="_blank" rel="noopener" href="http://linux.51yip.com/search/iostat">参数解析点这里</a></p>
+<p>iostat -d -k 1 10   #以k为单位，显示磁盘的IO状态，1秒刷新1次，共显示10次</p>
+<p>参数 -d 表示，显示设备（磁盘）使用状态；-k某些使用block为单位的列强制使用</p>
+<p>![img](Linux 常用命令总结/clip_image046.png)</p>
+<p>%user: 在用户级别运行所使用的CPU的百分比.</p>
+<p>%nice: nice操作所使用的CPU的百分比.</p>
+<p>%sys: 在系统级别(kernel)运行所使用CPU的百分比.</p>
+<p>%iowait: CPU等待硬件I/O时,所占用CPU百分比.</p>
+<p>%idle: CPU空闲时间的百分比.</p>
+<p>Kilobytes为单位；1 10表示，数据显示每隔1秒刷新一次，共显示10次</p>
+<p>![img](Linux 常用命令总结/clip_image047.png)</p>
+<p>rrqm/s: 每秒进行 merge 的读操作数目。当系统调用需要读取数据的时候，VFS将请求发到各个FS，如果FS发现不同的读取请求读取的是相同Block的数据，FS会将这个请求合并Merge）；</p>
+<p>wrqm/s: 每秒进行 merge 的写操作数目。</p>
+<p>r/s: 每秒向设备发出的读取请求数。</p>
+<p>w/s: 每秒向设备发出的写入请求数。</p>
+<p>rsec/s: 每秒读扇区数。</p>
+<p>wsec/s: 每秒写扇区数。</p>
+<p>rkB/s: 每秒读K字节数。是 rsect/s 的一半，因为每扇区大小为512字节。(需要计算)</p>
+<p>wkB/s: 每秒写K字节数。是 wsect/s 的一半。(需要计算)</p>
+<p>avgrq-sz: 发布到设备的请求的平均大小（以扇区为单位）。</p>
+<p>avgqu-sz: 发给设备的请求的平均队列长度</p>
+<p>awai：请求被发送给设备并被处理的平均时间（以毫秒为单位）。这包括队列中的请求所花费的时间以及为其提供服务所花费的时间。</p>
+<p>svctm: 表示平均每次设备I/O操作的服务时间（以毫秒为单位。</p>
+<p>%util: 一秒中有百分之多少的时间用于 I/O 操作。</p>
+<p>关于Merge的解释：当系统调用需要读取数据的时 候，VFS将请求发到各个FS，如果FS发现不同的读取请求读取的是相同Block的数据，FS会将这个请求合并Merge</p>
+<p>await：每一个IO请求的处理的平均时间（单位是毫秒）。这里可以理解为IO的响应时间，一般地系统IO响应时间应该低于5ms，如果大于10ms就比较大了。</p>
+<p>%util：在统计时间内所有处理IO时间，除以总共统计时间。例如，如果统计间隔1秒，该 设备有0.8秒在处理IO，而0.2秒闲置，那么该设备的%util = 0.8/1 = 80%，所以该参数暗示了设备的繁忙程度。一般地，如果该参数是100%表示设备已经接近满负荷运行了（当然如果是多磁盘，即使%util是100%，因 为磁盘的并发能力，所以磁盘使用未必就到了瓶颈）</p>
+<p>![img](Linux 常用命令总结/clip_image048.png)</p>
+<p>tps：表明发给设备的每秒传输次数。传输(transfer)是对设备的I / O请求。可以将多个逻辑请求组合到设备的单个I / O请求中。传输的大小不确定。</p>
+<h3 id="1-14-8-sar（各数据都能查）"><a href="#1-14-8-sar（各数据都能查）" class="headerlink" title="1.14.8.   sar（各数据都能查）"></a>1.14.8.   sar（各数据都能查）</h3><p>全面地获取系统的CPU、运行队列、磁盘I/O、分页（交换区）、内存、CPU中断和网络等性能数据。</p>
+<p>sar [options] [-A] [-o file] t [n]</p>
+<p>t为采样间隔，n为采样次数，默认值是1；</p>
+<p>-o file表示将命令结果以二进制格式存放在文件中，file 是文件名</p>
+<p>-A：所有报告的总和</p>
+<p>-u：输出CPU使用情况的统计信息</p>
+<p>-v：输出inode、文件和其他内核表的统计信息</p>
+<p>-d：输出每一个块设备的活动信息</p>
+<p>-r：输出内存和交换空间的统计信息</p>
+<p>-b：显示I/O和传送速率的统计信息</p>
+<p>-a：文件读写情况</p>
+<p>-c：输出进程统计信息，每秒创建的进程数</p>
+<p>-R：输出内存页面的统计信息</p>
+<p>-w：输出系统交换活动信息</p>
+<p>-y：终端设备活动情况</p>
+<p><a target="_blank" rel="noopener" href="http://linux.51yip.com/search/sar">结果参数解析点这里</a></p>
+<p>sar -u -o test 10 3 #每10秒采样一次，连续采样3次，观察CPU 的使用情况，并将采样结果以二进制形式存入当前目录下的文件test中</p>
+<p>sar -n 用法：</p>
+<p>-n DEV ： 网络接口统计信息。</p>
+<p>-n EDEV ： 网络接口错误。</p>
+<p>-n IP ： IP数据报统计信息。</p>
+<p>-n EIP ： IP错误统计信息。</p>
+<p>-n TCP ： TCP统计信息。</p>
+<p>-n ETCP ： TCP错误统计信息。</p>
+<p>-n SOCK ： 套接字使用</p>
+<p>sar -n DEV 1</p>
+<p>第一列：表示报告的时间</p>
+<p>第二列： IFACE 表示网卡</p>
+<p>第三，四列 ： rxpck/s 和 txpck/s 分别表示每秒接收，发送的网络帧数，也就是PPS</p>
+<p>第五，六列 ： rxKB/s 和 txKB/s 分别表示每秒接收，发送的 千 字节数，也就是BPS</p>
+<p>rxcmp/s 每秒接收的压缩数据包</p>
+<p>txcmp/s 每秒发送的压缩数据包</p>
+<p>rxmcst/s 每秒钟 接收的多播数据包</p>
+<p>sar -n EDEV 1</p>
+<p>rxerr/s 每秒钟接收到的损坏的数据包</p>
+<p>txerr/s 每秒钟发送的数据包错误数</p>
+<p>coll/s 当发送数据包时候，每秒钟发生的冲撞（collisions）数，这个是在半双工模式下才有</p>
+<p>rxdrop/s 当由于缓冲区满的时候，网卡设备接收端每秒钟丢掉的网络包的数目</p>
+<p>txdrop/s 当由于缓冲区满的时候，网络设备发送端每秒钟丢掉的网络包的数目</p>
+<p>txcarr/s 当发送数据包的时候，每秒钟载波错误发生的次数</p>
+<p>rxfram  在接收数据包的时候，每秒钟发生的帧对其错误的次数</p>
+<p>rxfifo  在接收数据包的时候，每秒钟缓冲区溢出的错误发生的次数</p>
+<p>txfifo  在发生数据包 的时候，每秒钟缓冲区溢出的错误发生的次数</p>
+<p>sar -n SOCK 1</p>
+<p>totsck 当前被使用的socket总数</p>
+<p>tcpsck 当前正在被使用的TCP的socket总数</p>
+<p>udpsck 当前正在被使用的UDP的socket总数</p>
+<p>rawsck 当前正在被使用于RAW的skcket总数</p>
+<p>if-frag 当前的IP分片的数目</p>
+<p>tcp-tw TCP套接字中处于TIME-WAIT状态的连接数量</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/gavin5033/article/details/84989463">实时监控网卡流量的脚本</a></p>
+<p>#!/bin/bash</p>
+<p>ethn=$1</p>
+<p>while true</p>
+<p>do</p>
+<p> RX_pre=$(cat /proc/net/dev | grep $ethn | sed ‘s/:/ /g’ | awk ‘{print $2}’)</p>
+<p> TX_pre=$(cat /proc/net/dev | grep $ethn | sed ‘s/:/ /g’ | awk ‘{print $10}’)</p>
+<p> sleep 1</p>
+<p> RX_next=$(cat /proc/net/dev | grep $ethn | sed ‘s/:/ /g’ | awk ‘{print $2}’)</p>
+<p> TX_next=$(cat /proc/net/dev | grep $ethn | sed ‘s/:/ /g’ | awk ‘{print $10}’)</p>
+<p> clear</p>
+<p> echo -e “\t RX <code>date +%k:%M:%S</code> TX”</p>
+<p> RX=$((${RX_next}-${RX_pre}))</p>
+<p> TX=$((${TX_next}-${TX_pre}))</p>
+<p> if [[ $RX -lt 1024 ]];then</p>
+<p>  RX=”${RX}B/s”</p>
+<p> elif [[ $RX -gt 1048576 ]];then</p>
+<p>  RX=$(echo $RX | awk ‘{print $1/1048576 “MB/s”}’)</p>
+<p> else</p>
+<p>  RX=$(echo $RX | awk ‘{print $1/1024 “KB/s”}’)</p>
+<p> fi</p>
+<p> if [[ $TX -lt 1024 ]];then</p>
+<p>  TX=”${TX}B/s”</p>
+<p> elif [[ $TX -gt 1048576 ]];then</p>
+<p>  TX=$(echo $TX | awk ‘{print $1/1048576 “MB/s”}’)</p>
+<p> else</p>
+<p>  TX=$(echo $TX | awk ‘{print $1/1024 “KB/s”}’)</p>
+<p> fi</p>
+<p> echo -e “$ethn \t $RX  $TX “</p>
+<p>done</p>
+<h3 id="1-14-9-ipcs（进程间通信设施）"><a href="#1-14-9-ipcs（进程间通信设施）" class="headerlink" title="1.14.9.   ipcs（进程间通信设施）"></a>1.14.9.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/ipcs">ipcs</a>（进程间通信设施）</h3><p>用于报告Linux中进程间通信设施的状态，显示的信息包括消息列表、共享内存和信号量的信息。</p>
+<p>-a：显示全部可显示的信息； </p>
+<p>-q：显示活动的消息队列信息； </p>
+<p>-m：显示活动的共享内存信息； </p>
+<p>-s： 显示活动的信号量信息 ; </p>
+<p>-l： 显示资源限制</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dalongyes/article/details/50616162">详细解析点这里</a></p>
+<p>ipcs –a显示所有的IPC设施</p>
+<h3 id="1-14-10-ipcrm（删除ipc设施）"><a href="#1-14-10-ipcrm（删除ipc设施）" class="headerlink" title="1.14.10. ipcrm（删除ipc设施）"></a>1.14.10. <a target="_blank" rel="noopener" href="http://man.linuxde.net/ipcrm">ipcrm</a>（删除ipc设施）</h3><p>用来删除一个或更多的消息队列、信号量集或者共享内存标识。</p>
+<h3 id="1-14-11-strace（系统调用跟踪）"><a href="#1-14-11-strace（系统调用跟踪）" class="headerlink" title="1.14.11. strace（系统调用跟踪）"></a>1.14.11. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/strace">strace</a>（系统调用跟踪）</h3><p>用于诊断、调试Linux用户空间跟踪器。我们用它来监控用户空间进程和内核的交互，比如系统调用、信号传递、进程状态变更等。</p>
+<p>-f 跟踪由fork调用所产生的子进程. </p>
+<p>-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪. </p>
+<p>-tt 在输出中的每一行前加上时间信息,微秒级. </p>
+<p>-T 显示每一调用所耗的时间. </p>
+<p>-e trace=set只跟踪指定的系统 调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all</p>
+<p>strace -o output.txt -T -tt -e trace=all -p 28979 #跟踪28979进程的所有系统调用（-e trace=all），并统计系统调用的花费时间，以及开始时间（并以可视化的时分秒格式显示），最后将记录结果存在output.txt文件里面</p>
+<p>strace -f -F -o <del>/dcop-strace.txt dcopserver # -f -F选项告诉strace同时跟踪fork和vfork出来的进程，-o选项把所有strace输出写到</del>/dcop-strace.txt里 面，dcopserver是要启动和调试的程序</p>
+<h3 id="1-14-12-ltrace（跟踪进程库函数）"><a href="#1-14-12-ltrace（跟踪进程库函数）" class="headerlink" title="1.14.12. ltrace（跟踪进程库函数）"></a>1.14.12. <a target="_blank" rel="noopener" href="http://man.linuxde.net/ltrace">ltrace</a>（跟踪进程库函数）</h3><p>命令会跟踪进程的库函数调用,它会显现出哪个库函数被调用。</p>
+<h2 id="1-15-关机-重启-注销和查看系统信息的命令（6个）"><a href="#1-15-关机-重启-注销和查看系统信息的命令（6个）" class="headerlink" title="1.15.  关机/重启/注销和查看系统信息的命令（6个）"></a>1.15.  关机/重启/注销和查看系统信息的命令（6个）</h2><h3 id="1-15-1-shutdown（安全关机）"><a href="#1-15-1-shutdown（安全关机）" class="headerlink" title="1.15.1.   shutdown（安全关机）"></a>1.15.1.   shutdown（安全关机）</h3><p>以一种安全的方式关闭系统。所有登陆用户都可以看到关机信息提示。shutdown 通过通知 init 进程，要求它改换运行级别来实现。</p>
+<p>-k  并非真正关机，只向所有人显示警告信息。</p>
+<p>-r  重启。</p>
+<p>-h  停机。</p>
+<p>shutdown –h now  #关机</p>
+<p>shutdown –h 23:00  #晚上11点关机</p>
+<p>shutdown –r now  #重启</p>
+<p>shutdown –r +30 ‘reboot now’  #30分钟后重启，并且提示reboot now</p>
+<p>shutdown –k “18:00”</p>
+<p>shutdown,half,poweroff的区别：</p>
+<p>\1. shutdown实际上是调用init 0, init 0会cleanup一些工作然后调用halt或者poweroff。</p>
+<p>\2. halt和shutdown的联系在于。使用halt时，若系统的 runlevel 为 0 或 6 ，则关闭系统，否则以 shutdown 指令（加上 -h 参数）来取代</p>
+<p>\3. 其实主要区别是halt和poweroff，没有做acpi的系统上，halt只是关闭了os，电源还在工作，你得手动取按一下那个按钮，而poweroff会发送一个关闭电源的信号给acpi。但在现在的系统上，他们实际上都一样了</p>
+<p>\4. ACPI：表示高级配置和接口（Advanced Configuration and Power Management Interface），帮助操作系统控制划拨给每一件与计算机相连的设备的电量，有了ACPI，操作系统就可以把不同的外设关闭。</p>
+<h3 id="1-15-2-halt（关机）"><a href="#1-15-2-halt（关机）" class="headerlink" title="1.15.2.   halt（关机）"></a>1.15.2.   halt（关机）</h3><p>关机。</p>
+<p>-n : 在关机前不做将记忆体资料写回硬盘的动作 </p>
+<p>-w : 并不会真的关机，只是把记录写到 /var/log/wtmp 档案里 </p>
+<p>-d : 不把记录写到 /var/log/wtmp 档案里（-n 这个参数包含了 -d） </p>
+<p>-f : 强迫关机，不呼叫 shutdown 这个指令 </p>
+<p>-i : 在关机之前先把所有网络相关的装置先停止 </p>
+<p>-p : 当关机的时候，顺便做关闭电源（poweroff）的动作</p>
+<h3 id="1-15-3-poweroff（关机并切断电源）"><a href="#1-15-3-poweroff（关机并切断电源）" class="headerlink" title="1.15.3.   poweroff（关机并切断电源）"></a>1.15.3.   poweroff（关机并切断电源）</h3><p>关机并且切断系统电源。</p>
+<p>-n：关闭操作系统时不执行sync操作； </p>
+<p>-w：不真正关闭操作系统，仅在日志文件“/var/log/wtmp”中； </p>
+<p>-d：关闭操作系统时，不将操作写入日志文件“/var/log/wtmp”中添加相应的记录； </p>
+<p>-f：强制关闭操作系统； </p>
+<p>-i：关闭操作系统之前关闭所有的网络接口； </p>
+<p>-h：关闭操作系统之前将系统中所有的硬件设置为备用模式</p>
+<h3 id="1-15-4-logout"><a href="#1-15-4-logout" class="headerlink" title="1.15.4.   logout"></a>1.15.4.   logout</h3><p>退出当前登录的Shell。</p>
+<p>同exit的区别：</p>
+<p>如果没有切换过用户的话，都是退出控制台。 如果切换过用户的话，这两个命令都是注销当前用户，返回上一个用户</p>
+<h3 id="1-15-5-exit"><a href="#1-15-5-exit" class="headerlink" title="1.15.5.   exit"></a>1.15.5.   exit</h3><p>退出当前登录的Shell。</p>
+<p>exit 退出控制台，对于多层shell，用于逐层退出，到最顶层shell，作用就和logout相同。</p>
+<h3 id="1-15-6-Ctrl-d（等于输exit后回车）"><a href="#1-15-6-Ctrl-d（等于输exit后回车）" class="headerlink" title="1.15.6.   Ctrl+d（等于输exit后回车）"></a>1.15.6.   Ctrl+d（等于输exit后回车）</h3><p>退出当前登录的Shell的快捷键。</p>
+<p>补充：</p>
+<p>Ctrl+c，Ctrl+z，Ctrl+d的区别</p>
+<p>ctrl-c: ( kill foreground process ) 发送 SIGINT 信号给前台进程组中的所有进程，强制终止程序的执行；</p>
+<p>ctrl-z: ( suspend foreground process ) 发送 SIGTSTP 信号给前台进程组中的所有进程，常用于挂起一个进程，而并非结束进程，用户可以使用使用fg/bg操作恢复执行前台或后台的进程。fg命令在前台恢复执行被挂起的进 程，此时可以使用ctrl-z再次挂起该进程，bg命令在后台恢复执行被挂起的进程，而此时将无法使用ctrl-z再次挂起该进程；</p>
+<p>ctrl-d: ( Terminate input, or exit shell ) 一个特殊的二进制值，表示 EOF，作用相当于在终端中输入exit后回车；</p>
+<h2 id="1-16-进程管理相关命令（15个）"><a href="#1-16-进程管理相关命令（15个）" class="headerlink" title="1.16.  进程管理相关命令（15个）"></a>1.16.  进程管理相关命令（15个）</h2><h3 id="1-16-1-lsof（列出被打开的文件）"><a href="#1-16-1-lsof（列出被打开的文件）" class="headerlink" title="1.16.1.   lsof（列出被打开的文件）"></a>1.16.1.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/lsof">lsof</a>（列出被打开的文件）</h3><p>全名listopenfiles，也就是列举系统中已经被打开的文件。</p>
+<p>-c&lt;进程名&gt;：列出指定进程所打开的文件；</p>
+<p>-d&lt;文件号&gt;：列出占用该文件的进程；</p>
+<p>+d&lt;目录&gt;：列出目录下被打开的文件；</p>
+<p>+D&lt;目录&gt;：递归列出目录下被打开的文件；</p>
+<p>-n&lt;目录&gt;：列出使用NFS的文件；</p>
+<p>-i&lt;条件&gt;：列出符合条件的进程。（4、6、协议、端口、 @ip ）</p>
+<p>-p&lt;进程号&gt;：列出指定进程号所打开的文件；</p>
+<p>lsof /usr/sbin/httpd #找出谁在使用这个文件</p>
+<p>lsof -u user_name |more #列出某个用户使用的所有文件（^user_name,表除这个用户之外）</p>
+<p>lsof -c httpd #列出某个程序使用的所有文件</p>
+<p>lsof +D /usr/local #列出/usr/local下被打开的所有文件</p>
+<p>lsof -p 3738 #列出由某个PID对应的进程打开的文件</p>
+<p>lsof –i    #列出所有网络连接</p>
+<p>lsof -i:80     #找到使用某个端口的进程</p>
+<h3 id="1-16-2-fuser（找出使用文件的进程）"><a href="#1-16-2-fuser（找出使用文件的进程）" class="headerlink" title="1.16.2.   fuser（找出使用文件的进程）"></a>1.16.2.   <a target="_blank" rel="noopener" href="https://www.cnblogs.com/songxingzhu/p/6368792.html">fuser</a>（找出使用文件的进程）</h3><p>找出当前正在使用文件的程序。fuser显示使用指定文件或者文件系统的进程ID.默认情况下每个文件名后面跟一个字母表示访问类型。</p>
+<p>-a 显示所有命令行中指定的文件，默认情况下被访问的文件才会被显示。  </p>
+<p>-k 杀掉访问文件的进程。如果没有指定-signal就会发送SIGKILL信号。  </p>
+<p>-u 在每个PID后面添加进程拥有者的用户名称。</p>
+<p>-l 列出所有已知的信号名称。 </p>
+<p>-m name 指定一个挂载文件系统上的文件或者被挂载的块设备（名称name）。这样所有访问这个文件或者文件系统的进程都会被列出来。如果指定的是一个目录会自动转换成”name/“,并使用所有挂载在那个目录下面的文件系统。 </p>
+<p>访问类型如下： </p>
+<p>c 代表当前目录 </p>
+<p>e 将此文件作为程序的可执行对象使用 </p>
+<p>f 打开的文件。默认不显示。 </p>
+<p>F 打开的文件，用于写操作。默认不显示。 </p>
+<p>r 根目录。 </p>
+<p>m 映射文件或者共享库。</p>
+<p>fuser -a /root #显示与/root 目录相关的进程</p>
+<p>fuser -k /root #杀死与/root 目录相关的进程 </p>
+<p>fuser -um /dev/sda2 #显示使用/dev/sda2设备的进程</p>
+<p>fuser -v -n tcp 80  #显示使用80端口的进程</p>
+<h3 id="1-16-3-screen（多窗口跑命令）"><a href="#1-16-3-screen（多窗口跑命令）" class="headerlink" title="1.16.3.   screen（多窗口跑命令）"></a>1.16.3.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/screen">screen</a>（多窗口跑命令）</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mchina/archive/2013/01/30/2880680.html">linux screen 命令详解</a></p>
+<p>命令行终端管理软件。拥有会话恢复，多窗口，会话共享功能</p>
+<p># screen [-AmRvx -ls -wipe][-d &lt;作业名称&gt;][-h &lt;行数&gt;][-r &lt;作业名称&gt;][-s ][-S &lt;作业名称&gt;]</p>
+<p>参数说明：</p>
+<p>-A -[r|R]     将所有的视窗都调整为目前终端机的大小。</p>
+<p>-c filename   用指定的filename文件替代screen的配置文件’.screenrc’.</p>
+<p>-d [pid.tty.host] 断开screen进程(使用该命令时，screen的状态一定要是Attached，也就是说有用户连在screen里)。一般进程的名字是以pid.tty.host这种形式表示(用screen -list命令可以看出状态)。</p>
+<p>-D [pid.tty.host] 与-d命令实现一样的功能，区别就是如果执行成功，会踢掉原来在screen里的用户并让他logout。</p>
+<p>-h &lt;行数&gt; 　  指定视窗的缓冲区行数</p>
+<p>-ls或–list    显示目前所有的screen作业。</p>
+<p>-m      即使目前已在作业中的screen作业，仍强制建立新的screen作业。</p>
+<p>-p number or name 预先选择一个窗口。</p>
+<p>-r [pid.tty.host] 恢复离线的screen进程，如果有多个断开的进程，需要指定[pid.tty.host]</p>
+<p>-R     先试图恢复离线的作业。若找不到离线的作业，即建立新的screen作业。</p>
+<p>-s shell    指定建立新视窗时，所要执行的shell。</p>
+<p>-S &lt;作业名称&gt; 指定screen作业的名称。(用来替代[pid.tty.host]的命名方式,可以简化操作).</p>
+<p>-v       显示版本信息。</p>
+<p>-wipe     检查目前所有的screen作业，并删除已经无法使用的screen作业。</p>
+<p>-x       恢复之前离线的screen作业。</p>
+<p>常用命令：</p>
+<p>screen -S yourname -&gt; 新建一个叫yourname的session</p>
+<p>screen -ls -&gt; 列出当前所有的session</p>
+<p>screen -r yourname -&gt; 回到yourname这个session</p>
+<p>screen -d yourname -&gt; 远程detach某个session</p>
+<p>screen -d -r yourname -&gt; 结束当前session并回到yourname这个session</p>
+<h3 id="1-16-4-bg（后台执行）"><a href="#1-16-4-bg（后台执行）" class="headerlink" title="1.16.4.   bg（后台执行）"></a>1.16.4.   bg（后台执行）</h3><p>将一个在后台暂停的命令，变成继续执行（在后台执行）。</p>
+<p>ping localhost -a &gt;/dev/null &amp;  #将程序放到后台执行，crtl –z后，可通过bg id 调用</p>
+<p>![img](Linux 常用命令总结/clip_image049.png)</p>
+<h3 id="1-16-5-fg（前台执行）"><a href="#1-16-5-fg（前台执行）" class="headerlink" title="1.16.5.   fg（前台执行）"></a>1.16.5.   fg（前台执行）</h3><p>将后台中的命令调至前台继续运行。</p>
+<h3 id="1-16-6-jobs（查看后台任务）"><a href="#1-16-6-jobs（查看后台任务）" class="headerlink" title="1.16.6.   jobs（查看后台任务）"></a>1.16.6.   jobs（查看后台任务）</h3><p>查看当前有多少在后台运行的命令。</p>
+<p>-l：显示进程号； </p>
+<p>-n：显示任务状态的变化； </p>
+<p>-r：仅输出运行状态（running）的任务； </p>
+<p>-s：仅输出停止状态（stoped）的任务。</p>
+<h3 id="1-16-7-kill（通过进程号终止进程）"><a href="#1-16-7-kill（通过进程号终止进程）" class="headerlink" title="1.16.7.   kill（通过进程号终止进程）"></a>1.16.7.   kill（通过进程号终止进程）</h3><p>终止进程。不指定信号时将发送SIGTERM（15）终止指定进程</p>
+<p>-l &lt;信号&gt;，若不加信号的编号参数，则使用“-l”参数会列出全部的信号名称</p>
+<p>-s 指定发送信号</p>
+<p>-u 指定用户</p>
+<p>-kill发送信号为SIGKILL(9)</p>
+<p>kill 1908     #杀死进程</p>
+<p>kill -KILL 1908  #强制杀死进程</p>
+<p>kill -9 6985   #彻底杀死进程</p>
+<p>kill -u tank   #杀死指定用户的所有进程</p>
+<p>常用信号一览：</p>
+<p>![img](Linux 常用命令总结/clip_image050.png)</p>
+<p><a target="_blank" rel="noopener" href="http://www.jb51.net/LINUXjishu/173601.html">完整信号解析点这里</a></p>
+<h3 id="1-16-8-killall（通过进程名终止进程）"><a href="#1-16-8-killall（通过进程名终止进程）" class="headerlink" title="1.16.8.   killall（通过进程名终止进程）"></a>1.16.8.   <a target="_blank" rel="noopener" href="https://www.cnblogs.com/rsky/p/4886043.html">killall</a>（通过进程名终止进程）</h3><p>通过进程名终止进程。</p>
+<p>-I 忽略小写</p>
+<p>-g 杀死进程组而不是进程</p>
+<p>-i 交互模式，杀死进程前先询问用户</p>
+<p>-l 列出所有的已知信号名称</p>
+<p>-s 发送指定的信号</p>
+<p>killall sudo #杀死sudo进程</p>
+<h3 id="1-16-9-pkill（类似kill，可杀终端）"><a href="#1-16-9-pkill（类似kill，可杀终端）" class="headerlink" title="1.16.9.   pkill（类似kill，可杀终端）"></a>1.16.9.   <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/pkill">pkill</a>（类似kill，可杀终端）</h3><p>是ps命令和kill命令的结合,用来杀死指定进程</p>
+<p>-v 与条件不符合的程序</p>
+<p>-t&lt;终端&gt; 指定终端下的所有程序</p>
+<p>-u&lt;用户&gt; 指定用户的程序</p>
+<p>pkill -t tty1   #杀死终端1下的所有进程 </p>
+<p>pkill -kill -t pts/2  #踢用户</p>
+<p>pkill -9 6985   #彻底杀死进程</p>
+<p>pkill -u tank  #杀死指定用户的所有进程</p>
+<p>pkill -vu root  #杀死不属于root用户的所有进程</p>
+<h3 id="1-16-10-crontab（定时任务）"><a href="#1-16-10-crontab（定时任务）" class="headerlink" title="1.16.10. crontab（定时任务）"></a>1.16.10. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/crontab">crontab</a>（定时任务）</h3><p>定时任务命令。配合脚本使用。</p>
+<p>crontab [-u user] [-l| -r | -e][-i]</p>
+<p>-u 设定某个用户的cron服务</p>
+<p>-e 设置计时器</p>
+<p>-l 列出当前计时器的设置</p>
+<p>-r 删除计时器的设置</p>
+<p>格式为：分 时 日 月 周几 命令</p>
+<p>*/5 * * * * #每五分钟执行</p>
+<p>0 8 * * 1-5 #周一到周五的每天8点执行，</p>
+<p>1-59/10 12-23 * * 1-5 /var/www/test.sh  #每周一到周五的11:41开始，每隔10分钟执行一次</p>
+<p>0 10,16 * * * /var/www/test.sh  #每天10:00、16:00执行</p>
+<p>补充：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/payton_liu/article/details/17120041">Linux下cron服务</a></p>
+<ol>
+<li><p>cron是服务名称，crond是后台进程，crontab则是定制好的计划任务表</p>
+</li>
+<li><p>cron有两个配置文件，一个是一个全局配置文件（/etc/crontab），是针对系统任务的；一组是crontab命令生成的配置文件（/var/spool/cron下的文件），是针对某个用户的。定时任务配置到任意一个中都可以。</p>
+</li>
+</ol>
+<h3 id="1-16-11-ps（查看进程状态）"><a href="#1-16-11-ps（查看进程状态）" class="headerlink" title="1.16.11. ps（查看进程状态）"></a>1.16.11. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/ps">ps</a>（查看进程状态）</h3><p>显示进程的快照。</p>
+<p>-a：显示所有终端机下执行的进程，除了阶段作业领导者之外 </p>
+<p>-e：显示所有进程 </p>
+<p>-f：显示进程的重要状态信息 </p>
+<p>-l：显示进程的详细状态信息</p>
+<p>-t&lt;终端机编号&gt; 　指定终端机编号，并列出属于该终端机的进程的状况</p>
+<p>-u&lt;用户识别码&gt; 　列出属于该用户的进程的状况，也可使用用户名称来指定</p>
+<p>a 显示现行终端机下的所有进程，包括其他用户的进程。</p>
+<p>u 　以用户为主的格式来显示进程状况</p>
+<p>x 　显示所有进程，不以终端机来区分</p>
+<p>![这里写图片描述](Linux 常用命令总结/clip_image051.png)</p>
+<h3 id="1-16-12-pgrep"><a href="#1-16-12-pgrep" class="headerlink" title="1.16.12. pgrep"></a>1.16.12. pgrep</h3><p>通过程序的名字来查询进程的工具，一般是用来判断程序是否正在运行</p>
+<p>#pgrep 参数选项  程序名</p>
+<h3 id="1-16-13-pstree（树形进程）"><a href="#1-16-13-pstree（树形进程）" class="headerlink" title="1.16.13. pstree（树形进程）"></a>1.16.13. <a target="_blank" rel="noopener" href="http://linux.51yip.com/search/pstree">pstree</a>（树形进程）</h3><p>树形显示进程。</p>
+<p>pstree指令用ASCII字符显示树状结构，清楚地表达程序间的相互关系。如果不指定程序识别码或用户名称，则会把系统启动时的第一个程序视为基层，并显示之后的所有程序。若指定用户名称，便会以隶属该用户的第一个程序当作基层，然后显示该用户的所有程序。</p>
+<h3 id="1-16-14-nice（指定优先级）"><a href="#1-16-14-nice（指定优先级）" class="headerlink" title="1.16.14. nice（指定优先级）"></a>1.16.14. nice（指定优先级）</h3><p>以指定的优先级运行命令，这会影响相应进程的调度。nice值范围为-20到+19</p>
+<p>nice -n 19 vim &amp; #设置优先级为19</p>
+<h3 id="1-16-15-renice（修改优先级）"><a href="#1-16-15-renice（修改优先级）" class="headerlink" title="1.16.15. renice（修改优先级）"></a>1.16.15. renice（修改优先级）</h3><p>调整程序优先级</p>
+<p>-g &lt;程序群组名称&gt; 　使用程序群组名称，修改所有隶属于该程序群组的程序的优先权。</p>
+<p>-p &lt;程序识别码&gt; 　 改变该程序的优先权等级，此参数为预设值。</p>
+<p>-u &lt;用户名称&gt; 　  指定用户名称，修改所有隶属于该用户的程序的优先权。</p>
+<p>renice -5 -p 5200  #PID为5200的进程nice设为-5</p>
+<p>进程优先级、进程nice值和%nice：</p>
+<p>用top或者ps命令会输出PRI/PR、NI、%ni/%nice这三种指标值</p>
+<ol>
+<li><p>  <strong>PRI</strong> ：进程优先权，代表这个进程可被执行的优先级，其值越小，优先级就越高，越早被执行; PRI有linux系统控制，我们只能调整nice值</p>
+</li>
+<li><p>  PRI(new)=PRI(old)+nice</p>
+</li>
+<li><p>  <strong>NI</strong> ：进程Nice值，代表这个进程的优先值;</p>
+</li>
+<li><p>  <strong>%nice</strong> ：改变过优先级的进程的占用CPU的百分比。</p>
+</li>
+<li><p>  nice值范围为-20 ~ 19，一般用户调整的范围为0~19，且只能调大，不能调小</p>
+</li>
+</ol>
+<ol start="6">
+<li><p>  nice：一开始执行程式就立即给予一个特定的 nice 值： </p>
+</li>
+<li><p>  renice：调整某个已经存在的 PID 的 nice 值</p>
+</li>
+</ol>
+<h3 id="1-16-16-nohup（忽略挂起信号）"><a href="#1-16-16-nohup（忽略挂起信号）" class="headerlink" title="1.16.16. nohup（忽略挂起信号）"></a>1.16.16. nohup（忽略挂起信号）</h3><p>忽略挂起信号运行指定的命令。在使用nohup命令后台运行命令之后，需要使用exit正常退出当前账户，这样才能保证命令一直在后台运行</p>
+<p>如果使用nohup命令提交作业，那么在缺省情况下该作业的所有输出都被重定向到一个名为nohup.out的文件中，除非另外指定了输出文件</p>
+<p>nohup crontab_php.sh test &amp;  #退出后继续执行sh文件</p>
+<p>nohup crontab_php.sh &gt;test 2&gt;&amp;1 &amp; #退出后继续执行sh文件,将标准错误2重定向到标准输出1，然后将标准输出导入文件，结果就是包含了标准输出和标准输入</p>
+<h3 id="1-16-17-pgrep（查匹配条件的进程）"><a href="#1-16-17-pgrep（查匹配条件的进程）" class="headerlink" title="1.16.17. pgrep（查匹配条件的进程）"></a>1.16.17. <a target="_blank" rel="noopener" href="http://man.linuxde.net/pgrep">pgrep</a>（查匹配条件的进程）</h3><p>查找匹配条件的进程。</p>
+<p>-o：仅显示找到的最小（起始）进程号；</p>
+<p>-n：仅显示找到的最大（结束）进程号；</p>
+<p>-l：显示进程名称；</p>
+<p>-P：指定父进程号；</p>
+<p>-g：指定进程组；</p>
+<p>-t：指定开启进程的终端；</p>
+<p>-u：指定进程的有效用户ID。</p>
+<p>pgrep -l httpd  #查找和httpd有关的进程，并显示进程名</p>
+<h3 id="1-16-18-runlevel（当前运行级别）"><a href="#1-16-18-runlevel（当前运行级别）" class="headerlink" title="1.16.18. runlevel（当前运行级别）"></a>1.16.18. runlevel（当前运行级别）</h3><p>查看系统当前运行级别。</p>
+<p>系统级别：</p>
+<p>0 ：停机</p>
+<p>1 ：单用户模式</p>
+<p>2 ：多用户模式，无网络</p>
+<p>3 ：完全的多用户模式</p>
+<p>4 ：用户自定义</p>
+<p>5 ：图形界面多用户模式</p>
+<p>6 ：重启</p>
+<h3 id="1-16-19-init（切换运行级别）"><a href="#1-16-19-init（切换运行级别）" class="headerlink" title="1.16.19. init（切换运行级别）"></a>1.16.19. init（切换运行级别）</h3><p>切换运行级别。</p>
+<h3 id="1-16-20-service（服务管理）"><a href="#1-16-20-service（服务管理）" class="headerlink" title="1.16.20. service（服务管理）"></a>1.16.20. service（服务管理）</h3><p>启动、停止、重新启动和关闭系统服务，还可以显示所有系统服务的当前状态。</p>
+<p>启动（start）、停止（stop）、重启（restart）、重新加载配置（reload）、查看状态（status）</p>
+<h3 id="1-16-21-systemctl（服务管理）"><a href="#1-16-21-systemctl（服务管理）" class="headerlink" title="1.16.21. systemctl（服务管理）"></a>1.16.21. <a target="_blank" rel="noopener" href="https://blog.csdn.net/u012486840/article/details/53161574">systemctl</a>（服务管理）</h3><p>CentOS 7的服务管理工具</p>
+<p>设置默认启动级别</p>
+<p>systemctl set-default name.target</p>
+<h1 id="2-应用程序"><a href="#2-应用程序" class="headerlink" title="2.  应用程序"></a>2.  应用程序</h1><h3 id="2-1-1-mysql（数据库常用命令）"><a href="#2-1-1-mysql（数据库常用命令）" class="headerlink" title="2.1.1. mysql（数据库常用命令）"></a>2.1.1. mysql（数据库常用命令）</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ithomer/article/details/5131863">MySQL 数据库常用命令小结</a></p>
+<p>mysql -u root -p passowrd -h host_ip # 登录</p>
+<p>create database name # 创建数据库</p>
+<p>use database name # 选择数据库</p>
+<p>drop database name # 直接删除数据库，不提醒</p>
+<p>mysqladmin drop databasename # 删除数据库前，有提示</p>
+<p>show tables #显示表</p>
+<p>delete from tables_name where id=3 # 从表中删除行数据</p>
+<p>describe tablename # 表的详细描述</p>
+<p>select user，host，password from mysql.user # 显示所有用户</p>
+<p>select DISTINCT user from mysql.user # 显示所有的用户，不重复</p>
+<p>show variables like ‘character%’;  # 查看字符集设置</p>
+<p>show grants for keystone; # 查看授权是否成功</p>
+<h4 id="2-1-1-1-允许root用户远程登录"><a href="#2-1-1-1-允许root用户远程登录" class="headerlink" title="2.1.1.1. 允许root用户远程登录"></a>2.1.1.1. <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/865a2df52590">允许root用户远程登录</a></h4><p>mysql&gt; use mysql;</p>
+<p>mysql&gt; update user set host = ‘%’ where user = ‘root’; # 报错误也没关系</p>
+<p>mysql&gt; flush privileges;</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2021/01/19/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%B8%AD%E7%9A%848%E4%B8%AA%20character_set%20%E5%8F%98%E9%87%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -844,7 +3301,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-19 23:17:05" itemprop="dateModified" datetime="2021-01-19T23:17:05+08:00">2021-01-19</time>
+                <time title="Modified: 2021-01-20 22:36:27" itemprop="dateModified" datetime="2021-01-20T22:36:27+08:00">2021-01-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -908,7 +3365,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/11/24/k8s/%E4%BB%8B%E7%BB%8DKubernetes%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E6%8E%A5%E5%8F%A3%EF%BC%88CSI%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/12/11/Linux/IO%E6%A8%A1%E5%9E%8B%E5%8F%8Aselect%E3%80%81poll%E3%80%81epoll%E5%92%8Ckqueue%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
@@ -922,7 +3379,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/heavyfish.github.io/2020/11/24/k8s/%E4%BB%8B%E7%BB%8DKubernetes%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E6%8E%A5%E5%8F%A3%EF%BC%88CSI%EF%BC%89/" class="post-title-link" itemprop="url">CSI简介</a>
+            <a href="/heavyfish.github.io/2020/12/11/Linux/IO%E6%A8%A1%E5%9E%8B%E5%8F%8Aselect%E3%80%81poll%E3%80%81epoll%E5%92%8Ckqueue%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">IO模型及select、poll、epoll和kqueue的区别</a>
         </h2>
 
         <div class="post-meta">
@@ -932,14 +3389,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2020-11-24 14:25:08" itemprop="dateCreated datePublished" datetime="2020-11-24T14:25:08+08:00">2020-11-24</time>
+              <time title="Created: 2020-12-11 21:39:34" itemprop="dateCreated datePublished" datetime="2020-12-11T21:39:34+08:00">2020-12-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-17 23:05:05" itemprop="dateModified" datetime="2021-01-17T23:05:05+08:00">2021-01-17</time>
+                <time title="Modified: 2021-01-20 22:43:49" itemprop="dateModified" datetime="2021-01-20T22:43:49+08:00">2021-01-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -947,7 +3404,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/heavyfish.github.io/categories/Kubernetes/" itemprop="url" rel="index"><span itemprop="name">Kubernetes</span></a>
+                  <a href="/heavyfish.github.io/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
                 </span>
             </span>
 
@@ -957,14 +3414,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>19k</span>
+              <span>9.5k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>17 mins.</span>
+              <span>9 mins.</span>
             </span>
 
         </div>
@@ -976,110 +3433,193 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>本文翻译于 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/community/blob/master/contributors/design-proposals/storage/container-storage-interface.md">CSI Volume Plugins in Kubernetes Design Doc</a>，简单介绍了CSI的整体架构</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/heavyfish.github.io/2020/11/24/k8s/%E4%BB%8B%E7%BB%8DKubernetes%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E6%8E%A5%E5%8F%A3%EF%BC%88CSI%EF%BC%89/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
+          <a id="more"></a>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/11/23/Go/GRPC/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
-      <meta itemprop="name" content="Shenxr">
-      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
-    </span>
+<h1 id="1、快速入门"><a href="#1、快速入门" class="headerlink" title="1、快速入门"></a>1、快速入门</h1><h2 id="1、常见I-O模型"><a href="#1、常见I-O模型" class="headerlink" title="1、常见I/O模型"></a>1、常见I/O模型</h2><p><code>网络IO的本质是socket的读取，socket在linux系统被抽象为流，IO可以理解为对流的操作</code>。刚才说了，对于一次IO访问（以read举例），<code>数据会先被拷贝到操作系统内核的缓冲区中，然后才会从操作系统内核的缓冲区拷贝到应用程序的地址空间</code>。所以说，当一个read操作发生时，它会经历两个阶段：</p>
+<blockquote>
+<ol>
+<li>第一阶段：等待数据准备 (Waiting for the data to be ready)。</li>
+<li>第二阶段：将数据从内核拷贝到进程中 (Copying the data from the kernel to the process)。</li>
+</ol>
+</blockquote>
+<p>对于socket流而言，</p>
+<blockquote>
+<ol>
+<li>第一步：通常涉及等待网络上的数据分组到达，然后被复制到内核的某个缓冲区。</li>
+<li>第二步：把数据从内核缓冲区复制到应用进程缓冲区。</li>
+</ol>
+</blockquote>
+<p>网络应用需要处理的无非就是两大类问题，<code>网络IO，数据计算</code>。相对于后者，网络IO的延迟，给应用带来的性能瓶颈大于后者。网络IO的模型大致有如下几种：</p>
+<ul>
+<li><p>blocking I/O</p>
+</li>
+<li><p>nonblocking I/O</p>
+</li>
+<li><p>I/O multiplexing (<code>select</code> and <code>poll</code>)</p>
+</li>
+<li><p>signal driven I/O (<code>SIGIO</code>)</p>
+</li>
+<li><p>asynchronous I/O (the POSIX <code>aio_</code>functions)—————<strong>异步IO模型最大的特点是 完成后发回通知</strong>。</p>
+<p><strong>阻塞与否，取决于实现IO交换的方式。</strong></p>
+<p><strong>异步阻塞是基于select，select函数本身的实现方式是阻塞的，而采用select函数有个好处就是它可以同时监听多个文件句柄</strong></p>
+<p><strong>异步非阻塞直接在完成后通知，用户进程只需要发起一个IO操作然后立即返回，等IO操作真正的完成以后，应用程序会得到IO操作完成的通知，此时用户进程只需要对数据进行处理就好了，不需要进行实际的IO读写操作，因为真正的IO读取或者写入操作已经由内核完成了。</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Mode</th>
+<th align="center">Blocking</th>
+<th align="center">Non-blocking</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Synchronous</td>
+<td align="center">read/write</td>
+<td align="center">read/write (O_NONBLOCK)</td>
+</tr>
+<tr>
+<td align="center">Asynchronous</td>
+<td align="center">I/O multiplexing (select/poll/epoll)</td>
+<td align="center">AIO</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意：对于 I/O multiplexing 的定义是 同步 还是 异步 发现了不同的描述。都是基于角度不同而已，不用深究，关键在于对  I/O multiplexing 本身的理解</p>
+</blockquote>
+<h3 id="1-blocking-I-O"><a href="#1-blocking-I-O" class="headerlink" title="1 blocking I/O"></a><strong>1 blocking I/O</strong></h3><p>阻塞套接字，<code>application处于一种不再消费 CPU 而只是简单等待响应的状态</code>。下图是它调用过程的图示：</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120224307907.png" alt="image-20210120224307907"></p>
+<p>重点解释下上图，下面例子都会讲到。首先application调用 recvfrom()转入kernel，注意kernel有2个过程，wait for data和copy data from kernel to user。直到最后copy complete后，recvfrom()才返回。此过程一直是阻塞的。</p>
+<h3 id="2-nonblocking-I-O："><a href="#2-nonblocking-I-O：" class="headerlink" title="2 nonblocking I/O："></a><strong>2 nonblocking I/O：</strong></h3><p>与blocking I/O对立的，非阻塞套接字，调用过程图如下：</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120224314607.png" alt="image-20210120224314607"></p>
+<p><code>同步非阻塞就是 “每隔一会儿瞄一眼进度条” 的轮询（polling）方式</code>。在这种模型中，<code>设备是以非阻塞的形式打开的</code>。这意味着 IO 操作不会立即完成，read 操作可能会返回一个错误代码，说明这个命令不能立即满足（EAGAIN 或 EWOULDBLOCK）。</p>
+<p><code>也就是说非阻塞的recvform系统调用调用之后，进程并没有被阻塞，内核马上返回给进程，如果数据还没准备好，此时会返回一个error</code>。进程在返回之后，可以干点别的事情，然后再发起recvform系统调用。重复上面的过程，循环往复的进行recvform系统调用。<code>这个过程通常被称之为轮询</code>。轮询检查内核数据，直到数据准备好，再拷贝数据到进程，进行数据处理。**<code>需要注意，拷贝数据整个过程，进程仍然是属于阻塞的状态</code>**。</p>
+<h3 id="3-I-O-multiplexing-select-and-poll"><a href="#3-I-O-multiplexing-select-and-poll" class="headerlink" title="3 I/O multiplexing (select and poll)"></a><strong>3 I/O multiplexing (select and poll)</strong></h3><p><strong>最常见的I/O复用模型，select。</strong></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120224319723.png" alt="image-20210120224319723"></p>
+<p>由于同步非阻塞方式需要不断主动轮询，轮询占据了很大一部分过程，轮询会消耗大量的CPU时间，而 “后台” 可能有多个任务在同时进行，人们就想到了循环查询多个任务的完成状态，只要有任何一个任务完成，就去处理它。如果轮询不是进程的用户态，而是有人帮忙就好了。<code>那么这就是所谓的 “IO 多路复用”</code>。UNIX/Linux 下的 select、poll、epoll 就是干这个的（epoll 比 poll、select 效率高，做的事情是一样的）。</p>
+<p>select调用是内核级别的，select轮询相对非阻塞的轮询的区别在于—<code>前者可以等待多个socket，能实现同时对多个IO端口进行监听</code>，当其中任何一个socket的数据准好了，<code>就能返回进行可读</code>，<code>然后进程再进行recvform系统调用，将数据由内核拷贝到用户进程，当然这个过程是阻塞的</code>。select或poll调用之后，会阻塞进程，与blocking IO阻塞不同在于，<code>此时的select不是等到socket数据全部到达再处理, 而是有了一部分数据就会调用用户进程来处理</code>。如何知道有一部分数据到达了呢？<code>监视的事情交给了内核，内核负责数据到达的处理</code>。</p>
+<p><code>I/O复用模型会用到select、poll、epoll函数，这几个函数也会使进程阻塞，但是和阻塞I/O所不同的的，这几个函数可以同时阻塞多个I/O操作</code>。而且可以同时对多个读操作，多个写操作的I/O函数进行检测，直到有数据可读或可写时（注意不是全部数据可读或可写），才真正调用I/O操作函数。</p>
+<p>对于多路复用，也就是轮询多个socket。<code>多路复用既然可以处理多个IO，也就带来了新的问题，多个IO之间的顺序变得不确定了</code>。</p>
+<h3 id="4-signal-driven-I-O-SIGIO"><a href="#4-signal-driven-I-O-SIGIO" class="headerlink" title="4 signal driven I/O (SIGIO)"></a><strong>4 signal driven I/O (SIGIO)</strong></h3><p>信号驱动式I/O：首先我们允许Socket进行信号驱动IO,并安装一个信号处理函数，进程继续运行并不阻塞。当数据准备好时，进程会收到一个SIGIO信号，可以在信号处理函数中调用I/O操作函数处理数据。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120224324988.png" alt="image-20210120224324988"></p>
+<p>与**I/O multiplexing (select and poll)**相比，它的优势是，免去了select的阻塞与轮询，当有活跃套接字时，由注册的handler处理。</p>
+<h3 id="5-asynchronous-I-O-the-POSIX-aio-functions"><a href="#5-asynchronous-I-O-the-POSIX-aio-functions" class="headerlink" title="5 asynchronous I/O (the POSIX aio_functions)"></a><strong>5 asynchronous I/O (the POSIX aio_functions)</strong></h3><p>相对于同步IO，异步IO不是顺序执行。<code>用户进程进行aio_read系统调用之后，无论内核数据是否准备好，都会直接返回给用户进程，然后用户态进程可以去做别的事情</code>。等到socket数据准备好了，内核直接复制数据给进程，<code>然后从内核向进程发送通知</code>。<code>IO两个阶段，进程都是非阻塞的</code>。</p>
+<p>Linux提供了AIO库函数实现异步，但是用的很少。目前有很多开源的异步IO库，例如libevent、libev、libuv。Windows的IOCP 也实现了异步I/O</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120224329605.png" alt="image-20210120224329605"></p>
+<h3 id="6-下面是以上五种模型的比较"><a href="#6-下面是以上五种模型的比较" class="headerlink" title="6 下面是以上五种模型的比较"></a><strong>6 下面是以上五种模型的比较</strong></h3><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210120224334657.png" alt="image-20210120224334657"></p>
+<p>=====================分割线==================================</p>
+<p>5种模型的比较比较清晰了，剩下的就是把select,epoll,iocp,kqueue按号入座那就OK了。</p>
+<p><strong><em>\</em>select和iocp分别对应第3种与第5种模型，那么epoll与kqueue呢？其实也于select属于同一种模型，只是更高级一些，可以看作有了第4种模型的某些特性，如callback机制。**</strong></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><strong>为什么epoll,kqueue比select高级？</strong> </p>
+<p>答案是，他们无<strong>轮询</strong>。因为他们用callback取代了。想想看，当套接字比较多的时候，每次select()都要通过遍历FD_SETSIZE个Socket来完成调度,不管哪个Socket是活跃的,都遍历一遍。这会浪费很多CPU时间。如果能给套接字注册某个回调函数，当他们活跃时，自动完成相关操作，那就避免了轮询，这正是epoll与kqueue做的。</p>
+<p><strong>windows or *nix （IOCP or kqueue/epoll）？</strong></p>
+<p>诚然，Windows的IOCP非常出色，目前很少有支持<strong>asynchronous I/O</strong>的系统，但是由于其系统本身的局限性，大型<a target="_blank" rel="noopener" href="http://detail.zol.com.cn/server_index/subcate31_list_1.html">服务器</a>还是在UNIX下。而且正如上面所述，kqueue/epoll 与 IOCP相比，就是多了一层从内核copy数据到应用层的阻塞，从而不能算作<strong>asynchronous I/O类。</strong>但是，这层小小的阻塞无足轻重，kqueue与epoll已经做得很优秀了。</p>
+<p><strong>提供一致的接口，IO Design Patterns</strong></p>
+<p>实际上，不管是哪种模型，都可以抽象一层出来，提供一致的接口，广为人知的有ACE,<strong>Libevent（基于reactor模式）</strong>这些，他们都是跨平台的，而且他们自动选择最优的I/O复用机制，用户只需调用接口即可。说到这里又得说说2个设计模式，Reactor and <em>Proactor。见：</em><a target="_blank" rel="noopener" href="http://blog.csdn.net/wenbingoon/article/details/9880365">Reactor模式–VS–Proactor模式</a>。Libevent是Reactor模型，ACE提供Proactor模型。实际都是对各种I/O复用机制的封装。</p>
+<p><strong><em>\</em>总结一些重点：**</strong></p>
+<ol>
+<li><strong><em>\</em>只有IOCP是asynchronous I/O，其他机制或多或少都会有一点阻塞。**</strong></li>
+<li><strong><em>\</em>select低效是因为每次它都需要轮询。但低效也是相对的，视情况而定，也可通过良好的设计改善**</strong></li>
+<li><strong><em>\</em>epoll, kqueue、select是Reacor模式，IOCP是Proactor模式。**</strong></li>
+<li><strong><em>\</em>java nio包是select模型。。**</strong></li>
+</ol>
+<h2 id="2、epoll-与select的区别"><a href="#2、epoll-与select的区别" class="headerlink" title="2、epoll 与select的区别"></a>2、epoll 与select的区别</h2><p><strong><em>\</em>1. 使用多进程或者多线程，但是这种方法会造成程序的复杂，而且对与进程与线程的创建维护也需要很多的开销。（Apache服务器是用的子进程的方式，优点可以隔离用户）  **（同步阻塞IO）*\</strong>***</p>
+<p><strong><em>\</em>2.一种较好的方式为\</strong>*<em>I/O多路复用*</em>*<em>（I/O multiplexing）（先构造一张有关描述符的列表（epoll中为队列），然后调用一个函数，直到这些描述符中的一个准备好时才返回，返回时告诉进程哪些I/O就绪。select和epoll这两个机制都是多路I/O机制的解决方案，select为POSIX标准中的，而epoll为Linux所特有的。***</em></p>
+<h3 id="区别（epoll相对select优点）主要有三："><a href="#区别（epoll相对select优点）主要有三：" class="headerlink" title="区别（epoll相对select优点）主要有三："></a><strong>区别（epoll相对select优点）主要有三：</strong></h3><p><strong>1</strong>.select的句柄数目受限，在linux/posix_types.h头文件有这样的声明：#define __FD_SETSIZE  1024 表示select最多同时监听1024个fd。而epoll没有，它的限制是最大的打开文件句柄数目。</p>
+<p>**2.**epoll的最大好处是不会随着FD的数目增长而降低效率，在selec中采用轮询处理，其中的数据结构类似一个数组的数据结构，而epoll是维护一个队列，直接看队列是不是空就可以了。epoll只会对”活跃”的socket进行操作—这是因为在内核实现中epoll是根据每个fd上面的callback函数实现的。那么，只有”活跃”的socket才会主动的去调用 callback函数（把这个句柄加入队列），其他idle状态句柄则不会，在这点上，epoll实现了一个”伪”AIO。但是如果绝大部分的I/O都是“活跃的”，每个I/O端口使用率很高的话，epoll效率不一定比select高（可能是要维护队列复杂）。</p>
+<p><strong>3</strong>.使用mmap加速内核与用户空间的消息传递。无论是select,poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存拷贝就很重要，在这点上，epoll是通过内核与用户空间mmap同一块内存实现的。</p>
+<h3 id="关于epoll工作模式ET，LT"><a href="#关于epoll工作模式ET，LT" class="headerlink" title="关于epoll工作模式ET，LT"></a><strong>关于epoll工作模式ET，LT</strong></h3><p>epoll有两种工作方式</p>
+<p>ET：Edge Triggered，边缘触发。仅当状态发生变化时才会通知，epoll_wait返回。换句话，就是对于一个事件，只通知一次。且只支持非阻塞的socket。</p>
+<p>LT：Level Triggered，电平触发（默认工作方式）。类似select/poll,只要还有没有处理的事件就会一直通知，以LT方式调用epoll接口的时候，它就相当于一个速度比较快的poll.支持阻塞和不阻塞的socket。</p>
+<h2 id="3、Linux并发网络编程模型"><a href="#3、Linux并发网络编程模型" class="headerlink" title="3、Linux并发网络编程模型"></a>3、Linux并发网络编程模型</h2><p>  1  Apache 模型，简称 PPC （ Process Per Connection ，）:为每个连接分配一个进程。主机分配给每个连接的时间和空间上代价较大，并且随着连接的增多，大量进程间切换开销也增长了。很难应对大量的客户并发连接。</p>
+<p>  2  TPC 模型（ Thread Per Connection ）：每个连接一个线程。和PPC类似。</p>
+<p>  3  select 模型：I/O多路复用技术。</p>
+<p>​    .1 每个连接对应一个描述。select模型受限于 FD_SETSIZE即进程最大打开的描述符数linux2.6.35为1024,实际上linux每个进程所能打开描数字的个数仅受限于内存大小，然而在设计select的系统调用时，却是参考FD_SETSIZE的值。可通过重新编译内核更改此值，但不能根治此问题，对于百万级的用户连接请求  即便增加相应 进程数， 仍显得杯水车薪呀。</p>
+<p>   .2select每次都会扫描一个文件描述符的集合，这个集合的大小是作为select第一个参数传入的值。但是每个进程所能打开文件描述符若是增加了 ，扫描的效率也将减小。</p>
+<p>   .3内核到用户空间，采用内存复制传递文件描述上发生的信息。 </p>
+<p> 4 poll 模型：I/O多路复用技术。poll模型将不会受限于FD_SETSIZE，因为内核所扫描的文件 描述符集合的大小是由用户指定的，即poll的第二个参数。但仍有扫描效率和内存拷贝问题。</p>
+<p> 5 pselect模型：I/O多路复用技术。同select。</p>
+<p> 6 epoll模型：</p>
+<p>  .1)无文件描述字大小限制仅与内存大小相关</p>
+<p>  .2)epoll返回时已经明确的知道哪个socket fd发生了什么事件，不用像select那样再一个个比对。</p>
+<p> .3)内核到用户空间采用共享内存方式，传递消息。</p>
+<h2 id="4、FAQ"><a href="#4、FAQ" class="headerlink" title="4、FAQ"></a>4、FAQ</h2><p>1、单个epoll并不能解决所有问题，特别是你的每个操作都比较费时的时候，因为epoll是串行处理的。 所以你有还是必要建立线程池来发挥更大的效能。 </p>
+<p>2、如果fd被注册到两个epoll中时，如果有事件发生则两个epoll都会触发事件。</p>
+<p>3、如果注册到epoll中的fd被关闭，则其会自动被清除出epoll监听列表。<br>4、如果多个事件同时触发epoll，则多个事件会被联合在一起返回。<br>5、epoll_wait会一直监听epollhup事件发生，所以其不需要添加到events中。<br>6、为了避免大数据量io时，et模式下只处理一个fd,其他fd被饿死的情况发生。linux建议可以在fd联系到的结构中增加ready位，然后epoll_wait触发事件之后仅将其置位为ready模式，然后在下边轮询ready fd列表。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wenbingoon/article/details/9004512">IO模型及select、poll、epoll和kqueue的区别</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/486b0965c296">聊聊Linux 五种IO模型</a></p>
+<h1 id="2、select-与-epoll"><a href="#2、select-与-epoll" class="headerlink" title="2、select 与 epoll"></a>2、select 与 epoll</h1><p>我们常学习的实现 I/O 多路复用的系统调用有四种：</p>
+<ul>
+<li>select （select 和 pool 提供基本相同的功能。它们只是在细节上有所不同）</li>
+<li>pool</li>
+<li>epoll    （Linux 专属的系统调用）</li>
+<li>kqueue  （被 FreeBSD、NetBSD、OpenBSD、macOS等系统支持）</li>
+</ul>
+<p>我们会细致比较的是 select 与 epoll。</p>
+<h2 id="2-1、复用技术和I-O复用"><a href="#2-1、复用技术和I-O复用" class="headerlink" title="2.1、复用技术和I/O复用"></a>2.1、<strong>复用技术和I/O复用</strong></h2><ul>
+<li><strong><em>复用的概念</em></strong></li>
+</ul>
+<p>复用技术(multiplexing)并不是新技术而是一种设计思想，在通信和硬件设计中存在频分复用、时分复用、波分复用、码分复用等，在日常生活中复用的场景也非常多，因此不要被专业术语所迷惑。从本质上来说，复用就是为了解决<em>有限资源和过多使用者的不平衡问题</em>，<strong>复用技术的理论基础是资源的可释放性</strong>。</p>
+<ul>
+<li><strong><em>资源的可释放性</em></strong></li>
+</ul>
+<p>举个实际生活的例子：*<strong>不可释放场景</strong>：<em>ICU病房的呼吸机作为有限资源，病人一旦占用且在未脱离危险之前是无法放弃占用的，因此不可能几个情况一样的病人轮流使用。**</em>可释放场景*<em>：</em>对于一些其他资源比如医护人员就可以实现对多个病人的同时监护，理论上不存在一个病人占用医护人员资源不释放的场景。</p>
+<ul>
+<li><strong><em>理解IO复用</em></strong></li>
+</ul>
+<p>*<strong>I/O的含义</strong>：*在计算机领域常说的IO包括磁盘IO和网络IO，我们所说的IO复用主要是指网络IO，在Linux中一切皆文件，因此网络IO也经常用文件描述符FD来表示。</p>
+<p>*<strong>复用的含义</strong>：*那么这些文件描述符FD要复用什么呢？在网络场景中复用的就是任务处理线程，所以简单理解就是多个IO共用1个线程。</p>
+<p><em>I<strong>O复用的可行性</strong>：</em>IO请求的基本操作包括read和write，由于网络交互的本质性，必然存在等待，换言之就是整个网络连接中FD的读写是交替出现的，时而可读可写，时而空闲，所以IO复用是可用实现的。</p>
+<p>综上认为，IO复用技术就是协调多个可释放资源的FD交替共享任务处理线程完成通信任务，实现多个fd对应1个任务处理线程。</p>
+<p>现实生活中IO复用就像一只边牧管理几百只绵羊一样。</p>
+<ul>
+<li><strong><em>IO复用的设计原则和产生背景</em></strong></li>
+</ul>
+<p><strong><em>高效IO复用机制要满足</em>：协调者消耗最少的系统资源、最小化FD的等待时间、最大化FD的数量、任务处理线程最少的空闲、多快好省完成任务等</strong>。</p>
+<p>在网络并发量非常小的原始时期，即使per req per process地处理网络请求也可以满足要求，但是随着网络并发量的提高，原始方式必将阻碍进步，所以就刺激了IO复用机制的实现和推广。</p>
+<h2 id="2-2、select-和-epoll-的任务"><a href="#2-2、select-和-epoll-的任务" class="headerlink" title="2.2、select 和 epoll 的任务"></a>2.2、select 和 epoll 的任务</h2><p>要比较epoll相比较select高效在什么地方，就需要比较二者做相同事情的方法。</p>
+<p>要完成对I/O流的复用需要完成如下几个事情：</p>
+<p><strong>1.用户态怎么将文件句柄传递到内核态？</strong></p>
+<p><strong>2.内核态怎么判断I/O流可读可写？</strong></p>
+<p><strong>3.内核怎么通知监控者有I/O流可读可写？</strong></p>
+<p><strong>4.监控者如何找到可读可写的I/O流并传递给用户态应用程序？</strong></p>
+<p><strong>5.继续循环时监控者怎样重复上述步骤？</strong></p>
+<p>搞清楚上述的步骤也就能解开epoll高效的原因了。</p>
+<h3 id="select的做法："><a href="#select的做法：" class="headerlink" title="select的做法："></a><strong>select的做法：</strong></h3><p>步骤1的解法：select创建3个文件描述符集，并将这些文件描述符拷贝到内核中，这里限制了文件句柄的最大的数量为1024（注意是全部传入—第一次拷贝）；</p>
+<p>步骤2的解法：内核针对读缓冲区和写缓冲区来判断是否可读可写,这个动作和select无关；</p>
+<p>步骤3的解法：内核在检测到文件句柄可读/可写时就产生中断通知监控者select，select被内核触发之后，就返回可读可写的文件句柄的总数；</p>
+<p>步骤4的解法：select会将之前传递给内核的文件句柄（即fd_set）再次从内核传到用户态（第2次拷贝），select返回给用户态的只是可读可写的文件句柄总数，再使用FD_ISSET宏函数来检测哪些文件I/O可读可写（遍历）；</p>
+<p>步骤5的解法：select对于事件的监控是建立在内核的修改之上的，也就是说经过一次监控之后，内核会修改位，因此再次监控时需要再次从用户态向内核态进行拷贝（第N次拷贝）</p>
+<h3 id="epoll的做法："><a href="#epoll的做法：" class="headerlink" title="epoll的做法："></a><strong>epoll的做法：</strong></h3><p>步骤1的解法：首先执行epoll_create在内核专属于epoll的高速cache区，并在该缓冲区建立红黑树和就绪链表，用户态传入的文件句柄将被放到红黑树中（第一次拷贝）。</p>
+<p>步骤2的解法：内核针对读缓冲区和写缓冲区来判断是否可读可写，这个动作与epoll无关；</p>
+<p>步骤3的解法：epoll_ctl执行add动作时除了将文件句柄放到红黑树上之外，还向内核注册了该文件句柄的回调函数，内核在检测到某句柄可读可写时则调用该回调函数，回调函数将文件句柄放到就绪链表。</p>
+<p>步骤4的解法：epoll_wait只监控就绪链表就可以，如果就绪链表有文件句柄，则表示该文件句柄可读可写，并返回到用户态（少量的拷贝）；</p>
+<p>步骤5的解法：由于内核不修改文件句柄的位，因此只需要在第一次传入就可以重复监控，直到使用epoll_ctl删除，否则不需要重新传入，因此无多次拷贝。</p>
+<p>简单说：epoll是继承了select/poll的I/O复用的思想，并在二者的基础上从监控IO流、查找I/O事件等角度来提高效率，具体地说就是内核句柄列表、红黑树、就绪list链表来实现的。</p>
+<h2 id="2-3、epoll-详解"><a href="#2-3、epoll-详解" class="headerlink" title="2.3、epoll 详解"></a>2.3、epoll 详解</h2><p>先简单回顾下如何使用C库封装的3个epoll系统调用吧。</p>
+<ol>
+<li><strong>int</strong> epoll_create(<strong>int</strong> size);  </li>
+<li><strong>int</strong> epoll_ctl(<strong>int</strong> epfd, <strong>int</strong> op, <strong>int</strong> fd, <strong>struct</strong> epoll_event *event);  </li>
+<li><strong>int</strong> epoll_wait(<strong>int</strong> epfd, <strong>struct</strong> epoll_event *events,<strong>int</strong> maxevents, <strong>int</strong> timeout);  </li>
+</ol>
+<p>使用起来很清晰：</p>
+<p>A.epoll_create建立一个epoll对象。参数size是内核保证能够正确处理的最大句柄数，多于这个最大数时内核可不保证效果。</p>
+<p>B.epoll_ctl可以操作上面建立的epoll，例如，将刚建立的socket加入到epoll中让其监控，或者把 epoll正在监控的某个socket句柄移出epoll，不再监控它等等(<strong>也就是将I/O流放到内核</strong>)。</p>
+<p>C.epoll_wait在调用时，在给定的timeout时间内，当在监控的所有句柄中有事件发生时，就返回用户态的进程（<strong>也就是在内核层面捕获可读写的I/O事件</strong>）。</p>
+<p>从上面的调用方式就可以看到epoll比select/poll的优越之处：</p>
+<p>因为后者每次调用时都要传递你所要监控的所有socket给select/poll系统调用，这意味着需要将用户态的socket列表copy到内核态，如果以万计的句柄会导致每次都要copy几十几百KB的内存到内核态，非常低效。而我们调用epoll_wait时就相当于以往调用select/poll，但是这时却不用传递socket句柄给内核，因为内核已经在epoll_ctl中拿到了要监控的句柄列表。</p>
+<p>====&gt;<em>select监控的句柄列表在用户态，每次调用都需要从用户态将句柄列表拷贝到内核态，但是epoll中句柄就是建立在内核中的，这样就减少了内核和用户态的拷贝，高效的原因之一。</em></p>
+<p><strong>epoll综合的执行过程：</strong> </p>
+<p>​      如此，一棵红黑树，一张准备就绪句柄链表，少量的内核cache，就帮我们解决了大并发下的socket处理问题。执行epoll_create时，创建了红黑树和就绪链表，执行epoll_ctl时，如果增加socket句柄，则检查在红黑树中是否存在，存在立即返回，不存在则添加到树干上，然后向内核注册回调函数，用于当中断事件来临时向准备就绪链表中插入数据。执行epoll_wait时立刻返回准备就绪链表里的数据即可。</p>
+<p><strong>epoll水平触发和边缘触发的实现：</strong></p>
+<p>​     当一个socket句柄上有事件时，内核会把该句柄插入上面所说的准备就绪list链表，这时我们调用epoll_wait，会把准备就绪的socket拷贝到用户态内存，然后清空准备就绪list链表， 最后，epoll_wait干了件事，就是检查这些socket，如果不是ET模式（就是LT模式的句柄了），并且这些socket上确实有未处理的事件时，又把该句柄放回到刚刚清空的准备就绪链表了，所以，非ET的句柄，只要它上面还有事件，epoll_wait每次都会返回。而ET模式的句柄，除非有新中断到，即使socket上的事件没有处理完，也是不会次次从epoll_wait返回的。</p>
+<p><em>====&gt;区别就在于epoll_wait将socket返回到用户态时是否清空就绪链表。</em></p>
+<h2 id="参考文档："><a href="#参考文档：" class="headerlink" title="参考文档："></a>参考文档：</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/87843750">深入理解IO复用之epoll-知乎-静海听风</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20122137">epoll 或者 kqueue 的原理是什么？</a>-知乎</p>
+<p><a target="_blank" rel="noopener" href="https://daniel.haxx.se/docs/poll-vs-select.html">poll vs select vs event-based</a></p>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="请问你能包养我吗">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/heavyfish.github.io/2020/11/23/Go/GRPC/" class="post-title-link" itemprop="url">GRPC</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-11-23 12:22:49" itemprop="dateCreated datePublished" datetime="2020-11-23T12:22:49+08:00">2020-11-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-17 22:46:18" itemprop="dateModified" datetime="2021-01-17T22:46:18+08:00">2021-01-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/heavyfish.github.io/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>7.7k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>7 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>简单介绍了 GRPC 是什么</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/heavyfish.github.io/2020/11/23/Go/GRPC/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 
@@ -1097,7 +3637,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/heavyfish.github.io/page/2/">2</a><a class="page-number" href="/heavyfish.github.io/page/3/">3</a><a class="extend next" rel="next" href="/heavyfish.github.io/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/heavyfish.github.io/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/heavyfish.github.io/page/4/">4</a><a class="extend next" rel="next" href="/heavyfish.github.io/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1164,7 +3704,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/heavyfish.github.io/archives">
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1177,7 +3717,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/heavyfish.github.io/tags/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1214,13 +3754,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">282k</span>
+    <span title="Symbols count total">381k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">4:17</span>
+    <span title="Reading time total">5:46</span>
 </div>
 <!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
