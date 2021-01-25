@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+</script>
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="关于ceph命令的快速查询与部分知识点总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="请问你能包养我吗">
+<meta property="og:url" content="https://heavyfish.github.io/2021/01/25/Ceph/Ceph-%E9%80%9F%E6%9F%A5%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="请问你能包养我吗">
+<meta property="og:description" content="关于ceph命令的快速查询与部分知识点总结">
+<meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125224723410.png">
+<meta property="og:image" content="file:////Users/shenshawn/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image002.png">
+<meta property="og:image" content="file:////Users/shenshawn/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image003.png">
+<meta property="og:image" content="file:////Users/shenshawn/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image004.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125230207343.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125230245595.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125230313760.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125230348027.png">
+<meta property="article:published_time" content="2021-01-25T14:34:59.761Z">
+<meta property="article:modified_time" content="2021-01-25T15:03:57.143Z">
+<meta property="article:author" content="Shenxr">
+<meta property="article:tag" content="Ceph">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125224723410.png">
+
+<link rel="canonical" href="https://heavyfish.github.io/2021/01/25/Ceph/Ceph-%E9%80%9F%E6%9F%A5%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title> | 请问你能包养我吗</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">请问你能包养我吗</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/heavyfish.github.io/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2021/01/25/Ceph/Ceph-%E9%80%9F%E6%9F%A5%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-01-25 22:34:59 / Modified: 23:03:57" itemprop="dateCreated datePublished" datetime="2021-01-25T22:34:59+08:00">2021-01-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Ceph/" itemprop="url" rel="index"><span itemprop="name">Ceph</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>39k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>35 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>关于ceph命令的快速查询与部分知识点总结</p>
+<a id="more"></a>
+
+
+
+<p><a target="_blank" rel="noopener" href="http://xuxiaopang.com/2016/10/18/exp-get-crushmap-from-osdmap/">osdmap提取crushmap</a></p>
+<p>ceph 【mon | osd | pg】–help</p>
+<h1 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1. 常用命令"></a>1. 常用命令</h1><h2 id="1-1-整体监控"><a href="#1-1-整体监控" class="headerlink" title="1.1. 整体监控"></a>1.1. 整体监控</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ceph -s</span><br><span class="line"></span><br><span class="line">ceph health</span><br><span class="line"></span><br><span class="line">ceph health detail</span><br><span class="line"></span><br><span class="line">ceph -w # 持续输入</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-2-OSD相关"><a href="#1-2-OSD相关" class="headerlink" title="1.2. OSD相关"></a>1.2. OSD相关</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ceph df</span><br><span class="line"></span><br><span class="line">ceph osd df</span><br><span class="line"></span><br><span class="line">ceph osd stat</span><br><span class="line"></span><br><span class="line">ceph osd tree</span><br><span class="line"></span><br><span class="line">ceph osd dump</span><br><span class="line"></span><br><span class="line">ceph osd -i &#123;osd_id&#125; --flush-journal</span><br><span class="line"></span><br><span class="line">rbd du &#123;pool_name&#125;/&#123;image_name&#125; #查看image实际大小</span><br><span class="line"></span><br><span class="line">ceph osd primary-affinity &lt;osd-id&gt; &lt;weight&gt; # 调整 OSD 的主亲和性，这样 CRUSH 就尽量不把它用作 acting set 里的主 OSD 了，默认为1</span><br><span class="line"></span><br><span class="line">ceph osd crush reweight &lt;osd.name&gt; &lt;float value&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-3-集群Monitor"><a href="#1-3-集群Monitor" class="headerlink" title="1.3. 集群Monitor"></a>1.3. 集群Monitor</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ceph mon stat</span><br><span class="line"></span><br><span class="line">ceph quorum_status -f json-pretty</span><br><span class="line"></span><br><span class="line">ceph mon dump</span><br><span class="line"></span><br><span class="line">ceph mon getmap -o &#123;tmp&#125;/&#123;filename&#125; # 从法定人数获取monmap</span><br><span class="line"></span><br><span class="line">ceph-mon -i &#123;mon_id&#125; --extract-monmap &#123;filename&#125; #从mon进程抓取monmap</span><br><span class="line"></span><br><span class="line">ceph-mon -i &#123;mon_id&#125; --inject-monmap &#123;filename&#125; #注入monmap</span><br><span class="line"></span><br><span class="line">monmaptool --rm &#123;mon_name&#125; &#123;filename&#125; # 删除monmap中的一条条目</span><br><span class="line"></span><br><span class="line">monmaptool --add &#123;mon_name&#125; &#123;IP&#125; &#123;filename&#125; #向monmap添加mon</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-4-PG"><a href="#1-4-PG" class="headerlink" title="1.4. PG"></a>1.4. PG</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">ceph pg dump</span><br><span class="line"></span><br><span class="line">ceph pg stat</span><br><span class="line"></span><br><span class="line">ceph pg ls</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 返回pg 的映射</span></span><br><span class="line">ceph pg map &#123;pg-num&#125; </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">检索特定PG的信息</span></span><br><span class="line">ceph pg &#123;pg-id&#125; query </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">（输出json格式文件）</span></span><br><span class="line">ceph pg dump -o &#123;filename&#125; --format=json </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash"> 返回处于某种状态的PG</span></span><br><span class="line">ceph pg dump_stuck inactive|unclean|stale [--format &lt;format&gt;] [-t|--threshold &lt;seconds&gt;] </span><br><span class="line"></span><br><span class="line">ceph pg &#123;poolnum&#125;.&#123;pg-id&#125; query</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 把未找到的对象标记lost，delete会删除它，revert会回滚至前一个版本</span></span><br><span class="line">ceph pg &#123;pg_id&#125; mark_unfound_lost revert | delete  </span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-5-Pool"><a href="#1-5-Pool" class="headerlink" title="1.5. Pool"></a>1.5. Pool</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">ceph osd pool create &#123;pool_name&#125; &#123;pg_num&#125; &#123;pgp_num&#125; #创建池</span><br><span class="line"></span><br><span class="line">ceph osd pool ls &#123;detail&#125; # 查看池「详情」</span><br><span class="line"></span><br><span class="line">ceph osd lspools #列出池</span><br><span class="line"></span><br><span class="line">rados lspools #列出池</span><br><span class="line"></span><br><span class="line">ceph osd pool set &#123;pool-name&#125; pg_num &#123;pg_num&#125; #设置 pg 数</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建池</span></span><br><span class="line">ceph osd pool create &#123;pool-name&#125; &#123;pg-num&#125; [ &#123;pgp-num&#125; ] [ replicated ] [ crush-ruleset-name ] [ expected-num-objects ]  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ceph osd pool set-quota &#123;pool-name&#125; [max_objects num] [max_bytes num]</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">rados ps #查看pool的使用信息</span><br><span class="line"></span><br><span class="line">ceph osd pool mksnap/rmsnap &#123;pool_name&#125; &#123;snap_name&#125; #创建/删除 快照</span><br><span class="line"></span><br><span class="line">rbd ls &#123;pool_name&#125; # 查看池中的image</span><br><span class="line"></span><br><span class="line">rados -p &#123;pool_name&#125; ls # 查看池中的object</span><br><span class="line"></span><br><span class="line">rados -p &#123;pool_name&#125; ls #查看pool中的object</span><br><span class="line"></span><br><span class="line">rados -p &#123;pool_name&#125; get &#123;object_name&#125; &#123;file_name&#125; #导出pool中的obejct </span><br><span class="line"></span><br><span class="line">hexdump -vC file_name #对导出的对象进行转码查看</span><br><span class="line"></span><br><span class="line">rados put &#123;objec_name&#125; &#123;file_path&#125; --pool=pool_name # 放置对象入池</span><br><span class="line"></span><br><span class="line">ceph osd map &#123;pool_name&#125; &#123;object_name&#125;  # 定位对象位置</span><br><span class="line"></span><br><span class="line">rados rm &#123;object_name&#125; --pool=&#123;pool_name&#125; # 删除对象</span><br><span class="line"></span><br><span class="line">ceph osd pool rm &#123;pool_name&#125; #删除池 </span><br><span class="line"></span><br><span class="line">ceph osd pool application enable &#123;pool_name&#125; &#123;type&#125; #为pool 设置 type </span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-6-CRUSH-Map"><a href="#1-6-CRUSH-Map" class="headerlink" title="1.6. CRUSH Map"></a>1.6. CRUSH Map</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ceph osd getcrushmap -o &#123;filename&#125; #输出编译格式的crushmap</span><br><span class="line"></span><br><span class="line">crushtool -d &#123;compiled_file&#125; -o &#123;decompiled_file&#125; #反编译crushmap</span><br><span class="line"></span><br><span class="line">crushtool -c &#123;decompiled_file&#125; -o &#123;compiled_file&#125; #编译crushmap</span><br><span class="line"></span><br><span class="line">ceph osd setcrushmap -i &#123;compiled_file&#125; # 注入crushmap</span><br><span class="line"></span><br><span class="line">crushtool -i crushmpa.com --test --min-x 0 --max-x 100 --num-rep 3 --ruleset 2 --show_mappings # 测试编译crushmap</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-7-集群配置"><a href="#1-7-集群配置" class="headerlink" title="1.7. 集群配置"></a>1.7. 集群配置</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ceph --show-config</span><br><span class="line"></span><br><span class="line">ceph daemon osd.0 config get mon_osd_full_ratio</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">实时修改参数。重启失效，修改后的参数不可见</span></span><br><span class="line"></span><br><span class="line">ceph daemon osd.1 config set mon_osd_full_ratio 0.95</span><br><span class="line"></span><br><span class="line">ceph tell mon.* injectargs &#x27;--mon_osd_report_timeout 400&#x27;  </span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-8-用户权限"><a href="#1-8-用户权限" class="headerlink" title="1.8. 用户权限"></a>1.8. 用户权限</h2><p><strong>语法格式：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;daemon-type&#125; ‘allow &#123;capability&#125;’[ &#123;daemon-type&#125; ‘allow &#123;capabilit&#125;’]</span><br></pre></td></tr></table></figure>
+<p><strong>MON能力：</strong></p>
+<ul>
+<li><p>Monitor 能力包括 r 、 w 、 x 和 allow profile {cap}，例如：</p>
+</li>
+<li><p>mon ‘allow rwx’</p>
+</li>
+<li><p>mon ‘allow profile osd’</p>
+</li>
+</ul>
+<p><strong>OSD能力：</strong></p>
+<ul>
+<li>OSD 能力包括 r 、 w 、 x 、 class-read 、 class-write 和 profile osd 。另外， OSD 能力还支持存储池和命名空间的配置</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">osd ‘allow &#123;capability&#125;’[pool=&#123;pool_name&#125;]  [namespace=&#123;namespace_name&#125;]</span><br><span class="line"></span><br><span class="line">osd ‘allow class-read object_prefix rbd_children, allow rwx pool=backups, allow rwx pool=backups-cache’</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>MDS能力：</strong></p>
+<ul>
+<li> MDS 能力比较简单，只需要 allow 或者空白，也不会解析更多选项</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mds ‘allow’</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>权限解析：</strong></p>
+<p><code>allow</code>： 在守护进程的访问设置之前，仅对 MDS 隐含 <code>rw</code> 。 </p>
+<p><code>r</code>: 授予用户读权限，对 monitor 具有读权限才能获取 CRUSH map</p>
+<p><code>w</code>: 授予用户写对象的权限。</p>
+<p><code>x</code>：授予用户调用类方法的能力，即同时有读和写，且能在 monitor 上执行 <code>auth</code> 操作。</p>
+<p><code>class-read</code>：授予用户调用类读取方法的能力， <code>x</code> 的子集。</p>
+<p><code>class-write</code>：授予用户调用类写入方法的能力， <code>x</code> 的子集。</p>
+<p><code>*</code>：授权此用户读、写和执行某守护进程/存储池，且允许执行管理命令。</p>
+<p><code>profile osd</code>：授权一个用户以 OSD 身份连接其它 OSD 或 Monitor。授予 OSD 们允许其它 OSD 处理复制、心跳流量和状态报告。</p>
+<p><code>profile mds</code>：授权一个用户以 MDS 身份连接其它 MDS 或 Monitor。</p>
+<p><code>profile bootstrap-osd</code>： 授权用户自举引导一个 OSD 。授予部署工具，像 <code>ceph-disk</code> 、<code>ceph-deploy</code> 等等，这样它们在自举引导 OSD 时就有权限增加密钥了。</p>
+<p><code>profile bootstrap-mds</code>：授权用户自举引导一个 MDS。授予例如 <code>ceph-deploy</code> 的部署工具，这样它们在自举引导 MDS 时就有权限增加密钥了。</p>
+<h2 id="1-9-集群用户"><a href="#1-9-集群用户" class="headerlink" title="1.9. 集群用户"></a>1.9. 集群用户</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">ceph auth list # 显示用户</span><br><span class="line"></span><br><span class="line">ceph auth get client.admin [ -o &#123;filename&#125; ] # 获取特定用户信息</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">增加用户</span></span><br><span class="line">ceph auth add  [ -i &#123;input_file&#125; ]  # 不回显，可从keyring文件导入</span><br><span class="line"></span><br><span class="line">ceph auth get-or-create [ -o &#123;file_name&#125; ] # 回显 user 和 keyring</span><br><span class="line"></span><br><span class="line">ceph auth get-or-create-key # 回显keyring</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">修改权限</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> caps的权限是替换不能直接增减</span></span><br><span class="line">ceph auth caps client.cbl mon ‘ ’ osd ‘ ’</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除用户</span></span><br><span class="line">ceph auth del client.cbl  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示keyring</span></span><br><span class="line">ceph auth print-key client.cbl </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 从密钥文件导入用户</span></span><br><span class="line">ceph auth import -i /path/to/keyring </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建keyring文件，增加用户，但用户还不在集群中</span></span><br><span class="line">ceph-authtool -C /etc/ceph/ceph.keyring -n client.ringo --cap osd &#x27;allow rwx&#x27; --cap mon &#x27;allow rwx&#x27; --gen-key </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">从keyring文件导入用户</span></span><br><span class="line">ceph auth add client.ringo -i /etc/ceph/ceph.keyring </span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-10-rbd命令"><a href="#1-10-rbd命令" class="headerlink" title="1.10.   rbd命令"></a>1.10.   rbd命令</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建image</span></span><br><span class="line">rbd create &#123;image_name&#125; --size 1024 --pool &#123;pool_name&#125; </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看 pool 中的 image</span></span><br><span class="line">rbd -p &#123;pool_name&#125; ls</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看 image 详情</span></span><br><span class="line">rbd info &#123;poo_name&#125;/&#123;image_nam&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-11-确定osd位置"><a href="#1-11-确定osd位置" class="headerlink" title="1.11.   确定osd位置"></a>1.11.   确定osd位置</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ceph osd find 0</span><br><span class="line"></span><br><span class="line">ceph-crush-location --cluster ceph --id 0 --type osd</span><br><span class="line"></span><br><span class="line">ceph osd crush tree -f json-pretty</span><br></pre></td></tr></table></figure>
+<h2 id="1-12-杂项"><a href="#1-12-杂项" class="headerlink" title="1.12.   杂项"></a>1.12.   杂项</h2><h3 id="1-12-1-查找object处于哪个pg和osd"><a href="#1-12-1-查找object处于哪个pg和osd" class="headerlink" title="1.12.1. 查找object处于哪个pg和osd"></a>1.12.1. 查找object处于哪个pg和osd</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd map volumes rbd_data.83c36c2755a28f.0000000000001e20</span><br></pre></td></tr></table></figure>
+<h3 id="1-12-2-根据rbd-data查找image"><a href="#1-12-2-根据rbd-data查找image" class="headerlink" title="1.12.2. 根据rbd.data查找image"></a>1.12.2. 根据rbd.data查找image</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rados -p volumes listomapvals rbd_directory|grep -C 5 83c36c2755a28f</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-12-3-查看RBD的镜像位置"><a href="#1-12-3-查看RBD的镜像位置" class="headerlink" title="1.12.3. 查看RBD的镜像位置"></a>1.12.3. 查看RBD的镜像位置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> USAGE:./rbd-loc &lt;pool&gt; &lt;image&gt;</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">if [ -z $&#123;1&#125; ] || [ -z $&#123;2&#125; ];</span><br><span class="line"></span><br><span class="line">then</span><br><span class="line"></span><br><span class="line">  echo &quot;USAGE: ./rbd-loc &lt;pool&gt; &lt;image&gt;&quot;</span><br><span class="line"></span><br><span class="line">exit 1</span><br><span class="line"></span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">rbd_prefix=$(rbd -p $&#123;1&#125; info $&#123;2&#125; | grep block_name_prefix | awk &#x27;&#123;print $2&#125;&#x27;)</span><br><span class="line"></span><br><span class="line">for i in $(rados -p $&#123;1&#125; ls | grep $&#123;rbd_prefix&#125;)</span><br><span class="line"></span><br><span class="line">do</span><br><span class="line"></span><br><span class="line">  ceph osd map $&#123;1&#125; $&#123;i&#125;</span><br><span class="line"></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">##</span></span> </span><br></pre></td></tr></table></figure>
+<h3 id="1-12-4-统计OSD上PG的数量"><a href="#1-12-4-统计OSD上PG的数量" class="headerlink" title="1.12.4. 统计OSD上PG的数量"></a>1.12.4. 统计OSD上PG的数量</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">ceph pg dump | awk &#x27;</span><br><span class="line"></span><br><span class="line"> /^pg_stat/ &#123; col=1; while($col!=&quot;up&quot;) &#123;col++&#125;; col++ &#125;</span><br><span class="line"></span><br><span class="line"> /^[0-9a-f]+\.[0-9a-f]+/ &#123; match($0,/^[0-9a-f]+/); pool=substr($0, RSTART, RLENGTH); poollist[pool]=0;</span><br><span class="line"></span><br><span class="line"> up=$col; i=0; RSTART=0; RLENGTH=0; delete osds; while(match(up,/[0-9]+/)&gt;0) &#123; osds[++i]=substr(up,RSTART,RLENGTH); up = substr(up, RSTART+RLENGTH) &#125;</span><br><span class="line"></span><br><span class="line"> for(i in osds) &#123;array[osds[i],pool]++; osdlist[osds[i]];&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END &#123;</span><br><span class="line"></span><br><span class="line"> printf(&quot;\n&quot;);</span><br><span class="line"></span><br><span class="line"> slen=asorti(poollist,newpoollist);</span><br><span class="line"></span><br><span class="line"> printf(&quot;pool :\t&quot;);for (i=1;i&lt;=slen;i++) &#123;printf(&quot;%s\t&quot;, newpoollist[i])&#125;; printf(&quot;| SUM \n&quot;);</span><br><span class="line"></span><br><span class="line"> for (i in poollist) printf(&quot;--------&quot;); printf(&quot;----------------\n&quot;);</span><br><span class="line"></span><br><span class="line"> slen1=asorti(osdlist,newosdlist)</span><br><span class="line"></span><br><span class="line"> delete poollist;</span><br><span class="line"></span><br><span class="line"> for (j=1;j&lt;=slen;j++) &#123;maxpoolosd[j]=0&#125;;</span><br><span class="line"></span><br><span class="line"> for (j=1;j&lt;=slen;j++) &#123;for (i=1;i&lt;=slen1;i++)&#123;if (array[newosdlist[i],newpoollist[j]] &gt;0  )&#123;minpoolosd[j]=array[newosdlist[i],newpoollist[j]] ;break &#125; &#125;&#125;;            </span><br><span class="line"></span><br><span class="line"> for (i=1;i&lt;=slen1;i++) &#123; printf(&quot;osd.%i\t&quot;, newosdlist[i]); sum=0; </span><br><span class="line"></span><br><span class="line"> for (j=1;j&lt;=slen;j++)  &#123; printf(&quot;%i\t&quot;, array[newosdlist[i],newpoollist[j]]); sum+=array[newosdlist[i],newpoollist[j]]; poollist[j]+=array[newosdlist[i],newpoollist[j]];if(array[newosdlist[i],newpoollist[j]] != 0)&#123;poolhasid[j]+=1 &#125;;if(array[newosdlist[i],newpoollist[j]]&gt;maxpoolosd[j])&#123;maxpoolosd[j]=array[newosdlist[i],newpoollist[j]];maxosdid[j]=newosdlist[i]&#125;;if(array[newosdlist[i],newpoollist[j]] != 0)&#123;if(array[newosdlist[i],newpoollist[j]]&lt;=minpoolosd[j])&#123;minpoolosd[j]=array[newosdlist[i],newpoollist[j]];minosdid[j]=newosdlist[i]&#125;&#125;&#125;; printf(&quot;| %i\n&quot;,sum)&#125; for (i in poollist) printf(&quot;--------&quot;); printf(&quot;----------------\n&quot;);</span><br><span class="line"></span><br><span class="line"> slen2=asorti(poollist,newpoollist);</span><br><span class="line"></span><br><span class="line"> printf(&quot;SUM :\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;%s\t&quot;,poollist[i]); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line"> printf(&quot;Osd :\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;%s\t&quot;,poolhasid[i]); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line"> printf(&quot;AVE :\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;%.2f\t&quot;,poollist[i]/poolhasid[i]); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line"> printf(&quot;Max :\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;%s\t&quot;,maxpoolosd[i]); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line"> printf(&quot;Osdid :\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;osd.%s\t&quot;,maxosdid[i]); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line"> printf(&quot;per:\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;%.1f%\t&quot;,100*(maxpoolosd[i]-poollist[i]/poolhasid[i])/(poollist[i]/poolhasid[i])); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line"> for (i=1;i&lt;=slen2;i++) printf(&quot;--------&quot;);printf(&quot;----------------\n&quot;);</span><br><span class="line"></span><br><span class="line"> printf(&quot;min :\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;%s\t&quot;,minpoolosd[i]); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line"> printf(&quot;osdid :\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;osd.%s\t&quot;,minosdid[i]); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line"> printf(&quot;per:\t&quot;); for (i=1;i&lt;=slen;i++) printf(&quot;%.1f%\t&quot;,100*(minpoolosd[i]-poollist[i]/poolhasid[i])/(poollist[i]/poolhasid[i])); printf(&quot;|\n&quot;);</span><br><span class="line"></span><br><span class="line">&#125;&#x27;</span><br></pre></td></tr></table></figure>
+<h3 id="1-12-5-部分参数解释"><a href="#1-12-5-部分参数解释" class="headerlink" title="1.12.5. 部分参数解释"></a>1.12.5. 部分参数解释</h3><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125224723410.png" alt="image-20210125224723410"></p>
+<h2 id="1-13-MDS配置参数"><a href="#1-13-MDS配置参数" class="headerlink" title="1.13.  MDS配置参数"></a>1.13.  MDS配置参数</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[mds]</span><br><span class="line"></span><br><span class="line">mds_cache_memory_limit = 94471210401</span><br><span class="line"></span><br><span class="line">mds_log_max_segments = 50</span><br><span class="line"></span><br><span class="line">mds_beacon_grace = 600</span><br><span class="line"></span><br><span class="line">mds_cache_size = 0</span><br><span class="line"></span><br><span class="line">mds_standby_replay = True</span><br><span class="line"></span><br><span class="line">mds_cache_reservation = 0.15</span><br><span class="line"></span><br><span class="line">mds_health_cache_threshold = 1.07</span><br><span class="line"></span><br><span class="line">mds_bal_fragment_size_max = 200000</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="2-ceph-deploy安装"><a href="#2-ceph-deploy安装" class="headerlink" title="2. ceph-deploy安装"></a>2. ceph-deploy安装</h1><p>  环境：三节点（3mon，3mgr，3OSD）</p>
+<h2 id="2-1-准备"><a href="#2-1-准备" class="headerlink" title="2.1. 准备"></a>2.1. 准备</h2><p>1、三节点免密</p>
+<p>2、装ansible，时间同步，更新/etc/hosts，更新yum源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">wget -O &#x2F;etc&#x2F;yum.repos.d&#x2F;epel.repo http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;repo&#x2F;epel-7.repo</span><br><span class="line"> </span><br><span class="line">yum 直接装ceph-deploy的版本较低，可以去阿里镜像源上选版本</span><br><span class="line">yum install https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ceph&#x2F;rpm-luminous&#x2F;el7&#x2F;noarch&#x2F;ceph-deploy-2.0.1-0.noarch.rpm</span><br><span class="line">3、三节点建ceph用户，创建&#x2F;etc&#x2F;ceph目录</span><br><span class="line">useradd ceph -M -s &#x2F;sbin&#x2F;nologin</span><br><span class="line">mkdir &#x2F;etc&#x2F;ceph</span><br><span class="line">chown ceph:ceph &#x2F;etc&#x2F;ceph</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+<p>4、关闭防火墙，selinux。或开启防火墙端口，让 6789 以及 6800-7100 端口通过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># iptables -A INPUT -i &#123;iface&#125; -p tcp -s &#123;ip-address&#125;&#x2F;&#123;netmask&#125; --dport 6789 -j ACCEPT </span><br><span class="line"></span><br><span class="line"># iptables -A INPUT -i &#123;iface&#125; -p tcp -s &#123;ip-address&#125;&#x2F;&#123;netmask&#125; --dport 6800:7100 -j ACCEPT </span><br><span class="line"></span><br><span class="line">#iptables save</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-2-安装"><a href="#2-2-安装" class="headerlink" title="2.2. 安装"></a>2.2. 安装</h2><p>5、进入主节点 /etc/ceph 目录下，开装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ceph-deploy install ceph-node1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 【ceph-node1为主节点的hostname】</span></span><br><span class="line">ceph-deploy new ceph-node1 </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 【ceph -s 可查看状态了】</span></span><br><span class="line">ceph-deploy mon create-initial </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 推动密钥到其他节点</span> </span><br><span class="line">ceph-deploy admin ceph-ndoe2 ceph-node3</span><br></pre></td></tr></table></figure>
+<p>6、安装OSD</p>
+<p>ansible执行分区三节点的/dev/vdb/盘</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> parted /dev/vdb -s mklabel gpt</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> parted /dev/vdb -s mkpart <span class="string">&quot;&quot;</span> data 4M 15G</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> parted /dev/vdb -s mkpart <span class="string">&quot;&quot;</span> journal 15G 100%</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">ceph-deploy osd create --data /dev/vdb1 --journal /dev/vdb2 --filestore &#123;hostname&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>7、安装mgr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-deploy mgr create ceph-node1</span><br></pre></td></tr></table></figure>
+
+
+<p>8、扩容mon</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改主节点的ceph.conf，新增</span></span><br><span class="line">public_network = 172.16.29.0/24</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 推送配置到其他节点，</span></span><br><span class="line">ceph-deploy --overwrite-conf config push ceph-node2 ceph-node3</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行命令扩容</span> </span><br><span class="line">ceph-deploy mon create ceph-node2 ceph-node3</span><br></pre></td></tr></table></figure>
+
+
+<p>9、扩容mgr</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 执行命令扩容</span></span><br><span class="line">ceph-deploy mgr create ceph-node2 ceph-node3</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-3-测试"><a href="#2-3-测试" class="headerlink" title="2.3. 测试"></a>2.3. 测试</h2><p>10、测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建pool</span> </span><br><span class="line">ceph osd pool create mytest 30</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 放置对象进pool</span> </span><br><span class="line">rados put &#123;object-name&#125; &#123;file-path&#125; --pool=mytest</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 确认pool中的对象</span> </span><br><span class="line">rados -p mytest ls</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 定位对象位置</span> </span><br><span class="line">ceph osd map pool_name objec_name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除对象</span> </span><br><span class="line">rados rm object_name --pool=pool_name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除pool</span> </span><br><span class="line">ceph osd pool rm pool_name</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="3-常见问题"><a href="#3-常见问题" class="headerlink" title="3. 常见问题"></a>3. 常见问题</h1><h2 id="3-1-手动扩容mon"><a href="#3-1-手动扩容mon" class="headerlink" title="3.1. 手动扩容mon"></a>3.1. 手动扩容mon</h2><p>1、目标节点新建数据目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;ceph-&#123;mon-id&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>2、创建临时目录tmp，用于存放新增mon所需的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;tmp</span><br></pre></td></tr></table></figure>
+
+
+<p>3、获取mon的keyring文件，保存在临时目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph auth get mon. -o &#123;tmp&#125;&#x2F;keyring</span><br></pre></td></tr></table></figure>
+
+
+<p>4、获取集群的monmap保存到临时目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph mon getmap -o &#123;tmp&#125;&#x2F;mapfile</span><br></pre></td></tr></table></figure>
+
+
+<p>5、格式化第1步创建的数据目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-mon -i &#123;mon-id&#125; --mkfs --monmap &#123;tmp&#125;&#x2F;mapfile --keyring &#123;tmp&#125;&#x2F;keyring</span><br></pre></td></tr></table></figure>
+
+
+<p>6、把主节点上的client.admin keyring 和ceph.conf 拷贝到/etc/ceph目录下，注意更改ceph.conf的内容匹配新增后的情况。然后启动ceph-mon进程，添加成功</p>
+<h2 id="3-2-手动添加mon进集群"><a href="#3-2-手动添加mon进集群" class="headerlink" title="3.2. 手动添加mon进集群"></a>3.2. 手动添加mon进集群</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ceph mon getmap -o monmap.map</span><br><span class="line"></span><br><span class="line">monmaptool --print monmap.map</span><br><span class="line"></span><br><span class="line">monmaptool --add mon.$IP  $IP:6789  monmap,map</span><br><span class="line"></span><br><span class="line">ceph-mon -i ID --inject-monmap monmap.map</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-3-手动扩容OSD"><a href="#3-3-手动扩容OSD" class="headerlink" title="3.3. 手动扩容OSD"></a>3.3. 手动扩容OSD</h2><h3 id="3-3-1-未指定journal"><a href="#3-3-1-未指定journal" class="headerlink" title="3.3.1. 未指定journal"></a>3.3.1. 未指定journal</h3><p>1、手动创建 osd id</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd create &#123;id&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>2、新OSD主机上创建数据目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;osd&#x2F;ceph-&#123;osd-number&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>3、挂载OSD磁盘到数据目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkfs.xfs &#x2F;dev&#x2F;vdc</span><br><span class="line"></span><br><span class="line">mount &#x2F;dev&#x2F;vdc &#x2F;var&#x2F;lib&#x2F;osd&#x2F;ceph-&#123;osd-number&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>4、在数据目录下创建keyring</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph-authtool -C keyring</span><br><span class="line"></span><br><span class="line">ceph auth get-or-create osd.3 osd &#39;allow *&#39; mon &#39;allow profile osd&#39; mgr &#39;allow profile osd&#39; -o .&#x2F;keyring</span><br></pre></td></tr></table></figure>
+
+
+<p>5、初始化数据目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-osd -i $ID --osd-id $(uuidgen)</span><br></pre></td></tr></table></figure>
+
+
+<p>6、解决所有权</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown ceph:ceph -R &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;osd&#x2F;ceph-3</span><br></pre></td></tr></table></figure>
+
+
+<p>7、把新osd加入crush map中（可选）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ceph osd crush add &#123;id-or-name&#125; &#123;weight&#125; [&#123;bucket-type&#125;&#x3D;&#123;bucket-name&#125; …]</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">ceph osd crush add 3 0.08800 pool&#x3D;ssd_root rack&#x3D;ssd_rack01 host&#x3D;ssd_ceph4</span><br></pre></td></tr></table></figure>
+
+
+<p>8、启动osd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start ceph-osd@&#123;osd-number&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="3-3-2-有指定journal"><a href="#3-3-2-有指定journal" class="headerlink" title="3.3.2. 有指定journal"></a>3.3.2. 有指定journal</h3><p>1、对磁盘分区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">parted &#x2F;dev&#x2F;vdc -s mklabel gpt</span><br><span class="line"></span><br><span class="line">parted &#x2F;dev&#x2F;vdc -s mkpart &quot;&quot; data 4M 15G</span><br><span class="line"></span><br><span class="line">parted &#x2F;dev&#x2F;vdc -s mkpart &quot;&quot; journal 15G 100%</span><br></pre></td></tr></table></figure>
+<p>2、创建OSD</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-volume lvm create --filestore --data &#x2F;dev&#x2F;vdc1 --journal &#x2F;dev&#x2F;vdc2</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-4-手动删除mon"><a href="#3-4-手动删除mon" class="headerlink" title="3.4. 手动删除mon"></a>3.4. 手动删除mon</h2><h3 id="3-4-1-正常删除"><a href="#3-4-1-正常删除" class="headerlink" title="3.4.1. 正常删除"></a>3.4.1. 正常删除</h3><p>1、停止ceph-mon进程</p>
+<p>2、从集群中移除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph mon remove &#123;mon-id&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="3-4-2-不正常删除"><a href="#3-4-2-不正常删除" class="headerlink" title="3.4.2. 不正常删除"></a>3.4.2. 不正常删除</h3><p>1、停止集群中所有的ceph-mon进程</p>
+<p>2、提取mon map</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-mon -i &#123;mon-id&#125; --extract-monmap &#123;map-path&#125;</span><br></pre></td></tr></table></figure>
+<p>3、删除未存活的mon</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">monmaptool &#123;map-path&#125; --rm &#123;mon-id&#125;</span><br></pre></td></tr></table></figure>
+<p>4、向存活的的monitor注入修改后的monmap</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-mon -i &#123;mon-id&#125; --inject-monmap &#123;map-path&#125;</span><br></pre></td></tr></table></figure>
+<p>5、启动存活的mon</p>
+<h2 id="3-5-手动删除osd"><a href="#3-5-手动删除osd" class="headerlink" title="3.5. 手动删除osd"></a>3.5. 手动删除osd</h2><p>1、停止OSD进程</p>
+<p>2、执行下列命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ceph osd out &#123;osd-number&#125;</span><br><span class="line"></span><br><span class="line">ceph osd crush remove &#123;osd-number&#125;</span><br><span class="line"></span><br><span class="line">ceph auth del osd.&#123;osd-number&#125;</span><br><span class="line"></span><br><span class="line">ceph osd rm &#123;osd-number&#125;</span><br><span class="line"></span><br><span class="line">umount &#x2F;dev&#x2F;vdx</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-6-修复PG-inconsistent"><a href="#3-6-修复PG-inconsistent" class="headerlink" title="3.6. 修复PG inconsistent"></a>3.6. 修复PG inconsistent</h2><p>1、查找处于inconsistent状态的问题PG</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph health detail</span><br></pre></td></tr></table></figure>
+<p>2、去对应的主OSD的OSD日志中查找不一致的具体对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -Hn ‘ERR’ &#123;Log_Path&#125;</span><br></pre></td></tr></table></figure>
+<p>3、找到具体PG后，修复它</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph pg repair &#123;pg_id&#125;</span><br></pre></td></tr></table></figure>
+<p>4、若还未ok，则停掉不一致的object所属的OSD</p>
+<p>5、刷新该OSD的日志</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-osd -i &#123;osd_id&#125; --flush-journal</span><br></pre></td></tr></table></figure>
+<p>6、将不一致的object移除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;osd&#x2F;ceph-&#123;osd-id&#125;&#x2F;current&#x2F;&#123;pg.id&#125;_head&#x2F; &#123;object&#125; &#x2F;home</span><br></pre></td></tr></table></figure>
+<p>7、重启该OSD后，执行命令修复</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph pg repair &#123;pg_id&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-7-Mon-Map的备份与恢复"><a href="#3-7-Mon-Map的备份与恢复" class="headerlink" title="3.7. Mon Map的备份与恢复"></a>3.7. Mon Map的备份与恢复</h2><p>1、定时备份mon的两个目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;$cluster-$hostname&#x2F;store.db</span><br><span class="line"></span><br><span class="line">&#x2F;etc&#x2F;ceph</span><br></pre></td></tr></table></figure>
+<p>2、恢复（假设3个节点的mon全挂了，现在在第4个干净的节点上起ceph）</p>
+<p>拷贝两个目录，到ceph-4节点上。修改ceph.conf中 { mon_initial_members }为ceph-4。</p>
+<p>新建一个monmap用以前的fsid，将ceph-4加入到monmap，然后将monmap注入到ceph-4中</p>
+<p>将ceph-4的ceph.conf推送到其他节点，在重启OSD集群</p>
+<h2 id="3-8-更换OSD的journal"><a href="#3-8-更换OSD的journal" class="headerlink" title="3.8. 更换OSD的journal"></a>3.8. 更换OSD的journal</h2><h3 id="3-8-1-分区替换"><a href="#3-8-1-分区替换" class="headerlink" title="3.8.1. 分区替换"></a>3.8.1. 分区替换</h3><p>1、集群打noout标记，停掉相关OSD进程，下刷journal</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-osd -i &#123;osd_id&#125; --flush-journal</span><br></pre></td></tr></table></figure>
+<p>2、删除旧的journal，然后新建journal，新建journal实质是为/dev/vdx 分区建立一个名为journal的软链接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s &#x2F;dev&#x2F;disk&#x2F;by-partuuid&#x2F;&#123;id&#125; &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;osd&#x2F;ceph-0&#x2F;journal</span><br></pre></td></tr></table></figure>
+<p>3、新创journal，然后启动OSD，去掉标记</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-osd -i &#123;osd_id&#125; --mkjournal</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="3-8-2-整盘替换"><a href="#3-8-2-整盘替换" class="headerlink" title="3.8.2. 整盘替换"></a>3.8.2. 整盘替换</h3><p>1、备份需要替换的journal分区表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sgdisk --backup&#x3D;&#123;file&#125; &#x2F;dev&#x2F;vdx</span><br></pre></td></tr></table></figure>
+<p>2、还原分区表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sgdisk --load-backup&#x3D;&#123;file&#125; &#x2F;dev&#x2F;vdx</span><br></pre></td></tr></table></figure>
+<p>3、重建journal</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-osd -i &#123;osd_id&#125; --mkjournal</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-9-删除image"><a href="#3-9-删除image" class="headerlink" title="3.9. 删除image"></a>3.9. 删除image</h2><p>1、删除image提示正在使用中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd rm &#123;pool_name&#125;&#x2F;&#123;image_name&#125;</span><br></pre></td></tr></table></figure>
+<p>2、查看image的使用者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd -p &#123;pool_name&#125; status &#123;image_name&#125;</span><br></pre></td></tr></table></figure>
+<p>3、把该watcher加入黑名单，然后再次删除，即可成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd blacklist add &#123;watcher&#125;</span><br></pre></td></tr></table></figure>
+<p>4、查询黑名单列表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd blacklist ls</span><br></pre></td></tr></table></figure>
+<p>5、从黑名单中移出一个客户端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd blacklist rm &#123;watcher&#125;</span><br></pre></td></tr></table></figure>
+<p>6、清空黑名单</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph osd blacklist clear</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-10-kolla-ansible恢复mon"><a href="#3-10-kolla-ansible恢复mon" class="headerlink" title="3.10.   kolla-ansible恢复mon"></a>3.10.   kolla-ansible恢复mon</h2><p>1、备份三节点的ceph.conf 和 mon目录数据</p>
+<p>2、删除一个节点的mon容器，multinode注销掉其他mon节点和OSD节点只留一个，重新部署</p>
+<p>3、新的ceph-mon容器起来后，确认状态。然后用以前的数据替换。然后再确认状态。</p>
+<p>4、如果ceph-mon能起来，则此时是ceph集群是error状态，然后在koll-ansible跑一遍所有的mon</p>
+<h2 id="3-11-rbd无法删除"><a href="#3-11-rbd无法删除" class="headerlink" title="3.11.  rbd无法删除"></a>3.11.  rbd无法删除</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/sisimi/p/7776633.html">https://www.cnblogs.com/sisimi/p/7776633.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rbd statsu &lt;pool_name&gt;&#x2F;rbd-name</span><br><span class="line"></span><br><span class="line">ceph osd blacklist add ......</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-12-均衡osd数据"><a href="#3-12-均衡osd数据" class="headerlink" title="3.12.  均衡osd数据"></a>3.12.  均衡osd数据</h2><p>osd数据不均时，有两条命令可以使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd reweight-by-pg</span><br><span class="line"></span><br><span class="line">ceph osd reweight-by-utilization</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#120以120个pg为基准，要自己算</span><br><span class="line"></span><br><span class="line">ceph osd reweight-by-pg 120 1.03 10 volumes</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"># var为1.03，ceph osd df，找到120对应的 var</span><br><span class="line"></span><br><span class="line"># 10：每次移动10个pg</span><br><span class="line"></span><br><span class="line"># volumes：调整的pool</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">ceph osd reweight-by-utilization 10</span><br><span class="line"></span><br><span class="line"># 10：每次移动10个pg（感觉10没必要写）</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>预测试：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceph osd test-reweight-by-pg</span><br><span class="line"></span><br><span class="line">ceph osd test-reweight-by-utilization</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-13-删除正在使用的镜像"><a href="#3-13-删除正在使用的镜像" class="headerlink" title="3.13.  删除正在使用的镜像"></a>3.13.  删除正在使用的镜像</h2><p>1.查看该镜像的snap被哪些volume依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd children -p &lt;poolname&gt; &lt;待删除image的uuid&gt;@snap</span><br></pre></td></tr></table></figure>
+<p> 2.用flatten命令解除依赖，让rbd分层去处理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd flatten volumes&#x2F;volume-xxxxx</span><br></pre></td></tr></table></figure>
+<p> 3.检查是否还存在依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd children -p &lt;poolname&gt; &lt;待删除image的uuid&gt;@snap</span><br></pre></td></tr></table></figure>
+<p> 4.删除镜像</p>
+<h2 id="3-14-ceph-monitor-元数据丢失"><a href="#3-14-ceph-monitor-元数据丢失" class="headerlink" title="3.14.  ceph monitor 元数据丢失"></a>3.14.  ceph monitor 元数据丢失</h2><p>解决思路</p>
+<ol>
+<li><p>从osd的中拿到元数据。ceph 在H版之后提供ceph-objectstore-tool和ceph-monstore-tool工具恢复元数据。利用ceph-objectstore-tool工具从osd节点上拿到元数据，在利用ceph-monstore-tool工具还原。操作步骤如下</p>
+</li>
+<li><p>这里的ceph是J 版，在monitor节点上其中一台安装ceph-test包，目的 得到 ceph-monstore-tool工具，假设我们的monitor节点名字位mon1、mon2、mon3，osd节点为osd1-osd9</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mon1# yum install ceph-test -y</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>停掉所有的osd服务和kill掉残余的monitor服务</p>
+</li>
+<li><p>从osd节点上获取元数据(这里我弄了个脚本) </p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">需要在第一台osd节点上也就是ip为10.10.1.1上创建mkdir /tmp/monstore目录</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">data_dir=/tmp/monstore/</span><br><span class="line">for ip in &#123;1..9&#125;</span><br><span class="line">do</span><br><span class="line">    ssh -t root@10.10.1.$ip &quot;for osd in /var/lib/ceph/osd/ceph-*;do ceph-objectstore-tool --data-path \$osd --op update-mon-db --mon-store-path $data_dir;done&quot; </span><br><span class="line">    let &quot;ip_next=$ip+1&quot; </span><br><span class="line">    ssh -t root@20.1.5.$ip &quot;rsync -avz $data_dir root@10.10.1.$ip_next:/tmp/monstore/&quot; </span><br><span class="line">    sleep 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>最终将10.10.1.9机器上的/tmp/monstore目录同步到mon1上</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -avz &#x2F;tmp&#x2F;monstore&#x2F; root@mon1:&#x2F;tmp&#x2F;monstore&#x2F;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>恢复mon的元数据</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mon# ceph-monstore-tool &#x2F;tmp&#x2F;monstore rebuild</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>delete /var/lib/ceph/mon/ceph-mon1/store.db文件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mon1# rm -rf &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;ceph-mon1&#x2F;store.db</span><br><span class="line">mon1# cp -ar &#x2F;tmp&#x2F;monstore&#x2F;* &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;ceph-mon1&#x2F;</span><br></pre></td></tr></table></figure>
+<ol start="8">
+<li><p>启动该monitor服务，将会报cluster_uuid和旧的不一致，记录新的值，接下来将会用该值去创建新的monitor集群</p>
+</li>
+<li><p>准备重建mon集群</p>
+</li>
+<li><p>备份mon1上的/var/lib/ceph/mon/ceph-mon1/目录下的文件,备份完之后删除该目录</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mon1# cp -ar &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;ceph-mon1&#x2F; &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;ceph-mon1-bak</span><br><span class="line">mon1# rm -rf &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;ceph-mon1&#x2F;*</span><br></pre></td></tr></table></figure>
+<ol start="11">
+<li>备份原先的/etc/ceph下面的文件，并拷贝ceph.conf文件到/etc/ceph/下</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mon1# cp -ar &#x2F;etc&#x2F;ceph &#x2F;etc&#x2F;ceph-bak</span><br><span class="line">mon1# rm -rf &#x2F;etc&#x2F;ceph&#x2F;*</span><br><span class="line">mon1# cp &#x2F;etc&#x2F;ceph-bak&#x2F;ceph.conf &#x2F;etc&#x2F;ceph&#x2F;</span><br></pre></td></tr></table></figure>
+<ol start="12">
+<li><p>修改ceph.conf文件的fsid</p>
+</li>
+<li><p>创建keyring</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mon1# ceph-authtool --create-keyring &#x2F;tmp&#x2F;ceph.mon.keyring --gen-key -n mon. --cap mon &#39;allow *&#39;</span><br><span class="line">mon1# ceph-authtool --create-keyring &#x2F;etc&#x2F;ceph&#x2F;ceph.client.admin.keyring --gen-key -n  client.admin --set-uid&#x3D;0 --cap mon &#39;allow *&#39; --cap osd &#39;allow *&#39; --cap mds &#39;allow *&#39;</span><br><span class="line">mon1# ceph-authtool &#x2F;tmp&#x2F;ceph.mon.keyring --import-keyring &#x2F;etc&#x2F;ceph&#x2F;ceph.client.admin.keyring</span><br></pre></td></tr></table></figure>
+<ol start="14">
+<li>创建monmap文件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">monmaptool --create --add mon1 10.10.1.1 --fsid 用新的值 &#x2F;tmp&#x2F;monmap</span><br></pre></td></tr></table></figure>
+<ol start="15">
+<li>初始化</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mon1# ceph-mon --mkfs -i mon1 --monmap &#x2F;tmp&#x2F;monmap --keyring &#x2F;tmp&#x2F;ceph.mon.keyring</span><br><span class="line">mon1# cd &#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;ceph-mon1&#x2F; ;touch done;touch systemd;rm -rf store.db;cp -ar &#x2F;tmp&#x2F;monstore&#x2F;* .&#x2F; </span><br></pre></td></tr></table></figure>
+<ol start="16">
+<li><p>启动该monitor服务</p>
+</li>
+<li><p>接下去便是新增monitor的操作了，按照官方的来即可，到启动monitor服务前需要做如下操作：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">从mon1上拷贝&#x2F;tmp&#x2F;monstore，然后覆盖另外两台的&#x2F;var&#x2F;lib&#x2F;ceph&#x2F;mon&#x2F;ceph-mon2或者3&#x2F;store.db文件</span><br><span class="line">最后在启动monitor服务</span><br></pre></td></tr></table></figure>
+<ol start="18">
+<li>用ceph -s命令可以观察到mon集群差不多ok了，最后再启动所有osd节点上的服务。<br> 注意：之所以会产生新的fsid怀疑两种情况，一种是工具生成的，一种是mon集群被重建过。<br> 该值可以查看/var/lib/ceph/osd/ceph-xxx/ceph_fsid文件。</li>
+</ol>
+<p>临时代码，针对Animbus6.5，三个mon节点全部挂掉修复</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">data_dir=/tmp/monstore/</span><br><span class="line">for ip in &#123;11..13&#125;</span><br><span class="line">do</span><br><span class="line">    ssh -t root@192.168.1.$ip &quot;for osd in `mount|grep /var/lib/ceph/osd|awk &#x27;&#123;print $1 &quot;:&quot; $3&#125;&#x27;`;do ceph-objectstore-tool --data-path `echo $osd|awk -F &#x27;:&#x27; &#x27;&#123;print $2&#125;&#x27;` --op update-mon-db --mon-store-path $data_dir --journal-path `echo $osd|awk -F &#x27;:&#x27; &#x27;&#123;sub(&quot;1&quot;,&quot;2&quot;);print ($1)&#125;&#x27;`;done&quot; </span><br><span class="line">    let &quot;ip_next=$ip+1&quot; </span><br><span class="line">    ssh -t root@192.168.1.$ip &quot;rsync -avz $data_dir root@192.168.1.$ip_next:/tmp/monstore/&quot; </span><br><span class="line">    sleep 1</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;kolla&#x2F;ceph-mon&#x2F;ceph.conf</span><br><span class="line"> auth xxx &#x3D; none</span><br><span class="line"> only one ceph monitor</span><br><span class="line"> docker restart ceph_mon</span><br><span class="line"> ceph auth list</span><br><span class="line"> client.admin</span><br><span class="line"> client.cinder</span><br><span class="line"> client.nova</span><br><span class="line"> ceph auth import -i ceph.client.admin.keyring</span><br><span class="line"></span><br><span class="line">ceph.client.cinder.keyring</span><br><span class="line"> key &#x3D; xxxx</span><br><span class="line"> caps osd &#x3D; &quot;allow *&quot;</span><br><span class="line"> caps osd &#x3D; &quot;profile rbd pool&#x3D;volume,profile rbd pool&#x3D;images&quot;</span><br><span class="line"> caps mon &#x3D; &quot;profile rbd&quot;</span><br><span class="line"></span><br><span class="line">\#ceph auth add</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-15-Ceph-mds-数据恢复"><a href="#3-15-Ceph-mds-数据恢复" class="headerlink" title="3.15.  Ceph mds 数据恢复"></a>3.15.  Ceph mds 数据恢复</h2><p>方法一：备份整个文件系统</p>
+<p>1、执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rados -p cephfs_data ls &gt; &#x2F;opt&#x2F;cephfs.data.obj.list</span><br></pre></td></tr></table></figure>
+<p>2、找到文件的inode</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stat -c %i &#x2F;datayes&#x2F;registry&#x2F;docker&#x2F;registry&#x2F;v2&#x2F;blobs&#x2F;sha256&#x2F;e0&#x2F;e0f14364cb6f52dc0dd7fd5e8ab05a4208a4ccf841c3b9ce49ab53b670dafaea&#x2F;data</span><br></pre></td></tr></table></figure>
+<p>3、 把输出表达成16进制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">printf &#39;%x\n&#39; 1099538961116</span><br><span class="line"></span><br><span class="line">得到10001a112dc</span><br></pre></td></tr></table></figure>
+<p>4、</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;opt&#x2F;cephfs.data.obj.list | grep 10001a112dc | sort</span><br><span class="line"></span><br><span class="line">这里把文件输出进行了切片，比如原来是a.txt。可能会被切成</span><br><span class="line"></span><br><span class="line">10001a112dc.00001</span><br><span class="line"></span><br><span class="line">10001a112dc.00002</span><br><span class="line"></span><br><span class="line">两个文件，没有关系，拼成一起就是a.txt了。</span><br></pre></td></tr></table></figure>
+
+
+<p>5、</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rados -p cephfs_data get 10001a112dc.000000 &#123;backup_path&#125;.000000</span><br><span class="line"></span><br><span class="line">注意这里的&#123;backup_path&#125;需要与原来的文件路径很像。比如原来的路径是</span><br><span class="line"></span><br><span class="line">&#x2F;mnt&#x2F;x&#x2F;y&#x2F;z&#x2F;abc.txt</span><br><span class="line"></span><br><span class="line">那么backup_path需要是&#x2F;mnt2&#x2F;x&#x2F;y&#x2F;z&#x2F;abc.txt</span><br></pre></td></tr></table></figure>
+
+
+<p>6、把这种切片的文件合并一下</p>
+<h2 id="3-16-Cephfs-升级顺序"><a href="#3-16-Cephfs-升级顺序" class="headerlink" title="3.16.  Cephfs 升级顺序"></a>3.16.  Cephfs 升级顺序</h2><p>升级顺序：<br> monitor<br> osd<br> mds backup node<br> mds active node</p>
+<h2 id="3-17-如何处理PG-inconsistent状态"><a href="#3-17-如何处理PG-inconsistent状态" class="headerlink" title="3.17.  如何处理PG inconsistent状态"></a>3.17.  如何处理PG inconsistent状态</h2><p>[如何处理PG inconsistent状态](<a target="_blank" rel="noopener" href="https://ypdai.github.io/2019/02/26/%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86PG">https://ypdai.github.io/2019/02/26/如何处理PG</a> inconsistent状态/)</p>
+<h1 id="4-常用知识点"><a href="#4-常用知识点" class="headerlink" title="4. 常用知识点"></a>4. 常用知识点</h1><h2 id="4-1-RBD的基本信息"><a href="#4-1-RBD的基本信息" class="headerlink" title="4.1. RBD的基本信息"></a>4.1. RBD的基本信息</h2><p>1、PG是目录 /var/lib/ceph/osd/ceph-{osd_number}/current/ 下可见</p>
+<p>2、解析image信息</p>
+<p>rbd -p {pool_name} info {image_name} </p>
+<p><img src="file:////Users/shenshawn/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image002.png" alt="img"></p>
+<p>l 虽然foo有256个object，但是在pool中不会立即创建这些对象，而是需要多少创多少</p>
+<p>当我们在pool中创建一个image后，pool中会出现</p>
+<p><img src="file:////Users/shenshawn/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image003.png" alt="img"></p>
+<p>l rbd_directory：空，因为image的format是2</p>
+<p>l rbd_id.foo：存储prefix</p>
+<p>Features的编号</p>
+<p>配置项为<strong>rbd_default_features = [3 or 61]</strong>,这个值是由几个属性加起来的：</p>
+<p><strong>only applies to format 2 images</strong></p>
+<p><strong>+1 for layering,</strong></p>
+<p><strong>+2 for stripingv2,</strong></p>
+<p><strong>+4 for exclusive lock,</strong></p>
+<p><strong>+8 for object map</strong></p>
+<p><strong>+16 for fast-diff,</strong></p>
+<p><strong>+32 for deep-flatten,</strong></p>
+<p><strong>+64 for journaling</strong></p>
+<p>所以<strong>61=1+4+8+16+32</strong>就是<strong>layering | exclusive lock | object map |fast-diff |deep-flatten</strong>这些属性的大合集,需要哪个不需要哪个，做个简单的加法配置好<strong>rbd_default_features</strong>就可以了。</p>
+<h2 id="4-2-Image的特性"><a href="#4-2-Image的特性" class="headerlink" title="4.2. Image的特性"></a>4.2. Image的特性</h2><p><img src="file:////Users/shenshawn/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image004.png" alt="img"></p>
+<h2 id="4-3-Ceph常见auth"><a href="#4-3-Ceph常见auth" class="headerlink" title="4.3. Ceph常见auth"></a>4.3. Ceph常见auth</h2><table>
+<thead>
+<tr>
+<th><strong>capabilities</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>allow</td>
+<td>Precedes access settings for a  daemon.</td>
+</tr>
+<tr>
+<td>r</td>
+<td>Gives the user read access. Required  with monitors to retrieve the CRUSH map.</td>
+</tr>
+<tr>
+<td>w</td>
+<td>Gives the user write access to  objects.</td>
+</tr>
+<tr>
+<td>x</td>
+<td>Gives the user the capability to call  class methods (i.e., both read and write) and to conduct auth operations on  monitors.</td>
+</tr>
+<tr>
+<td>class-read</td>
+<td>Gives the user the capability to call  class read methods. Subset of <strong>x</strong>.</td>
+</tr>
+<tr>
+<td>class-write</td>
+<td>Gives the user the capability to call  class write methods. Subset of <strong>x</strong>.</td>
+</tr>
+<tr>
+<td>*</td>
+<td>Gives the user read, write and  execute permissions for a particular daemon/pool, and the ability to execute admin  commands.</td>
+</tr>
+<tr>
+<td>profile  osd</td>
+<td>Gives a user permissions to connect  as an OSD to other OSDs or monitors. Conferred on OSDs to enable OSDs to  handle replication heartbeat traffic and status reporting.</td>
+</tr>
+<tr>
+<td>profile  bootstrap-osd</td>
+<td>Gives a user permissions to bootstrap  an OSD. Conferred on deployment tools such as <strong>ceph-disk</strong>, <strong>ceph-deploy</strong>,  etc. so that they have permissions to add keys, etc. when bootstrapping an  OSD.</td>
+</tr>
+</tbody></table>
+<p>profile mds</p>
+<p><strong>描述**</strong>:** 授权一个用户以 MDS 身份连接其它 MDS 或 Monitor。</p>
+<p>profile bootstrap-mds</p>
+<p><strong>描述**</strong>:** 授权用户自举引导一个 MDS。授予例如 ceph-deploy 的部署工具，这样它们在自举引导 MDS 时就有权限增加密钥了。</p>
+<h2 id="4-4-PG的常见Flag"><a href="#4-4-PG的常见Flag" class="headerlink" title="4.4. PG的常见Flag"></a>4.4. PG的常见Flag</h2><table>
+<thead>
+<tr>
+<th><strong>Flag</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Use Cases</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>noin</td>
+<td>Prevents OSDs from being treated  as <strong>in</strong> the cluster.</td>
+<td>Commonly used with <strong>noout</strong> to  address flapping OSDs.       通常和<strong>noout</strong>一起用防止OSD  up/down跳来跳去</td>
+</tr>
+<tr>
+<td>noout</td>
+<td>Prevents OSDs from being treated  as <strong>out</strong> of the cluster.</td>
+<td>MON在过了300秒(mon_osd_down_out_interval)后自动将down掉的OSD标记为out，一旦out数据就会开始迁移，建议在处理故障期间设置该标记，避免数据迁移。</td>
+</tr>
+<tr>
+<td>noup</td>
+<td>Prevents OSDs from being treated  as <strong>up</strong> and running.</td>
+<td>Commonly used with <strong>nodown</strong>to  address flapping OSDs.      通常和<strong>nodwon</strong>一起用解决OSD  up/down跳来跳去</td>
+</tr>
+<tr>
+<td>nodown</td>
+<td>Prevents OSDs from being treated  as <strong>down</strong>.</td>
+<td>网络问题可能会影响到Ceph进程之间的心跳，有时候OSD进程还在，却被其他OSD一起举报标记为down,导致不必要的损耗，如果确定OSD进程始终正常，可以设置nodown标记防止OSD被误标记为down.</td>
+</tr>
+<tr>
+<td>full</td>
+<td>Makes a cluster appear to have  reached its <strong>full_ratio</strong>, and thereby prevents write operations.</td>
+<td>如果集群快要满了，你可以预先将其设置为FULL，注意这个设置会停止写操作。(有没有效需要实际测试)</td>
+</tr>
+<tr>
+<td>pause</td>
+<td>Ceph will stop processing read and  write operations, but will not affect OSD <strong>in</strong>, <strong>out</strong>, <strong>up</strong> or <strong>down</strong> statuses.</td>
+<td>If you need to troubleshoot a running  Ceph cluster without clients reading and writing data, you can set the  cluster to <strong>pause</strong> to prevent client operations.      这个标记会停止一切客户端的读写，但是集群依旧保持正常运行。</td>
+</tr>
+<tr>
+<td>nobackfill</td>
+<td>Ceph will prevent new backfill  operations.</td>
+<td>If you need to take an OSD or  node <strong>down</strong> temporarily, (e.g., upgrading daemons), you can  set <strong>nobackfill</strong> so that Ceph will not backfill while the  OSD(s) is <strong>down</strong>.</td>
+</tr>
+<tr>
+<td>norebalance</td>
+<td>Ceph will prevent new rebalancing  operations.</td>
+<td>这个标记通常和上面的nobackfill和下面的norecover一起设置，在操作集群(挂掉OSD或者整个节点)时，如果不希望操作过程中数据发生恢复迁移等，可以设置这个标志，记得操作完后unset掉。</td>
+</tr>
+<tr>
+<td>norecover</td>
+<td>Ceph will prevent new recovery  operations.</td>
+<td>也是在操作磁盘时防止数据发生恢复。</td>
+</tr>
+<tr>
+<td>noscrub</td>
+<td>Ceph will prevent new scrubbing  operations.</td>
+<td>If you want to prevent scrubbing  (e.g., to reduce overhead during high loads, recovery, backfilling,  rebalancing, etc.), you can set <strong>noscrub</strong> and/or <strong>nodeep-scrub</strong>to  prevent the cluster from scrubbing OSDs.</td>
+</tr>
+<tr>
+<td>nodeep-scrub</td>
+<td>Ceph will prevent new deep scrubbing  operations.</td>
+<td>有时候在集群恢复时，scrub操作会影响到恢复的性能，和上面的noscrub一起设置来停止scrub。一般不建议打开。</td>
+</tr>
+<tr>
+<td>notieragent</td>
+<td>Ceph will disable the process that is  looking for cold/dirty objects to flush and evict.</td>
+<td>If you want to stop the tier agent  process from finding cold objects to flush to the backing storage tier, you  may set <strong>notieragent</strong>.      停止tier引擎查找冷数据并下刷到后端存储。</td>
+</tr>
+</tbody></table>
+<h2 id="4-5-PG的常见状态"><a href="#4-5-PG的常见状态" class="headerlink" title="4.5. PG的常见状态"></a>4.5. PG的常见状态</h2><table>
+<thead>
+<tr>
+<th><strong>State</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Creating</td>
+<td>When you create a pool, it will  create the number of placement groups you specified. Ceph will echo creating  when it is creating one or more placement groups. Once they are created, the  OSDs that are part of a placement group’s  Acting Set will peer. Once peering is complete, the placement group status  should be active+clean, which means a Ceph client can begin writing to the  placement group.       当创建一个池的时候，Ceph会创建一些PG(通俗点说就是在OSD上建目录)，处于创建中的PG就被标记为creating，当创建完之后，那些处于Acting集合(<em>ceph pg map 1.0 osdmap e9395 pg 1.0 (1.0) -&gt; up [27,4,10]  acting [27,4,10]**，对于pg 1.0 它的三副本会分布在osd.27,osd.4,osd.10上，那么这三个OSD上的pg 1.0就会发生沟通，确保状态一致</em>)的PG就会进行peer，当peering完成后，也就是这个PG的三副本状态一致后，这个PG就会变成active+clean状态，也就意味着客户端可以进行写入操作了。</td>
+</tr>
+<tr>
+<td>Peering</td>
+<td>When Ceph is Peering a placement  group, Ceph is bringing the OSDs that store the replicas of the placement  group into <strong>agreement about the state</strong> of the objects and  metadata in the placement group. When Ceph completes peering, this means that  the OSDs that store the placement group agree about the current state of the  placement group. However, completion of the peering process does <strong>NOT</strong> mean  that each replica has the latest contents.      peer过程实际上就是让三个保存同一个PG副本的OSD对保存在各自OSD上的对象状态和元数据进行协商的过程，但是呢peer完成并不意味着每个副本都保存着最新的数据。     <strong>Authoritative History</strong>    Ceph will <strong>NOT</strong> acknowledge a write operation to a client,  until all OSDs of the acting set persist the write operation. This practice  ensures that at least one member of the acting set will have a record of  every acknowledged write operation since the last successful peering  operation.   With an accurate record of each acknowledged write operation, Ceph can  construct and disseminate a new authoritative history of the placement group—a complete, and fully  ordered set of operations that, if performed, would bring an OSD’s copy of a placement group up to date.      直到OSD的副本都完成写操作，Ceph才会通知客户端写操作完成。这确保了Acting集合中至少有一个副本，自最后一次成功的peer后，记录了所有已向客户端通知过的写确认。通过对每个已确认的写操作的准确记录，Ceph可以构造并传播placement group的一个新的authoritative history —— 一个完整的、完全有序的操作集，如果执行该操作集，将使OSD placement副本更新</td>
+</tr>
+<tr>
+<td>Active</td>
+<td>Once Ceph completes the peering  process, a placement group may become <strong>active</strong>. The <strong>active</strong>state  means that the data in the placement group is generally available in the  primary placement group and the replicas for read and write operations.      当PG完成了Peer之后，就会成为active状态，这个状态意味着主从OSD的该PG都可以提供读写了。</td>
+</tr>
+<tr>
+<td>Clean</td>
+<td>When a placement group is in  the <strong>clean</strong> state, the primary OSD and the replica OSDs have  successfully peered and there are no stray replicas for the placement group.  Ceph replicated all objects in the placement group the correct number of  times.      这个状态的意思就是主从OSD已经成功peer并且没有滞后的副本。PG的正常副本数满足集群副本数。</td>
+</tr>
+<tr>
+<td>Degraded</td>
+<td>When a client writes an object to the  primary OSD, the primary OSD is responsible for writing the replicas to the  replica OSDs. After the primary OSD writes the object to storage, the  placement group will remain in a <strong>degraded</strong> state until the  primary OSD has received an acknowledgement from the replica OSDs that Ceph  created the replica objects successfully.      当客户端向一个主OSD写入一个对象时，主OSD负责向从OSD写剩下的副本，在主OSD写完后，在从OSD向主OSD发送ack之前，这个PG均会处于降级状态。   The reason a placement group can be <strong>active+degraded</strong> is that  an OSD may be <strong>active</strong>even though it doesn’t  hold all of the objects yet. If an OSD goes <strong>down</strong>, Ceph marks each  placement group assigned to the OSD as <strong>degraded</strong>. The OSDs must  peer again when the OSD comes back online. However, a client can still write  a new object to a <strong>degraded</strong> placement group if it is <strong>active</strong>.      而PG处于active+degraded状态是因为一个OSD处于active状态但是这个OSD上的PG并没有保存所有的对象。当一个OSDdown了，Ceph会将这个OSD上的PG都标记为降级。当这个挂掉的OSD重新上线之后，OSD们必须重新peer。然后，客户端还是可以向一个active+degraded的PG写入的。   If an OSD is <strong>down</strong> and the <strong>degraded</strong> condition  persists, Ceph may mark the <strong>down</strong> OSD as <strong>out</strong> of  the cluster and remap the data from the <strong>down</strong> OSD to another  OSD. The time between being marked <strong>down</strong> and being  marked <strong>out</strong> is controlled by <strong>mon osd down out  interval</strong>, which is set to <strong>300</strong> seconds by default.      当OSDdown掉五分钟后，集群会自动将这个OSD标为out,然后将缺少的PGremap到其他OSD上进行恢复以保证副本充足，这个五分钟的配置项是mon osd down out interval，默认值为300s。   A placement group can also be <strong>degraded</strong>, because Ceph cannot find  one or more objects that Ceph thinks should be in the placement group. While  you cannot read or write to unfound objects, you can still access all of the  other objects in the <strong>degraded</strong> placement group.      PG如果丢了对象，Ceph也会将其标记为降级。你可以继续访问没丢的对象，但是不能读写已经丢失的对象了。   Let’s say there are 9 OSDs with size = 3 (three  copies of objects). If OSD number 9 goes down, the PGs assigned to OSD 9 go  in a degraded state. If OSD 9 doesn’t recover, it  goes out of the cluster and the cluster rebalances. In that scenario, the PGs  are degraded and then recover to an active state.      假设有9个OSD，三副本，然后osd.8挂了，在osd.8上的PG都会被标记为降级，如果osd.8不再加回到集群那么集群就会自动恢复出那个OSD上的数据，在这个场景中，PG是降级的然后恢复完后就会变成active状态。</td>
+</tr>
+<tr>
+<td>Recovering</td>
+<td>Ceph was designed for fault-tolerance  at a scale where hardware and software problems are ongoing. When an OSD  goes <strong>down</strong>, its contents may fall behind the current state of other  replicas in the placement groups. When the OSD is back <strong>up</strong>, the  contents of the placement groups must be updated to reflect the current  state. During that time period, the OSD may reflect a <strong>recovering</strong> state.      Ceph设计之初就考虑到了容错性，比如软硬件的错误。当一个OSD挂了，它所包含的副本内容将会落后于其他副本，当这个OSD起来之后， 这个OSD的数据将会更新到当前最新的状态。这段时间，这个OSD上的PG就会被标记为recover。   Recovery isn’t always trivial, because a hardware  failure might cause a cascading failure of multiple OSDs. For example, a  network switch for a rack or cabinet may fail, which can cause the OSDs of a  number of host machines to fall behind the current state of the cluster. Each  one of the OSDs must recover once the fault is resolved.      而recover是不容忽视的，因为有时候一个小的硬件故障可能会导致多个OSD发生一连串的问题。比如，如果一个机架或者机柜的路由挂了，会导致一大批OSD数据滞后，每个OSD在故障解决重新上线后都需要进行recover。   Ceph provides a number of settings to balance the resource contention between  new service requests and the need to recover data objects and restore the  placement groups to the current state. The <strong>osd recovery delay start</strong> setting  allows an OSD to restart, re-peer and even process some replay requests  before starting the recovery process. The <strong>osd recovery threads</strong>setting  limits the number of threads for the recovery process (1 thread by default).  The <strong>osd recovery thread timeout</strong> sets a thread timeout, because  multiple OSDs may fail, restart and re-peer at staggered rates. The <strong>osd  recovery max active</strong> setting limits the number of recovery requests  an OSD will entertain simultaneously to prevent the OSD from failing to serve  . The <strong>osd recovery max chunk</strong> setting limits the size of the  recovered data chunks to prevent network congestion.      osd recovery delay start 允许OSD在开始恢复过程之前重新启动，重新对等甚至处理一些重播请求。  osd恢复线程设置限制了恢复过程的线程数（默认为1个线程）。  osd恢复线程超时设置了线程超时，因为多个OSD可能会失败，重新启动并以交错速率重新对等。  osd recovery max active设置限制OSD将同时接受的恢复请求的数量，以防止OSD无法提供服务。  osd recovery max chunk设置限制了恢复的数据块的大小，以防止网络拥塞。</td>
+</tr>
+<tr>
+<td>Backfilling</td>
+<td>When a new OSD joins the cluster,  CRUSH will reassign placement groups from OSDs in the cluster to the newly  added OSD. Forcing the new OSD to accept the reassigned placement groups  immediately can put excessive load on the new OSD. Back filling the OSD with  the placement groups allows this process to begin in the background. Once  backfilling is complete, the new OSD will begin serving requests when it is  ready. During the backfill operations, you may see one of several  states: <strong>backfill_wait</strong> indicates that a backfill operation is  pending, but isn’t underway yet; backfill indicates that  a <strong>backfill</strong>operation is underway; and, <strong>backfill_too_full</strong>indicates  that a backfill operation was requested, but couldn’t  be completed due to insufficient storage capacity. When a placement group can’t be backfilled, it may be considered <strong>incomplete</strong>. Ceph  provides a number of settings to manage the load spike associated with  reassigning placement groups to an OSD (especially a new OSD). By  default, <strong>osd_max_backfills</strong> sets the maximum number of  concurrent backfills to or from an OSD to 10. The <strong>osd backfill full  ratio</strong> enables an OSD to refuse a backfill request if the OSD is  approaching its full ratio (85%, by default). If an OSD refuses a backfill  request, the <strong>osd backfill retry interval</strong> enables an OSD to  retry the request (after 10 seconds, by default). OSDs can also set <strong>osd  backfill scan min</strong> and <strong>osd backfill scan max</strong> to  manage scan intervals (64 and 512, by default).   重要：PG的backfill总是在recovery完成之后进行的   当一个新的OSD加入到集群后，CRUSH会重新规划PG将其他OSD上的部分PG迁移到这个新增的PG上。如果强制要求新OSD接受所有的PG迁入要求会极大的增加该OSD的负载。回填这个OSD允许进程在后端执行。一旦回填完成后，新的OSD将会承接IO请求。在回填过程中，你可能会看到如下状态：      backfill_wait: 表明回填动作被挂起，并没有执行。   backfill：表明回填动作正在执行。   backfill_too_full：表明当OSD收到回填请求时，由于OSD已经满了不能再回填PG了。    imcomplete: 当一个PG不能被回填时，这个PG会被认为是不完整的。   同样，Ceph提供了一系列的参数来限制回填动作，包括  osd_max_backfills设置OSD间O进行并发回填的最大数量为10。  osd_backfill_full_ratio：当OSD容量达到默认的85%是拒绝回填请求。osd_backfill_retry_interval:字面意思。</td>
+</tr>
+<tr>
+<td>Remmapped</td>
+<td>When the Acting Set that services a  placement group changes, the data migrates from the old acting set to the new  acting set. It may take some time for a new primary OSD to service requests.  So it may ask the old primary to continue to service requests until the  placement group migration is complete. Once data migration completes, the  mapping uses the primary OSD of the new acting set.      当Acting集合里面的PG组合发生变化时，数据从旧的集合迁移到新的集合中。这段时间可能比较久，新集合的主OSD在迁移完之前不能响应请求。所以新主OSD会要求旧主OSD继续服务指导PG迁移完成。一旦数据迁移完成，新主OSD就会生效接受请求。  比如一个OSD out了，其上的PG在这个OSD out过后，就会进入remmapped状态</td>
+</tr>
+<tr>
+<td>Stale</td>
+<td>While Ceph uses heartbeats to ensure  that hosts and daemons are running, the <strong>ceph-osd</strong>daemons may also  get into a <strong>stuck</strong> state where they aren’t reporting statistics in a timely manner (e.g., a temporary  network fault). By default, OSD daemons report their placement group, up  thru, boot and failure statistics every half second (i.e., <strong>0.5</strong>),  which is more frequent than the heartbeat thresholds. If the <strong>Primary  OSD</strong> of a placement group’s acting set fails  to report to the monitor or if other OSDs have reported the primary OSD down,  the monitors will mark the placement group <strong>stale</strong>.      Ceph使用心跳来确保主机和进程都在运行，OSD进程如果不能周期性的发送心跳包，那么PG就会变成stuck状态。默认情况下，OSD每半秒钟汇汇报一次PG，up  thru,boot, failure statistics等信息，要比心跳包更会频繁一点。如果主OSD不能汇报给MON或者其他OSD汇报主OSD挂了，Monitor会将主OSD上的PG标记为stale。   When you start your cluster, it is common to see the <strong>stale</strong> state  until the peering process completes. After your cluster has been running for  awhile, seeing placement groups in the <strong>stale</strong>state indicates that  the primary OSD for those placement groups is <strong>down</strong> or not  reporting placement group statistics to the monitor.      当启动集群后，直到peer过程完成，PG都会处于stale状态。而当集群运行了一段时间后，如果PG卡在stale状态，说明主OSD上的PG挂了或者不能给MON发送信息。</td>
+</tr>
+<tr>
+<td>Misplaced</td>
+<td>There are some temporary backfilling  scenarios where a PG gets mapped temporarily to an OSD. When that <strong>temporary</strong> situation  should no longer be the case, the PGs might still reside in the temporary  location and not in the proper location. In which case, they are said to  be <strong>misplaced</strong>. That’s  because the correct number of extra copies actually exist, but one or more  copies is in the wrong place.      有一些回填的场景：PG被临时映射到一个OSD上。而这种情况实际上不应太久，PG可能仍然处于临时位置而不是正确的位置。这种情况下个PG就是misplaced。这是因为正确的副本数存在但是有个别副本保存在错误的位置上。   Lets say there are 3 OSDs: 0,1,2 and all PGs map to some permutation of those  three. If you add another OSD (OSD 3), some PGs will now map to OSD 3 instead  of one of the others. However, until OSD 3 is backfilled, the PG will have a  temporary mapping allowing it to continue to serve I/O from the old mapping.  During that time, the PG is <strong>misplaced</strong> (because it has a  temporary mapping) but not <strong>degraded</strong> (since there are 3  copies).   <strong>Example</strong>:   pg 1.5: up=acting: [0,1,2] &lt;add osd 3&gt; pg 1.5: up: [0,3,1] acting:  [0,1,2]   Here, [0,1,2] is a temporary mapping, so the <strong>up</strong>set is not equal  to the <strong>acting</strong> set and the PG is <strong>misplaced</strong> but  not <strong>degraded</strong> since [0,1,2] is still three copies.   pg 1.5: up=acting: [0,3,1]   OSD 3 is now backfilled and the temporary mapping is removed, not degraded  and not misplaced.</td>
+</tr>
+<tr>
+<td>Incomplete</td>
+<td>A PG goes into a <strong>incomplete</strong> state  when there is incomplete content and peering fails i.e, when there are no  complete OSDs which are current enough to perform recovery.      当一个PG被标记为incomplete,说明这个PG内容不完整或者peer失败，比如没有一个完整的OSD用来恢复数据了。   Lets say [1,2,3] is a acting OSD set and it switches to [1,4,3], then osd.1  will request a temporary acting set of [1,2,3] while backfilling 4. During  this time, if 1,2,3 all go down, osd.4 will be the only one left which might  not have fully backfilled. At this time, the PG will go incomplete indicating  that there are no complete OSDs which are current enough to perform recovery.   Alternately, if osd.4 is not involved and the acting set is simply [1,2,3]  when 1,2,3 go down, the PG would likely go <strong>stale</strong> indicating  that the mons have not heard anything on that PG since the acting set  changed. The reason being there are no OSDs left to notify the new OSDs.</td>
+</tr>
+</tbody></table>
+<h2 id="4-6-PG的常用术语"><a href="#4-6-PG的常用术语" class="headerlink" title="4.6. PG的常用术语"></a>4.6. PG的常用术语</h2><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125230207343.png" alt="image-20210125230207343"></p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125230245595.png" alt="image-20210125230245595"> </p>
+<h2 id="4-7-Pool的PG计算"><a href="#4-7-Pool的PG计算" class="headerlink" title="4.7. Pool的PG计算"></a>4.7. Pool的PG计算</h2><p>若少于5个OSD， 设置pg_num为128。</p>
+<p>5~10个OSD，设置pg_num为512。</p>
+<p>10~50个OSD，设置pg_num为4096。</p>
+<p>超过50个OSD，可以<a target="_blank" rel="noopener" href="https://ceph.com/pgcalc/">参考如下</a>计算。</p>
+<p>每个OSD的PG数 × OSD总数 × 数据存储占比 ➗ pool_size （结果向上取2的n次幂）</p>
+<p>计算总PG，但用上种计算方法为佳，乘以100（现在建议为200），是假定了每个OSD上的PG数为100</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125230313760.png" alt="image-20210125230313760"></p>
+<p>因为每个pool的数据量不同，所以建议根据数据量，来确定每个pool的PG数量，计算方法同上</p>
+<h2 id="4-8-数据如何存到OSD"><a href="#4-8-数据如何存到OSD" class="headerlink" title="4.8. 数据如何存到OSD"></a>4.8. 数据如何存到OSD</h2><h3 id="4-8-1-计算PG"><a href="#4-8-1-计算PG" class="headerlink" title="4.8.1. 计算PG"></a>4.8.1. 计算PG</h3><p>1、对object名进行哈希，得到一串值HASH(‘bar’) = 0x3E0A4162</p>
+<p>2、用随机数除以PG的总数256，得到的余数一定会落在[0x0, 0xFF]之间，也就是这256个PG中的某一个。0x3E0A4162 % 0xFF ===&gt; 0x62</p>
+<p>3、object名一定，则其对应的PG.ID一定。PG.ID加上池ID就构成了一个完整ID，如1.6f</p>
+<h3 id="4-8-2-计算OSD"><a href="#4-8-2-计算OSD" class="headerlink" title="4.8.2. 计算OSD"></a>4.8.2. 计算OSD</h3><p>1、为什么不能用hash来代替crushmap 【HASH(PG_ID) %OSD_num ===&gt; OSD】</p>
+<p>l 因为OSD一变，就会导致PG上的数据从一个盘，迁到另一个盘</p>
+<p>l 如果保存多个副本，我们希望得到多个OSD结果的输出，HASH只能获得一个，但是CRUSH可以获得任意多个</p>
+<p>l 如果增加OSD的数量，OSD_num增大了，同样会导致PG在OSD之间的胡乱迁移，但是CRUSH可以保证数据向新增机器均匀的扩散</p>
+<p>2、CRUSH算法</p>
+<p>1、我们有</p>
+<p>l 互不相同的PG_ID。</p>
+<p>l 互不相同的OSD_ID。</p>
+<p>l 每个OSD最大的不同的就是它们的容量，即4T还是800G的容量，我们将每个OSD的容量又称为OSD的权重(weight)，规定4T权重为4，800G为0.8，也就是以T为单位的值</p>
+<p>2、以straw算法为例，如何挑OSD</p>
+<p>l CRUSH_HASH( PG_ID, OSD_ID, r ) ===&gt; draw</p>
+<p>l ( draw &amp;0xffff ) * osd_weight ===&gt; osd_straw</p>
+<p>l pick up high_osd_straw</p>
+<p>具体步骤为</p>
+<p>l 给出一个PG_ID，作为CRUSH_HASH的输入。</p>
+<p>l CRUSH_HASH(PG_ID, OSD_ID, r) 得出一个随机数(重点是随机数，不是HASH)。</p>
+<p>l 对于所有的OSD用他们的权重乘以每个OSD_ID对应的随机数，得到乘积。</p>
+<p>l 选出乘积最大的OSD。（注意，这个乘积 &lt; osd的reweight比较，则此OSD会被淘汰）</p>
+<p>l 这个PG就会保存到这个OSD上。</p>
+<p>解决一个PG映射到多个OSD的问题，还记得那个常量r吗？我们把r+1，再求一遍随机数，再去乘以每个OSD的权重，再去选出乘积最大的OSD，如果和之前的OSD编号不一样，那么就选中它，如果和之前的OSD编号一样的话，那么再把r+2，再次选一次，直到选出我们需要的三个不一样编号的OSD为止</p>
+<h3 id="4-8-3-CRUSH-Map的影响"><a href="#4-8-3-CRUSH-Map的影响" class="headerlink" title="4.8.3. CRUSH Map的影响"></a>4.8.3. CRUSH Map的影响</h3><p>第2步是一个简单的过程。CRUSH Map 在OSD的挑选中也起着巨大的作用。CRUSH Map中有几个区域</p>
+<ul>
+<li>tunable：还记得CRUSH_HASH算法中的r变量吗，选择失败的时候这个值经常会自加一，choose_total_tries 50这个50就是用来限定总共失败的次数的，CRUSH算法本身是个递归算法，所以给定一个总共失败次数防止算法无限选择失败。那么如果要选出3副本，选失败了50次只选出一个OSD，那么最终结果是？CRUSH将输出[osd.a， ，]这样的输出，也就是说只给出一个OSD，一般很少会遇到这种情况，除非你要从一个只有一个host的root下面去选出三个host。</li>
+<li>devices : 就是所有的OSD的集合。</li>
+<li>types: 就是集群内所有的Bucket+OSD的类型的取值范围，所有的Bucket都要属于这些类型，当然，你可以自己增删这里给出的类型，注意type后面的数字必须唯一，因为CRUSH算法在保存类型时不是使用字符串，而是类型对应的数字，所以类型名称在CRUSH眼里是没有意义的。</li>
+<li>buckets：就是树上的除了OSD以外的节点，从内容来看可以发现，每个bucket都有向下包含关系，这里看到ID和类型的ID是一样的，CRUSH在底层并不保存节点的名称字符串，而是以数字保存的，值得一提的是，OSD的ID是大于等于零的，bucket的ID是小于零的。还有就是alg straw，因为straw是最公平的选择方法，其实还有三个算法(uniform, tree,     list)，因为没有straw综合分高，所以就不介绍了。</li>
+<li>rules： 最下面的rule区域是我们修改的最多的地方，replicated_ruleset这个是这个rule的名称，需要唯一，同样CRUSH只保存这个rule的ID，其ID就是ruleset 0这里的0,所以需要添加一个rule的时候需要注意名称和ID都不能重复</li>
+</ul>
+<p>声明bucket实例：</p>
+<p>声明一个桶实例时，你必须指定其类型、惟一名称（字符串）、惟一负整数 ID （可选）、指定和各条目总容量/能力相关的权重、指定桶算法（通常是 straw ）、和哈希（通常为 0 ，表示哈希算法 rjenkins1 ）。一个桶可以包含一到多个条目，这些条目可以由节点桶或叶子组成，它们可以有个权重用来反映条目的相对权重，Ceph 用双精度类型数据表示桶权重</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[bucket-type] [bucket-name] &#123;</span><br><span class="line">        id [a unique negative numeric ID]</span><br><span class="line">        weight [the relative capacity&#x2F;capability of the item(s)]</span><br><span class="line">        alg [the bucket type: uniform | list | tree | straw ]</span><br><span class="line">        hash [the hash type: 0 by default]</span><br><span class="line">        item [item-name] weight [weight]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">host node1 &#123;</span><br><span class="line">        id -1</span><br><span class="line">        alg straw</span><br><span class="line">        hash 0</span><br><span class="line">        item osd.0 weight 1.00</span><br><span class="line">        item osd.1 weight 1.00</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">host node2 &#123;</span><br><span class="line">        id -2</span><br><span class="line">        alg straw</span><br><span class="line">        hash 0</span><br><span class="line">        item osd.2 weight 1.00</span><br><span class="line">        item osd.3 weight 1.00</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">rack rack1 &#123;</span><br><span class="line">        id -3</span><br><span class="line">           alg straw</span><br><span class="line">        hash 0</span><br><span class="line">        item node1 weight 2.00</span><br><span class="line">        item node2 weight 2.00</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>CRUSH Map 规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rule &lt;rulename&gt; &#123;</span><br><span class="line"> </span><br><span class="line">        ruleset &lt;ruleset&gt;</span><br><span class="line">        type [ replicated | erasure ]</span><br><span class="line">        min_size &lt;min-size&gt;</span><br><span class="line">        max_size &lt;max-size&gt;</span><br><span class="line">        step take &lt;bucket-type&gt;</span><br><span class="line">        step [choose|chooseleaf] [firstn|indep] &lt;N&gt; &lt;bucket-type&gt;</span><br><span class="line">        step emit</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<p>·    ruleset：区分一条规则属于某个规则集的手段。给存储池设置规则集后激活。</p>
+<p>·    type：规则类型，目前仅支持 replicated 和 erasure ，默认是 replicated 。</p>
+<p>·    min_size：可以选择此规则的存储池最小副本数。</p>
+<p>·    max_size：可以选择此规则的存储池最大副本数。</p>
+<p>·    step take <bucket-name>：选取起始的桶名，并迭代到树底。</p>
+<p>·    step choose firstn {num} type {bucket-type}：选取指定类型桶的数量，这个数字通常是存储池的副本数（即 pool size ）。如果 {num} == 0 ， 选择 pool-num-replicas 个桶（所有可用的）；如果 {num} &gt; 0 &amp;&amp; &lt; pool-num-replicas ，就选择那么多的桶；如果 {num} &lt; 0 ，它意味着选择 pool-num-replicas - {num} 个桶。</p>
+<p>·    step chooseleaf firstn {num} type {bucket-type}：选择 {bucket-type} 类型的桶集合，并从各桶的子树里选择一个叶子节点。桶集合的数量通常是存储池的副本数（即 pool size ）。如果 {num} == 0 ，选择 pool-num-replicas 个桶（所有可用的）；如果 {num} &gt; 0 &amp;&amp; &lt; pool-num-replicas ，就选择那么多的桶；如果 {num} &lt; 0 ，它意味着选择 pool-num-replicas - {num}个桶。</p>
+<p>·    step emit：输出当前值并清空堆栈。通常用于规则末尾，也适用于相同规则应用到不同树的情况。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210125230348027.png" alt="image-20210125230348027"></p>
+<h2 id="4-9-ceph集群性能估算"><a href="#4-9-ceph集群性能估算" class="headerlink" title="4.9. ceph集群性能估算"></a>4.9. ceph集群性能估算</h2><p>1、sata盘，日志分区在本盘（写放大即为2）。副本数为3</p>
+<p>4K 随机读 IOPS = R * 0.7</p>
+<p>4K 随机写 IOPS = W * 0.7 / ( 2 *3 )</p>
+<p><a target="_blank" rel="noopener" href="https://www.infoq.cn/article/qJiSBxZ9dg8XOtIAkXar">如何计算ceph读写性能</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/41909971">ceph读写性能估算方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/entry/5ab347daf265da238d509ed5">Ceph分布式存储系统-性能测试与优化</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/heavyfish.github.io/tags/Ceph/" rel="tag"># Ceph</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2021/01/20/Linux/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93/" rel="prev" title="Linux常用命令总结">
+      <i class="fa fa-chevron-left"></i> Linux常用命令总结
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-text">1. 常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E6%95%B4%E4%BD%93%E7%9B%91%E6%8E%A7"><span class="nav-text">1.1. 整体监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-OSD%E7%9B%B8%E5%85%B3"><span class="nav-text">1.2. OSD相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E9%9B%86%E7%BE%A4Monitor"><span class="nav-text">1.3. 集群Monitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-PG"><span class="nav-text">1.4. PG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-Pool"><span class="nav-text">1.5. Pool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-CRUSH-Map"><span class="nav-text">1.6. CRUSH Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="nav-text">1.7. 集群配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-8-%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90"><span class="nav-text">1.8. 用户权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-9-%E9%9B%86%E7%BE%A4%E7%94%A8%E6%88%B7"><span class="nav-text">1.9. 集群用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-10-rbd%E5%91%BD%E4%BB%A4"><span class="nav-text">1.10.   rbd命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-11-%E7%A1%AE%E5%AE%9Aosd%E4%BD%8D%E7%BD%AE"><span class="nav-text">1.11.   确定osd位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-12-%E6%9D%82%E9%A1%B9"><span class="nav-text">1.12.   杂项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-12-1-%E6%9F%A5%E6%89%BEobject%E5%A4%84%E4%BA%8E%E5%93%AA%E4%B8%AApg%E5%92%8Cosd"><span class="nav-text">1.12.1. 查找object处于哪个pg和osd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-12-2-%E6%A0%B9%E6%8D%AErbd-data%E6%9F%A5%E6%89%BEimage"><span class="nav-text">1.12.2. 根据rbd.data查找image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-12-3-%E6%9F%A5%E7%9C%8BRBD%E7%9A%84%E9%95%9C%E5%83%8F%E4%BD%8D%E7%BD%AE"><span class="nav-text">1.12.3. 查看RBD的镜像位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-12-4-%E7%BB%9F%E8%AE%A1OSD%E4%B8%8APG%E7%9A%84%E6%95%B0%E9%87%8F"><span class="nav-text">1.12.4. 统计OSD上PG的数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-12-5-%E9%83%A8%E5%88%86%E5%8F%82%E6%95%B0%E8%A7%A3%E9%87%8A"><span class="nav-text">1.12.5. 部分参数解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-13-MDS%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="nav-text">1.13.  MDS配置参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-ceph-deploy%E5%AE%89%E8%A3%85"><span class="nav-text">2. ceph-deploy安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%87%86%E5%A4%87"><span class="nav-text">2.1. 准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%AE%89%E8%A3%85"><span class="nav-text">2.2. 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E6%B5%8B%E8%AF%95"><span class="nav-text">2.3. 测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-text">3. 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E6%89%8B%E5%8A%A8%E6%89%A9%E5%AE%B9mon"><span class="nav-text">3.1. 手动扩容mon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%89%8B%E5%8A%A8%E6%B7%BB%E5%8A%A0mon%E8%BF%9B%E9%9B%86%E7%BE%A4"><span class="nav-text">3.2. 手动添加mon进集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%89%8B%E5%8A%A8%E6%89%A9%E5%AE%B9OSD"><span class="nav-text">3.3. 手动扩容OSD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-1-%E6%9C%AA%E6%8C%87%E5%AE%9Ajournal"><span class="nav-text">3.3.1. 未指定journal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-2-%E6%9C%89%E6%8C%87%E5%AE%9Ajournal"><span class="nav-text">3.3.2. 有指定journal</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E6%89%8B%E5%8A%A8%E5%88%A0%E9%99%A4mon"><span class="nav-text">3.4. 手动删除mon</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-1-%E6%AD%A3%E5%B8%B8%E5%88%A0%E9%99%A4"><span class="nav-text">3.4.1. 正常删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-2-%E4%B8%8D%E6%AD%A3%E5%B8%B8%E5%88%A0%E9%99%A4"><span class="nav-text">3.4.2. 不正常删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-%E6%89%8B%E5%8A%A8%E5%88%A0%E9%99%A4osd"><span class="nav-text">3.5. 手动删除osd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E4%BF%AE%E5%A4%8DPG-inconsistent"><span class="nav-text">3.6. 修复PG inconsistent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-Mon-Map%E7%9A%84%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="nav-text">3.7. Mon Map的备份与恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-8-%E6%9B%B4%E6%8D%A2OSD%E7%9A%84journal"><span class="nav-text">3.8. 更换OSD的journal</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-1-%E5%88%86%E5%8C%BA%E6%9B%BF%E6%8D%A2"><span class="nav-text">3.8.1. 分区替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-2-%E6%95%B4%E7%9B%98%E6%9B%BF%E6%8D%A2"><span class="nav-text">3.8.2. 整盘替换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-9-%E5%88%A0%E9%99%A4image"><span class="nav-text">3.9. 删除image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-10-kolla-ansible%E6%81%A2%E5%A4%8Dmon"><span class="nav-text">3.10.   kolla-ansible恢复mon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-11-rbd%E6%97%A0%E6%B3%95%E5%88%A0%E9%99%A4"><span class="nav-text">3.11.  rbd无法删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-12-%E5%9D%87%E8%A1%A1osd%E6%95%B0%E6%8D%AE"><span class="nav-text">3.12.  均衡osd数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-13-%E5%88%A0%E9%99%A4%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8%E7%9A%84%E9%95%9C%E5%83%8F"><span class="nav-text">3.13.  删除正在使用的镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-14-ceph-monitor-%E5%85%83%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1"><span class="nav-text">3.14.  ceph monitor 元数据丢失</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-15-Ceph-mds-%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-text">3.15.  Ceph mds 数据恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-16-Cephfs-%E5%8D%87%E7%BA%A7%E9%A1%BA%E5%BA%8F"><span class="nav-text">3.16.  Cephfs 升级顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-17-%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86PG-inconsistent%E7%8A%B6%E6%80%81"><span class="nav-text">3.17.  如何处理PG inconsistent状态</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-text">4. 常用知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-RBD%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">4.1. RBD的基本信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Image%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-text">4.2. Image的特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-Ceph%E5%B8%B8%E8%A7%81auth"><span class="nav-text">4.3. Ceph常见auth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-PG%E7%9A%84%E5%B8%B8%E8%A7%81Flag"><span class="nav-text">4.4. PG的常见Flag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-PG%E7%9A%84%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81"><span class="nav-text">4.5. PG的常见状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-PG%E7%9A%84%E5%B8%B8%E7%94%A8%E6%9C%AF%E8%AF%AD"><span class="nav-text">4.6. PG的常用术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-Pool%E7%9A%84PG%E8%AE%A1%E7%AE%97"><span class="nav-text">4.7. Pool的PG计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E6%95%B0%E6%8D%AE%E5%A6%82%E4%BD%95%E5%AD%98%E5%88%B0OSD"><span class="nav-text">4.8. 数据如何存到OSD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-1-%E8%AE%A1%E7%AE%97PG"><span class="nav-text">4.8.1. 计算PG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-2-%E8%AE%A1%E7%AE%97OSD"><span class="nav-text">4.8.2. 计算OSD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-3-CRUSH-Map%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">4.8.3. CRUSH Map的影响</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-9-ceph%E9%9B%86%E7%BE%A4%E6%80%A7%E8%83%BD%E4%BC%B0%E7%AE%97"><span class="nav-text">4.9. ceph集群性能估算</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shenxr"
+      src="/heavyfish.github.io/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description">在被人包养前，记录学习笔记的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives">
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/heavyfish.github.io/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/heavyfish.github.io/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">419k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">6:21</span>
+</div>
+<!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+  <script defer src="/heavyfish.github.io/lib/three/three.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/heavyfish.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/heavyfish.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":100,"height":250,"hOffset":-7,"vOffset":30},"mobile":{"show":false},"log":false,"tagMode":false});</script></body>
+</html>
