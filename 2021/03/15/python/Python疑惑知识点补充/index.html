@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/heavyfish.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/heavyfish.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/heavyfish.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/heavyfish.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/heavyfish.github.io/css/main.css">
+
+</script>
+
+
+<link rel="stylesheet" href="/heavyfish.github.io/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="关于Python的一些细节知识点补充">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python学习手册21～25">
+<meta property="og:url" content="https://heavyfish.github.io/2021/03/15/python/Python%E7%96%91%E6%83%91%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A1%A5%E5%85%85/index.html">
+<meta property="og:site_name" content="请问你能包养我吗">
+<meta property="og:description" content="关于Python的一些细节知识点补充">
+<meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/format,png.jpeg">
+<meta property="article:published_time" content="2021-03-15T15:32:58.485Z">
+<meta property="article:modified_time" content="2021-03-17T15:04:30.260Z">
+<meta property="article:author" content="Shenxr">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/format,png.jpeg">
+
+<link rel="canonical" href="https://heavyfish.github.io/2021/03/15/python/Python%E7%96%91%E6%83%91%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A1%A5%E5%85%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Python学习手册21～25 | 请问你能包养我吗</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/heavyfish.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">请问你能包养我吗</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/heavyfish.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/heavyfish.github.io/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/heavyfish.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2021/03/15/python/Python%E7%96%91%E6%83%91%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A1%A5%E5%85%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/heavyfish.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python学习手册21～25
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-15 23:32:58" itemprop="dateCreated datePublished" datetime="2021-03-15T23:32:58+08:00">2021-03-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-17 23:04:30" itemprop="dateModified" datetime="2021-03-17T23:04:30+08:00">2021-03-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>关于Python的一些细节知识点补充</p>
+<a id="more"></a>
+
+<h1 id="1、Python中的语句和编译过程"><a href="#1、Python中的语句和编译过程" class="headerlink" title="1、Python中的语句和编译过程"></a>1、Python中的语句和编译过程</h1><h2 id="python中的语句"><a href="#python中的语句" class="headerlink" title="python中的语句"></a>python中的语句</h2><h3 id="1、赋值语句"><a href="#1、赋值语句" class="headerlink" title="1、赋值语句"></a>1、赋值语句</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>message = <span class="string">&#x27;And now for something completely different&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n = <span class="number">17</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pi = <span class="number">3.141592653589793</span></span><br></pre></td></tr></table></figure>
+<h3 id="2、表达式和语句"><a href="#2、表达式和语句" class="headerlink" title="2、表达式和语句"></a>2、表达式和语句</h3><p><strong>表达式（expression）</strong>是值、变量和运算符的组合，代表一个单一的结果。 值自身也被认为是一个表达式，变量也是，因此下面都是合法的表达式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">42</span></span><br><span class="line"><span class="number">42</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n</span><br><span class="line"><span class="number">17</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>n + <span class="number">25</span></span><br><span class="line"><span class="number">42</span></span><br></pre></td></tr></table></figure>
+<p>当你在提示符后输入表达式时，解释器会 ** 计算（evaluate）**该表达式，这就意味着解释器会求它的值。在上面的例子中，n的值是17，n + 25的值是42。</p>
+<p><strong>语句（statement）</strong>是一个会产生影响的代码单元，是代表一个命令或行为的一段代码，例如新建一个变量或显示某个值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>n = <span class="number">17</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(n)</span><br></pre></td></tr></table></figure>
+<p>第一行是一个赋值语句，将某个值赋给了n。第二行是一个打印语句，在屏幕上显示n的值。</p>
+<p>当你输入一个语句后，解释器会<strong>执行（execute）</strong>这个语句，即按照语句的指令完成操作。一般来说，语句是没有值的。</p>
+<h3 id="3、关键字"><a href="#3、关键字" class="headerlink" title="3、关键字"></a>3、关键字</h3><p>关键字是用于解析程序的；你不能使用if、def和while这样的关键词作为变量名。</p>
+<p>if，while，隐含了 go to 的含义；</p>
+<p>def 也隐含了将函数赋值给变量的含义。</p>
+<p>它们都是程序中含有特殊意义的词汇。它们会帮你进行代码的跳转，或是隐含的对象的创建。</p>
+<h2 id="Python编译过程"><a href="#Python编译过程" class="headerlink" title="Python编译过程"></a>Python编译过程</h2><p>参考文档见此文：<a target="_blank" rel="noopener" href="https://blog.csdn.net/helloxiaozhe/article/details/78104975">python编译过程和执行原理</a></p>
+<h3 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h3><p>python的解释执行是相对于编译执行而言的。我们都知道，使用C/C++之类的编译性语言编写的程序，是需要从源文件转换成计算机使用的机器语言，经过链接器链接之后形成了二进制的可执行文件。运行该程序的时候，就可以把二进制程序从硬盘载入到内存中并运行。</p>
+<p><strong>解释型语言，解释器不产生目标机器代码，而是产生中间代码，这种中间代码与机器代码不同，中间代码的解释是由软件支持的，不能直接使用在硬件上</strong>。该软件解释器通常会导致执行效率较低，用解释型语言编写的程序是由另一个可以理解中间代码的解释程序执行的。和编译的程序不同的是, 解释程序的任务是逐一将源代码的语句解释成可执行的机器指令，不需要将源程序翻译成目标代码再执行。<strong>对于解释型语言，需要一个专门的解释器来执行该程序，每条语句只有在执行是才能被翻译，这种解释型语言每执行一次就翻译一次，因而效率低下</strong>。</p>
+<p>Java解释器，java很特殊，java是需要编译的，但是没有直接编译成机器语言，而是编译成字节码，然后在Java虚拟机上用解释的方式执行字节码。Python也使用了类似的方式，先将python编译成python字节码，然后由一个专门的python字节码解释器负责解释执行字节码。</p>
+<p>当我们执行Python代码的时候，在Python解释器用四个过程“拆解”我们的代码，最终被CPU执行返回给用户。</p>
+<p>1、首先当用户键入代码交给Python处理的时候会先进行<strong>词法分析</strong>，例如用户键入关键字或者当输入关键字有误时，都会被词法分析所触发，不正确的代码将不会被执行。</p>
+<p>2、下一步Python会进行<strong>语法分析</strong>，例如当”for i in test:”中，test后面的冒号如果被写为其他符号，代码依旧不会被执行。</p>
+<p>3、下面进入最关键的过程，在执行Python前，Python会<strong>生成.pyc文件</strong>，这个文件就是字节码，如果我们不小心修改了字节码，Python下次重新编译该程序时会和其上次生成的字节码文件进行比较，如果不匹配则会将被修改过的字节码文件进行覆盖，以确保每次编译后字节码的准确性。</p>
+<p>4、那么什么是字节码？字节码在Python虚拟机程序里对应的是PyCodeObject对象。.pyc文件是字节码在磁盘上的表现形式。简单来说就是在编译代码的过程中，首先会将代码中的函数、类等对象分类处理，然后生成字节码文件。有了字节码文件，CPU可以直接识别字节码文件进行处理，接着Python就可执行了。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/format,png.jpeg" alt="img"></p>
+<h3 id="2、区分编译声明和执行时使用"><a href="#2、区分编译声明和执行时使用" class="headerlink" title="2、区分编译声明和执行时使用"></a>2、区分编译声明和执行时使用</h3><p>一些代码在编译时，就将其执行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">124</span></span><br></pre></td></tr></table></figure>
+<p>还有些代码，在解释器执行到其时，才开始执行，如 def ，import，from这些语句</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/heavyfish.github.io/2021/03/01/python/python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C21%EF%BD%9E25/" rel="prev" title="Python学习手册21～25">
+      <i class="fa fa-chevron-left"></i> Python学习手册21～25
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81Python%E4%B8%AD%E7%9A%84%E8%AF%AD%E5%8F%A5%E5%92%8C%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="nav-text">1、Python中的语句和编译过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python%E4%B8%AD%E7%9A%84%E8%AF%AD%E5%8F%A5"><span class="nav-text">python中的语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5"><span class="nav-text">1、赋值语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8C%E8%AF%AD%E5%8F%A5"><span class="nav-text">2、表达式和语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">3、关键字</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="nav-text">Python编译过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E6%A6%82%E8%BF%B0"><span class="nav-text">1、概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%8C%BA%E5%88%86%E7%BC%96%E8%AF%91%E5%A3%B0%E6%98%8E%E5%92%8C%E6%89%A7%E8%A1%8C%E6%97%B6%E4%BD%BF%E7%94%A8"><span class="nav-text">2、区分编译声明和执行时使用</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shenxr"
+      src="/heavyfish.github.io/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Shenxr</p>
+  <div class="site-description" itemprop="description">在被人包养前，记录学习笔记的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/heavyfish.github.io/archives">
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/heavyfish.github.io/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/heavyfish.github.io/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shenxr</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">422k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">6:24</span>
+</div>
+<!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/heavyfish.github.io/lib/anime.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/heavyfish.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/heavyfish.github.io/js/utils.js"></script>
+
+<script src="/heavyfish.github.io/js/motion.js"></script>
+
+
+<script src="/heavyfish.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/heavyfish.github.io/js/next-boot.js"></script>
+
+
+  <script defer src="/heavyfish.github.io/lib/three/three.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/heavyfish.github.io/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/heavyfish.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/heavyfish.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":100,"height":250,"hOffset":-7,"vOffset":30},"mobile":{"show":false},"log":false,"tagMode":false});</script></body>
+</html>
