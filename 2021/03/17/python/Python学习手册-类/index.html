@@ -22,17 +22,93 @@
     var CONFIG = {"hostname":"heavyfish.github.io","root":"/heavyfish.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="在被人包养前，记录学习笔记的博客">
+  <meta name="description" content="Python 中 oop、类的介绍">
 <meta property="og:type" content="article">
-<meta property="og:title" content="请问你能包养我吗">
+<meta property="og:title" content="Python学习手册-类">
 <meta property="og:url" content="https://heavyfish.github.io/2021/03/17/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C-%E7%B1%BB/index.html">
 <meta property="og:site_name" content="请问你能包养我吗">
-<meta property="og:description" content="在被人包养前，记录学习笔记的博客">
+<meta property="og:description" content="Python 中 oop、类的介绍">
 <meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318224831091.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318224946848.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225249488.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225313866.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225520238.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225558727.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225658751.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230009153.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230853591.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318231354998.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318231414513.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230255637.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230406995.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230446710.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318232343109.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224142392.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224319259.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224454528.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224718305.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224858053.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322230129413.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322230028793.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322230913457.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322230941445.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322231101530.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323220445864.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323220527450.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323220611114.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323220635733.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323221338854.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323221458406.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323221902243.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323222334705.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331215827966.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331220818105.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331220833878.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331220850716.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331221503575.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331221750986.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331221855260.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331222738969.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331222840168.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331222217702.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331224615421.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406213454038.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406213646566.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406213852016.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406214231831.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406214348753.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406214457405.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406214632454.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406215056150.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406215216559.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406215257945.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406215557346.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406220153336.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406221522368.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406221647409.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406221815623.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222202517.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222225981.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222313890.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222411056.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222430676.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222503562.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407225901241.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407230200656.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407230319588.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407230343476.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407231424072.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407231559528.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407231927293.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407233056896.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407234052142.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210412225144188.png">
 <meta property="article:published_time" content="2021-03-17T15:11:15.456Z">
-<meta property="article:modified_time" content="2021-03-17T15:11:16.641Z">
+<meta property="article:modified_time" content="2021-04-12T14:51:53.616Z">
 <meta property="article:author" content="Shenxr">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318224831091.png">
 
 <link rel="canonical" href="https://heavyfish.github.io/2021/03/17/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C-%E7%B1%BB/">
 
@@ -47,7 +123,7 @@
   };
 </script>
 
-  <title> | 请问你能包养我吗</title>
+  <title>Python学习手册-类 | 请问你能包养我吗</title>
   
 
 
@@ -170,7 +246,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          Python学习手册-类
         </h1>
 
         <div class="post-meta">
@@ -179,9 +255,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-03-17 23:11:15 / Modified: 23:11:16" itemprop="dateCreated datePublished" datetime="2021-03-17T23:11:15+08:00">2021-03-17</time>
+              <time title="Created: 2021-03-17 23:11:15" itemprop="dateCreated datePublished" datetime="2021-03-17T23:11:15+08:00">2021-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-12 22:51:53" itemprop="dateModified" datetime="2021-04-12T22:51:53+08:00">2021-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/heavyfish.github.io/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
             </span>
 
           <br>
@@ -190,14 +281,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>0</span>
+              <span>1.8k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1 mins.</span>
+              <span>2 mins.</span>
             </span>
 
         </div>
@@ -209,7 +300,222 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>Python 中 oop、类的介绍</p>
+<a id="more"></a>
+
+<h1 id="26、OOP"><a href="#26、OOP" class="headerlink" title="26、OOP"></a>26、OOP</h1><p>概括的讲，类就是一些函数的包，这些函数大量地使用并处理内置对象类型。不过类的设计是为了创建和管理新的对象，同时它们也支持继承。</p>
+<h2 id="为何使用类"><a href="#为何使用类" class="headerlink" title="为何使用类"></a>为何使用类</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318224831091.png" alt="image-20210318224831091" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318224946848.png" alt="image-20210318224946848" style="zoom:50%;" />
+
+<h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225249488.png" alt="image-20210318225249488" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225313866.png" alt="image-20210318225313866" style="zoom:50%;" />
+
+
+
+<h1 id="27、类代码编写基础"><a href="#27、类代码编写基础" class="headerlink" title="27、类代码编写基础"></a>27、类代码编写基础</h1><h2 id="基础规则"><a href="#基础规则" class="headerlink" title="基础规则"></a>基础规则</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225520238.png" alt="image-20210318225520238" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225558727.png" alt="image-20210318225558727" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318225658751.png" alt="image-20210318225658751" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230009153.png" alt="image-20210318230009153" style="zoom:50%;" />
+
+<h2 id="编写时的思路"><a href="#编写时的思路" class="headerlink" title="编写时的思路"></a>编写时的思路</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230853591.png" alt="image-20210318230853591" style="zoom:50%;" />
+
+
+
+<h2 id="特殊的类属性"><a href="#特殊的类属性" class="headerlink" title="特殊的类属性"></a>特殊的类属性</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318231354998.png" alt="image-20210318231354998" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318231414513.png" alt="image-20210318231414513" style="zoom:50%;" />
+
+<blockquote>
+<p><code>x.__dict__[&#39;data&#39;]</code>  属性 和 直接用 <code>x.data</code>（点号） 访问属性的区别在于， 点号(.) 访问属性会触发继承搜索，  <code>__dict__</code> 不会触发。点号触发继承搜索时，实际上已经是<code>x.__dict__[&#39;__class__&#39;][&#39;data&#39;]</code> 或 <code>x.__dict__[&#39;__class__&#39;][&#39;__bases__&#39;][&#39;data&#39;]</code>  形式了</p>
+</blockquote>
+<h2 id="习题-1"><a href="#习题-1" class="headerlink" title="习题"></a>习题</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230255637.png" alt="image-20210318230255637" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230406995.png" alt="image-20210318230406995" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318230446710.png" alt="image-20210318230446710" style="zoom:50%;" />
+
+
+
+<p>10、一般来说，什么时候可以选择使用对象嵌入和组合而不是继承？</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210318232343109.png" alt="image-20210318232343109" style="zoom:50%;" />
+
+
+
+<h1 id="28、类代码编写细节"><a href="#28、类代码编写细节" class="headerlink" title="28、类代码编写细节"></a>28、类代码编写细节</h1><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224142392.png" alt="image-20210322224142392" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224319259.png" alt="image-20210322224319259" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224454528.png" alt="image-20210322224454528" style="zoom:50%;" />
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test</span>(<span class="params">self</span>):</span></span><br><span class="line">		<span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>对于类中的方法，按惯例第一位参数通常都称为self（从技术上讲，只有其位置重要，名称不重要）。这个参数给方法提供了一个钩子，从而返回调用的主体也就是实例对象。通过这个参数，Python得以管理每个实例彼此不同的数据。</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224718305.png" alt="image-20210322224718305" style="zoom:50%;" />
+
+
+
+<p>采用<strong>抽象父类</strong>后，除非子类中的所有抽象方法都已经定义，否则带有抽象方法的类是不能实例化的。</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322224858053.png" alt="image-20210322224858053" style="zoom:50%;" />
+
+
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322230129413.png" alt="image-20210322230129413" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322230028793.png" alt="image-20210322230028793" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322230913457.png" alt="image-20210322230913457" style="zoom:50%;" />
+
+<h2 id="习题-2"><a href="#习题-2" class="headerlink" title="习题"></a>习题</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322230941445.png" alt="image-20210322230941445" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210322231101530.png" alt="image-20210322231101530" style="zoom:50%;" />
+
+<h1 id="30、运算符重载"><a href="#30、运算符重载" class="headerlink" title="30、运算符重载"></a>30、运算符重载</h1><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323220445864.png" alt="image-20210323220445864" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323220527450.png" alt="image-20210323220527450" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323220611114.png" alt="image-20210323220611114" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323220635733.png" alt="image-20210323220635733" style="zoom:50%;" />
+
+<h2 id="索引和分片-getitem-和-setitem"><a href="#索引和分片-getitem-和-setitem" class="headerlink" title="索引和分片 __getitem__ 和 __setitem__"></a>索引和分片 <code>__getitem__</code> 和 <code>__setitem__</code></h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323221338854.png" alt="image-20210323221338854" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323221458406.png" alt="image-20210323221458406" style="zoom:50%;" />
+
+<blockquote>
+<p><strong><code>__getitem__</code> 是python中一种重载迭代的方式，如果定义了这个方法，for 循环每次都会通过连续的更高的偏移量来调用类中的<code>__getitem__</code> 方法。</strong></p>
+</blockquote>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323221902243.png" alt="image-20210323221902243" style="zoom:50%;" />
+
+<p>任何支持for循环的类也会自动支持迭代上下文。而它们同时也可以触发 <code>__getitem__</code>，包括：成员关系测试 in，列表推导，内置函数map，列表和元组赋值运算，类型构造方法（如 list，tuple）</p>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210323222334705.png" alt="image-20210323222334705" style="zoom:50%;" />
+
+<h2 id="可迭代对象：-iter-和-next"><a href="#可迭代对象：-iter-和-next" class="headerlink" title="可迭代对象：__iter__和 __next__"></a>可迭代对象：<code>__iter__</code>和 <code>__next__</code></h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331215827966.png" alt="image-20210331215827966" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331220818105.png" alt="image-20210331220818105" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331220833878.png" alt="image-20210331220833878" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331220850716.png" alt="image-20210331220850716" style="zoom:50%;" />
+
+<blockquote>
+<p>“可迭代对象”本质上就是序列观念的一种通用化：如果对象是实际保存的序列或是可以在迭代工具上下文中（例如，for循环）一次产生一个结果的对象，那么就看作是可迭代的。可迭代对象包括实际序列，以及能够按照需求计算的虚拟序列。</p>
+<p>可迭代对象（iterable）一般指一个支持iter调用的对象。</p>
+<p>迭代器（iterator）指一个支持<code>next(I)</code>调用的对象（这个对象是通过 <code>I = iter(X)</code> 返回的）</p>
+<p>生成器指代能自动支持迭代协议的对象，因此生成器本身就是可迭代对象</p>
+</blockquote>
+<h3 id="单遍扫描与多遍扫描"><a href="#单遍扫描与多遍扫描" class="headerlink" title="单遍扫描与多遍扫描"></a>单遍扫描与多遍扫描</h3><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331221503575.png" alt="image-20210331221503575" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331221750986.png" alt="image-20210331221750986" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331221855260.png" alt="image-20210331221855260" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331222738969.png" alt="image-20210331222738969" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331222840168.png" alt="image-20210331222840168" style="zoom:50%;" />
+
+<h3 id="类-VS-生成器"><a href="#类-VS-生成器" class="headerlink" title="类 VS 生成器"></a>类 VS 生成器</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gsquares</span>(<span class="params">start, stop</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(start,stop+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">yield</span> i ** <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331222217702.png" alt="image-20210331222217702" style="zoom:50%;" />
+
+
+
+<h3 id="iter-和-yield-结合"><a href="#iter-和-yield-结合" class="headerlink" title="__iter__ 和 yield 结合"></a><code>__iter__</code> 和 <code>yield</code> 结合</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Squares</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,start,stop</span>):</span></span><br><span class="line">        self.start=start</span><br><span class="line">        self.stop=stop</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> value <span class="keyword">in</span> <span class="built_in">range</span>(self.start,self.stop+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">yield</span> value ** <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>当 <code>__iter__</code> 被调用时，它自动返回了一个生成器对象。</p>
+<h2 id="成员关系：-contains-、-iter-、-getitem"><a href="#成员关系：-contains-、-iter-、-getitem" class="headerlink" title="成员关系：__contains__、__iter__、__getitem__"></a>成员关系：<code>__contains__</code>、<code>__iter__</code>、<code>__getitem__</code></h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210331224615421.png" alt="image-20210331224615421" style="zoom:50%;" />
+
+<blockquote>
+<p>注意：这里说的是 方法的优先级，当 <code>__contains__</code> 不能处理该迭代上下文时，就会由后面的方法继续处理</p>
+</blockquote>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406213454038.png" alt="image-20210406213454038" style="zoom:50%;" />
+
+
+
+<h2 id="属性访问：-getattr-和-setattr"><a href="#属性访问：-getattr-和-setattr" class="headerlink" title="属性访问：__getattr 和 __setattr__"></a>属性访问：<code>__getattr</code> 和 <code>__setattr__</code></h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406213646566.png" alt="image-20210406213646566" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406213852016.png" alt="image-20210406213852016" style="zoom:50%;" />
+
+<blockquote>
+<p>注意：在 <code>__setattr__</code> 中对任何 self 属性做赋值，都将再次调用 <code>__setattr__</code> ，这将导致无穷递归循环（最终结果是栈溢出异常）。</p>
+<p><strong>类中任意位置的 self 属性赋值，最终都会被路由到 <code>__setattr__</code></strong></p>
+</blockquote>
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406214231831.png" alt="image-20210406214231831" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406214348753.png" alt="image-20210406214348753" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406214457405.png" alt="image-20210406214457405" style="zoom:50%;" />
+
+<h3 id="其他属性管理工具"><a href="#其他属性管理工具" class="headerlink" title="其他属性管理工具"></a>其他属性管理工具</h3><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406214632454.png" alt="image-20210406214632454" style="zoom:50%;" />
+
+
+
+<h2 id="字符串显示-repr-和-str"><a href="#字符串显示-repr-和-str" class="headerlink" title="字符串显示: __repr__ 和 __str__"></a>字符串显示: <code>__repr__</code> 和 <code>__str__</code></h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406215056150.png" alt="image-20210406215056150" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406215216559.png" alt="image-20210406215216559" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406215257945.png" alt="image-20210406215257945" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406215557346.png" alt="image-20210406215557346" style="zoom:50%;" />
+
+
+
+<h2 id="调用表达式-call"><a href="#调用表达式-call" class="headerlink" title="调用表达式: __call__"></a>调用表达式: <code>__call__</code></h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406220153336.png" alt="image-20210406220153336" style="zoom:50%;" />
+
+<blockquote>
+<p><code>__call__</code> 的优势在于：<strong>通过OOP，状态的记忆采用了显式的属性赋值运算来实现</strong>。这将不同于其他状态保持技术（例如全局变量，外层函数作用域引用，可变默认值参数等），也不再依赖更加被限制或隐式的行为。此外，类自带的结构和定制化功能能实现超越状态保持的更多功能</p>
+</blockquote>
+<h2 id="布尔测试：-bool-和-len"><a href="#布尔测试：-bool-和-len" class="headerlink" title="布尔测试：__bool__ 和 __len__"></a>布尔测试：<code>__bool__</code> 和 <code>__len__</code></h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406221522368.png" alt="image-20210406221522368" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406221647409.png" alt="image-20210406221647409" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406221815623.png" alt="image-20210406221815623" style="zoom:50%;" />
+
+
+
+<h2 id="对象析构函数：-del"><a href="#对象析构函数：-del" class="headerlink" title="对象析构函数：__del__"></a>对象析构函数：<code>__del__</code></h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222202517.png" alt="image-20210406222202517" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222225981.png" alt="image-20210406222225981" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222313890.png" alt="image-20210406222313890" style="zoom:50%;" />
+
+<h2 id="习题-3"><a href="#习题-3" class="headerlink" title="习题"></a>习题</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222411056.png" alt="image-20210406222411056" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222430676.png" alt="image-20210406222430676" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210406222503562.png" alt="image-20210406222503562" style="zoom:50%;" />
+
+
+
+<h1 id="31、类的设计"><a href="#31、类的设计" class="headerlink" title="31、类的设计"></a>31、类的设计</h1><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407225901241.png" alt="image-20210407225901241" style="zoom:50%;" />
+
+<h2 id="继承与组合"><a href="#继承与组合" class="headerlink" title="继承与组合"></a>继承与组合</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407230200656.png" alt="image-20210407230200656" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407230319588.png" alt="image-20210407230319588" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407230343476.png" alt="image-20210407230343476" style="zoom:50%;" />
+
+<blockquote>
+<p><strong>多用组合，少用继承。组合可以把代码拆解的更加灵活</strong></p>
+</blockquote>
+<h2 id="委托：“包装器”代理对象"><a href="#委托：“包装器”代理对象" class="headerlink" title="委托：“包装器”代理对象"></a>委托：“包装器”代理对象</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407231424072.png" alt="image-20210407231424072" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407231559528.png" alt="image-20210407231559528" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407231927293.png" alt="image-20210407231927293" style="zoom:50%;" />
+
+
+
+<h2 id="类的伪私有属性"><a href="#类的伪私有属性" class="headerlink" title="类的伪私有属性"></a>类的伪私有属性</h2><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407233056896.png" alt="image-20210407233056896" style="zoom:50%;" />
+
+<img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210407234052142.png" alt="image-20210407234052142" style="zoom:50%;" />
+
+<blockquote>
+<p>伪私有属性的目的：是为了 在多重继承的大型项目中，避免不同父类中的变量名相互冲突</p>
+</blockquote>
+<h2 id="方法是对象：绑定或未绑定"><a href="#方法是对象：绑定或未绑定" class="headerlink" title="方法是对象：绑定或未绑定"></a>方法是对象：绑定或未绑定</h2><p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210412225144188.png" alt="image-20210412225144188"></p>
+
     </div>
 
     
@@ -286,6 +592,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#26%E3%80%81OOP"><span class="nav-text">26、OOP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8%E7%B1%BB"><span class="nav-text">为何使用类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%A0%E9%A2%98"><span class="nav-text">习题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#27%E3%80%81%E7%B1%BB%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E5%9F%BA%E7%A1%80"><span class="nav-text">27、类代码编写基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%A7%84%E5%88%99"><span class="nav-text">基础规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E6%97%B6%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="nav-text">编写时的思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E7%B1%BB%E5%B1%9E%E6%80%A7"><span class="nav-text">特殊的类属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%A0%E9%A2%98-1"><span class="nav-text">习题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#28%E3%80%81%E7%B1%BB%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E7%BB%86%E8%8A%82"><span class="nav-text">28、类代码编写细节</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%A0%E9%A2%98-2"><span class="nav-text">习题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#30%E3%80%81%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="nav-text">30、运算符重载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%92%8C%E5%88%86%E7%89%87-getitem-%E5%92%8C-setitem"><span class="nav-text">索引和分片 __getitem__ 和 __setitem__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%EF%BC%9A-iter-%E5%92%8C-next"><span class="nav-text">可迭代对象：__iter__和 __next__</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E9%81%8D%E6%89%AB%E6%8F%8F%E4%B8%8E%E5%A4%9A%E9%81%8D%E6%89%AB%E6%8F%8F"><span class="nav-text">单遍扫描与多遍扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB-VS-%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-text">类 VS 生成器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iter-%E5%92%8C-yield-%E7%BB%93%E5%90%88"><span class="nav-text">__iter__ 和 yield 结合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E5%91%98%E5%85%B3%E7%B3%BB%EF%BC%9A-contains-%E3%80%81-iter-%E3%80%81-getitem"><span class="nav-text">成员关系：__contains__、__iter__、__getitem__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E8%AE%BF%E9%97%AE%EF%BC%9A-getattr-%E5%92%8C-setattr"><span class="nav-text">属性访问：__getattr 和 __setattr__</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B1%9E%E6%80%A7%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="nav-text">其他属性管理工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%BE%E7%A4%BA-repr-%E5%92%8C-str"><span class="nav-text">字符串显示: __repr__ 和 __str__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F-call"><span class="nav-text">调用表达式: __call__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%83%E5%B0%94%E6%B5%8B%E8%AF%95%EF%BC%9A-bool-%E5%92%8C-len"><span class="nav-text">布尔测试：__bool__ 和 __len__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%EF%BC%9A-del"><span class="nav-text">对象析构函数：__del__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%A0%E9%A2%98-3"><span class="nav-text">习题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#31%E3%80%81%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-text">31、类的设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E4%B8%8E%E7%BB%84%E5%90%88"><span class="nav-text">继承与组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A7%94%E6%89%98%EF%BC%9A%E2%80%9C%E5%8C%85%E8%A3%85%E5%99%A8%E2%80%9D%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1"><span class="nav-text">委托：“包装器”代理对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E4%BC%AA%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7"><span class="nav-text">类的伪私有属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E6%98%AF%E5%AF%B9%E8%B1%A1%EF%BC%9A%E7%BB%91%E5%AE%9A%E6%88%96%E6%9C%AA%E7%BB%91%E5%AE%9A"><span class="nav-text">方法是对象：绑定或未绑定</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -350,13 +657,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">422k</span>
+    <span title="Symbols count total">424k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">6:24</span>
+    <span title="Reading time total">6:25</span>
 </div>
 <!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
