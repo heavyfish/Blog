@@ -154,6 +154,154 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/11/17/Linux/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/17/Linux/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/" class="post-title-link" itemprop="url">进程、线程、协程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-11-17 14:31:31" itemprop="dateCreated datePublished" datetime="2020-11-17T14:31:31+08:00">2020-11-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-20 22:37:27" itemprop="dateModified" datetime="2021-01-20T22:37:27+08:00">2021-01-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="1、进程"><a href="#1、进程" class="headerlink" title="1、进程"></a>1、进程</h1><blockquote>
+<p>进程是系统资源分配的最小单位, 系统由一个个进程(程序)组成 一般情况下，包括文本区域（text region）、数据区域（data region）和堆栈（stack region）。</p>
+<ul>
+<li>文本区域存储处理器执行的代码</li>
+<li>数据区域存储变量和进程执行期间使用的动态分配的内存；</li>
+<li>堆栈区域存储着活动过程调用的指令和本地变量。</li>
+</ul>
+</blockquote>
+<p>每一个进程都有自己的一个进程堆栈空间。在<em>Linux</em>界面执行一个执行码时，<em>Shell</em>进程会<em>fork</em>一个子进程，再调用<em>exec</em>系统调用在子进程中执行该执行码。</p>
+<p><code>exec</code>系统调用执行新程序时会把命令行参数和环境变量表传递给<code>main</code>函数，它们在整个进程堆栈空间中的位置如下图所示。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210113234143489.png" alt="image-20210113234143489"></p>
+<p>下面是对图 进程堆栈空间各段的具体说明：</p>
+<p><em>①</em>  代码段（文本段）：保存程序的执行码。在进程并发时，代码段是共享的且只读的，在存储器中只需有一个副本。</p>
+<p><em>②</em>  数据段：此段又称为初始化数据段，它包含了程序中已初始化的全局变量、全局静态变量、局部静态变量。</p>
+<p>例如，函数外定义的变量并赋值：<em>int count=30 ;</em></p>
+<p>此变量<em>count</em>存放在数据段中。</p>
+<p><em>③</em>  <em>bss</em>段：通常此段又称为未初始化数据段，它包含了程序中未初始化的全局变量、全局静态变量、局部静态变量，程序执行前操作系统将此段初始化为<em>0</em>。</p>
+<p>例如，函数外定义的变量但没有赋值：<em>long sum[1000] ;</em></p>
+<p>此变量存放在<em>bss</em>段中。</p>
+<p><em>④</em>  栈：程序执行前静态分配的内存空间，栈的大小可在编译时指定，<em>Linux</em>环境下默认为<em>8M</em>。栈段是存放程序执行时局部变量、函数调用信息、中断现场保留信息的空间。程序执行时，<em>CPU</em>堆栈段指针会在栈顶根据执行情况进行上下移动。</p>
+<p><em>⑤</em>  堆：程序执行时，按照程序需要动态分配的内存空间。<em>malloc</em>、<em>calloc</em>、<em>realloc</em>函数分配的空间都在堆上分配。</p>
+<blockquote>
+<p>通信问题:   由于进程间是隔离的,各自拥有自己的内存内存资源, <em>因此相对于线程比较安全</em>, 所以不同进程之间的数据只能通过 <em>IPC(Inter-Process Communication)</em> 进行通信共享.</p>
+</blockquote>
+<h1 id="2、线程"><a href="#2、线程" class="headerlink" title="2、线程"></a>2、线程</h1><blockquote>
+<ul>
+<li><p>线程属于进程</p>
+</li>
+<li><p>线程共享进程的内存地址空间</p>
+</li>
+<li><p>线程几乎不占有系统资源 通信问题:  进程相当于一个容器,而线程而是运行在容器里面的,因此对于容器内的东西,线程是共同享有的,因此线程间的通信可以直接通过全局变量进行通信,但是由此带来的例如多个线程读写同一个地址变量的时候则将带来不可预期的后果,因此这时候引入了各种锁的作用,例如互斥锁等。</p>
+</li>
+</ul>
+</blockquote>
+<p>同时多线程是不安全的,当一个线程崩溃了,会导致整个进程也崩溃了,即其他线程也挂了, 但多进程而不会,一个进程挂了,另一个进程依然照样运行。</p>
+<ul>
+<li><strong><em>进程是系统分配资源的最小单位</em></strong></li>
+<li><strong><em>线程是CPU调度的最小单位</em></strong></li>
+<li><em>由于默认进程内只有一个线程,所以多核CPU处理多进程就像是一个进程一个核心</em></li>
+</ul>
+<p>线程和进程的上下文切换，进程切换分3步:</p>
+<ol>
+<li>切换页目录以使用新的地址空间</li>
+<li>切换内核栈</li>
+<li>切换硬件上下文</li>
+</ol>
+<p>而线程切换只需要第2、3步,因此进程的切换代价比较大</p>
+<h1 id="3、协程"><a href="#3、协程" class="headerlink" title="3、协程"></a>3、协程</h1><blockquote>
+<ul>
+<li>协程是属于线程的。协程程序是在线程里面跑的，因此协程又称微线程和纤程等</li>
+<li>协程没有线程的上下文切换消耗。协程的调度切换是用户(程序员)手动切换的,因此更加灵活,因此又叫用户空间线程.</li>
+<li>原子操作性。由于协程是用户调度的，所以不会出现执行一半的代码片段被强制中断了，因此无需原子操作锁。</li>
+</ul>
+</blockquote>
+<h2 id="协程的实现：迭代器和生成器"><a href="#协程的实现：迭代器和生成器" class="headerlink" title="协程的实现：迭代器和生成器"></a>协程的实现：迭代器和生成器</h2><ul>
+<li>迭代器： 实现了迭代接口的类,接口函数例如:current,key,next,rewind,valid。迭代器最基本的规定了对象可以通过next返回下一个值，而不是像数组，列表一样一次性返回。语言实现：在Java的foreach遍历迭代器对(数组)，Python的for遍历迭代器对象(tuple，list，dist)。</li>
+<li>生成器： 使用 <em>yield</em> 关键字的函数,可以多次返回值，生成器实际上也算是实现了迭代器接口(协议)。即生成器也可通过next返回下一个值。</li>
+</ul>
+<blockquote>
+<p>协程举例：在Python中，使用了yield的函数为生成器函数，即可以多次返回值。则生成器可以暂停一下，转而执行其他代码，再回来继续执行函数往下的代码。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/11/16/Go/%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%8D%E5%B0%84-%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1009,104 +1157,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2020/09/18/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C10%EF%BD%9E13/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Shenxr">
-      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="请问你能包养我吗">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/18/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C10%EF%BD%9E13/" class="post-title-link" itemprop="url">Python学习手册10～13</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-09-18 15:35:47" itemprop="dateCreated datePublished" datetime="2020-09-18T15:35:47+08:00">2020-09-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-17 22:35:33" itemprop="dateModified" datetime="2021-01-17T22:35:33+08:00">2021-01-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6.6k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>10、if</p>
-<p>11、while、for</p>
-<p>12、迭代和推导</p>
-<p>13、如何通过文档学习python</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/09/18/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C10%EF%BD%9E13/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1177,7 +1227,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1227,13 +1277,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">424k</span>
+    <span title="Symbols count total">425k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">6:26</span>
+    <span title="Reading time total">6:27</span>
 </div>
 <!--  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>

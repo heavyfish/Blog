@@ -22,17 +22,24 @@
     var CONFIG = {"hostname":"heavyfish.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="在被人包养前，记录学习笔记的博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="请问你能包养我吗">
-<meta property="og:url" content="https://heavyfish.github.io/archives/2020/index.html">
+  <meta name="description" content="Ceph相关的个人知识体系整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ceph学习笔记">
+<meta property="og:url" content="https://heavyfish.github.io/2021/04/19/Ceph/Ceph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="请问你能包养我吗">
-<meta property="og:description" content="在被人包养前，记录学习笔记的博客">
+<meta property="og:description" content="Ceph相关的个人知识体系整理">
 <meta property="og:locale">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210419002543603.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/stack.png">
+<meta property="og:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210419012208880.png">
+<meta property="article:published_time" content="2021-04-18T16:24:18.664Z">
+<meta property="article:modified_time" content="2021-04-18T17:22:21.545Z">
 <meta property="article:author" content="Shenxr">
+<meta property="article:tag" content="Ceph">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210419002543603.png">
 
-<link rel="canonical" href="https://heavyfish.github.io/archives/2020/">
+<link rel="canonical" href="https://heavyfish.github.io/2021/04/19/Ceph/Ceph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
 
 <script id="page-configurations">
@@ -40,12 +47,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-Hans'
   };
 </script>
 
-  <title>Archive | 请问你能包养我吗</title>
+  <title>Ceph学习笔记 | 请问你能包养我吗</title>
   
 
 
@@ -148,235 +155,153 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">OK! 37 posts in total. Keep on posting.</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://heavyfish.github.io/2021/04/19/Ceph/Ceph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Shenxr">
+      <meta itemprop="description" content="在被人包养前，记录学习笔记的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="请问你能包养我吗">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ceph学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-04-19 00:24:18 / Modified: 01:22:21" itemprop="dateCreated datePublished" datetime="2021-04-19T00:24:18+08:00">2021-04-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ceph/" itemprop="url" rel="index"><span itemprop="name">Ceph</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
-    </div>
+        <p>Ceph相关的个人知识体系整理</p>
+<a id="more"></a>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-12-11T21:39:34+08:00"
-              content="2020-12-11">
-          12-11
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/12/11/Linux/IO%E6%A8%A1%E5%9E%8B%E5%8F%8Aselect%E3%80%81poll%E3%80%81epoll%E5%92%8Ckqueue%E7%9A%84%E5%8C%BA%E5%88%AB/" itemprop="url">
-            <span itemprop="name">IO模型及select、poll、epoll和kqueue的区别</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-24T14:25:08+08:00"
-              content="2020-11-24">
-          11-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/24/k8s/%E4%BB%8B%E7%BB%8DKubernetes%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E6%8E%A5%E5%8F%A3%EF%BC%88CSI%EF%BC%89/" itemprop="url">
-            <span itemprop="name">CSI简介</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-23T12:22:49+08:00"
-              content="2020-11-23">
-          11-23
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/23/Go/GRPC/" itemprop="url">
-            <span itemprop="name">GRPC</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-23T11:23:02+08:00"
-              content="2020-11-23">
-          11-23
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/23/k8s/PLEG%E6%9C%BA%E5%88%B6/" itemprop="url">
-            <span itemprop="name">PLEG机制</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-20T17:19:06+08:00"
-              content="2020-11-20">
-          11-20
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/20/k8s/%E4%BB%8B%E7%BB%8DKubernetes%E4%B8%AD%E7%9A%84%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6%E6%8E%A5%E5%8F%A3%EF%BC%88CRI%EF%BC%89/" itemprop="url">
-            <span itemprop="name">CRI简介</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-18T11:29:33+08:00"
-              content="2020-11-18">
-          11-18
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/18/Go/The%20Go%20scheduler-v1.8/" itemprop="url">
-            <span itemprop="name">The Go scheduler-v1.8</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-17T14:31:31+08:00"
-              content="2020-11-17">
-          11-17
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/17/Linux/%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B/" itemprop="url">
-            <span itemprop="name">进程、线程、协程</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-16T21:13:35+08:00"
-              content="2020-11-16">
-          11-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/16/Go/%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%8D%E5%B0%84-%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/" itemprop="url">
-            <span itemprop="name">什么是反射-官网翻译</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-15T17:08:57+08:00"
-              content="2020-11-15">
-          11-15
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/15/Go/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url">
-            <span itemprop="name">Go语言学习笔记</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-11-09T14:25:14+08:00"
-              content="2020-11-09">
-          11-09
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/11/09/k8s/%E6%89%8B%E5%8A%A8%E6%90%AD%E5%BB%BAKubernetes/" itemprop="url">
-            <span itemprop="name">手动搭建Kubernetes</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210419002543603.png" alt="image-20210419002543603"></p>
+<h1 id="1、Ceph基础"><a href="#1、Ceph基础" class="headerlink" title="1、Ceph基础"></a>1、Ceph基础</h1><h2 id="Ceph是什么"><a href="#Ceph是什么" class="headerlink" title="Ceph是什么"></a>Ceph是什么</h2><p>Ceph在一个统一的系统中同时提供了 对象存储 ，块存储 和 文件存储。 Ceph高度可靠，易于管理且免费。 Ceph提供了非凡的可伸缩性，允许成千上万的客户端访问PB到EB量级的数据。一个Ceph存储节点代表一台服务器及其上运行的OSD守护进程，一个Ceph存储集群管理大量存储节点，这些节点相互通信以动态复制和重均衡数据。</p>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/stack.png" alt="../_images/stack.png"></p>
+<p>观察上图架构，</p>
+<ul>
+<li>底层的 RADOS 是Ceph的核心实现，里面实现了CRUSH算法，负责调用系统接口，以读写磁盘数据</li>
+<li>LIBRAODS 是一个库，封装了访问RAODS的API</li>
+<li>RADOSGW，RBD是更高一层的库，面向client使用</li>
+<li>CEPHFS，提供了兼容POSIX标准文件系统的API，直接和RODOS打交通</li>
+</ul>
+<h2 id="Ceph的优缺点"><a href="#Ceph的优缺点" class="headerlink" title="Ceph的优缺点"></a>Ceph的优缺点</h2><p><strong>优点：</strong></p>
+<ul>
+<li>数据的高度安全：无论是 纠删码模式，或是replica模式，数据的多副本加上故障域的划分，保证了数据的高度安全</li>
+<li>去中心化模式：读写数据时，不存在单点故障。在获取到集群map信息后。读写数据时，通过crush算法，得出数据应该 写入/读出 的位置。（具体的过程，后面探讨）</li>
+<li>巨量的数据管理，PB 到 EB 级别</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>需要合理的配置和管理，避免数据分布不均</li>
+<li>CRUSH 本身的算法，并不能保证数据分布的绝对均衡</li>
+<li>多副本情况下，对磁盘同构性的要求</li>
+</ul>
+<h2 id="Ceph的硬件选型"><a href="#Ceph的硬件选型" class="headerlink" title="Ceph的硬件选型"></a>Ceph的硬件选型</h2><p>总结于官网：</p>
+<p><strong>CPU：</strong></p>
+<ul>
+<li>CephFS：将占用大量CPU，&gt;=4C，GHz越高越好</li>
+<li>OSD：1个OSD进程对应 1~2C，避免CPU密集型服务与其争抢资源</li>
+</ul>
+<p><strong>RAM：</strong></p>
+<ul>
+<li>Monitor 和 Manager：内存使用量通常随群集的大小而扩展。在引导时以及在拓扑更改和恢复期间，比在稳态操作期间将需要更多的内存。通常建议32G。300 OSD时，最小64G。若是仔细研究，还需注意考虑 <code>mon_osd_cache_size</code> 和 <code>rocksdb_cache_size</code>  的参数值</li>
+<li>ceph-mds：元数据守护程序的内存利用率取决于其缓存配置为消耗多少内存。对于大多数系统，我们建议最小为1 GB。请参阅<code>mds_cache_memory</code></li>
+<li>filestore OSD   1T 对标 1G</li>
+<li>BlueStore OSD 有一个默认为4GB的内存目标。建议为每个BlueStore OSD设置约8GB。</li>
+</ul>
+<p><strong>硬盘：</strong></p>
+<ul>
+<li>根据需要，设置 SSD 存储池 和 SAS 存储池</li>
+<li>根据业务的状况，合理选择 随机读写性能 和 顺序读写性能 的最优硬盘</li>
+<li>通过CRUSH Map 为 CephFS 的 metadata pool 指定 SSD盘，可以加速 CephFS</li>
+<li>SSD做日志盘，SAS做数据盘</li>
+</ul>
+<p><strong>网络：</strong></p>
+<ul>
+<li>网络带宽 和 硬盘的读写带宽 需要相互适配</li>
+</ul>
+<p><img src="https://image-1303893285.cos.ap-shanghai.myqcloud.com/image/image-20210419012208880.png" alt="image-20210419012208880"></p>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Ceph/" rel="tag"># Ceph</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/17/python/Python%E5%AD%A6%E4%B9%A0%E6%89%8B%E5%86%8C-%E7%B1%BB/" rel="prev" title="Python学习手册_类">
+      <i class="fa fa-chevron-left"></i> Python学习手册_类
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2020/page/2/">2</a><a class="page-number" href="/archives/2020/page/3/">3</a><a class="extend next" rel="next" href="/archives/2020/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
-  </nav>
+  
+  
 
 
 
@@ -428,6 +353,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81Ceph%E5%9F%BA%E7%A1%80"><span class="nav-text">1、Ceph基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ceph%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">Ceph是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ceph%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-text">Ceph的优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ceph%E7%9A%84%E7%A1%AC%E4%BB%B6%E9%80%89%E5%9E%8B"><span class="nav-text">Ceph的硬件选型</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
